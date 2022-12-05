@@ -17,7 +17,9 @@ specifiers:
   '@typescript-eslint/parser': ^5.45.0
   autoprefixer: ^10.4.13
   bcryptjs: ^2.4.3
+  clsx: ^1.2.1
   cross-env: ^7.0.3
+  csstype: ^3.0.10
   eslint: ^8.29.0
   eslint-config-next: 13.0.2
   husky: ^8.0.2
@@ -29,6 +31,7 @@ specifiers:
   prisma: ^4.7.1
   react: 18.2.0
   react-dom: 18.2.0
+  react-hot-toast: ^2.4.0
   superjson: 1.9.1
   tailwindcss: ^3.2.4
   typescript: ^4.9.3
@@ -43,10 +46,12 @@ dependencies:
   '@trpc/react-query': 10.4.3_x72ucuwg27nhluiflrpycjcdya
   '@trpc/server': 10.4.3
   bcryptjs: 2.4.3
+  clsx: 1.2.1
   next: 13.0.2_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.17.0_pknogjuzx4bv7zxtatcb2ahtsq
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-hot-toast: 2.4.0_owo25xnefcwdq3zjgtohz6dbju
   superjson: 1.9.1
   zod: 3.19.1
 
@@ -60,6 +65,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.45.0_s5ps7njkmjlaqajutnox5ntcla
   autoprefixer: 10.4.13_postcss@8.4.19
   cross-env: 7.0.3
+  csstype: 3.1.1
   eslint: 8.29.0
   eslint-config-next: 13.0.2_s5ps7njkmjlaqajutnox5ntcla
   husky: 8.0.2
@@ -815,6 +821,11 @@ packages:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
     dev: false
 
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
+
   /color-convert/2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
     engines: {node: '>=7.0.0'}
@@ -877,7 +888,6 @@ packages:
 
   /csstype/3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
-    dev: true
 
   /damerau-levenshtein/1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
@@ -1496,6 +1506,14 @@ packages:
       merge2: 1.4.1
       slash: 3.0.0
     dev: true
+
+  /goober/2.1.11_csstype@3.1.1:
+    resolution: {integrity: sha512-5SS2lmxbhqH0u9ABEWq7WPU69a4i2pYcHeCxqaNq6Cw3mnrF0ghWNM4tEGid4dKy8XNIAUbuThuozDHHKJVh3A==}
+    peerDependencies:
+      csstype: ^3.0.10
+    dependencies:
+      csstype: 3.1.1
+    dev: false
 
   /grapheme-splitter/1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
@@ -2252,6 +2270,20 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hot-toast/2.4.0_owo25xnefcwdq3zjgtohz6dbju:
+    resolution: {integrity: sha512-qnnVbXropKuwUpriVVosgo8QrB+IaPJCpL8oBI6Ov84uvHZ5QQcTp2qg6ku2wNfgJl6rlQXJIQU5q+5lmPOutA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      goober: 2.1.11_csstype@3.1.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - csstype
     dev: false
 
   /react-is/16.13.1:
