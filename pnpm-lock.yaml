@@ -49,6 +49,7 @@ specifiers:
   redux: ^4.2.0
   superjson: 1.9.1
   tailwindcss: ^3.2.4
+  typedoc: ^0.23.21
   typescript: ^4.9.3
   zod: ^3.19.1
 
@@ -104,6 +105,7 @@ devDependencies:
   prettier-plugin-tailwindcss: 0.1.13_prettier@2.8.0
   prisma: 4.7.1
   tailwindcss: 3.2.4_postcss@8.4.19
+  typedoc: 0.23.21_typescript@4.9.3
   typescript: 4.9.3
 
 packages:
@@ -1982,15 +1984,15 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
 
-  /@motionone/animation/10.14.0:
+  /@motionone/animation/10.15.0:
     resolution:
       {
-        integrity: sha512-h+1sdyBP8vbxEBW5gPFDnj+m2DCqdlAuf2g6Iafb1lcMnqjsRXWlPw1AXgvUMXmreyhqmPbJqoNfIKdytampRQ==,
+        integrity: sha512-FllQ9ogoATxEEiq7TFKuh2uPEvcw9658IYCpOTGnu53HYCrFQS61eKwsn7TqR4NEnTql2I+NGNipFqw3UZo1AA==,
       }
     dependencies:
-      '@motionone/easing': 10.14.0
-      '@motionone/types': 10.14.0
-      '@motionone/utils': 10.14.0
+      '@motionone/easing': 10.15.0
+      '@motionone/types': 10.15.0
+      '@motionone/utils': 10.15.0
       tslib: 2.4.0
     dev: false
 
@@ -2000,49 +2002,49 @@ packages:
         integrity: sha512-zjfX+AGMIt/fIqd/SL1Lj93S6AiJsEA3oc5M9VkUr+Gz+juRmYN1vfvZd6MvEkSqEjwPQgcjN7rGZHrDB9APfQ==,
       }
     dependencies:
-      '@motionone/animation': 10.14.0
-      '@motionone/generators': 10.14.0
-      '@motionone/types': 10.14.0
-      '@motionone/utils': 10.14.0
+      '@motionone/animation': 10.15.0
+      '@motionone/generators': 10.15.0
+      '@motionone/types': 10.15.0
+      '@motionone/utils': 10.15.0
       hey-listen: 1.0.8
       tslib: 2.4.0
     dev: false
 
-  /@motionone/easing/10.14.0:
+  /@motionone/easing/10.15.0:
     resolution:
       {
-        integrity: sha512-2vUBdH9uWTlRbuErhcsMmt1jvMTTqvGmn9fHq8FleFDXBlHFs5jZzHJT9iw+4kR1h6a4SZQuCf72b9ji92qNYA==,
+        integrity: sha512-VA1a0sa81euSeki2JgVl/t4MygeqfJn7GsMfewoGCln7gp/iZR12HbSo6RaWsHxPkUBRxSRUo+8zeuYRxv6oZQ==,
       }
     dependencies:
-      '@motionone/utils': 10.14.0
+      '@motionone/utils': 10.15.0
       tslib: 2.4.0
     dev: false
 
-  /@motionone/generators/10.14.0:
+  /@motionone/generators/10.15.0:
     resolution:
       {
-        integrity: sha512-6kRHezoFfIjFN7pPpaxmkdZXD36tQNcyJe3nwVqwJ+ZfC0e3rFmszR8kp9DEVFs9QL/akWjuGPSLBI1tvz+Vjg==,
+        integrity: sha512-bE4lEd/RIQ+DwlLC2IfF/FBOSPwjxV5AbwQuatMg/bWtndps66YMvX1NbvD0wzg+EIpPwi8i8YnYy7usdb8apg==,
       }
     dependencies:
-      '@motionone/types': 10.14.0
-      '@motionone/utils': 10.14.0
+      '@motionone/types': 10.15.0
+      '@motionone/utils': 10.15.0
       tslib: 2.4.0
     dev: false
 
-  /@motionone/types/10.14.0:
+  /@motionone/types/10.15.0:
     resolution:
       {
-        integrity: sha512-3bNWyYBHtVd27KncnJLhksMFQ5o2MSdk1cA/IZqsHtA9DnRM1SYgN01CTcJ8Iw8pCXF5Ocp34tyAjY7WRpOJJQ==,
+        integrity: sha512-uNjSt2/Ud1Ld5TuZ98empFFgHNPysIcUQE3F/YuWxDQR/UO86sCqvnAHBkxUhpc2FVE6hb+3RpFmFxAUDwn11w==,
       }
     dev: false
 
-  /@motionone/utils/10.14.0:
+  /@motionone/utils/10.15.0:
     resolution:
       {
-        integrity: sha512-sLWBLPzRqkxmOTRzSaD3LFQXCPHvDzyHJ1a3VP9PRzBxyVd2pv51/gMOsdAcxQ9n+MIeGJnxzXBYplUHKj4jkw==,
+        integrity: sha512-M1PCJ533xpjuEmhTVZYw+KPU6/lDZP9d2NpJDcMMUH/TYPnL3w9CYCTn+b4KKdSUJB2KO7t3xfspJsLqj35SRQ==,
       }
     dependencies:
-      '@motionone/types': 10.14.0
+      '@motionone/types': 10.15.0
       hey-listen: 1.0.8
       tslib: 2.4.0
     dev: false
@@ -3050,6 +3052,15 @@ packages:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
+    dev: true
+
+  /brace-expansion/2.0.1:
+    resolution:
+      {
+        integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==,
+      }
+    dependencies:
+      balanced-match: 1.0.2
     dev: true
 
   /braces/3.0.2:
@@ -4676,6 +4687,13 @@ packages:
     engines: { node: '>=6' }
     hasBin: true
 
+  /jsonc-parser/3.2.0:
+    resolution:
+      {
+        integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==,
+      }
+    dev: true
+
   /jsx-ast-utils/3.3.3:
     resolution:
       {
@@ -4778,6 +4796,22 @@ packages:
     dependencies:
       yallist: 4.0.0
 
+  /lunr/2.3.9:
+    resolution:
+      {
+        integrity: sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==,
+      }
+    dev: true
+
+  /marked/4.2.3:
+    resolution:
+      {
+        integrity: sha512-slWRdJkbTZ+PjkyJnE30Uid64eHwbwa1Q25INCAYfZlK4o6ylagBy/Le9eWntqJFoFT93ikUKMv47GZ4gTwHkw==,
+      }
+    engines: { node: '>= 12' }
+    hasBin: true
+    dev: true
+
   /merge2/1.4.1:
     resolution:
       {
@@ -4804,6 +4838,16 @@ packages:
       }
     dependencies:
       brace-expansion: 1.1.11
+    dev: true
+
+  /minimatch/5.1.1:
+    resolution:
+      {
+        integrity: sha512-362NP+zlprccbEt/SkxKfRMHnNY85V74mVnpUpNyr3F35covl09Kec7/sEFLt3RA4oXmewtoaanoIf67SE5Y5g==,
+      }
+    engines: { node: '>=10' }
+    dependencies:
+      brace-expansion: 2.0.1
     dev: true
 
   /minimist/1.2.7:
@@ -5827,6 +5871,17 @@ packages:
     engines: { node: '>=8' }
     dev: true
 
+  /shiki/0.11.1:
+    resolution:
+      {
+        integrity: sha512-EugY9VASFuDqOexOgXR18ZV+TbFrQHeCpEYaXamO+SZlsnT/2LxuLBX25GGtIrwaEVFXUAbUQ601SWE2rMwWHA==,
+      }
+    dependencies:
+      jsonc-parser: 3.2.0
+      vscode-oniguruma: 1.7.0
+      vscode-textmate: 6.0.0
+    dev: true
+
   /side-channel/1.0.4:
     resolution:
       {
@@ -6158,6 +6213,23 @@ packages:
     engines: { node: '>=10' }
     dev: true
 
+  /typedoc/0.23.21_typescript@4.9.3:
+    resolution:
+      {
+        integrity: sha512-VNE9Jv7BgclvyH9moi2mluneSviD43dCE9pY8RWkO88/DrEgJZk9KpUk7WO468c9WWs/+aG6dOnoH7ccjnErhg==,
+      }
+    engines: { node: '>= 14.14' }
+    hasBin: true
+    peerDependencies:
+      typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x
+    dependencies:
+      lunr: 2.3.9
+      marked: 4.2.3
+      minimatch: 5.1.1
+      shiki: 0.11.1
+      typescript: 4.9.3
+    dev: true
+
   /typescript/4.9.3:
     resolution:
       {
@@ -6263,6 +6335,20 @@ packages:
       }
     hasBin: true
     dev: false
+
+  /vscode-oniguruma/1.7.0:
+    resolution:
+      {
+        integrity: sha512-L9WMGRfrjOhgHSdOYgCt/yRMsXzLDJSL7BPrOZt73gU0iWO4mpqzqQzOz5srxqTvMBaR0XZTSrVWo4j55Rc6cA==,
+      }
+    dev: true
+
+  /vscode-textmate/6.0.0:
+    resolution:
+      {
+        integrity: sha512-gu73tuZfJgu+mvCSy4UZwd2JXykjK9zAZsfmDeut5dx/1a7FeTk0XwJsSuqQn+cuMCGVbIBfl+s53X4T19DnzQ==,
+      }
+    dev: true
 
   /webpack-bundle-analyzer/4.7.0:
     resolution:

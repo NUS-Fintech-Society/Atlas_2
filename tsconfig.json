@@ -20,6 +20,14 @@
       "~/*": ["./*"]
     }
   },
+  "typedocOptions": {
+    "entryPoints": [
+      "src/server/trpc/router/admin/announcement/*",
+      "src/server/trpc/router/admin/users/*",
+      "src/server/trpc/router/member/*"
+    ],
+    "out": "docs"
+  },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],
   "exclude": ["node_modules"]
 }
