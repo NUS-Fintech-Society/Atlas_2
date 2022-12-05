@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Projects {
+  description  String
+  difficulty   Int
+  rating       Int
+  departments  String?
+  project_id   Int          @id
+  name         String
+  team_lead    String
+  created_date DateTime
+  Departments  Departments? @relation(fields: [departments], references: [department_id])
+  User         User[]       @relation("ProjectsToUser")
+}
+
+model Departments {
+  department_id String          @id
+  name          String
+  roles         String[]
+  announcements Announcements[]
+  projects      Projects[]
+}
+
+model Announcements {
+  announcement_id String       @id
+  content         String
+  image           String?
+  title           String
+  updated_date    DateTime
+  uploaded_date   DateTime
+  department_id   String?
+  userId          String
+  Departments     Departments? @relation(fields: [department_id], references: [department_id])
+  created_by      User         @relation(fields: [userId], references: [id])
+}
+
+model User {
+  attendance     Int?            @default(0)
+  batch          String
+  department     String?
+  diet           String?
+  discord        String?
+  email          String          @unique
+  faculty        String?
+  gender         String?
+  hashedPassword String
+  hobbies        String?
+  id             String          @id @unique
+  image          String?
+  level          String
+  linkedin       String?
+  major          String?
+  name           String
+  phone          String?
+  personal_email String?
+  race           String?
+  roles          String
+  shirt          String?
+  telegram       String?
+  total_events   Int?            @default(0)
+  wallet         String?
+  year           String?
+  date_of_birth  DateTime?
+  Announcements  Announcements[]
+  projects       Projects[]      @relation("ProjectsToUser")
+}
+
+model event {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @db.Date
+  qr_code     String?
+  departments Json     @db.Json
+  attendees   Json     @db.Json
+  name        String
+}

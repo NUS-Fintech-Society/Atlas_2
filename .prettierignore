@@ -1,0 +1,7 @@
+.next
+.prettierrc.js
+next-env.d.ts 
+next.config.mjs 
+package.json
+**/*.mjs
+.eslintrc.json
