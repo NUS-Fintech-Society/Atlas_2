@@ -4,4 +4,3 @@
 pnpm lint
 pnpm prettier --write .
 pnpm build
-pnpm typedoc --excludeNotDocumented
