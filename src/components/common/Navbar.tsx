@@ -3,7 +3,6 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
-import Image from 'next/image'
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
@@ -60,6 +59,7 @@ export default function Example() {
                   <div>
                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
+                      {/* TODO: Insert a SVG here */}
                     </Menu.Button>
                   </div>
                   <Transition
