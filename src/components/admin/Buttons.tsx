@@ -5,9 +5,7 @@ const Buttons = () => {
   return (
     <div className="flex mt-5 justify-between">
       <Button>
-        <Link href="/admin/users/upload-multiple-users">
-          Upload Multiple Users
-        </Link>
+        <Link href="/admin/users/create-multiple">Upload Multiple Users</Link>
       </Button>
 
       <Button>
