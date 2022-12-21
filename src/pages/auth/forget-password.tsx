@@ -1,55 +1,61 @@
-import {
-  Heading,
-  Flex,
-  Icon,
-  InputGroup,
-  Input,
-  InputRightAddon,
-  FormControl,
-  FormLabel,
-  Button,
-  Spacer,
-} from '@chakra-ui/react'
-import { BsArrowLeftShort } from 'react-icons/bs'
 import Container from '~/components/auth/Container'
+import { useState } from 'react'
+import { Button, Input } from '~/components/utilities'
 import Head from 'next/head'
 import Link from 'next/link'
 
 const ForgotPasswordPage = () => {
+  const [email, setEmail] = useState('')
+
   return (
     <>
       <Head>
-        <title>Forgot Password</title>
+        <title>Reset Password</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="The reset password page for Atlas" />
       </Head>
+
       <Container>
-        <Flex flexDirection="column" alignItems="start">
-          <Flex mb={8} w="100%" alignItems="center" justifyContent="center">
-            <Link href="/auth/login">
-              <Icon as={BsArrowLeftShort} boxSize={12} />
-            </Link>
-            <Heading as="h1" size="2xl" textAlign="center">
-              Forgot Password
-            </Heading>
-            <Spacer></Spacer>
-          </Flex>
-          <FormControl>
-            <FormLabel>NUS Email</FormLabel>
-            <InputGroup>
-              <Input type="email" />
-              <InputRightAddon>@u.nus.edu</InputRightAddon>
-            </InputGroup>
-          </FormControl>
-          <Button
-            mt={10}
-            size="lg"
-            isLoading={false}
-            type="submit"
-            alignSelf="stretch"
-          >
-            Send Reset Link
-          </Button>
-        </Flex>
+        <div className="flex flex-col items-start w-full">
+          {/* ---- Heading ---- */}
+          <h1 className="mb-2 text-center self-center text-5xl font-[ubuntu] font-medium">
+            Forgot Password
+          </h1>
+          {/* ---- Heading ---- */}
+
+          <form className="w-full">
+            {/* ---- Username ---- */}
+            <label htmlFor="email" className="text-2xl font-[ubuntu]">
+              Username
+            </label>
+            <div className="flex flex-row w-full items-center mt-2">
+              <Input
+                className="rounded text-black"
+                name="email"
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="NUS Email"
+                required
+                type="text"
+                value={email}
+              />
+            </div>
+            {/* ---- Username ---- */}
+
+            {/* ---- Reset Password Link ---- */}
+            <div className="flex flex-col">
+              <Button className="shadow-md mt-2" type="submit">
+                Send Reset Link
+              </Button>
+              {/* ---- Reset Password Link ---- */}
+
+              <Link href="/auth/login">
+                <Button className="shadow-md mt-2 w-full" type="button">
+                  Return
+                </Button>
+              </Link>
+            </div>
+          </form>
+        </div>
       </Container>
     </>
   )

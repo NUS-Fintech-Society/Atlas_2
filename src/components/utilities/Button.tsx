@@ -42,7 +42,7 @@ type ButtonType = {
   disabled?: boolean
   isLoading?: boolean
   onClick?: MouseEventHandler<HTMLButtonElement>
-  type?: 'submit'
+  type?: 'submit' | 'button'
 }
 
 export default Button

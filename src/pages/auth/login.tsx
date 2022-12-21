@@ -58,6 +58,7 @@ const LoginPage = () => {
       <Head>
         <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="The login page for Atlas" />
       </Head>
       <Container>
         <form onSubmit={submitForm}>
@@ -74,7 +75,7 @@ const LoginPage = () => {
             </label>
             <div className="flex flex-row w-full items-center mt-2">
               <Input
-                className="rounded-l text-black"
+                className="rounded text-black"
                 name="email"
                 required
                 onChange={(e) => setEmail(e.target.value)}
@@ -102,12 +103,13 @@ const LoginPage = () => {
 
             {/* ---- Forgot Your Password ---- */}
             <div className="mx-auto my-6">
-              <Link href="/auth/forgot-password">
+              <Link href="/auth/forget-password">
                 <div className="font-medium">Forgot your password?</div>
               </Link>
             </div>
             {/* ---- Forgot Your Password ---- */}
 
+            {/* ---- Login Button ---- */}
             <Button
               className="mt-2 self-stretch shadow-md"
               isLoading={submitting}
@@ -115,6 +117,7 @@ const LoginPage = () => {
             >
               Login
             </Button>
+            {/* ---- Login Button ---- */}
           </div>
         </form>
         <Toaster />
