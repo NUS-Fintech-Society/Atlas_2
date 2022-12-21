@@ -62,52 +62,63 @@ const LoginPage = () => {
       <Container>
         <form onSubmit={submitForm}>
           <div className="flex flex-col items-start">
-            <h1 className="mb-2 text-center self-center font-bold text-5xl">
+            {/* ---- Title ---- */}
+            <h1 className="mb-2 text-center self-center text-5xl font-[ubuntu]">
               Login
             </h1>
+            {/* ---- Title ---- */}
 
-            <label htmlFor="email" className="font-bold">
-              NUS Email
+            {/* ---- Username ---- */}
+            <label htmlFor="email" className="text-2xl font-[ubuntu]">
+              Username
             </label>
             <div className="flex flex-row w-full items-center mt-2">
               <Input
-                className="rounded-l"
+                className="rounded-l text-black"
                 name="email"
                 required
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="NUS Email"
                 type="text"
                 value={email}
               />
-              <div className="flex p-2.5 bg-gray-200 rounded-r">@u.nus.edu</div>
             </div>
+            {/* ---- Username ---- */}
 
-            <label htmlFor="password" className="font-bold">
+            {/* ---- Password ---- */}
+            <label htmlFor="password" className="text-2xl font-[ubuntu] mt-4">
               Password
             </label>
             <Input
-              className="rounded-md mt-2"
+              className="rounded-md mt-2 text-black"
               name="password"
               required
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
               type="password"
               value={password}
             />
+            {/* ---- Password ---- */}
 
-            <Link href="/auth/forgot-password">
-              <div className="mt-4 underline">Forgot your password?</div>
-            </Link>
+            {/* ---- Forgot Your Password ---- */}
+            <div className="mx-auto my-6">
+              <Link href="/auth/forgot-password">
+                <div className="font-medium">Forgot your password?</div>
+              </Link>
+            </div>
+            {/* ---- Forgot Your Password ---- */}
+
             <Button
               className="mt-2 self-stretch shadow-md"
-              disabled={!email || !password}
               isLoading={submitting}
               type="submit"
             >
-              Sign In
+              Login
             </Button>
           </div>
         </form>
+        <Toaster />
       </Container>
-      <Toaster />
     </>
   )
 }

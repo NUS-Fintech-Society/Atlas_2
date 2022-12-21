@@ -5,6 +5,7 @@ const Input = ({
   className,
   name,
   onChange,
+  placeholder,
   required,
   type,
   value,
@@ -16,6 +17,7 @@ const Input = ({
       required={required}
       name={name}
       onChange={onChange}
+      placeholder={placeholder}
       type={type}
       value={value}
     />
@@ -28,6 +30,7 @@ type InputType = {
   className?: string
   name?: string
   onChange?: ChangeEventHandler<HTMLInputElement>
+  placeholder?: string
   required?: boolean
   type: 'text' | 'password'
   value?: string | number | readonly string[]
