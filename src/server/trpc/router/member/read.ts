@@ -64,3 +64,43 @@ export const getMemberImage = protectedProcedure
       })
     }
   })
+
+export const getRoles = protectedProcedure.query(async ({ ctx }) => {
+  try {
+    return await ctx.prisma.user.findMany({
+      where: {},
+      distinct: ['roles'],
+      select: { roles: true },
+    })
+  } catch (error) {
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'error retrieving roles' + error,
+    })
+  }
+})
+
+export const getAllUsers = protectedProcedure
+  .input(
+    z.object({
+      roles: z.string(),
+    })
+  )
+  .query(async ({ ctx, input }) => {
+    try {
+      return await ctx.prisma.user.findMany({
+        where: {
+          roles: input.roles,
+        },
+        select: {
+          name: true,
+          batch: true,
+        },
+      })
+    } catch (error) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'error retrieving users' + error,
+      })
+    }
+  })
