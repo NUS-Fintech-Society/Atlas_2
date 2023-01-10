@@ -17,7 +17,7 @@ function classNames(...classes: string[]) {
 
 export default function Example() {
   return (
-    <Disclosure as="nav" className="bg-gray-800 mb-3">
+    <Disclosure as="nav" className="mb-3 bg-gray-800">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@ export default function Example() {
                           item.current
                             ? 'bg-gray-900 text-white'
                             : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'px-3 py-2 rounded-md text-sm font-medium'
+                          'rounded-md px-3 py-2 text-sm font-medium'
                         )}
                         aria-current={item.current ? 'page' : undefined}
                       >
@@ -102,8 +102,8 @@ export default function Example() {
                         {({ active }) => (
                           <button
                             className={classNames(
-                              active ? 'bg-gray-100 w-full text-left' : '',
-                              'block px-4 py-2 text-sm text-gray-700 w-full text-left'
+                              active ? 'w-full bg-gray-100 text-left' : '',
+                              'block w-full px-4 py-2 text-left text-sm text-gray-700'
                             )}
                             onClick={() =>
                               signOut({
@@ -133,7 +133,7 @@ export default function Example() {
                     item.current
                       ? 'bg-gray-900 text-white'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium'
+                    'block rounded-md px-3 py-2 text-base font-medium'
                   )}
                   aria-current={item.current ? 'page' : undefined}
                 >

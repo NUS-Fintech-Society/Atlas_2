@@ -5,7 +5,7 @@ const BottomNavBar = () => {
   return (
     <section
       id="bottom-navigation"
-      className="block fixed inset-x-0 bottom-0 bg-white z-10 shadow md:invisible"
+      className="fixed inset-x-0 bottom-0 z-10 block bg-white shadow md:invisible"
     >
       <div id="tabs" className="flex justify-between">
         {TabConfig.map(({ href, src, title }, index) => (
@@ -20,12 +20,12 @@ export default BottomNavBar
 
 const TabButton = ({ href, src, title }: TabButtonProps) => {
   return (
-    <div className="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+    <div className="inline-block w-full justify-center pt-2 pb-1 text-center hover:text-teal-500 focus:text-teal-500">
       <Link href={href}>
         <div>
           <Image
             alt="Home"
-            className="inline-block mb-1"
+            className="mb-1 inline-block"
             height={25}
             src={src}
             width={25}

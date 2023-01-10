@@ -1,8 +1,8 @@
 const Container = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
   return (
-    <div className="flex items-center justify-center w-screen h-screen bg-black text-white">
-      <div className="w-full min-h-screen p-4 flex flex-col items-center justify-center">
-        <div className="p-8 w-full max-w-3xl rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-1000">
+    <div className="flex h-screen w-screen items-center justify-center bg-black text-white">
+      <div className="flex min-h-screen w-full flex-col items-center justify-center p-4">
+        <div className="w-full max-w-3xl rounded-2xl p-8 shadow-lg transition-all duration-1000 hover:shadow-2xl">
           {children}
         </div>
       </div>

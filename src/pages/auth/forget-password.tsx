@@ -1,5 +1,5 @@
 import Container from '~/components/auth/Container'
-import { FormEvent, FormEventHandler, useState } from 'react'
+import { type FormEvent, useState } from 'react'
 import { Button, Input } from '~/components/utilities'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -68,9 +68,9 @@ const ForgotPasswordPage = () => {
 
             {/* ---- Reset Password Link ---- */}
             <div className="flex flex-col">
-              <Button 
-                isLoading={isLoading} 
-                className="mt-2 shadow-md" 
+              <Button
+                isLoading={isLoading}
+                className="mt-2 shadow-md"
                 type="submit"
               >
                 Send Reset Link

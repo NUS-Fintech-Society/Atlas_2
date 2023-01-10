@@ -64,16 +64,16 @@ const LoginPage = () => {
         <form onSubmit={submitForm}>
           <div className="flex flex-col items-start">
             {/* ---- Title ---- */}
-            <h1 className="mb-2 text-center self-center text-5xl font-[ubuntu]">
+            <h1 className="mb-2 self-center text-center font-[ubuntu] text-5xl">
               Login
             </h1>
             {/* ---- Title ---- */}
 
             {/* ---- Username ---- */}
-            <label htmlFor="email" className="text-2xl font-[ubuntu]">
+            <label htmlFor="email" className="font-[ubuntu] text-2xl">
               Username
             </label>
-            <div className="flex flex-row w-full items-center mt-2">
+            <div className="mt-2 flex w-full flex-row items-center">
               <Input
                 className="rounded text-black"
                 name="email"
@@ -87,11 +87,11 @@ const LoginPage = () => {
             {/* ---- Username ---- */}
 
             {/* ---- Password ---- */}
-            <label htmlFor="password" className="text-2xl font-[ubuntu] mt-4">
+            <label htmlFor="password" className="mt-4 font-[ubuntu] text-2xl">
               Password
             </label>
             <Input
-              className="rounded-md mt-2 text-black"
+              className="mt-2 rounded-md text-black"
               name="password"
               required
               onChange={(e) => setPassword(e.target.value)}

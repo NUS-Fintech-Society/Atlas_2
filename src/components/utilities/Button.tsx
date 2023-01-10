@@ -13,7 +13,7 @@ const Button = ({
     <button
       className={clsx(
         className, // ADDITIONAL PROPERTIES IF REQUIRED
-        'text-white px-4 py-2 rounded-md font-bold', // COMMON PROPERTIES
+        'rounded-md px-4 py-2 font-bold text-white', // COMMON PROPERTIES
         !isLoading && 'bg-[#4365DD]', // DEFAULT COLOUR WHEN NOT LOADING
         isLoading && 'bg-[#7996FC]', // DEFAULT WHEN LOADING
         'hover:bg-[#7996FC]', // ON HOVER
