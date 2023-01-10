@@ -66,7 +66,6 @@ export const authOptions: NextAuthOptions = {
             name: account.name,
             email: account.email,
             level: account.level,
-            image: account.image || '',
           }
         } catch (e) {
           throw new Error((e as Error).message)
