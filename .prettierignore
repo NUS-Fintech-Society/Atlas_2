@@ -5,3 +5,4 @@ next.config.mjs
 package.json
 **/*.mjs
 .eslintrc.json
+pnpm-lock.yaml

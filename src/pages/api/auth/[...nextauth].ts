@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
 
           // Step 3: Get the user by the email
           const adapterUser = await prisma.user.findUnique({
-            where: { email: email.concat('@u.nus.edu') },
+            where: { email },
           })
           if (!adapterUser) throw new Error('Invalid NUS email or password')
 
