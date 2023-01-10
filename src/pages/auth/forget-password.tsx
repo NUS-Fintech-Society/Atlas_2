@@ -1,11 +1,36 @@
 import Container from '~/components/auth/Container'
-import { useState } from 'react'
+import { FormEvent, FormEventHandler, useState } from 'react'
 import { Button, Input } from '~/components/utilities'
 import Head from 'next/head'
 import Link from 'next/link'
+import { trpc } from '~/utils/trpc'
+import { useToast } from '@chakra-ui/react'
 
 const ForgotPasswordPage = () => {
+  const toast = useToast()
   const [email, setEmail] = useState('')
+  const { mutateAsync, isLoading } = trpc.auth.resetPassword.useMutation()
+  const formHandler = async (e: FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault()
+      await mutateAsync(email)
+    } catch (e) {
+      toast({
+        title: 'Something went wrong',
+        description: (e as Error).message,
+        status: 'error',
+        duration: 3000,
+      })
+      return
+    }
+    toast({
+      title: 'Successful',
+      description:
+        'If your email can be found in our database, you should receive an email regarding the steps to reset your password.',
+      status: 'success',
+      duration: 3000,
+    })
+  }
 
   return (
     <>
@@ -16,19 +41,19 @@ const ForgotPasswordPage = () => {
       </Head>
 
       <Container>
-        <div className="flex flex-col items-start w-full">
+        <div className="flex w-full flex-col items-start">
           {/* ---- Heading ---- */}
-          <h1 className="mb-2 text-center self-center text-5xl font-[ubuntu] font-medium">
+          <h1 className="mb-2 self-center text-center font-[ubuntu] text-5xl font-medium">
             Forgot Password
           </h1>
           {/* ---- Heading ---- */}
 
-          <form className="w-full">
+          <form className="w-full" onSubmit={formHandler}>
             {/* ---- Username ---- */}
-            <label htmlFor="email" className="text-2xl font-[ubuntu]">
-              Username
+            <label htmlFor="email" className="font-[ubuntu] text-2xl">
+              Email
             </label>
-            <div className="flex flex-row w-full items-center mt-2">
+            <div className="mt-2 flex w-full flex-row items-center">
               <Input
                 className="rounded text-black"
                 name="email"
@@ -43,13 +68,17 @@ const ForgotPasswordPage = () => {
 
             {/* ---- Reset Password Link ---- */}
             <div className="flex flex-col">
-              <Button className="shadow-md mt-2" type="submit">
+              <Button 
+                isLoading={isLoading} 
+                className="mt-2 shadow-md" 
+                type="submit"
+              >
                 Send Reset Link
               </Button>
               {/* ---- Reset Password Link ---- */}
 
               <Link href="/auth/login">
-                <Button className="shadow-md mt-2 w-full" type="button">
+                <Button className="mt-2 w-full shadow-md" type="button">
                   Return
                 </Button>
               </Link>
