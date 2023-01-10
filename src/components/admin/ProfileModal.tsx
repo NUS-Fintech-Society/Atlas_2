@@ -61,7 +61,7 @@ const ProfilePage = ({
   }
 
   return (
-    <div className="flex flex-wrap justify-between gap-6 mt-4">
+    <div className="mt-4 flex flex-wrap justify-between gap-6">
       <ProfileInfo {...data.user} />
       <div className="flex flex-col">
         <ProfilePicture studentId={studentId} session={session} />
@@ -246,7 +246,7 @@ const DeleteImageBtn = ({
 const ProfileInfo = (props: ProfilePageType) => {
   return (
     <Box>
-      <p className="text-3xl font-bold pl-4 mb-4">{props.name}</p>
+      <p className="mb-4 pl-4 text-3xl font-bold">{props.name}</p>
       <TableContainer>
         <Table variant="unstyled" size={'sm'}>
           <Tbody>

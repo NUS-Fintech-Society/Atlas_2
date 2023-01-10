@@ -37,7 +37,7 @@ const CreateAnnouncementPage: NextPage = () => {
   return (
     <Layout>
       <div className="flex flex-col justify-evenly">
-        <h1 className="font-bold text-3xl my-2">Create Announcement</h1>
+        <h1 className="my-2 text-3xl font-bold">Create Announcement</h1>
 
         <p className="my-2">
           Simply create an announcement now and let everyone know! Fill in the
@@ -46,7 +46,7 @@ const CreateAnnouncementPage: NextPage = () => {
 
         <form onSubmit={handleSubmit}>
           <input
-            className="mb-3 px-2 py-1 focus:outline-blue-500 min-w-full border-gray-300 border border-solid rounded-lg"
+            className="mb-3 min-w-full rounded-lg border border-solid border-gray-300 px-2 py-1 focus:outline-blue-500"
             id="title"
             name="title"
             value={title}
@@ -57,7 +57,7 @@ const CreateAnnouncementPage: NextPage = () => {
 
           <textarea
             id="content"
-            className="px-2 py-1 mb-3 focus:outline-blue-500 min-w-full border-gray-300 border border-solid rounded-lg"
+            className="mb-3 min-w-full rounded-lg border border-solid border-gray-300 px-2 py-1 focus:outline-blue-500"
             maxLength={500}
             name="content"
             value={content}

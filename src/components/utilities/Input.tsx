@@ -12,7 +12,7 @@ const Input = ({
 }: InputType) => {
   return (
     <input
-      className={clsx(className, 'w-full pl-4 py-2 outline outline-gray-200')}
+      className={clsx(className, 'w-full py-2 pl-4 outline outline-gray-200')}
       id={name}
       required={required}
       name={name}

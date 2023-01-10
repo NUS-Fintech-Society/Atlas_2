@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 const Buttons = () => {
   return (
-    <div className="flex mt-5 justify-between">
+    <div className="mt-5 flex justify-between">
       <Button>
         <Link href="/admin/users/create-multiple">Upload Multiple Users</Link>
       </Button>

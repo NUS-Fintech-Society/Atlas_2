@@ -1,10 +1,6 @@
-import { router, publicProcedure, protectedProcedure } from '../trpc'
+import { router } from '../trpc'
+import { resetPassword } from './auth/post'
 
 export const authRouter = router({
-  getSession: publicProcedure.query(({ ctx }) => {
-    return ctx.session
-  }),
-  getSecretMessage: protectedProcedure.query(() => {
-    return 'you can now see this secret message!'
-  }),
+  resetPassword,
 })

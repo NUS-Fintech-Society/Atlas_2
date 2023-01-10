@@ -70,7 +70,7 @@ const DashboardPage: NextPage = () => {
           <div className="flex flex-row">
             <Button
               bg="light.secondary.primary"
-              className="text-white mr-5"
+              className="mr-5 text-white"
               onClick={() => router.back()}
             >
               Return
