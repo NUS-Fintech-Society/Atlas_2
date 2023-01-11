@@ -1,78 +1,81 @@
-import {
-  Box,
-  Heading,
-  Flex,
-  InputGroup,
-  Input,
-  FormControl,
-  FormLabel,
-  Button,
-  Spacer,
-} from '@chakra-ui/react'
-
-import Head from 'next/head'
 import { useSession } from 'next-auth/react'
+import { useState } from 'react'
+import { Button, Input } from '~/components/utilities'
+import LoadingScreen from '~/components/common/LoadingScreen'
+import Container from '~/components/auth/Container'
+import Head from 'next/head'
+import Link from 'next/link'
 
-const ChangePasswordPage = () => {
-  useSession({ required: true })
+const LoginPage = () => {
+  const { status } = useSession({ required: true })
+  const [oldPassword, setOldPassword] = useState('')
+  const [password, setPassword] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  if (status === "loading") return <LoadingScreen />
 
   return (
     <>
       <Head>
-        <title>Change Password</title>
+        <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="The login page for Atlas" />
       </Head>
-      <div>
-        <div>
-          <Box
-            p={8}
-            w="100%"
-            maxWidth="768px"
-            borderWidth={1}
-            borderRadius={16}
-            boxShadow="lg"
-            _hover={{ boxShadow: '2xl' }}
-            transition="all 1s"
-          >
-            <Flex flexDirection="column" alignItems="start">
-              <Flex
-                mb={8}
-                w="100%"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Heading as="h1" size="2xl" textAlign="center">
-                  Change Password
-                </Heading>
-                <Spacer></Spacer>
-              </Flex>
-              <FormControl mt={4}>
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <Input type="password" />
-                </InputGroup>
-              </FormControl>
-              <FormControl mt={4}>
-                <FormLabel>Confirm Password</FormLabel>
-                <InputGroup>
-                  <Input type="password" />
-                </InputGroup>
-              </FormControl>
-              <Button
-                mt={10}
-                size="lg"
-                isLoading={false}
-                type="submit"
-                alignSelf="stretch"
-              >
-                Confirm Change
-              </Button>
-            </Flex>
-          </Box>
-        </div>
-      </div>
+      <Container>
+        <form>
+          <div className="flex flex-col items-start">
+            {/* ---- Title ---- */}
+            <h1 className="mb-2 self-center text-center font-[ubuntu] text-5xl">
+              Change Password
+            </h1>
+            {/* ---- Title ---- */}
+
+            {/* ---- Old Password ---- */}
+            <label htmlFor="old-password" className="font-[ubuntu] text-2xl">
+              Current Password
+            </label>
+            <div className="mt-2 flex w-full flex-row items-center">
+              <Input
+                className="rounded text-black"
+                name="old-password"
+                required
+                onChange={(e) => setOldPassword(e.target.value)}
+                placeholder="Enter your old password"
+                type="password"
+                value={oldPassword}
+              />
+            </div>
+            {/* ---- Username ---- */}
+
+            {/* ---- Password ---- */}
+            <label htmlFor="new-password" className="mt-4 font-[ubuntu] text-2xl">
+              Password
+            </label>
+            <Input
+              className="mt-2 rounded-md text-black"
+              name="new-password"
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your new password"
+              type="password"
+              value={password}
+            />
+            {/* ---- Password ---- */}
+
+            {/* ---- Login Button ---- */}
+            <Button
+              className="mt-2 self-stretch shadow-md"
+              isLoading={submitting}
+              type="submit"
+            >
+              Login
+            </Button>
+            {/* ---- Login Button ---- */}
+          </div>
+        </form>
+      </Container>
     </>
   )
 }
 
-export default ChangePasswordPage
+export default LoginPage
