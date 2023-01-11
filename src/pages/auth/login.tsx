@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router'
 import { useSession, signIn } from 'next-auth/react'
 import { useState, type FormEvent } from 'react'
-import toast, { Toaster } from 'react-hot-toast'
 import { Button, Input } from '~/components/utilities'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useToast } from '@chakra-ui/react'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const toast = useToast()
 
   const submitForm = async (e: FormEvent<HTMLElement>) => {
     try {
@@ -32,17 +33,21 @@ const LoginPage = () => {
 
       if (res && res.error) {
         setSubmitting(false)
-        toast.error(res.error, {
-          duration: 2000,
-          position: 'bottom-center',
+        toast({
+          description: res.error,
+          duration: 3000,
+          status: 'error',
+          title: 'Oops, something went wrong!',
         })
         return
       }
     } catch (e) {
       setSubmitting(false)
-      toast.error('Oops, something went wrong. Please try again', {
-        duration: 2000,
-        position: 'bottom-center',
+      toast({
+        description: (e as Error).message,
+        duration: 3000,
+        status: 'error',
+        title: 'Oops, something went wrong!',
       })
     }
   }
@@ -120,7 +125,6 @@ const LoginPage = () => {
             {/* ---- Login Button ---- */}
           </div>
         </form>
-        <Toaster />
       </Container>
     </>
   )

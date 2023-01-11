@@ -6,24 +6,34 @@ import { useRouter } from 'next/router'
 import { Button } from '~/components/utilities'
 import Layout from '~/components/common/Layout'
 import LoadingScreen from '~/components/common/LoadingScreen'
-import toast, { Toaster } from 'react-hot-toast'
+import { useToast } from '@chakra-ui/react'
 
 const CreateAnnouncementPage: NextPage = () => {
   const [content, setContent] = useState('')
   const [title, setTitle] = useState('')
-
   const { data: session, status } = useSession({ required: true })
   const router = useRouter()
+  const toast = useToast()
+
   const handleSubmit = async () => {
     try {
       await mutateAsync({
         content,
         title,
       })
+
+      toast({
+        description: 'Message successfully created!',
+        duration: 3000,
+        status: 'success',
+        title: 'Success!',
+      })
     } catch (e) {
-      toast.error('Oops, something went wrong. Please try again', {
-        duration: 2000,
-        position: 'bottom-center',
+      toast({
+        description: (e as Error).message,
+        duration: 3000,
+        status: 'error',
+        title: 'Oops, something went wrong!',
       })
     }
   }
@@ -74,7 +84,6 @@ const CreateAnnouncementPage: NextPage = () => {
           </Button>
         </form>
       </div>
-      <Toaster />
     </Layout>
   )
 }

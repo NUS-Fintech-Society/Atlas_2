@@ -51,14 +51,14 @@ export const authOptions: NextAuthOptions = {
           const adapterUser = await prisma.user.findUnique({
             where: { email },
           })
-          if (!adapterUser) throw new Error('Invalid NUS email or password')
+          if (!adapterUser) throw new Error('Invalid email or password')
 
           // Step 4: Type cast it to the type of User
           const account = adapterUser as User
 
           // If the account is found, challenge the hashPassword with the password
           const success = await compare(password, account.hashedPassword)
-          if (!success) throw new Error('Wrong password')
+          if (!success) throw new Error('Invalid email or password')
 
           // The user object is passed to the session callback in session.data.user
           return {
