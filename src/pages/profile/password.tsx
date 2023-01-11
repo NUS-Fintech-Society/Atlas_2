@@ -12,7 +12,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
-  if (status === "loading") return <LoadingScreen />
+  if (status === 'loading') return <LoadingScreen />
 
   return (
     <>
@@ -48,7 +48,10 @@ const LoginPage = () => {
             {/* ---- Username ---- */}
 
             {/* ---- Password ---- */}
-            <label htmlFor="new-password" className="mt-4 font-[ubuntu] text-2xl">
+            <label
+              htmlFor="new-password"
+              className="mt-4 font-[ubuntu] text-2xl"
+            >
               Password
             </label>
             <Input
