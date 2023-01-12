@@ -1,16 +1,42 @@
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { type FormEvent, useState } from 'react'
 import { Button, Input } from '~/components/utilities'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import Head from 'next/head'
-import Link from 'next/link'
+import { useToast } from '@chakra-ui/react'
+import { trpc } from '~/utils/trpc'
 
 const LoginPage = () => {
+  const toast = useToast()
+  const { mutateAsync, isLoading } = trpc.profile.changePassword.useMutation()
   const { status } = useSession({ required: true })
   const [oldPassword, setOldPassword] = useState('')
   const [password, setPassword] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+
+  const formHandler = async (e: FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault()
+      await mutateAsync({
+        password,
+        oldPassword,
+      })
+
+      toast({
+        description: 'Password changed successfully',
+        duration: 3000,
+        status: 'success',
+        title: 'Success!',
+      })
+    } catch (e) {
+      toast({
+        description: (e as Error).message,
+        duration: 3000,
+        status: 'error',
+        title: 'Oops, an error occured!',
+      })
+    }
+  }
 
   if (status === 'loading') return <LoadingScreen />
 
@@ -22,7 +48,7 @@ const LoginPage = () => {
         <meta name="description" content="The login page for Atlas" />
       </Head>
       <Container>
-        <form>
+        <form onSubmit={formHandler}>
           <div className="flex flex-col items-start">
             {/* ---- Title ---- */}
             <h1 className="mb-2 self-center text-center font-[ubuntu] text-5xl">
@@ -68,10 +94,10 @@ const LoginPage = () => {
             {/* ---- Login Button ---- */}
             <Button
               className="mt-2 self-stretch shadow-md"
-              isLoading={submitting}
+              isLoading={isLoading}
               type="submit"
             >
-              Login
+              Change password
             </Button>
             {/* ---- Login Button ---- */}
           </div>
