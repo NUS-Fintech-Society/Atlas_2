@@ -6,14 +6,16 @@ import Container from '~/components/auth/Container'
 import Head from 'next/head'
 import { useToast } from '@chakra-ui/react'
 import { trpc } from '~/utils/trpc'
+import Link from 'next/link'
 
-const LoginPage = () => {
+const ChangePasswordPage = () => {
   const toast = useToast()
   const { mutateAsync, isLoading } = trpc.profile.changePassword.useMutation()
   const { status } = useSession({ required: true })
   const [oldPassword, setOldPassword] = useState('')
   const [password, setPassword] = useState('')
 
+  // Use to submit the form to change the password
   const formHandler = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault()
@@ -81,7 +83,7 @@ const LoginPage = () => {
               Password
             </label>
             <Input
-              className="mt-2 rounded-md text-black"
+              className="my-4 mt-2 rounded-md text-black"
               name="new-password"
               required
               onChange={(e) => setPassword(e.target.value)}
@@ -93,12 +95,24 @@ const LoginPage = () => {
 
             {/* ---- Login Button ---- */}
             <Button
-              className="mt-2 self-stretch shadow-md"
+              className="my-2 self-stretch shadow-md"
+              disabled={!oldPassword || !password}
               isLoading={isLoading}
               type="submit"
             >
               Change password
             </Button>
+
+            <div className="w-full">
+              <Link href="/profile">
+                <Button
+                  className="mt-2 w-full self-stretch shadow-md"
+                  type="button"
+                >
+                  Return
+                </Button>
+              </Link>
+            </div>
             {/* ---- Login Button ---- */}
           </div>
         </form>
@@ -107,4 +121,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default ChangePasswordPage
