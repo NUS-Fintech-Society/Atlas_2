@@ -35,7 +35,7 @@ const ForgotPasswordPage = () => {
   return (
     <>
       <Head>
-        <title>Reset Password</title>
+        <title>Atlas | Forget Password</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The reset password page for Atlas" />
       </Head>

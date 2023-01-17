@@ -61,7 +61,7 @@ const LoginPage = () => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Atlas | Login</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
@@ -108,7 +108,7 @@ const LoginPage = () => {
 
             {/* ---- Forgot Your Password ---- */}
             <div className="mx-auto my-6">
-              <Link href="/auth/forget-password">
+              <Link href="/auth/forgetpassword">
                 <div className="font-medium">Forgot your password?</div>
               </Link>
             </div>
