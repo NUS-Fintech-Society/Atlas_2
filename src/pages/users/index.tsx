@@ -21,7 +21,9 @@ export default function AdminUserPage() {
   return (
     <>
       <Head>
-        <title></title>
+        <title>Atlas | Users</title>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="The login page for Atlas" />
       </Head>
       <Layout>
         <div className="flex flex-col">
