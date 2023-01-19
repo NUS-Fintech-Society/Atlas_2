@@ -5,7 +5,7 @@ const Layout = ({ children }: { children: JSX.Element[] | JSX.Element }) => {
   return (
     <>
       <Navbar />
-      <div className="mx-auto w-5/6">{children}</div>
+      <div className="mx-auto w-5/6 flex flex-col">{children}</div>
       <BottomNavBar />
     </>
   )

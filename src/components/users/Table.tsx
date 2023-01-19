@@ -19,6 +19,49 @@ type User = {
   id: string
 }
 
+const useColumns = () => {
+  return useMemo<ColumnDef<User>[]>(
+    () => [
+      {
+        header: 'Users',
+        columns: [
+          {
+            accessorKey: 'id',
+            cell: (info) => info.getValue(),
+            header: 'No.',
+            footer: (props) => props.column.id,
+          },
+          {
+            accessorKey: 'name',
+            cell: (info) => info.getValue(),
+            header: 'Name',
+            footer: (props) => props.column.id,
+          },
+          {
+            accessorKey: 'email',
+            cell: (info) => info.getValue(),
+            header: 'Email',
+            footer: (props) => props.column.id,
+          },
+          {
+            accessorKey: 'department',
+            cell: (info) => info.getValue(),
+            header: 'Department',
+            footer: (props) => props.column.id,
+          },
+          {
+            accessorKey: 'roles',
+            cell: (info) => info.getValue(),
+            header: 'Role',
+            footer: (props) => props.column.id,
+          },
+        ],
+      },
+    ],
+    []
+  )
+}
+
 const TableHeader = ({ table }: { table: ReactTable<User> }) => {
   return (
     <thead>
@@ -85,10 +128,11 @@ const Table = ({
   )
 }
 
-/**
- * @returns {JSX.Element} The data table consisting of the data
- */
 export default function DataTable() {
+  const columns = useColumns()
+
+  // useState is used because we only want the data to be rendered when
+  // users is defined. There will  be type error if we destructure data
   const [users, setUsers] = useState<User[]>([])
   const { isLoading } = trpc.user.getAllUsers.useQuery(undefined, {
     onSuccess(data) {
@@ -96,50 +140,9 @@ export default function DataTable() {
     },
   })
 
-  const columns = useMemo<ColumnDef<User>[]>(
-    () => [
-      {
-        header: 'Users',
-        columns: [
-          {
-            accessorKey: 'id',
-            cell: (info) => info.getValue(),
-            header: 'No.',
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: 'name',
-            cell: (info) => info.getValue(),
-            header: 'Name',
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: 'email',
-            cell: (info) => info.getValue(),
-            header: 'Email',
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: 'department',
-            cell: (info) => info.getValue(),
-            header: 'Department',
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorKey: 'roles',
-            cell: (info) => info.getValue(),
-            header: 'Role',
-            footer: (props) => props.column.id,
-          },
-        ],
-      },
-    ],
-    []
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
+    <Table data={users} columns={columns} />
   )
-
-  if (isLoading) {
-    return <LoadingScreen />
-  }
-
-  return <Table data={users} columns={columns} />
 }

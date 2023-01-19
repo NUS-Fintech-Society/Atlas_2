@@ -29,11 +29,9 @@ export default function AdminUserPage() {
 
   return (
     <>
-      <SEO />
       <Layout>
-        <div className="flex flex-col">
-          <DataTable />
-        </div>
+        <SEO />
+        <DataTable />
       </Layout>
     </>
   )
