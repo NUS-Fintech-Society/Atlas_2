@@ -10,6 +10,10 @@ import {
 import { useRouter } from 'next/router'
 import Layout from '~/components/common/Layout'
 import { useState, type FormEvent } from 'react'
+// import dynamic from 'next/dynamic'
+// const CreateMultipleUsers = dynamic(
+//   () => import('~/components/events/CreateMultipleUsers')
+// )
 
 const UserForm = () => {
   const router = useRouter()
