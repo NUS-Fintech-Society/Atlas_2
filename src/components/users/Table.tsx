@@ -3,9 +3,8 @@ import {
   type Table as ReactTable,
   useReactTable,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   type ColumnDef,
+  type PaginationState,
   flexRender,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
@@ -105,102 +104,108 @@ const TableBody = ({ table }: { table: ReactTable<User> }) => {
   )
 }
 
-const Table = ({
-  data,
-  columns,
-}: {
-  data: User[]
-  columns: ColumnDef<User>[]
-}) => {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  })
-
+const NavigationButton = ({ table }: { table: ReactTable<User> }) => {
   return (
-    <>
-      <table>
-        <TableHeader table={table} />
-        <TableBody table={table} />
-      </table>
-      <div className="h-2" />
-      <div className="flex items-center gap-2">
-        <button
-          className="rounded border p-1"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<<'}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<'}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>'}
-        </button>
-        <button
-          className="rounded border p-1"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>>'}
-        </button>
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{' '}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
-          <input
-            type="number"
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0
-              table.setPageIndex(page)
-            }}
-            className="w-16 rounded border p-1"
-          />
-        </span>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
-    </>
+    <div className="flex items-center gap-2">
+      {table.getCanPreviousPage() ? (
+        <>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {'<<'}
+          </button>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {'<'}
+          </button>
+        </>
+      ) : null}
+      {table.getCanNextPage() ? (
+        <>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            {'>'}
+          </button>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            {'>>'}
+          </button>
+        </>
+      ) : null}
+    </div>
   )
 }
 
 export default function DataTable() {
   const columns = useColumns()
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+  const fetchDataOption = { pageIndex, pageSize }
+  const pagination = useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize]
+  )
 
-  // useState is used because we only want the data to be rendered when
-  // users is defined. There will  be type error if we destructure data
-  const [users, setUsers] = useState<User[]>([])
-  const { isLoading } = trpc.user.getAllUsers.useQuery(undefined, {
-    onSuccess: (data) => setUsers(data),
+  const { isLoading, data } = trpc.user.getAllUsersForTable.useQuery(
+    fetchDataOption,
+    {
+      keepPreviousData: true,
+      staleTime: 5000,
+    }
+  )
+
+  const table = useReactTable<User>({
+    columns,
+    data: data?.users || [],
+    debugTable: true,
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    onPaginationChange: setPagination,
+    pageCount: data?.pageCount || -1,
+    state: { pagination },
   })
 
-  return isLoading ? <Spinner /> : <Table data={users} columns={columns} />
+  return isLoading ? (
+    <Spinner />
+  ) : (
+    <table>
+      <TableHeader table={table} />
+      <TableBody table={table} />
+      <NavigationButton table={table} />
+
+      {/* ------- Select Page Size ------- */}
+      <select
+        value={table.getState().pagination.pageSize}
+        onChange={(e) => {
+          console.log(e.target.value)
+          table.setPageSize(Number(e.target.value))
+        }}
+      >
+        {[10, 20, 30, 40, 50].map((pageSize) => (
+          <option key={pageSize} value={pageSize}>
+            Show {pageSize}
+          </option>
+        ))}
+      </select>
+      {/* ------- Select Page Size ------- */}
+
+      <div>{table.getRowModel().rows.length} Users</div>
+    </table>
+  )
 }
