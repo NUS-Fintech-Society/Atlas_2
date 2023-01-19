@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/router'
 import Layout from '~/components/common/Layout'
 import { useState, type FormEvent } from 'react'
+import Head from 'next/head'
 // import dynamic from 'next/dynamic'
 // const CreateMultipleUsers = dynamic(
 //   () => import('~/components/events/CreateMultipleUsers')
@@ -58,77 +59,84 @@ const UserForm = () => {
   }
 
   return (
-    <Layout>
-      <form onSubmit={handleSubmit}>
-        <Input
-          id="id"
-          isRequired
-          marginY={5}
-          name="id"
-          onChange={(e) => setId(e.target.value)}
-          placeholder="Enter the student id"
-          value={id}
-          variant="outline"
-        />
-
-        <InputGroup>
+    <>
+      <Head>
+        <title>Atlas | Create Users</title>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="The create user page for Atlas" />
+      </Head>
+      <Layout>
+        <form onSubmit={handleSubmit}>
           <Input
-            id="email"
+            id="id"
             isRequired
-            marginBottom={5}
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter a email"
-            value={email}
+            marginY={5}
+            name="id"
+            onChange={(e) => setId(e.target.value)}
+            placeholder="Enter the student id"
+            value={id}
             variant="outline"
           />
-          <InputRightAddon> @u.nus.edu </InputRightAddon>
-        </InputGroup>
 
-        <Input
-          id="password"
-          marginBottom={5}
-          name="password"
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter a password. If no password is provided, a random one will be generated"
-          value={password}
-          variant="outline"
-        />
+          <InputGroup>
+            <Input
+              id="email"
+              isRequired
+              marginBottom={5}
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter a email"
+              value={email}
+              variant="outline"
+            />
+            <InputRightAddon> @u.nus.edu </InputRightAddon>
+          </InputGroup>
 
-        <Select
-          marginBottom={5}
-          isRequired
-          onChange={(e) => setLevel(e.target.value)}
-          placeholder="Select the level"
-        >
-          <option value="member">Member</option>
-          <option value="lead">Lead</option>
-          <option value="codirector">Co-Director</option>
-          <option value="director">Director</option>
-          <option value="super">Admin</option>
-        </Select>
+          <Input
+            id="password"
+            marginBottom={5}
+            name="password"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter a password. If no password is provided, a random one will be generated"
+            value={password}
+            variant="outline"
+          />
 
-        <div className="flex">
-          <Button
-            bg="light.secondary.primary"
-            className="mr-5 text-white"
-            onClick={() => router.back()}
+          <Select
+            marginBottom={5}
+            isRequired
+            onChange={(e) => setLevel(e.target.value)}
+            placeholder="Select the level"
           >
-            Return
-          </Button>
+            <option value="member">Member</option>
+            <option value="lead">Lead</option>
+            <option value="codirector">Co-Director</option>
+            <option value="director">Director</option>
+            <option value="super">Admin</option>
+          </Select>
 
-          <Button
-            bg="light.secondary.primary"
-            className="text-white"
-            isLoading={isLoading}
-            type="submit"
-          >
-            Create User
-          </Button>
-        </div>
-      </form>
-    </Layout>
+          <div className="flex">
+            <Button
+              bg="light.secondary.primary"
+              className="mr-5 text-white"
+              onClick={() => router.back()}
+            >
+              Return
+            </Button>
+
+            <Button
+              bg="light.secondary.primary"
+              className="text-white"
+              isLoading={isLoading}
+              type="submit"
+            >
+              Create User
+            </Button>
+          </div>
+        </form>
+      </Layout>
+    </>
   )
 }
 
