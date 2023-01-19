@@ -1,4 +1,3 @@
-import LoadingScreen from '~/components/common/LoadingScreen'
 import { trpc } from '~/utils/trpc'
 import {
   type Table as ReactTable,
@@ -10,6 +9,7 @@ import {
   flexRender,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
+import { Spinner } from '@chakra-ui/react'
 
 type User = {
   name: string | null
@@ -23,7 +23,7 @@ const useColumns = () => {
   return useMemo<ColumnDef<User>[]>(
     () => [
       {
-        header: 'Users',
+        header: 'Manage Users',
         columns: [
           {
             accessorKey: 'id',
@@ -121,10 +121,74 @@ const Table = ({
   })
 
   return (
-    <table>
-      <TableHeader table={table} />
-      <TableBody table={table} />
-    </table>
+    <>
+      <table>
+        <TableHeader table={table} />
+        <TableBody table={table} />
+      </table>
+      <div className="h-2" />
+      <div className="flex items-center gap-2">
+        <button
+          className="rounded border p-1"
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'<<'}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'<'}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {'>'}
+        </button>
+        <button
+          className="rounded border p-1"
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          {'>>'}
+        </button>
+        <span className="flex items-center gap-1">
+          <div>Page</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} of{' '}
+            {table.getPageCount()}
+          </strong>
+        </span>
+        <span className="flex items-center gap-1">
+          | Go to page:
+          <input
+            type="number"
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              table.setPageIndex(page)
+            }}
+            className="w-16 rounded border p-1"
+          />
+        </span>
+        <select
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
   )
 }
 
@@ -135,14 +199,8 @@ export default function DataTable() {
   // users is defined. There will  be type error if we destructure data
   const [users, setUsers] = useState<User[]>([])
   const { isLoading } = trpc.user.getAllUsers.useQuery(undefined, {
-    onSuccess(data) {
-      setUsers(data)
-    },
+    onSuccess: (data) => setUsers(data),
   })
 
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
-    <Table data={users} columns={columns} />
-  )
+  return isLoading ? <Spinner /> : <Table data={users} columns={columns} />
 }

@@ -29,8 +29,8 @@ export default function AdminUserPage() {
 
   return (
     <>
+      <SEO />
       <Layout>
-        <SEO />
         <DataTable />
       </Layout>
     </>
