@@ -1,5 +1,5 @@
-import Buttons from '~/components/admin/Buttons'
-import UserTable from '~/components/admin/UserTable'
+import Buttons from '~/components/users/Buttons'
+import UserTable from '~/components/users/UserTable'
 import Layout from '~/components/common/Layout'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
