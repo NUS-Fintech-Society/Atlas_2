@@ -10,7 +10,6 @@ import type { AddUsersType, CSVType } from '~/store/types/admin.type'
 import type { MouseEvent } from 'react'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import Layout from '~/components/common/Layout'
 import LoadingScreen from '~/components/common/LoadingScreen'
 
 const DashboardPage: NextPage = () => {
@@ -62,32 +61,30 @@ const DashboardPage: NextPage = () => {
   }
 
   return (
-    <Layout>
-      <div className="flex flex-col">
-        {data.length ? <DataTable /> : null}
-        <Stack direction={['row', 'column']}>
-          <input accept=".csv" onChange={handleFile} type="file" />
-          <div className="flex flex-row">
-            <Button
-              bg="light.secondary.primary"
-              className="mr-5 text-white"
-              onClick={() => router.back()}
-            >
-              Return
-            </Button>
-            <Button
-              bg="light.secondary.primary"
-              className="text-white"
-              disabled={!data.length}
-              isLoading={isLoading}
-              onClick={clickHandler}
-            >
-              Submit File
-            </Button>
-          </div>
-        </Stack>
-      </div>
-    </Layout>
+    <div className="flex flex-col">
+      {data.length ? <DataTable /> : null}
+      <Stack direction={['row', 'column']}>
+        <input accept=".csv" onChange={handleFile} type="file" />
+        <div className="flex flex-row">
+          <Button
+            bg="light.secondary.primary"
+            className="mr-5 text-white"
+            onClick={() => router.back()}
+          >
+            Return
+          </Button>
+          <Button
+            bg="light.secondary.primary"
+            className="text-white"
+            disabled={!data.length}
+            isLoading={isLoading}
+            onClick={clickHandler}
+          >
+            Submit File
+          </Button>
+        </div>
+      </Stack>
+    </div>
   )
 }
 
