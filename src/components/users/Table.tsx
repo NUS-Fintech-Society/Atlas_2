@@ -22,7 +22,7 @@ const useColumns = () => {
   return useMemo<ColumnDef<User>[]>(
     () => [
       {
-        header: 'Manage Users',
+        header: 'Users',
         columns: [
           {
             accessorKey: 'id',
@@ -65,7 +65,10 @@ const TableHeader = ({ table }: { table: ReactTable<User> }) => {
   return (
     <thead>
       {table.getHeaderGroups().map((headerGroup) => (
-        <tr key={headerGroup.id}>
+        <tr
+          key={headerGroup.id}
+          className="bg-[#01003D] font-[inter] text-white"
+        >
           {headerGroup.headers.map((header) => (
             <th key={header.id} colSpan={header.colSpan}>
               {header.isPlaceholder ? null : (
@@ -86,13 +89,13 @@ const TableHeader = ({ table }: { table: ReactTable<User> }) => {
 
 const TableBody = ({ table }: { table: ReactTable<User> }) => {
   return (
-    <tbody className="text-center">
+    <tbody className="border border-[#01003D] text-center">
       {table.getRowModel().rows.map((row) => {
         return (
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => {
               return (
-                <td key={cell.id}>
+                <td key={cell.id} className="border-x border-[#01003D]">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               )
@@ -107,42 +110,35 @@ const TableBody = ({ table }: { table: ReactTable<User> }) => {
 const NavigationButton = ({ table }: { table: ReactTable<User> }) => {
   return (
     <div className="flex items-center gap-2">
-      {table.getCanPreviousPage() ? (
-        <>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<<'}
-          </button>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<'}
-          </button>
-        </>
-      ) : null}
-      {table.getCanNextPage() ? (
-        <>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>'}
-          </button>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>>'}
-          </button>
-        </>
-      ) : null}
+      <button
+        className="rounded border p-1"
+        onClick={() => table.setPageIndex(0)}
+        disabled={!table.getCanPreviousPage()}
+      >
+        {'<<'}
+      </button>
+      <button
+        className="rounded border p-1"
+        onClick={() => table.previousPage()}
+        disabled={!table.getCanPreviousPage()}
+      >
+        {'<'}
+      </button>
+
+      <button
+        className="rounded border p-1"
+        onClick={() => table.nextPage()}
+        disabled={!table.getCanNextPage()}
+      >
+        {'>'}
+      </button>
+      <button
+        className="rounded border p-1"
+        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+        disabled={!table.getCanNextPage()}
+      >
+        {'>>'}
+      </button>
     </div>
   )
 }
@@ -184,28 +180,30 @@ export default function DataTable() {
   return isLoading ? (
     <Spinner />
   ) : (
-    <table>
-      <TableHeader table={table} />
-      <TableBody table={table} />
-      <NavigationButton table={table} />
+    <>
+      <table>
+        <TableHeader table={table} />
+        <TableBody table={table} />
+      </table>
+      <div className="mt-5 flex w-1/2 flex-row items-center justify-between">
+        <NavigationButton table={table} />
 
-      {/* ------- Select Page Size ------- */}
-      <select
-        value={table.getState().pagination.pageSize}
-        onChange={(e) => {
-          console.log(e.target.value)
-          table.setPageSize(Number(e.target.value))
-        }}
-      >
-        {[10, 20, 30, 40, 50].map((pageSize) => (
-          <option key={pageSize} value={pageSize}>
-            Show {pageSize}
-          </option>
-        ))}
-      </select>
-      {/* ------- Select Page Size ------- */}
-
-      <div>{table.getRowModel().rows.length} Users</div>
-    </table>
+        {/* ------- Select Page Size ------- */}
+        <select
+          className="border-2 border-black"
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+        {/* ------- Select Page Size ------- */}
+      </div>
+    </>
   )
 }
