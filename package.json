@@ -40,6 +40,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
     "react-redux": "^8.0.5",
+    "react-select": "^5.7.0",
     "redux": "^4.2.0",
     "superjson": "1.9.1",
     "update": "^0.7.4",
