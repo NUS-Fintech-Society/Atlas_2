@@ -42,7 +42,7 @@ const EventPage = () => {
     return <div>Loading...</div>
   } else {
     return (
-      <div className="h-screen items-center bg-black text-white">
+      <div className="h-fill items-center bg-black text-white">
         <div className="mx-auto max-w-4xl p-10">
           <h1 className="mb-10 text-center text-2xl font-bold">
             Create New Event
