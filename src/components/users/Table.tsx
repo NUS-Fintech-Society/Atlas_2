@@ -8,7 +8,7 @@ import {
   flexRender,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import { Spinner } from '@chakra-ui/react'
+import LoadingScreen from '../common/LoadingScreen'
 
 type User = {
   name: string | null
@@ -65,10 +65,7 @@ const TableHeader = ({ table }: { table: ReactTable<User> }) => {
   return (
     <thead>
       {table.getHeaderGroups().map((headerGroup) => (
-        <tr
-          key={headerGroup.id}
-          className="bg-[#01003D] font-[inter] text-white"
-        >
+        <tr key={headerGroup.id} className="bg-[#01003D] text-xl text-white">
           {headerGroup.headers.map((header) => (
             <th key={header.id} colSpan={header.colSpan}>
               {header.isPlaceholder ? null : (
@@ -89,7 +86,7 @@ const TableHeader = ({ table }: { table: ReactTable<User> }) => {
 
 const TableBody = ({ table }: { table: ReactTable<User> }) => {
   return (
-    <tbody className="border border-[#01003D] text-center">
+    <tbody className="border border-[#01003D] text-center text-[15px]">
       {table.getRowModel().rows.map((row) => {
         return (
           <tr key={row.id}>
@@ -104,42 +101,6 @@ const TableBody = ({ table }: { table: ReactTable<User> }) => {
         )
       })}
     </tbody>
-  )
-}
-
-const NavigationButton = ({ table }: { table: ReactTable<User> }) => {
-  return (
-    <div className="flex items-center gap-2">
-      <button
-        className="rounded border p-1"
-        onClick={() => table.setPageIndex(0)}
-        disabled={!table.getCanPreviousPage()}
-      >
-        {'<<'}
-      </button>
-      <button
-        className="rounded border p-1"
-        onClick={() => table.previousPage()}
-        disabled={!table.getCanPreviousPage()}
-      >
-        {'<'}
-      </button>
-
-      <button
-        className="rounded border p-1"
-        onClick={() => table.nextPage()}
-        disabled={!table.getCanNextPage()}
-      >
-        {'>'}
-      </button>
-      <button
-        className="rounded border p-1"
-        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-        disabled={!table.getCanNextPage()}
-      >
-        {'>>'}
-      </button>
-    </div>
   )
 }
 
@@ -178,32 +139,46 @@ export default function DataTable() {
   })
 
   return isLoading ? (
-    <Spinner />
+    <LoadingScreen />
   ) : (
-    <>
-      <table>
+    <div className="m-auto w-3/4">
+      <table className="min-w-full font-[inter]">
         <TableHeader table={table} />
         <TableBody table={table} />
       </table>
-      <div className="mt-5 flex w-1/2 flex-row items-center justify-between">
-        <NavigationButton table={table} />
+      <div className="mt-5 flex flex-row items-center justify-between">
+        <div className="flex items-center gap-2">
+          <button
+            className="rounded border p-1"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {'<<'}
+          </button>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            {'<'}
+          </button>
 
-        {/* ------- Select Page Size ------- */}
-        <select
-          className="border-2 border-black"
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-        {/* ------- Select Page Size ------- */}
+          <button
+            className="rounded border p-1"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            {'>'}
+          </button>
+          <button
+            className="rounded border p-1"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+          >
+            {'>>'}
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   )
 }
