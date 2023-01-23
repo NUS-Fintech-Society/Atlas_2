@@ -16,27 +16,32 @@ import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Head from 'next/head'
+import LoadingScreen from '~/components/common/LoadingScreen'
+import RestrictedPage from '~/components/auth/RestrictedPage'
 
 const EventPage = () => {
   const toast = useToast()
   // useForm for state management except attendees which belongs in DataTable (child)
   const { register, handleSubmit } = useForm()
   const [attendees, setAttendees] = useState<string[]>([])
+  const { data: session, status } = useSession()
 
+  if (session?.level != 'super') {
+    return <RestrictedPage />
+  }
   const { data: data } = trpc.event.getAllUsers.useQuery()
   const newEvent = trpc.event.createEvent.useMutation()
-  const { data: session, status } = useSession()
 
   const formSubmit = (data: any) => {
     try {
-      console.log('Form args:', data)
-      console.log('Selected attendees: ', attendees)
-      // newEvent.mutate({
-      //   name: data.eventName,
-      //   date: new Date(data.eventDate),
-      //   departments: data.dept,
-      //   attendees: attendees,
-      // })
+      // console.log('Form args:', data)
+      // console.log('Selected attendees: ', attendees)
+      newEvent.mutate({
+        name: data.eventName,
+        date: new Date(data.eventDate),
+        departments: data.dept,
+        attendees: attendees,
+      })
       toast({
         description: 'A new event has been successfully created!',
       })
@@ -51,10 +56,7 @@ const EventPage = () => {
   }
 
   if (!data) {
-    if (status == 'unauthenticated') {
-      alert('Unauthorized!!')
-    }
-    return <div>Loading...</div>
+    return <LoadingScreen />
   } else {
     return (
       <>
