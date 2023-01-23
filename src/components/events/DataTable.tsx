@@ -13,6 +13,7 @@ import {
   useReactTable,
   ColumnFiltersState,
   getFilteredRowModel,
+  Row,
 } from '@tanstack/react-table'
 import {
   Button,
@@ -31,40 +32,41 @@ type Attendees = {
   department: string | null
   roles: string | null
   name: string | null
+  id: string
 }
 
-export const data: Attendees[] = [
-  {
-    department: 'millimetres (mm)',
-    roles: 'adam role',
-    name: 'adam',
-  },
-  {
-    department: 'centimetres (cm)',
-    roles: 'bob role',
-    name: 'bobby',
-  },
-  {
-    department: 'metres (m)',
-    roles: 'sal role',
-    name: 'sal',
-  },
-  {
-    department: 'millimetres (mm)',
-    roles: 'adam role',
-    name: 'adam',
-  },
-  {
-    department: 'centimetres (cm)',
-    roles: 'bob role',
-    name: 'bobby',
-  },
-  {
-    department: 'metres (m)',
-    roles: 'sal role',
-    name: 'sal',
-  },
-]
+// export const data: Attendees[] = [
+//   {
+//     department: 'millimetres (mm)',
+//     roles: 'adam role',
+//     name: 'adam',
+//   },
+//   {
+//     department: 'centimetres (cm)',
+//     roles: 'bob role',
+//     name: 'bobby',
+//   },
+//   {
+//     department: 'metres (m)',
+//     roles: 'sal role',
+//     name: 'sal',
+//   },
+//   {
+//     department: 'millimetres (mm)',
+//     roles: 'adam role',
+//     name: 'adam',
+//   },
+//   {
+//     department: 'centimetres (cm)',
+//     roles: 'bob role',
+//     name: 'bobby',
+//   },
+//   {
+//     department: 'metres (m)',
+//     roles: 'sal role',
+//     name: 'sal',
+//   },
+// ]
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -90,62 +92,57 @@ function IndeterminateCheckbox({
   )
 }
 
-const columnHelper = createColumnHelper<Attendees>()
-
-export const columns = [
-  columnHelper.display({
-    id: 'select',
-    header: 'select',
-    //TODO: make attendee object
-    cell: ({ row }: { row: any }) => (
-      <IndeterminateCheckbox
-        {...{
-          checked: row.getIsSelected(),
-          indeterminate: row.getIsSomeSelected(),
-          onChange: row.getToggleSelectedHandler(),
-        }}
-      />
-    ),
-    enableColumnFilter: false,
-  }),
-  columnHelper.accessor('department', {
-    cell: (info) => info.getValue(),
-    header: 'Department',
-    enableColumnFilter: true,
-    filterFn: MultiSelectFilterFn,
-  }),
-  columnHelper.accessor('roles', {
-    cell: (info) => info.getValue(),
-    header: 'Role',
-    enableColumnFilter: true,
-    filterFn: MultiSelectFilterFn,
-  }),
-  columnHelper.accessor('name', {
-    cell: (info) => info.getValue(),
-    header: 'Name',
-    enableColumnFilter: true,
-    filterFn: MultiSelectFilterFn,
-  }),
-]
-
 export type DataTableProps<Data extends object> = {
   data: Attendees[]
-  columns: ColumnDef<Attendees, any>[]
-  sendDataToParent: (att: string[]) => void
+  setAttendees: (attendees: string[]) => void
 }
 
 // ref https://github.com/chakra-ui/chakra-ui/discussions/4380
-//TODO: create form logic
 export function DataTable<Data extends object>({
   data,
-  columns,
-  sendDataToParent,
+  setAttendees,
 }: DataTableProps<Data>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
+
+  const columnHelper = createColumnHelper<Attendees>()
+  const columns: ColumnDef<Attendees, any>[] = [
+    columnHelper.display({
+      id: 'select',
+      header: 'select',
+      cell: ({ row }: { row: any }) => (
+        <IndeterminateCheckbox
+          {...{
+            checked: row.getIsSelected(),
+            indeterminate: row.getIsSomeSelected(),
+            onChange: row.getToggleSelectedHandler(),
+          }}
+        />
+      ),
+      enableColumnFilter: false,
+    }),
+    columnHelper.accessor('department', {
+      cell: (info) => info.getValue(),
+      header: 'Department',
+      enableColumnFilter: true,
+      filterFn: MultiSelectFilterFn,
+    }),
+    columnHelper.accessor('roles', {
+      cell: (info) => info.getValue(),
+      header: 'Role',
+      enableColumnFilter: true,
+      filterFn: MultiSelectFilterFn,
+    }),
+    columnHelper.accessor('name', {
+      cell: (info) => info.getValue(),
+      header: 'Name',
+      enableColumnFilter: true,
+      filterFn: MultiSelectFilterFn,
+    }),
+  ]
 
   const table = useReactTable({
     columns,
@@ -173,13 +170,22 @@ export function DataTable<Data extends object>({
     }
   }
 
+  // Helper fn to add/remove attendees before passing resulting array to setAttendees
+  const updateAttendees = (row: Row<Attendees>, resultArray: string[]) => {
+    const attendeeId = row.original.id
+    if (row.getIsSelected()) {
+      resultArray.push(attendeeId)
+    }
+  }
+
+  // Uses parent's setAttendees to maintain state in main page
   useEffect(() => {
-    const att: string[] = []
-    console.log('selected:', table.getSelectedRowModel().flatRows)
-    // table
-    //   .getSelectedRowModel()
-    //   .flatRows.map((d) => att.push(d.getValue('id')), sendDataToParent(att))
-  }, [rowSelection, table, sendDataToParent])
+    const resultArray: string[] = []
+    table
+      .getSelectedRowModel()
+      .flatRows.forEach((row) => updateAttendees(row, resultArray))
+    setAttendees(resultArray)
+  }, [rowSelection, table, setAttendees])
 
   return (
     <div>

@@ -8,6 +8,7 @@ export const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
         department: true,
         roles: true,
         name: true,
+        id: true,
       },
     })
     return users
