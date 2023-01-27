@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
-import ProfileInfoModal from '~/components/admin/ProfileModal'
+import ProfileInfoModal from '~/components/users/ProfileModal'
 import { useState } from 'react'
 import type { Session } from 'next-auth'
 

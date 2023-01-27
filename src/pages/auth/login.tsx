@@ -51,7 +51,6 @@ const LoginPage = () => {
     return <LoadingScreen />
   }
 
-  // Push the user to the home page if they are logged in
   if (session) {
     router.push('/')
   }
@@ -59,7 +58,7 @@ const LoginPage = () => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Atlas | Login</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
