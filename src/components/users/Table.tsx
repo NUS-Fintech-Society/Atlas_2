@@ -9,6 +9,7 @@ import {
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
 import LoadingScreen from '../common/LoadingScreen'
+import Link from 'next/link'
 
 type User = {
   name: string | null
@@ -141,7 +142,19 @@ export default function DataTable() {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <div className="m-auto w-3/4">
+    <div className="mx-auto w-3/4">
+      <h1 className="mb-12 flex w-full justify-center text-4xl font-normal">
+        Manage Users
+      </h1>
+
+      <div className="mb-9 block h-14 w-14 rounded-[50%] bg-[#97AEFF]">
+        <Link href="/users/create">
+          <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-[#231F20]">
+            +
+          </div>
+        </Link>
+      </div>
+
       <table className="min-w-full font-[inter]">
         <TableHeader table={table} />
         <TableBody table={table} />
