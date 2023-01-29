@@ -12,10 +12,10 @@ import {
   Grid,
   GridItem,
   Avatar,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react'
 
-const Member = ({ session, id }: { session: Session, id: string }) => {
+const Member = ({ session, id }: { session: Session; id: string }) => {
   const [selected, setSelected] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
@@ -26,12 +26,16 @@ const Member = ({ session, id }: { session: Session, id: string }) => {
         onClose={onClose}
         studentId={selected}
       />
-      <Avatar height="100px" width="100px" src="link" 
+      <Avatar
+        height="100px"
+        width="100px"
+        src="link"
         onClick={(e) => {
           e.preventDefault()
           setSelected(id)
           onOpen()
-        }}/>
+        }}
+      />
       <Container centerContent paddingTop="20px">
         <Text fontSize="25px" color="#FFFFFF">
           Role
@@ -68,7 +72,7 @@ const ExcoBoard = ({ session }: { session: Session }) => {
         {TopThreeInfo.map((p, i) => {
           return (
             <GridItem colStart={2 * i + 2} colEnd={2 * i + 3} key={i}>
-              <Member session={session} id={p.id.toString()}/>
+              <Member session={session} id={p.id.toString()} />
             </GridItem>
           )
         })}
@@ -76,7 +80,7 @@ const ExcoBoard = ({ session }: { session: Session }) => {
         {ExcoMembersInfo.map((p, i) => {
           return (
             <GridItem rowStart={2} rowSpan={1} colSpan={1} key={i}>
-              <Member session={session} id={p.id.toString()}/>
+              <Member session={session} id={p.id.toString()} />
             </GridItem>
           )
         })}
@@ -145,7 +149,7 @@ export default function dashboard({ session }: { session: Session }) {
         </GridItem>
       </Grid>
 
-      <ExcoBoard session={session}/>
+      <ExcoBoard session={session} />
       <MemberBoard />
     </div>
   )
