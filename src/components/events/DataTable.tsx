@@ -160,10 +160,14 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
       <div className="flex items-center justify-between py-4">
         <p className="text-2xl">Attendees</p>
         <div className="flex gap-4">
-          <Button bgColor="#4365DD" onClick={clearSelection}>
+          <Button
+            bgColor="#4365DD"
+            className="text-white"
+            onClick={clearSelection}
+          >
             Clear Selection
           </Button>
-          <Button bgColor="#4365DD" onClick={selectAll}>
+          <Button bgColor="#4365DD" className="text-white" onClick={selectAll}>
             Select All
           </Button>
         </div>
@@ -181,7 +185,10 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
                 {headerGroup.headers.map((header) => {
                   /* Create each header component with MultiSelect Btns */
                   return (
-                    <Th key={header.id} className="border-x-2 border-[#97AEFF]">
+                    <Th
+                      key={header.id}
+                      className="border-x-2 border-[#97AEFF] text-white"
+                    >
                       <div className="flex items-center justify-between ">
                         {/* Render header filter btn */}
                         {header.column.getCanFilter() ? (
