@@ -18,13 +18,16 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Head from 'next/head'
 import LoadingScreen from '~/components/common/LoadingScreen'
-import RestrictedPage from '~/components/auth/RestrictedPage'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
+import RestrictedScreen from '~/components/common/RestrictedScreen'
 
 const EventPage = () => {
   const router = useRouter()
   const toast = useToast()
+  const { data: session } = useSession({ required: true })
+  const [attendees, setAttendees] = useState<string[]>([])
+  const [submitBefore, setSubmitBefore] = useState<boolean>(false) // hacky use for attendees validation
 
   const FormSchema = z.object({
     eventName: z.string().min(1, { message: 'Invalid name' }),
@@ -40,7 +43,7 @@ const EventPage = () => {
       }),
     date: z.preprocess((arg) => {
       if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
-    }, z.date().min(new Date(), { message: 'A valid date is required' })),
+    }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
   })
 
   type FormSchemaType = z.infer<typeof FormSchema>
@@ -49,36 +52,32 @@ const EventPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   })
 
-  const [attendees, setAttendees] = useState<string[]>([])
-  const [submitBefore, setSubmitBefore] = useState<boolean>(false) // hacky use for attendees validation
-  const { data: session } = useSession()
-  const { data: data } = trpc.event.getAllUsers.useQuery()
+  const { data } = trpc.event.getAllUsers.useQuery()
   const newEvent = trpc.event.createEvent.useMutation()
 
   const invalidAttendees = attendees.length === 0
-  const formSubmit = async (formData: any) => {
+  const formSubmit = async (formData: FormSchemaType) => {
     try {
-      newEvent.mutate({
+      // Hacky soluton since attendees not linked to React-hook-form
+      if (invalidAttendees) {
+        return false
+      }
+      await newEvent.mutateAsync({
         name: formData.eventName,
         date: new Date(formData.date),
         departments: formData.dept,
         attendees: attendees,
       })
-
-      // Delay 2s
-      await new Promise(async (resolve) => {
-        await setTimeout(() => {
-          resolve(undefined)
-        }, 2000)
-      })
-
       toast({
-        description: 'A new event has been successfully created!',
+        duration: 3000,
+        status: 'success',
+        title: 'Success',
+        description: 'A new event has been successfully created',
       })
     } catch (e) {
       toast({
@@ -91,9 +90,10 @@ const EventPage = () => {
   }
   const redirectHome = () => router.push('/admin')
 
-  if (session?.level !== 'super') return <RestrictedPage />
   if (!data) return <LoadingScreen />
-
+  if (session?.level !== 'super') {
+    return <RestrictedScreen />
+  }
   return (
     <>
       <Head>
@@ -111,7 +111,7 @@ const EventPage = () => {
               <FormLabel>Event Name</FormLabel>
               <Input
                 type="text"
-                disabled={isSubmitting}
+                disabled={newEvent.isLoading}
                 {...register('eventName', { required: true })}
               />
               {errors.eventName && (
@@ -155,7 +155,7 @@ const EventPage = () => {
                 placeholder="Select Date and Time"
                 size="md"
                 type="datetime-local"
-                disabled={isSubmitting}
+                disabled={newEvent.isLoading}
                 className="dark:[color-scheme:dark]"
                 {...register('date', { required: true })}
               />
@@ -167,7 +167,7 @@ const EventPage = () => {
             </div>
             <div className="flex items-center">
               <FormLabel>QR Code required</FormLabel>
-              <Checkbox disabled={isSubmitting}></Checkbox>
+              <Checkbox disabled={newEvent.isLoading}></Checkbox>
             </div>
             <DataTable data={data} setAttendees={setAttendees} />
             {submitBefore && invalidAttendees && (
@@ -186,7 +186,7 @@ const EventPage = () => {
                 bgColor="#4365DD"
                 width={150}
                 type="submit"
-                disabled={isSubmitting}
+                disabled={newEvent.isLoading}
                 onClick={() => setSubmitBefore(true)}
               >
                 Create Event
