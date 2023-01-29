@@ -2,7 +2,7 @@ import ReactSelect, { components } from 'react-select'
 import { BiFilterAlt } from 'react-icons/bi'
 import React, { useState, useMemo } from 'react'
 import type { FilterFn, Table } from '@tanstack/react-table'
-import type { Attendees } from './DataTable'
+import type { Attendees } from '~/components/events/DataTable'
 
 // Function for filter rows via each column header
 export const MultiSelectFilterFn: FilterFn<Attendees> = (
