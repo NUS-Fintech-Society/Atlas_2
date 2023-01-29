@@ -4,7 +4,7 @@ export const TopThreeInfo = [
     image: '/images/1.png',
     role: 'Role',
     batch: '2021',
-    id: 0,
+    id: 'A0123456N',
   },
   {
     name: '2',

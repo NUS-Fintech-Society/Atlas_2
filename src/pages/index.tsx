@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { trpc } from '../utils/trpc'
 import { ExcoMembersInfo, TopThreeInfo } from '../components/users/Constants'
+import ProfileInfoModal from '../components/users/ProfileModal'
+import type { Session } from 'next-auth'
 
 import {
   Container,
@@ -10,13 +12,30 @@ import {
   Grid,
   GridItem,
   Avatar,
+  useDisclosure
 } from '@chakra-ui/react'
 
-const Member = () => {
+const Member = ({ session, id }: { session: Session, id: string }) => {
+  const [selected, setSelected] = useState('')
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Container centerContent padding="20px">
-      <Avatar height="100px" width="100px" src="link" />
+      <ProfileInfoModal
+        session={session}
+        isOpen={isOpen}
+        onClose={onClose}
+        studentId={selected}
+      />
+      <Avatar height="100px" width="100px" src="link" 
+        onClick={(e) => {
+          e.preventDefault()
+          setSelected(id)
+          onOpen()
+        }}/>
       <Container centerContent paddingTop="20px">
+        <Text fontSize="25px" color="#FFFFFF">
+          Role
+        </Text>
         <Text fontSize="20px" color="#FFFFFF">
           Name
         </Text>
@@ -28,7 +47,7 @@ const Member = () => {
   )
 }
 
-const ExcoBoard = () => {
+const ExcoBoard = ({ session }: { session: Session }) => {
   return (
     <div>
       <Container centerContent paddingTop="20px">
@@ -49,23 +68,7 @@ const ExcoBoard = () => {
         {TopThreeInfo.map((p, i) => {
           return (
             <GridItem colStart={2 * i + 2} colEnd={2 * i + 3} key={i}>
-              <Container centerContent padding="20px">
-                <Avatar height="100px" width="100px" src={p.image} />
-                <Container centerContent paddingTop="20px">
-                  <Text fontSize="25px" color="#FFFFFF">
-                    {' '}
-                    {p.role}{' '}
-                  </Text>
-                  <Text fontSize="20px" color="#FFFFFF">
-                    {' '}
-                    {p.name}
-                  </Text>
-                  <Text fontSize="20px" color="#FFFFFF">
-                    {' '}
-                    {p.batch}
-                  </Text>
-                </Container>
-              </Container>
+              <Member session={session} id={p.id.toString()}/>
             </GridItem>
           )
         })}
@@ -73,23 +76,7 @@ const ExcoBoard = () => {
         {ExcoMembersInfo.map((p, i) => {
           return (
             <GridItem rowStart={2} rowSpan={1} colSpan={1} key={i}>
-              <Container centerContent padding="20px">
-                <Avatar height="100px" width="100px" src={p.image} />
-                <Container centerContent paddingTop="20px">
-                  <Text fontSize="25px" color="#FFFFFF">
-                    {' '}
-                    {p.role}{' '}
-                  </Text>
-                  <Text fontSize="20px" color="#FFFFFF">
-                    {' '}
-                    {p.name}
-                  </Text>
-                  <Text fontSize="20px" color="#FFFFFF">
-                    {' '}
-                    {p.batch}
-                  </Text>
-                </Container>
-              </Container>
+              <Member session={session} id={p.id.toString()}/>
             </GridItem>
           )
         })}
@@ -135,7 +122,7 @@ const MemberBoard = () => {
   )
 }
 
-export default function dashboard() {
+export default function dashboard({ session }: { session: Session }) {
   return (
     <div>
       <Grid templateColumns="repeat(6,1fr)">
@@ -158,7 +145,7 @@ export default function dashboard() {
         </GridItem>
       </Grid>
 
-      <ExcoBoard />
+      <ExcoBoard session={session}/>
       <MemberBoard />
     </div>
   )
