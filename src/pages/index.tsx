@@ -3,8 +3,7 @@ import { trpc } from '../utils/trpc'
 import {
   ExcoMembersInfo,
   TopThreeInfo,
-  MembersInfo,
-} from './memberDashboard/constants'
+} from '../components/users/Constants'
 
 import {
   Container,
@@ -14,30 +13,18 @@ import {
   Grid,
   GridItem,
   Avatar,
-  Box,
 } from '@chakra-ui/react'
 
-// const{data: roles} = trpc.useQuery(["memberdash.getRoles"]) -> this will give you an array of object, each object has only 1
-// attribute called roles
-//     console.log(roles)
-//     {roles?.map((role,index) => {
-//         const{data: memberinfo} = trpc.useQuery(["memberdash.getAll",{roles: role.roles}]) -> this is to use each role from the prev query
-// to call the second query -> get all members info for this role, the output is also an array of object, each object has the person's info
-//         console.log(memberinfo)
-//     })}
 const Member = () => {
   return (
     <Container centerContent padding="20px">
-      {/* Link : https://bit.ly/dan-abramov */}
       <Avatar height="100px" width="100px" src="link" />
       <Container centerContent paddingTop="20px">
         <Text fontSize="20px" color="#FFFFFF">
-          {' '}
-          Name{' '}
+          Name
         </Text>
         <Text fontSize="20px" color="#FFFFFF">
-          {' '}
-          Batch{' '}
+          Batch
         </Text>
       </Container>
     </Container>
@@ -146,22 +133,6 @@ const MemberBoard = () => {
         {roles?.map((p, i) => {
           return (
             <GridItem colSpan={5} rowStart={i + 1} key={i}>
-              {/* <Members roles = {p.roles}/> */}
-              {/* <Grid templateColumns='repeat(5,1fr)' gap='9'>
-                {p.members.map((m, j) => {
-                    return (
-                        <GridItem colSpan={1} key={j}>
-                          <Container centerContent padding='20px'>
-                              <Avatar height='100px' width='100px'  src={m.image}/>
-                              <Container centerContent paddingTop='20px'>
-                              <Text fontSize='20px' color='#FFFFFF'>{m.name}</Text>
-                              <Text fontSize='20px' color='#FFFFFF'>{m.batch}</Text>
-                              </Container>
-                      </Container>
-                        </GridItem>
-                    );
-                  })}
-                  </Grid> */}
             </GridItem>
           )
         })}
@@ -173,15 +144,6 @@ const MemberBoard = () => {
 export default function dashboard() {
   return (
     <div>
-      {/* <div className = "h-48 grid grid-cols-7 grid-rows-1 gap-4">
-            <div className = " col-span-2 flex justify-center items-center">
-                <p className = "text-3xl">Co-Directors</p></div>
-            <div className = "flex flex-col justify-center items-center">
-            <Avatar name='Dan Abrahmov' size='xl' src='https://bit.ly/dan-abramov' />
-            <p className= 'text-xl'>name</p>
-            <p>batch</p>
-            </div>
-        </div> */}
       <Grid templateColumns="repeat(6,1fr)">
         <GridItem colStart={3} colEnd={5}>
           <Container centerContent>
