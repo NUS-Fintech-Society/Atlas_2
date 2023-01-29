@@ -27,8 +27,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-import React, { useEffect, useRef, useState } from 'react'
-import type { HTMLProps } from 'react'
+import React, { useEffect, useRef, useState, type HTMLProps } from 'react'
 
 export type Attendees = {
   department: string | null
