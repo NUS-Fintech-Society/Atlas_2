@@ -1,9 +1,15 @@
 import ReactSelect, { components } from 'react-select'
 import { BiFilterAlt } from 'react-icons/bi'
-import React from 'react'
-import { FilterFn } from '@tanstack/react-table'
+import React, { useState, useMemo } from 'react'
+import type { FilterFn, Table } from '@tanstack/react-table'
+import type { Attendees } from './DataTable'
 
-export const MultiSelectFilterFn: FilterFn<any> = (row, columnId, value) => {
+// Function for filter rows via each column header
+export const MultiSelectFilterFn: FilterFn<Attendees> = (
+  row,
+  columnId,
+  value
+) => {
   if (value.length === 0) return true
   const rowValue = row.getValue(columnId)
   return rowValue !== undefined ? value.includes(rowValue) : true
@@ -22,7 +28,7 @@ const DropdownIndicator = (props: any) => {
   )
 }
 
-const IndicatorsContainer = ({ children, ...props }: any) => {
+const IndicatorsContainer = ({ ...props }: any) => {
   return (
     <components.IndicatorsContainer {...props}>
       <DropdownIndicator {...props} />
@@ -34,36 +40,37 @@ type OptionType = {
   label: string
 }
 
-//TODO: fix dropdown not closing when unfocused
 export function MultiSelectColumnFilter({
   column,
   table,
 }: {
   column: any
-  table: any
+  table: Table<Attendees>
 }) {
   const preFilteredRows = table.getPreFilteredRowModel().rows
-  const id = column.id
 
-  const options = React.useMemo(() => {
+  const options = useMemo(() => {
     const options = new Set<string>()
-    preFilteredRows.forEach((row: any) => {
-      options.add(row.original[id])
+    preFilteredRows.forEach((row) => {
+      if (column.id !== undefined) {
+        const headerName = column.id
+        options.add(row.getValue(headerName))
+      }
     })
     const arr: OptionType[] = []
     options.forEach((key: string) => {
       arr.push({ value: key, label: key } as OptionType)
     })
     return arr
-  }, [id, preFilteredRows])
+  }, [column.id, preFilteredRows])
 
-  const [selectedOptions, setSelectedOptions] = React.useState<OptionType[]>([])
+  const [selectedOptions, setSelectedOptions] = useState<OptionType[]>([])
 
   return (
     <ReactSelect
       options={options}
       isMulti
-      closeMenuOnSelect={false}
+      closeMenuOnSelect={true}
       hideSelectedOptions={false}
       components={{
         Option,
@@ -82,17 +89,17 @@ export function MultiSelectColumnFilter({
       isSearchable={true}
       unstyled={true}
       styles={{
-        container: (baseStyles, state) => ({
+        container: (baseStyles) => ({
           ...baseStyles,
-          //marginRight: '-8rem',
           width: '2.5rem',
           height: '2.5rem',
         }),
-        indicatorsContainer: (baseStyles, state) => ({
+        indicatorsContainer: () => ({
           width: '100%',
           height: '100%',
+          cursor: 'pointer',
         }),
-        menuList: (baseStyles, state) => ({
+        menuList: () => ({
           backgroundColor: 'white',
           border: '1px solid #3F5DC5',
           color: '#3F5DC5',
@@ -100,26 +107,22 @@ export function MultiSelectColumnFilter({
           paddingTop: '0.3rem',
           paddingBottom: '0.3rem',
         }),
-        menu: (baseStyles, state) => ({
+        menu: (baseStyles) => ({
           ...baseStyles,
           width: '10rem',
         }),
-        valueContainer: (baseStyles, state) => ({
+        valueContainer: (baseStyles) => ({
           ...baseStyles,
           width: '0px',
           height: '0px',
         }),
-        placeholder: (baseStyles, state) => ({
+        placeholder: (baseStyles) => ({
           ...baseStyles,
           visibility: 'hidden',
         }),
-        option: (baseStyles, state) => ({
+        option: () => ({
           padding: '0.2rem',
         }),
-        //   indicatorSeparator: (baseStyles, state) => ({
-        //     ...baseStyles,
-        //     visibility: 'hidden',
-        //   }),
       }}
     />
   )

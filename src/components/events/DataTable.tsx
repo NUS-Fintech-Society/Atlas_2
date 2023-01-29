@@ -4,15 +4,16 @@ import {
 } from './MultiSelectFilter'
 import { BsChevronUp, BsChevronDown, BsArrowDownUp } from 'react-icons/bs'
 import {
-  ColumnDef,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
-  ColumnFiltersState,
   getFilteredRowModel,
+} from '@tanstack/react-table'
+import type {
+  SortingState,
+  ColumnFiltersState,
   Row,
 } from '@tanstack/react-table'
 import {
@@ -26,47 +27,15 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-import React, { HTMLProps, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import type { HTMLProps } from 'react'
 
-type Attendees = {
+export type Attendees = {
   department: string | null
   roles: string | null
   name: string | null
   id: string
 }
-
-// export const data: Attendees[] = [
-//   {
-//     department: 'millimetres (mm)',
-//     roles: 'adam role',
-//     name: 'adam',
-//   },
-//   {
-//     department: 'centimetres (cm)',
-//     roles: 'bob role',
-//     name: 'bobby',
-//   },
-//   {
-//     department: 'metres (m)',
-//     roles: 'sal role',
-//     name: 'sal',
-//   },
-//   {
-//     department: 'millimetres (mm)',
-//     roles: 'adam role',
-//     name: 'adam',
-//   },
-//   {
-//     department: 'centimetres (cm)',
-//     roles: 'bob role',
-//     name: 'bobby',
-//   },
-//   {
-//     department: 'metres (m)',
-//     roles: 'sal role',
-//     name: 'sal',
-//   },
-// ]
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -74,9 +43,9 @@ function IndeterminateCheckbox({
   ...rest
 }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const ref = React.useRef<HTMLInputElement>(null!)
+  const ref = useRef<HTMLInputElement>(null!)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate
     }
@@ -92,28 +61,24 @@ function IndeterminateCheckbox({
   )
 }
 
-export type DataTableProps<Data extends object> = {
+export type DataTableProps = {
   data: Attendees[]
   setAttendees: (attendees: string[]) => void
 }
 
 // ref https://github.com/chakra-ui/chakra-ui/discussions/4380
-export function DataTable<Data extends object>({
-  data,
-  setAttendees,
-}: DataTableProps<Data>) {
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+export function DataTable({ data, setAttendees }: DataTableProps) {
+  const [rowSelection, setRowSelection] = useState({})
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
+  // Create columns with associated data
   const columnHelper = createColumnHelper<Attendees>()
-  const columns: ColumnDef<Attendees, any>[] = [
+  const columns = [
     columnHelper.display({
       id: 'select',
       header: 'select',
-      cell: ({ row }: { row: any }) => (
+      cell: ({ row }) => (
         <IndeterminateCheckbox
           {...{
             checked: row.getIsSelected(),
@@ -144,6 +109,7 @@ export function DataTable<Data extends object>({
     }),
   ]
 
+  // init React Table
   const table = useReactTable({
     columns,
     data,
@@ -160,6 +126,8 @@ export function DataTable<Data extends object>({
     onColumnFiltersChange: setColumnFilters,
     debugColumns: true,
   })
+
+  // Multi-select functionalities
   const clearSelection = () => {
     setRowSelection({})
   }
@@ -191,7 +159,6 @@ export function DataTable<Data extends object>({
     <div>
       <div className="flex items-center justify-between py-4">
         <p className="text-2xl">Attendees</p>
-        {/* <p>{JSON.stringify(rowSelection)}</p> */}
         <div className="flex gap-4">
           <Button bgColor="#4365DD" onClick={clearSelection}>
             Clear Selection
@@ -212,25 +179,23 @@ export function DataTable<Data extends object>({
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
-                  const meta: any = header.column.columnDef.meta
+                  /* Create each header component with MultiSelect Btns */
                   return (
-                    <Th
-                      key={header.id}
-                      isNumeric={meta?.isNumeric}
-                      className="border-x-2 border-[#97AEFF]"
-                    >
+                    <Th key={header.id} className="border-x-2 border-[#97AEFF]">
                       <div className="flex items-center justify-between ">
+                        {/* Render header filter btn */}
                         {header.column.getCanFilter() ? (
                           <MultiSelectColumnFilter
                             column={header.column}
                             table={table}
                           />
                         ) : null}
+                        {/* Render header text */}
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                        {/* Render header sort btn */}
                         {header.column.getCanSort() ? (
                           <chakra.span
                             onClick={header.column.getToggleSortingHandler()}
@@ -259,14 +224,9 @@ export function DataTable<Data extends object>({
             {table.getRowModel().rows.map((row) => (
               <Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => {
-                  // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
-                  const meta: any = cell.column.columnDef.meta
+                  /* Create each row */
                   return (
-                    <Td
-                      key={cell.id}
-                      isNumeric={meta?.isNumeric}
-                      className="border-2 border-[#97AEFF]"
-                    >
+                    <Td key={cell.id} className="border-2 border-[#97AEFF]">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
