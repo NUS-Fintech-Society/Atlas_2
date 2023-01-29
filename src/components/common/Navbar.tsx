@@ -7,7 +7,7 @@ import { signOut } from 'next-auth/react'
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'User', href: '/user', current: false },
-  { name: 'Events', href: '/event', current: false },
+  { name: 'Events', href: '/events', current: false },
   { name: 'Announcements', href: '/admin/announcements', current: false },
 ]
 
@@ -15,7 +15,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Navbar() {
   return (
     <Disclosure as="nav" className="mb-3 bg-gray-800">
       {({ open }) => (
