@@ -1,9 +1,6 @@
 import React from 'react'
 import { trpc } from '../utils/trpc'
-import {
-  ExcoMembersInfo,
-  TopThreeInfo,
-} from '../components/users/Constants'
+import { ExcoMembersInfo, TopThreeInfo } from '../components/users/Constants'
 
 import {
   Container,
@@ -131,10 +128,7 @@ const MemberBoard = () => {
         })}
 
         {roles?.map((p, i) => {
-          return (
-            <GridItem colSpan={5} rowStart={i + 1} key={i}>
-            </GridItem>
-          )
+          return <GridItem colSpan={5} rowStart={i + 1} key={i}></GridItem>
         })}
       </Grid>
     </div>
