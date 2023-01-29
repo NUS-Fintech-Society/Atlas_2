@@ -58,7 +58,8 @@ const EventPage = () => {
   })
 
   const { data } = trpc.event.getAllUsers.useQuery()
-  const newEvent = trpc.event.createEvent.useMutation()
+  const { mutateAsync, isLoading: isSubmitting } =
+    trpc.event.createEvent.useMutation()
 
   const invalidAttendees = attendees.length === 0
   const formSubmit = async (formData: FormSchemaType) => {
@@ -67,7 +68,7 @@ const EventPage = () => {
       if (invalidAttendees) {
         return false
       }
-      await newEvent.mutateAsync({
+      await mutateAsync({
         name: formData.eventName,
         date: new Date(formData.date),
         departments: formData.dept,
@@ -111,7 +112,7 @@ const EventPage = () => {
               <FormLabel>Event Name</FormLabel>
               <Input
                 type="text"
-                disabled={newEvent.isLoading}
+                disabled={isSubmitting}
                 {...register('eventName', { required: true })}
               />
               {errors.eventName && (
@@ -155,8 +156,7 @@ const EventPage = () => {
                 placeholder="Select Date and Time"
                 size="md"
                 type="datetime-local"
-                disabled={newEvent.isLoading}
-                className="dark:[color-scheme:dark]"
+                disabled={isSubmitting}
                 {...register('date', { required: true })}
               />
               {errors.date && (
@@ -167,7 +167,7 @@ const EventPage = () => {
             </div>
             <div className="flex items-center">
               <FormLabel>QR Code required</FormLabel>
-              <Checkbox disabled={newEvent.isLoading}></Checkbox>
+              <Checkbox disabled={isSubmitting}></Checkbox>
             </div>
             <DataTable data={data} setAttendees={setAttendees} />
             {submitBefore && invalidAttendees && (
@@ -177,7 +177,7 @@ const EventPage = () => {
               <Button
                 bgColor="#FF9900"
                 width={150}
-                textColor="black"
+                textColor="white"
                 onClick={redirectHome}
               >
                 Back
@@ -185,8 +185,9 @@ const EventPage = () => {
               <Button
                 bgColor="#4365DD"
                 width={150}
+                className="text-white"
                 type="submit"
-                disabled={newEvent.isLoading}
+                disabled={isSubmitting}
                 onClick={() => setSubmitBefore(true)}
               >
                 Create Event
