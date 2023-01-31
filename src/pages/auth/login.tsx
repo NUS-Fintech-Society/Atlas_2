@@ -105,7 +105,7 @@ const LoginPage = () => {
 
             {/* ---- Forgot Your Password ---- */}
             <div className="mx-auto my-6">
-              <Link href="/auth/forget-password">
+              <Link href="/auth/forgetpassword">
                 <div className="font-medium">Forgot your password?</div>
               </Link>
             </div>
