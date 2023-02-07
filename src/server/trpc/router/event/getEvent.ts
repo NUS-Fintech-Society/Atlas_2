@@ -23,12 +23,8 @@ const getEvent = protectedProcedure
     ])
 
     if (!event) {
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'No such event exists',
-      })
+      return ''
     }
-
     return qrcode
   })
 
