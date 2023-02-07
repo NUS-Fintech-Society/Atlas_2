@@ -2,6 +2,7 @@ import { protectedProcedure } from '../../trpc'
 import { router } from '~/server/trpc/trpc'
 import { z } from 'zod'
 import { toDataURL } from 'qrcode'
+import { env } from '~/env/server.mjs'
 
 /**
  * Generates a QR code if the event exists
@@ -16,18 +17,15 @@ const getEvent = protectedProcedure
     // Run these 2 events synchronously to save time
     const [event, qrcode] = await Promise.all([
       ctx.prisma.event.findUnique({
-        select: {
-          name: true,
-        },
         where: { id: input },
       }),
-      toDataURL('www.google.com'),
+      toDataURL(`${env.DOMAIN}/events/${input}`),
     ])
 
     if (!event) {
       return {
         qrcode: '',
-        name: undefined,
+        name: '',
       }
     }
     return {
