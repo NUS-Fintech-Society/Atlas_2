@@ -1,7 +1,6 @@
 import { protectedProcedure } from '../../trpc'
 import { router } from '~/server/trpc/trpc'
 import { z } from 'zod'
-import { TRPCError } from '@trpc/server'
 import { toDataURL } from 'qrcode'
 
 /**
@@ -17,15 +16,24 @@ const getEvent = protectedProcedure
     // Run these 2 events synchronously to save time
     const [event, qrcode] = await Promise.all([
       ctx.prisma.event.findUnique({
+        select: {
+          name: true,
+        },
         where: { id: input },
       }),
       toDataURL('www.google.com'),
     ])
 
     if (!event) {
-      return ''
+      return {
+        qrcode: '',
+        name: undefined,
+      }
     }
-    return qrcode
+    return {
+      qrcode,
+      name: event.name,
+    }
   })
 
 export const eventRouter = router({

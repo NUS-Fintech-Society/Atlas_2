@@ -26,6 +26,8 @@ model Departments {
   roles         String[]
   announcements Announcements[]
   projects      Projects[]
+  Event         Event?          @relation(fields: [eventId], references: [id])
+  eventId       String?
 }
 
 model Announcements {
@@ -70,13 +72,17 @@ model User {
   date_of_birth  DateTime?
   Announcements  Announcements[]
   projects       Projects[]      @relation("ProjectsToUser")
+  Event          Event?          @relation(fields: [eventId], references: [id])
+  eventId        String?
 }
 
-model event {
-  id          String   @id @unique @default(uuid())
-  date        DateTime @db.Date
-  qr_code     String?
-  departments Json     @db.Json
-  attendees   Json     @db.Json
+model Event {
+  attendees   User[]
+  departments Departments[]
+  endDate     DateTime      @db.Date
+  hasStarted  Boolean       @default(false)
   name        String
+  id          String        @id @unique @default(uuid())
+  qr_code     String?
+  startDate   DateTime      @default(now()) @db.Date
 }
