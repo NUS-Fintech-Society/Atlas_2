@@ -73,7 +73,7 @@ model User {
 }
 
 model event {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @unique @default(uuid())
   date        DateTime @db.Date
   qr_code     String?
   departments Json     @db.Json
