@@ -1,19 +1,37 @@
 import { protectedProcedure } from '../../trpc'
+import { router } from '~/server/trpc/trpc'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
-import { randomBytes } from 'crypto'
-import { hash } from 'bcryptjs'
-import dayjs from 'dayjs'
-import nodemailer from 'nodemailer'
-import { env } from '~/env/server.mjs'
-import type { User } from '@prisma/client'
+import { toDataURL } from 'qrcode'
 
 /**
+ * Generates a QR code if the event exists
+ *
  * @params Event ID from the event page
+ * @throws TRPC Error if the Event ID does not exist
+ * @returns The QR code base 64 string that can be parsed onto the frontend
  */
 const getEvent = protectedProcedure
   .input(z.string())
   .query(async ({ ctx, input }) => {
-    if (ctx.session.level !== 'admin') {
+    // Run these 2 events synchronously to save time
+    const [event, qrcode] = await Promise.all([
+      ctx.prisma.event.findUnique({
+        where: { id: input },
+      }),
+      toDataURL('www.google.com'),
+    ])
+
+    if (!event) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'No such event exists',
+      })
     }
+
+    return qrcode
   })
+
+export const eventRouter = router({
+  getEvent,
+})
