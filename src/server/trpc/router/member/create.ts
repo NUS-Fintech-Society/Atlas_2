@@ -71,6 +71,7 @@ export const addMultipleUsers = protectedProcedure
           total_events: 0,
           wallet: null,
           year: user.year,
+          eventId: null,
         }
       })
 

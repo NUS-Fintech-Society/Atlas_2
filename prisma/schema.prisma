@@ -21,7 +21,7 @@ model Projects {
 }
 
 model Departments {
-  department_id String          @id
+  department_id String          @id @unique
   name          String
   roles         String[]
   eventId       String?
@@ -71,7 +71,7 @@ model User {
   year           String?
   date_of_birth  DateTime?
   eventId        String?
-  announcements  Announcements[] 
+  announcements  Announcements[]
   event          Event?          @relation(fields: [eventId], references: [id])
   projects       Projects[]      @relation("ProjectsToUser")
 }
@@ -83,6 +83,6 @@ model Event {
   id          String        @id @default(uuid())
   qr_code     String?
   startDate   DateTime      @default(now()) @db.Date
-  departments Departments[] 
+  departments Departments[]
   attendees   User[]
 }
