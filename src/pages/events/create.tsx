@@ -41,7 +41,10 @@ const EventPage = () => {
       .nonempty({
         message: 'At least one department must be chosen',
       }),
-    date: z.preprocess((arg) => {
+    startDate: z.preprocess((arg) => {
+      if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
+    }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
+    endDate: z.preprocess((arg) => {
       if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
     }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
   })
@@ -70,7 +73,8 @@ const EventPage = () => {
       }
       await mutateAsync({
         name: formData.eventName,
-        date: new Date(formData.date),
+        startDate: new Date(formData.startDate),
+        endDate: new Date(formData.endDate),
         departments: formData.dept,
         attendees: attendees,
       })
@@ -151,17 +155,32 @@ const EventPage = () => {
               )}
             </VStack>
             <div>
-              <FormLabel>Date</FormLabel>
+              <FormLabel>Start Date</FormLabel>
               <Input
                 placeholder="Select Date and Time"
                 size="md"
                 type="datetime-local"
                 disabled={isSubmitting}
-                {...register('date', { required: true })}
+                {...register('startDate', { required: true })}
               />
-              {errors.date && (
+              {errors.startDate && (
                 <Text color="tomato" className="pt-2">
-                  {errors.date.message}
+                  {errors.startDate.message}
+                </Text>
+              )}
+            </div>
+            <div>
+              <FormLabel>End Date</FormLabel>
+              <Input
+                placeholder="Select Date and Time"
+                size="md"
+                type="datetime-local"
+                disabled={isSubmitting}
+                {...register('endDate', { required: true })}
+              />
+              {errors.endDate && (
+                <Text color="tomato" className="pt-2">
+                  {errors.endDate.message}
                 </Text>
               )}
             </div>
