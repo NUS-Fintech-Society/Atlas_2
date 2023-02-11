@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
-import ProfileInfoModal from '~/components/admin/ProfileModal'
+import ProfileInfoModal from '~/components/users/ProfileModal'
 import { useState } from 'react'
 import type { Session } from 'next-auth'
 
@@ -37,7 +37,7 @@ const UserTable = ({ session }: { session: Session }) => {
         </Button>
       </td>
       <td>{data.name}</td>
-      <td>{data.telegram}</td>
+      <td>{data.roles}</td>
       <td>{data.department}</td>
     </tr>
   ))

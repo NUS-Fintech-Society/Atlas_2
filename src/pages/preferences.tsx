@@ -45,9 +45,12 @@ const ChangePasswordPage = () => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Atlas | Preferences</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="The login page for Atlas" />
+        <meta
+          name="description"
+          content="The user preferences page for Atlas"
+        />
       </Head>
       <Container>
         <form onSubmit={formHandler}>

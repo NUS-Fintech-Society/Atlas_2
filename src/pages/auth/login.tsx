@@ -26,11 +26,6 @@ const LoginPage = () => {
         redirect: false,
       })
 
-      if (res && res.ok) {
-        router.push('/users')
-        return
-      }
-
       if (res && res.error) {
         setSubmitting(false)
         toast({
@@ -52,10 +47,12 @@ const LoginPage = () => {
     }
   }
 
-  if (status === 'loading') return <LoadingScreen />
+  if (status === 'loading') {
+    return <LoadingScreen />
+  }
+
   if (session) {
-    if (session.level === 'admin') router.push('/admin')
-    router.push('/user')
+    router.push('/')
   }
 
   return (
@@ -108,7 +105,7 @@ const LoginPage = () => {
 
             {/* ---- Forgot Your Password ---- */}
             <div className="mx-auto my-6">
-              <Link href="/auth/forget-password">
+              <Link href="/auth/forgetpassword">
                 <div className="font-medium">Forgot your password?</div>
               </Link>
             </div>
