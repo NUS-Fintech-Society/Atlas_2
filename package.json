@@ -34,6 +34,7 @@
     "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
     "framer-motion": "^7.10.3",
+    "husky": "^8.0.3",
     "next": "13.0.2",
     "next-auth": "4.17.0",
     "nodemailer": "^6.8.0",

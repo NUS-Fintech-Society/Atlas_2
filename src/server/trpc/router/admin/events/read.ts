@@ -5,6 +5,7 @@ export const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
     const users = await ctx.prisma.user.findMany({
       select: {
+        // for display
         department: true,
         roles: true,
         name: true,
