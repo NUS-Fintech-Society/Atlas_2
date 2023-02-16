@@ -1,6 +1,5 @@
 import { Disclosure, Popover } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 
@@ -9,6 +8,7 @@ const navigation = [
   { name: 'User', href: '/users', current: false },
   { name: 'Events', href: '/events/create', current: false },
   { name: 'Announcements', href: '/admin/announcements', current: false },
+  { name: 'Sign Out', href: '/', current: false },
 ]
 
 function classNames(...classes: string[]) {
@@ -60,6 +60,9 @@ export default function HamburgerNavbar() {
                   href={item.href}
                   className="block px-3 py-2 hover:underline"
                   aria-current={item.current ? 'page' : undefined}
+                  onClick={
+                    item.name === 'Sign Out' ? () => signOut() : undefined
+                  }
                 >
                   {item.name}
                 </Disclosure.Button>
