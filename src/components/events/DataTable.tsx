@@ -186,7 +186,7 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
                   return (
                     <Th
                       key={header.id}
-                      className="border-x-2 border-[#97AEFF] text-white"
+                      className="text-white border-x-2 border-[#97AEFF]"
                     >
                       <div className="flex items-center justify-between ">
                         {/* Render header filter btn */}
@@ -232,7 +232,7 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
                 {row.getVisibleCells().map((cell) => {
                   /* Create each row */
                   return (
-                    <Td key={cell.id} className="border-2 border-[#97AEFF]">
+                    <Td key={cell.id} className="border-2">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
