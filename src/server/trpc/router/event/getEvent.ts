@@ -4,6 +4,16 @@ import { z } from 'zod'
 import { toDataURL } from 'qrcode'
 import { env } from '~/env/server.mjs'
 
+const startEvent = protectedProcedure
+  .input(z.string())
+  .mutation(async ({ ctx, input }) => {
+    const eventId = input
+    await ctx.prisma.event.update({
+      where: { id: eventId },
+      data: { hasStarted: true },
+    })
+  })
+
 /**
  * Generates a QR code if the event exists
  *
@@ -23,6 +33,7 @@ const getEvent = protectedProcedure
               name: true,
             },
           },
+          hasStarted: true,
           startDate: true,
           name: true,
         },
@@ -41,6 +52,7 @@ const getEvent = protectedProcedure
 
     return {
       departments: event.departments,
+      hasStarted: event.hasStarted,
       name: event.name,
       qrcode,
       start: event.startDate,
@@ -49,4 +61,5 @@ const getEvent = protectedProcedure
 
 export const eventRouter = router({
   getEvent,
+  startEvent,
 })

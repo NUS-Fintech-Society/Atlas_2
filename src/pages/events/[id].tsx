@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
+import Button from '~/components/utilities/Button'
 import Link from 'next/link'
 import Head from 'next/head'
 import dayjs from 'dayjs'
@@ -35,19 +36,31 @@ const NoImagePage = () => {
   )
 }
 
-const AttendancePage = ({
+const AdminAttendancePage = ({
   name,
   date,
   departments,
+  hasStarted,
+  id,
+  qrcode,
 }: {
   date: Date
   name: string
   departments: string[]
+  hasStarted: boolean
+  id: string
+  qrcode: string
 }) => {
   const start = dayjs(date).format('D MMMM YYYY')
-
-  function submitAttendance(e: MouseEvent<HTMLButtonElement>) {
+  const involvedDepartments = departments.map((department, index) => {
+    return <p key={index}>{department}</p>
+  })
+  const { mutateAsync, isLoading } = trpc.event.startEvent.useMutation()
+  async function startEvent(
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) {
     e.preventDefault()
+    await mutateAsync(id)
   }
 
   return (
@@ -63,7 +76,16 @@ const AttendancePage = ({
           <h2 className="my-14 text-center font-[Inter] text-3xl font-medium">
             {start}
           </h2>
-          <button onClick={submitAttendance}>Confirm Attendance</button>
+          <div className="flexjustify-center">
+            <Image alt="qrcode" height={300} src={qrcode} width={300} />
+          </div>
+          {hasStarted ? (
+            involvedDepartments
+          ) : (
+            <Button onClick={startEvent} isLoading={isLoading} type="button">
+              Start Event
+            </Button>
+          )}
         </div>
       </body>
     </>
@@ -92,7 +114,14 @@ const EventPage = () => {
       return <NoImagePage />
     }
     return (
-      <AttendancePage date={data.start as Date} name={data.name as string} />
+      <AdminAttendancePage
+        date={data.start as Date}
+        departments={data.departments as string[]}
+        id={slug}
+        hasStarted={data.hasStarted as boolean}
+        name={data.name as string}
+        qrcode={data.qrcode}
+      />
     )
   }
 
