@@ -12,25 +12,38 @@ import { env } from '~/env/server.mjs'
  * @returns The QR code base 64 string that can be parsed onto the frontend
  */
 const getEvent = protectedProcedure
-  .input(z.string())
+  .input(z.optional(z.string()))
   .query(async ({ ctx, input }) => {
-    // Run these 2 events synchronously to save time
     const [event, qrcode] = await Promise.all([
       ctx.prisma.event.findUnique({
         where: { id: input },
+        select: {
+          departments: {
+            select: {
+              name: true,
+            },
+          },
+          startDate: true,
+          name: true,
+        },
       }),
       toDataURL(`${env.DOMAIN}/events/${input}`),
     ])
 
     if (!event) {
       return {
-        qrcode: '',
+        departments: [''],
         name: '',
+        qrcode: '',
+        start: undefined,
       }
     }
+
     return {
-      qrcode,
+      departments: event.departments,
       name: event.name,
+      qrcode,
+      start: event.startDate,
     }
   })
 

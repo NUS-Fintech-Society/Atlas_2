@@ -24,10 +24,10 @@ model Departments {
   department_id String          @id
   name          String
   roles         String[]
-  announcements Announcements[]
-  projects      Projects[]
-  Event         Event?          @relation(fields: [eventId], references: [id])
   eventId       String?
+  announcements Announcements[]
+  Event         Event?          @relation(fields: [eventId], references: [id])
+  projects      Projects[]
 }
 
 model Announcements {
@@ -70,19 +70,19 @@ model User {
   wallet         String?
   year           String?
   date_of_birth  DateTime?
-  Announcements  Announcements[]
-  projects       Projects[]      @relation("ProjectsToUser")
-  Event          Event?          @relation(fields: [eventId], references: [id])
   eventId        String?
+  Announcements  Announcements[]
+  Event          Event?          @relation(fields: [eventId], references: [id])
+  projects       Projects[]      @relation("ProjectsToUser")
 }
 
 model Event {
-  attendees   User[]
-  departments Departments[]
   endDate     DateTime      @db.Date
   hasStarted  Boolean       @default(false)
   name        String
-  id          String        @id @unique @default(uuid())
+  id          String        @id @default(uuid())
   qr_code     String?
   startDate   DateTime      @default(now()) @db.Date
+  departments Departments[]
+  attendees   User[]
 }
