@@ -6,7 +6,7 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useToast } from '@chakra-ui/react'
+import { useToast, Image, Box } from '@chakra-ui/react'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -62,6 +62,8 @@ const LoginPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
+      <div>
+      <img src='/fintech_logo.png' className='cursor-pointer top-5vh fixed max-w-xs'/>
       <Container>
         <form onSubmit={submitForm}>
           <div className="flex flex-col items-start">
@@ -113,16 +115,17 @@ const LoginPage = () => {
 
             {/* ---- Login Button ---- */}
             <Button
-              className="mt-2 self-stretch shadow-md"
+              className="mt-2 self-center shadow-md w-40"
               isLoading={submitting}
               type="submit"
             >
-              Login
+              SIGN IN
             </Button>
             {/* ---- Login Button ---- */}
           </div>
         </form>
       </Container>
+    </div>
     </>
   )
 }

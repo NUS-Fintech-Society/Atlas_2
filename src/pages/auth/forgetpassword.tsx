@@ -39,12 +39,13 @@ const ForgotPasswordPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The reset password page for Atlas" />
       </Head>
-
+      <div>
+      <img src='/fintech_logo.png' className='cursor-pointer top-5vh fixed max-w-xs'/>
       <Container>
         <div className="flex w-full flex-col items-start">
           {/* ---- Heading ---- */}
           <h1 className="mb-2 self-center text-center font-[ubuntu] text-5xl font-medium">
-            Forgot Password
+            Reset Password
           </h1>
           {/* ---- Heading ---- */}
 
@@ -67,25 +68,25 @@ const ForgotPasswordPage = () => {
             {/* ---- Username ---- */}
 
             {/* ---- Reset Password Link ---- */}
-            <div className="flex flex-col">
+            <div className="flex flex-col m-4">
               <Button
                 isLoading={isLoading}
-                className="mt-2 shadow-md"
+                className="mt-2 self-center shadow-md w-40 m-24"
                 type="submit"
               >
                 Send Reset Link
               </Button>
               {/* ---- Reset Password Link ---- */}
-
-              <Link href="/auth/login">
-                <Button className="mt-2 w-full shadow-md" type="button">
-                  Return
-                </Button>
-              </Link>
             </div>
           </form>
         </div>
-      </Container>
+        <Link href="/auth/login">
+            <Button className="shadow-md mt-2" type="button">
+              Back
+            </Button>
+        </Link>
+      </Container>   
+      </div>
     </>
   )
 }
