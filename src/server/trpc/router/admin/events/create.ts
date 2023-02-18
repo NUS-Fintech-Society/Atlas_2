@@ -1,6 +1,5 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
-import { TRPCError } from '@trpc/server'
 import { PrismaClient } from '@prisma/client'
 
 export const createEvent = protectedProcedure

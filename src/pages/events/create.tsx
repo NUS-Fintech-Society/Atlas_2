@@ -97,7 +97,7 @@ const EventPage = () => {
   const redirectHome = () => router.push('/admin')
 
   if (!data) return <LoadingScreen />
-  if (session?.level !== 'super') {
+  if (!session?.isAdmin) {
     return <RestrictedScreen />
   }
   return (
