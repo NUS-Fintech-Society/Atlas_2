@@ -22,7 +22,7 @@ const CreateMultipleUsers = () => {
   const { isLoading, mutateAsync } = trpc.member.addMultipleUsers.useMutation()
   const { status, data: session } = useSession({ required: true })
   if (status === 'loading') return <LoadingScreen />
-  if (session.level !== 'super') router.push('/user')
+  if (!session.isAdmin) router.push('/user')
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
