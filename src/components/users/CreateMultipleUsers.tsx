@@ -1,4 +1,3 @@
-import type { NextPage } from 'next'
 import { useToast, Stack, Button } from '@chakra-ui/react'
 import { parse, type ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
@@ -12,7 +11,7 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 
-const DashboardPage: NextPage = () => {
+const CreateMultipleUsers = () => {
   const router = useRouter()
   const toast = useToast()
   const data = useSelector<RootState, AddUsersType[]>(
@@ -88,4 +87,4 @@ const DashboardPage: NextPage = () => {
   )
 }
 
-export default DashboardPage
+export default CreateMultipleUsers
