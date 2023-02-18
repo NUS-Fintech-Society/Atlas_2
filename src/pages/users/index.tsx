@@ -1,7 +1,6 @@
 import Layout from '~/components/common/Layout'
 import Head from 'next/head'
 import DataTable from '~/components/users/Table'
-import HamburgerNavbar from '~/components/common/HamburgerNavbar'
 
 const SEO = () => {
   return (
@@ -17,7 +16,6 @@ export default function AdminUserPage() {
   return (
     <>
       <SEO />
-      <HamburgerNavbar />
       <Layout>
         <DataTable />
       </Layout>

@@ -1,4 +1,4 @@
-import { Disclosure } from '@headlessui/react'
+import { Disclosure, Popover } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
@@ -8,13 +8,18 @@ const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'User', href: '/users', current: false },
   { name: 'Events', href: '/events/create', current: false },
+  { name: 'Announcements', href: '/admin/announcements', current: false },
   { name: 'Sign Out', href: '/', current: false },
 ]
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ')
+}
 
 export default function HamburgerNavbar() {
   const router = useRouter()
   return (
-    <Disclosure as="nav" className="mb-3 bg-[#01003D]">
+    <Disclosure as="nav" className="mb-3 bg-navbar">
       {({ open }) => (
         <>
           <div className="mx-auto px-2">
