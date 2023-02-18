@@ -77,7 +77,7 @@ const LoginPage = () => {
             </label>
             <div className="mt-2 flex w-full flex-row items-center">
               <Input
-                className="rounded text-black"
+                className="text-black rounded"
                 name="email"
                 required
                 onChange={(e) => setEmail(e.target.value)}
@@ -93,7 +93,7 @@ const LoginPage = () => {
               Password
             </label>
             <Input
-              className="mt-2 rounded-md text-black"
+              className="text-black mt-2 rounded-md"
               name="password"
               required
               onChange={(e) => setPassword(e.target.value)}

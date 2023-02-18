@@ -7,7 +7,7 @@ import { signOut } from 'next-auth/react'
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'User', href: '/user', current: false },
-  { name: 'Events', href: '/event', current: false },
+  { name: 'Events', href: '/events/create', current: false },
   { name: 'Announcements', href: '/admin/announcements', current: false },
 ]
 
@@ -17,14 +17,14 @@ function classNames(...classes: string[]) {
 
 export default function Example() {
   return (
-    <Disclosure as="nav" className="mb-3 bg-gray-800">
+    <Disclosure as="nav" className="bg-gray-800 mb-3">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button className="text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-white inline-flex items-center justify-center rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-inset">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -57,7 +57,7 @@ export default function Example() {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <Menu.Button className="bg-gray-800 focus:ring-white focus:ring-offset-gray-800 flex rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
                       {/* TODO: Insert a SVG here */}
                     </Menu.Button>
@@ -71,14 +71,14 @@ export default function Example() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="bg-white ring-black absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md py-1 shadow-lg ring-1 ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
                           <a
                             href="#"
                             className={classNames(
                               active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700'
+                              'text-gray-700 block px-4 py-2 text-sm'
                             )}
                           >
                             Your Profile
@@ -91,7 +91,7 @@ export default function Example() {
                             href="#"
                             className={classNames(
                               active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700'
+                              'text-gray-700 block px-4 py-2 text-sm'
                             )}
                           >
                             Settings
@@ -102,8 +102,8 @@ export default function Example() {
                         {({ active }) => (
                           <button
                             className={classNames(
-                              active ? 'w-full bg-gray-100 text-left' : '',
-                              'block w-full px-4 py-2 text-left text-sm text-gray-700'
+                              active ? 'bg-gray-100 w-full text-left' : '',
+                              'text-gray-700 block w-full px-4 py-2 text-left text-sm'
                             )}
                             onClick={() =>
                               signOut({
