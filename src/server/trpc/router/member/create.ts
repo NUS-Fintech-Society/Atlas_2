@@ -76,17 +76,16 @@ export const addMultipleUsers = protectedProcedure
       })
 
       const promises: Promise<SMTPTransport.SentMessageInfo>[] = []
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: env.GMAIL,
+          pass: env.GMAIL_PASSWORD,
+        },
+      })
 
       users.forEach(async (user) => {
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: env.GMAIL,
-            pass: env.GMAIL_PASSWORD,
-          },
-        })
-
-        const result = transporter.sendMail({
+        const promise = transporter.sendMail({
           from: env.GMAIL,
           to: user.email,
           subject: 'New Account Creation',
@@ -105,7 +104,7 @@ export const addMultipleUsers = protectedProcedure
             Fintech HR
             `,
         })
-        promises.push(result)
+        promises.push(promise)
       })
 
       // Fulfil all of the promises concurrently
@@ -130,6 +129,7 @@ export const createSingleUser = protectedProcedure
       email: z.string(),
       password: z.optional(z.string()),
       level: z.string(),
+      isAdmin: z.boolean(),
     })
   )
   .mutation(async ({ ctx, input }) => {
@@ -145,7 +145,7 @@ export const createSingleUser = protectedProcedure
       })
     }
 
-    const { email, id, level } = input
+    const { email, id, level, isAdmin } = input
 
     try {
       const password = input.password || randomBytes(10).toString('hex')
@@ -157,6 +157,27 @@ export const createSingleUser = protectedProcedure
         auth: {
           user: env.GMAIL,
           pass: env.GMAIL_PASSWORD,
+        },
+      })
+
+      const foundUser = await ctx.prisma.user.findUnique({ where: { email } })
+      if (foundUser) {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: 'User already exists',
+        })
+      }
+
+      await ctx.prisma.user.create({
+        data: {
+          batch: 'AY2022/2023',
+          name: '',
+          roles: '',
+          email,
+          id,
+          hashedPassword,
+          isAdmin,
+          level,
         },
       })
 
@@ -178,26 +199,6 @@ export const createSingleUser = protectedProcedure
       Thank You. <br /> 
       Fintech HR
       `,
-      })
-
-      const foundUser = await ctx.prisma.user.findUnique({ where: { email } })
-      if (foundUser) {
-        throw new TRPCError({
-          code: 'CONFLICT',
-          message: 'User already exists',
-        })
-      }
-
-      await ctx.prisma.user.create({
-        data: {
-          batch: 'AY2022/2023',
-          name: '',
-          roles: '',
-          email,
-          id,
-          hashedPassword,
-          level,
-        },
       })
     } catch (e) {
       throw new TRPCError({
