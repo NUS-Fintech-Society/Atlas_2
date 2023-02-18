@@ -6,7 +6,7 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import Button from '~/components/utilities/Button'
 import Link from 'next/link'
 import Head from 'next/head'
-import { type MouseEvent } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 
 const NoImagePage = () => {
   return (
@@ -89,10 +89,17 @@ const EventPage = () => {
   const router = useRouter()
   useSession({ required: true })
   const slug = router.query.id
+  const [hasError, setHasError] = useState(false)
   const { data, isLoading, isError } = trpc.event.getEvent.useQuery(
     typeof slug === 'string' ? slug : slug?.join(),
-    { enabled: false }
+    { enabled: !hasError }
   )
+
+  // Disables the refetch upon an error
+  useEffect(() => {
+    setHasError(true)
+  }, [isError])
+
   const render = () => {
     if (isLoading) {
       return (
@@ -104,7 +111,7 @@ const EventPage = () => {
         </>
       )
     }
-    if (isError || !data) {
+    if (hasError || !data) {
       return <NoImagePage />
     }
     return (
