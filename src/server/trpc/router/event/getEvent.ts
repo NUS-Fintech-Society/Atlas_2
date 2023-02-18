@@ -3,7 +3,12 @@ import { router } from '~/server/trpc/trpc'
 import { z } from 'zod'
 import { toDataURL } from 'qrcode'
 import { env } from '~/env/server.mjs'
+import dayjs from 'dayjs'
+import { TRPCError } from '@trpc/server'
 
+/**
+ * Toggles the event to start
+ */
 const startEvent = protectedProcedure
   .input(z.string())
   .mutation(async ({ ctx, input }) => {
@@ -33,6 +38,7 @@ const getEvent = protectedProcedure
               name: true,
             },
           },
+          endDate: true,
           hasStarted: true,
           startDate: true,
           name: true,
@@ -41,13 +47,22 @@ const getEvent = protectedProcedure
       toDataURL(`${env.DOMAIN}/events/${input}`),
     ])
 
+    // If there is no event, we return an empty object
     if (!event) {
-      return {
-        departments: [''],
-        name: '',
-        qrcode: '',
-        start: undefined,
-      }
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'No such event exist',
+      })
+    }
+
+    // Check if the event has ended
+    const end = dayjs(event.endDate)
+    const now = dayjs()
+    if (now.isAfter(end)) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'The event has already ended',
+      })
     }
 
     return {
