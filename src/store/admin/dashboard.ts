@@ -36,6 +36,7 @@ export const dashboardSlice = createSlice({
         }
       })
 
+      state = state.filter((person) => person.date_of_birth !== '')
       return state
     },
   },

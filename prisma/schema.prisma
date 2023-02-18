@@ -55,6 +55,7 @@ model User {
   hashedPassword String
   hobbies        String?
   id             String          @id @unique
+  isAdmin        Boolean?        @default(false)
   image          String?
   level          String
   linkedin       String?
