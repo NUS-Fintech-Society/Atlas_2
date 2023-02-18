@@ -23,10 +23,7 @@ model Projects {
 model Departments {
   department_id String          @id
   name          String
-  roles         String[]
-  eventId       String?
   announcements Announcements[]
-  Event         Event?          @relation(fields: [eventId], references: [id])
   projects      Projects[]
 }
 
@@ -54,7 +51,7 @@ model User {
   gender         String?
   hashedPassword String
   hobbies        String?
-  id             String          @id @unique
+  id             String          @id
   image          String?
   level          String
   linkedin       String?
@@ -70,19 +67,18 @@ model User {
   wallet         String?
   year           String?
   date_of_birth  DateTime?
-  eventId        String?
-  Announcements  Announcements[]
-  Event          Event?          @relation(fields: [eventId], references: [id])
+  isAdmin        Boolean?        @default(false)
+  announcements  Announcements[]
+  events         Event[]
   projects       Projects[]      @relation("ProjectsToUser")
 }
 
 model Event {
-  endDate     DateTime      @db.Date
-  hasStarted  Boolean       @default(false)
-  name        String
-  id          String        @id @default(uuid())
-  qr_code     String?
-  startDate   DateTime      @default(now()) @db.Date
-  departments Departments[]
-  attendees   User[]
+  endDate    DateTime @db.Date
+  hasStarted Boolean  @default(false)
+  name       String
+  id         String   @id @default(uuid())
+  qr_code    String?
+  startDate  DateTime @default(now()) @db.Date
+  attendees  User[]   @relation("EventToUser")
 }
