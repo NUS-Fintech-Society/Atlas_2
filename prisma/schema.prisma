@@ -21,9 +21,8 @@ model Projects {
 }
 
 model Departments {
-  department_id String          @id
+  department_id String          @id 
   name          String
-  roles         String[]
   announcements Announcements[]
   projects      Projects[]
 }
@@ -52,7 +51,7 @@ model User {
   gender         String?
   hashedPassword String
   hobbies        String?
-  id             String          @id @unique
+  id             String          @id
   isAdmin        Boolean?        @default(false)
   image          String?
   level          String
@@ -69,15 +68,17 @@ model User {
   wallet         String?
   year           String?
   date_of_birth  DateTime?
-  Announcements  Announcements[]
+  announcements  Announcements[]
   projects       Projects[]      @relation("ProjectsToUser")
+  events         Event[]
 }
 
-model event {
-  id          Int      @id @default(autoincrement())
-  date        DateTime @db.Date
-  qr_code     String?
-  departments Json     @db.Json
-  attendees   Json     @db.Json
-  name        String
+model Event {
+  endDate    DateTime @db.Date
+  hasStarted Boolean  @default(false)
+  name       String
+  id         String   @id @default(uuid())
+  qr_code    String?
+  startDate  DateTime @default(now()) @db.Date
+  attendees  User[]
 }
