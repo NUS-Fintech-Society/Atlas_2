@@ -6,9 +6,6 @@ module.exports = {
   ],
   theme: {
     extend: {},
-    colors: {
-      navbar: '#01003D',
-    },
   },
   plugins: [],
 }
