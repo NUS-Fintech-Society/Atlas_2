@@ -16,10 +16,8 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (token) {
-        console.log(token)
         session.isAdmin = token.isAdmin as boolean
       }
-      console.log(session)
       return session
     },
 
