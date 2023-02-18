@@ -1,6 +1,5 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
-import { TRPCError } from '@trpc/server'
 import { randomBytes } from 'crypto'
 import { hash } from 'bcryptjs'
 import type { User } from '@prisma/client'
