@@ -61,6 +61,7 @@ export const addMultipleUsers = protectedProcedure
           linkedin: user.linkedin,
           major: user.major,
           id: user.student_id,
+          isAdmin: false,
           name: user.name,
           email: user.nus_email,
           personal_email: user.personal_email,
@@ -122,6 +123,9 @@ export const addMultipleUsers = protectedProcedure
     }
   })
 
+/**
+ * Creates a single user.
+ */
 export const createSingleUser = protectedProcedure
   .input(
     z.object({
@@ -133,21 +137,21 @@ export const createSingleUser = protectedProcedure
     })
   )
   .mutation(async ({ ctx, input }) => {
-    const personMakingRequest = await ctx.prisma.user.findUnique({
-      where: { id: ctx.session.user.id },
-    })
-
-    // If the user is just a normal member, he should not be able to create a new account
-    if (!personMakingRequest || personMakingRequest.level === 'member') {
-      throw new TRPCError({
-        code: 'UNAUTHORIZED',
-        message: 'User is not authorized to create a new account',
-      })
-    }
-
-    const { email, id, level, isAdmin } = input
-
     try {
+      const personMakingRequest = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+      })
+
+      // If the user is just a normal member, he should not be able to create a new account
+      if (!personMakingRequest || personMakingRequest.level === 'member') {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'User is not authorized to create a new account',
+        })
+      }
+
+      const { email, id, level, isAdmin } = input
+
       const password = input.password || randomBytes(10).toString('hex')
 
       const hashedPassword = await hash(password, 10)
