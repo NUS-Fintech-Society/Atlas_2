@@ -23,7 +23,7 @@ export default function AdminUserPage() {
     return <LoadingScreen />
   }
 
-  if (session.level !== 'super') {
+  if (!session.isAdmin) {
     router.push('/users')
   }
 
