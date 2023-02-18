@@ -6,6 +6,7 @@ import { env } from '~/env/server.mjs'
 import dayjs from 'dayjs'
 import { TRPCError } from '@trpc/server'
 
+
 /**
  * Toggles the event to start
  */

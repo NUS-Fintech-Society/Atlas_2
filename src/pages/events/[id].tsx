@@ -4,38 +4,9 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Button from '~/components/utilities/Button'
-import Link from 'next/link'
 import Head from 'next/head'
 import { useEffect, useState, type MouseEvent } from 'react'
-
-const NoImagePage = () => {
-  return (
-    <>
-      <Head>
-        <title>Atlas | No Event Found</title>
-      </Head>
-      <div>
-        <div className="w-full">
-          {/* Warning Symbol */}
-          <Image
-            alt="Warning Triangle"
-            className="mx-auto"
-            src="/events/warning-triangle.svg"
-            width={400}
-            height={400}
-          />
-
-          <h1 className="text-center text-4xl font-bold">No Event Found!</h1>
-          <div className="mt-5 flex justify-center">
-            <Link href="/">
-              <Button>Return Home</Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
+import NoImagePage from '~/components/events/NoImagePage'
 
 const AdminAttendancePage = ({
   name,
@@ -89,6 +60,7 @@ const EventPage = () => {
   const router = useRouter()
   useSession({ required: true })
   const slug = router.query.id
+  console.log(slug)
   const [hasError, setHasError] = useState(false)
   const { data, isLoading, isError } = trpc.event.getEvent.useQuery(
     typeof slug === 'string' ? slug : slug?.join(),
