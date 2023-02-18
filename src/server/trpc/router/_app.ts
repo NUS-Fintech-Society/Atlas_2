@@ -4,7 +4,7 @@ import { announcementRouter } from './admin/announcement'
 import { memberRouter } from './member'
 import { profileRouter } from './profile'
 import { userRouter } from './admin/users'
-import { eventRouter } from './event/getEvent'
+import { eventRouter } from './event'
 
 export const appRouter = router({
   auth: authRouter,
