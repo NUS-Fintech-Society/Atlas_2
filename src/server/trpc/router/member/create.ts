@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
 import type { User } from '@prisma/client'
+import type SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 /**
  * Create multiple accounts for many users and send out an
@@ -74,6 +75,8 @@ export const addMultipleUsers = protectedProcedure
         }
       })
 
+      const promises: Promise<SMTPTransport.SentMessageInfo>[] = []
+
       users.forEach(async (user) => {
         const transporter = nodemailer.createTransport({
           service: 'gmail',
@@ -83,7 +86,7 @@ export const addMultipleUsers = protectedProcedure
           },
         })
 
-        await transporter.sendMail({
+        const result = transporter.sendMail({
           from: env.GMAIL,
           to: user.email,
           subject: 'New Account Creation',
@@ -102,11 +105,16 @@ export const addMultipleUsers = protectedProcedure
             Fintech HR
             `,
         })
+        promises.push(result)
       })
 
-      await ctx.prisma.user.createMany({
-        data: users,
-      })
+      // Fulfil all of the promises concurrently
+      await Promise.all([
+        promises,
+        ctx.prisma.user.createMany({
+          data: users,
+        }),
+      ])
     } catch (e) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
