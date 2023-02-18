@@ -16,14 +16,14 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (token) {
-        session.level = token.level as string
+        session.isAdmin = token.isAdmin as boolean
       }
       return session
     },
 
     async jwt({ token, user }) {
       if (user) {
-        token.level = (user as User).level
+        token.isAdmin = (user as User).isAdmin as boolean
         token.picture = user.image
       }
       return token
@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
             id: account.id,
             name: account.name,
             email: account.email,
-            level: account.level,
+            isAdmin: account.isAdmin,
           }
         } catch (e) {
           throw new Error((e as Error).message)
