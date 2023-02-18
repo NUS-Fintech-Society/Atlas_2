@@ -2,17 +2,15 @@ import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'User', href: '/users', current: false },
   { name: 'Events', href: '/events/create', current: false },
-  { name: 'Sign Out', href: '/', current: false },
+  { name: 'Sign Out', href: '/api/auth/signout', current: false },
 ]
 
 export default function HamburgerNavbar() {
-  const router = useRouter()
   return (
     <Disclosure as="nav" className="mb-3 bg-[#01003D]">
       {({ open }) => (
@@ -59,11 +57,9 @@ export default function HamburgerNavbar() {
                   aria-current={item.current ? 'page' : undefined}
                   onClick={
                     item.name === 'Sign Out'
-                      ? async () => {
-                          await signOut({
-                            redirect: false,
-                          })
-                          router.push('/auth/login')
+                      ? (e: React.MouseEvent<HTMLAnchorElement>) => {
+                          e.preventDefault()
+                          signOut()
                         }
                       : undefined
                   }
