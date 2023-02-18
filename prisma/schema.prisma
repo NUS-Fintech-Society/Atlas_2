@@ -21,7 +21,7 @@ model Projects {
 }
 
 model Departments {
-  department_id String          @id 
+  department_id String          @id
   name          String
   announcements Announcements[]
   projects      Projects[]
@@ -52,7 +52,6 @@ model User {
   hashedPassword String
   hobbies        String?
   id             String          @id
-  isAdmin        Boolean?        @default(false)
   image          String?
   level          String
   linkedin       String?
@@ -68,9 +67,10 @@ model User {
   wallet         String?
   year           String?
   date_of_birth  DateTime?
+  isAdmin        Boolean?        @default(false)
   announcements  Announcements[]
+  events         Event[]         @relation("EventToUser")
   projects       Projects[]      @relation("ProjectsToUser")
-  events         Event[]
 }
 
 model Event {
@@ -80,5 +80,5 @@ model Event {
   id         String   @id @default(uuid())
   qr_code    String?
   startDate  DateTime @default(now()) @db.Date
-  attendees  User[]
+  attendees  User[]   @relation("EventToUser")
 }
