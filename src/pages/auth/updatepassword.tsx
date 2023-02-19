@@ -11,7 +11,6 @@ const ForgotPasswordPage = () => {
   // Password for double confirmation 
   const [password2, setPassword2] = useState('')
   const [submitting, setSubmitting] = useState(false)
-
   return (
     <>
       <Head>
