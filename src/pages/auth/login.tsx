@@ -7,6 +7,7 @@ import Container from '~/components/auth/Container'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useToast } from '@chakra-ui/react'
+// import Image from 'next/image'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -62,67 +63,76 @@ const LoginPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
-      <Container>
-        <form onSubmit={submitForm}>
-          <div className="flex flex-col items-start">
-            {/* ---- Title ---- */}
-            <h1 className="mb-2 self-center text-center font-[ubuntu] text-5xl">
-              Login
-            </h1>
-            {/* ---- Title ---- */}
+      <div>
+        {/* <Image
+          alt="fintech-logo"
+          width={200}
+          height={200}
+          src="/fintech_logo.png"
+          className="top-5vh fixed max-w-xs cursor-pointer"
+        /> */}
+        <Container>
+          <form onSubmit={submitForm}>
+            <div className="flex flex-col items-start">
+              {/* ---- Title ---- */}
+              <h1 className="mb-2 self-center text-center font-[ubuntu] text-5xl">
+                Login
+              </h1>
+              {/* ---- Title ---- */}
 
-            {/* ---- Username ---- */}
-            <label htmlFor="email" className="font-[ubuntu] text-2xl">
-              Username
-            </label>
-            <div className="mt-2 flex w-full flex-row items-center">
+              {/* ---- Username ---- */}
+              <label htmlFor="email" className="font-[ubuntu] text-2xl">
+                Username
+              </label>
+              <div className="mt-2 flex w-full flex-row items-center">
+                <Input
+                  className="rounded text-black"
+                  name="email"
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="NUS Email"
+                  type="text"
+                  value={email}
+                />
+              </div>
+              {/* ---- Username ---- */}
+
+              {/* ---- Password ---- */}
+              <label htmlFor="password" className="mt-4 font-[ubuntu] text-2xl">
+                Password
+              </label>
               <Input
-                className="text-black rounded"
-                name="email"
+                className="mt-2 rounded-md text-black"
+                name="password"
                 required
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="NUS Email"
-                type="text"
-                value={email}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                type="password"
+                value={password}
               />
+              {/* ---- Password ---- */}
+
+              {/* ---- Forgot Your Password ---- */}
+              <div className="mx-auto my-6">
+                <Link href="/auth/forgetpassword">
+                  <div className="font-medium">Forgot your password?</div>
+                </Link>
+              </div>
+              {/* ---- Forgot Your Password ---- */}
+
+              {/* ---- Login Button ---- */}
+              <Button
+                className="mt-2 w-40 self-center shadow-md"
+                isLoading={submitting}
+                type="submit"
+              >
+                SIGN IN
+              </Button>
+              {/* ---- Login Button ---- */}
             </div>
-            {/* ---- Username ---- */}
-
-            {/* ---- Password ---- */}
-            <label htmlFor="password" className="mt-4 font-[ubuntu] text-2xl">
-              Password
-            </label>
-            <Input
-              className="text-black mt-2 rounded-md"
-              name="password"
-              required
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              type="password"
-              value={password}
-            />
-            {/* ---- Password ---- */}
-
-            {/* ---- Forgot Your Password ---- */}
-            <div className="mx-auto my-6">
-              <Link href="/auth/forgetpassword">
-                <div className="font-medium">Forgot your password?</div>
-              </Link>
-            </div>
-            {/* ---- Forgot Your Password ---- */}
-
-            {/* ---- Login Button ---- */}
-            <Button
-              className="mt-2 self-stretch shadow-md"
-              isLoading={submitting}
-              type="submit"
-            >
-              Login
-            </Button>
-            {/* ---- Login Button ---- */}
-          </div>
-        </form>
-      </Container>
+          </form>
+        </Container>
+      </div>
     </>
   )
 }
