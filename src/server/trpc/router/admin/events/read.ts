@@ -1,19 +1,17 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { TRPCError } from '@trpc/server'
 
-export default protectedProcedure.query(async ({ ctx }) => {
+export const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
     const users = await ctx.prisma.user.findMany({
       select: {
+        // for display
         department: true,
-        discord: true,
-        email: true,
-        id: true,
+        roles: true,
         name: true,
-        telegram: true,
+        id: true,
       },
     })
-
     return users
   } catch (e) {
     throw new TRPCError({

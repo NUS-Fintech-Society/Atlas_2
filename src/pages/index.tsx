@@ -3,6 +3,10 @@ import { trpc } from '../utils/trpc'
 import { ExcoMembersInfo, TopThreeInfo } from '../components/users/Constants'
 import ProfileInfoModal from '../components/users/ProfileModal'
 import type { Session } from 'next-auth'
+import { useSession } from 'next-auth/react'
+import LoadingScreen from '~/components/common/LoadingScreen'
+import Head from 'next/head'
+import HamburgerNavbar from '~/components/common/HamburgerNavbar'
 
 import {
   Container,
@@ -129,6 +133,13 @@ const MemberBoard = () => {
 export default function dashboard({ session }: { session: Session }) {
   return (
     <div>
+      <Head>
+        <title>Atlas</title>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="The home page for Atlas" />
+      </Head>
+      <HamburgerNavbar />
+      {status === 'loading' ? <LoadingScreen /> : <div>Home Page</div>}
       <Grid templateColumns="repeat(6,1fr)">
         <GridItem colStart={3} colEnd={5}>
           <Container centerContent>

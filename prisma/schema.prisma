@@ -23,7 +23,6 @@ model Projects {
 model Departments {
   department_id String          @id
   name          String
-  roles         String[]
   announcements Announcements[]
   projects      Projects[]
 }
@@ -52,7 +51,7 @@ model User {
   gender         String?
   hashedPassword String
   hobbies        String?
-  id             String          @id @unique
+  id             String          @id
   image          String?
   level          String
   linkedin       String?
@@ -68,15 +67,31 @@ model User {
   wallet         String?
   year           String?
   date_of_birth  DateTime?
-  Announcements  Announcements[]
+  isAdmin        Boolean?        @default(false)
+  announcements  Announcements[]
+  events         Event[]         @relation("EventToUser")
   projects       Projects[]      @relation("ProjectsToUser")
 }
 
-model event {
-  id          Int      @id @default(autoincrement())
-  date        DateTime @db.Date
-  qr_code     String?
-  departments Json     @db.Json
-  attendees   Json     @db.Json
-  name        String
+model Event {
+  endDate    DateTime @db.Date
+  hasStarted Boolean  @default(false)
+  name       String
+  id         String   @id @default(uuid())
+  qr_code    String?
+  startDate  DateTime @default(now()) @db.Date
+  attendees  User[]   @relation("EventToUser")
+}
+
+model Log {
+  date    DateTime? @default(now())
+  message String
+  id      String    @id @default(uuid())
+  title   String
+  type    LogType
+}
+
+enum LogType {
+  WARNING
+  ERROR
 }
