@@ -19,7 +19,7 @@ async function checkUserPermission(id: string) {
     where: { id },
   })
 
-  if (!personMakingRequest || personMakingRequest.level === 'member') {
+  if (!personMakingRequest || !personMakingRequest.isAdmin) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: 'User is not authorized to create a new account',
