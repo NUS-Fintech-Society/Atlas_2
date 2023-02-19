@@ -48,7 +48,7 @@ const ForgotPasswordPage = () => {
                   value={password}
                 />
               </div>
-              <div className='m-4'>
+              <div className='m-2'>
               </div>
               <label htmlFor="password" className="font-[ubuntu] text-2xl">
                 Confirm New Password:
