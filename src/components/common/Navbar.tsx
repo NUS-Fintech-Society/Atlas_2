@@ -7,7 +7,7 @@ import { signOut } from 'next-auth/react'
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'User', href: '/user', current: false },
-  { name: 'Events', href: '/event', current: false },
+  { name: 'Events', href: '/events/create', current: false },
   { name: 'Announcements', href: '/admin/announcements', current: false },
 ]
 
