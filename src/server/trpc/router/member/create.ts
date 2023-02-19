@@ -4,7 +4,6 @@ import { randomBytes } from 'crypto'
 import { hash } from 'bcryptjs'
 import type { User } from '@prisma/client'
 import {
-  checkUserPermission,
   checkIfUserExist,
   createNewUser,
   sendEmail,
@@ -78,14 +77,13 @@ export const createSingleUser = protectedProcedure
       const { email, id, level, isAdmin } = input
       const password = input.password || randomBytes(10).toString('hex')
 
-      await checkUserPermission(ctx.session.user.id)
       await checkIfUserExist(email)
       await createNewUser(email, id, isAdmin, level, password)
       await sendEmail(email, password)
     } catch (e) {
       await ctx.prisma.log.create({
         data: {
-          title: 'Error: Add Multiple Users',
+          title: 'Error: Add Single Users',
           message: (e as Error).message,
           type: LogType.ERROR,
         },
