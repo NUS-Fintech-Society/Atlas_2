@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import { trpc } from '../utils/trpc'
-import { ExcoMembersInfo, TopThreeInfo } from '../components/users/Constants'
 import ProfileInfoModal from '../components/users/ProfileModal'
 import type { Session } from 'next-auth'
-import { useSession } from 'next-auth/react'
-import LoadingScreen from '~/components/common/LoadingScreen'
 import Head from 'next/head'
 import HamburgerNavbar from '~/components/common/HamburgerNavbar'
 
@@ -22,8 +19,9 @@ import {
 const Member = ({ session, id }: { session: Session; id: string }) => {
   const [selected, setSelected] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { data } = trpc.member.getMemberProfile.useQuery(id)
   return (
-    <Container centerContent padding="20px">
+    <Container centerContent>
       <ProfileInfoModal
         session={session}
         isOpen={isOpen}
@@ -33,97 +31,51 @@ const Member = ({ session, id }: { session: Session; id: string }) => {
       <Avatar
         height="100px"
         width="100px"
-        src="link"
+        src={data?.user.image == null ? undefined : data?.user.image}
         onClick={(e) => {
           e.preventDefault()
           setSelected(id)
           onOpen()
         }}
       />
-      <Container centerContent paddingTop="20px">
+      <Container centerContent>
         <Text fontSize="25px" color="#FFFFFF">
-          Role
+          {data?.user.roles}
         </Text>
         <Text fontSize="20px" color="#FFFFFF">
-          Name
+          {data?.user.name}
         </Text>
         <Text fontSize="20px" color="#FFFFFF">
-          Batch
+          {data?.user.batch}
         </Text>
       </Container>
     </Container>
   )
 }
 
-const ExcoBoard = ({ session }: { session: Session }) => {
+const MemberBoard = ({ session, department }: { session: Session, department: string }) => {
+  const { data } = trpc.member.getUsersfromDepartment.useQuery({department: department})
   return (
     <div>
-      <Container centerContent paddingTop="20px">
+      <Container centerContent paddingTop="20px" bg="black">
         <Text fontSize="40px" color="#FF9900">
-          EXCO
+          {department}
         </Text>
       </Container>
-
       <Grid
         height="600px"
-        templateRows="repeat(2,1fr)"
         templateColumns="repeat(7,1fr)"
         gap="9"
         paddingTop="30px"
         paddingStart="150px"
         paddingEnd="150px"
       >
-        {TopThreeInfo.map((p, i) => {
-          return (
-            <GridItem colStart={2 * i + 2} colEnd={2 * i + 3} key={i}>
-              <Member session={session} id={p.id.toString()} />
-            </GridItem>
-          )
-        })}
-
-        {ExcoMembersInfo.map((p, i) => {
+        {data?.map((p, i) => {
           return (
             <GridItem rowStart={2} rowSpan={1} colSpan={1} key={i}>
               <Member session={session} id={p.id.toString()} />
             </GridItem>
           )
-        })}
-      </Grid>
-    </div>
-  )
-}
-
-const MemberBoard = () => {
-  const { data: roles } = trpc.member.getRoles.useQuery()
-  return (
-    <div>
-      <Container centerContent paddingTop="20px" bg="black">
-        <Text fontSize="40px" color="#FF9900">
-          Software Development
-        </Text>
-      </Container>
-      <Grid
-        height="600px"
-        templateColumns="repeat(7,1fr)"
-        gap="9"
-        paddingTop="30px"
-        paddingStart="150px"
-        paddingEnd="150px"
-      >
-        {roles?.map((p, i) => {
-          return (
-            <GridItem colSpan={2} rowStart={i + 1} key={i}>
-              <Container centerContent paddingTop="50px">
-                <Text fontSize="30px" color="#FFFFFF">
-                  {p.roles}
-                </Text>
-              </Container>
-            </GridItem>
-          )
-        })}
-
-        {roles?.map((p, i) => {
-          return <GridItem colSpan={5} rowStart={i + 1} key={i}></GridItem>
         })}
       </Grid>
     </div>
@@ -159,8 +111,8 @@ export default function dashboard({ session }: { session: Session }) {
         </GridItem>
       </Grid>
 
-      <ExcoBoard session={session} />
-      <MemberBoard />
+      <MemberBoard session={session} department="EXCO"/>
+      <MemberBoard session={session} department="Software Development"/>
     </div>
   )
 }

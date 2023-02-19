@@ -1,5 +1,5 @@
 import { router } from '~/server/trpc/trpc'
-import { getMemberProfile, getMemberImage, getRoles, getAllUsers } from './read'
+import { getMemberProfile, getMemberImage, getRoles, getAllUsers, getUsersfromDepartment } from './read'
 import { updateMemberImage } from './update'
 import { deleteMemberImage } from './delete'
 import { addMultipleUsers, createSingleUser } from './create'
@@ -9,6 +9,7 @@ export const memberRouter = router({
   createSingleUser,
   deleteMemberImage,
   getAllUsers,
+  getUsersfromDepartment,
   getMemberImage,
   getMemberProfile,
   getRoles,

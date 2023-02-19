@@ -14,7 +14,7 @@ const navigation = [
 export default function HamburgerNavbar() {
   const router = useRouter()
   return (
-    <Disclosure as="nav" className="mb-3 bg-[#01003D]">
+    <Disclosure as="nav" className="mb-3 bg-[#000000]">
       {({ open }) => (
         <>
           <div className="mx-auto px-2">

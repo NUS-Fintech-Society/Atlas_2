@@ -93,6 +93,33 @@ export const getAllUsers = protectedProcedure
           roles: input.roles,
         },
         select: {
+          id: true,
+          name: true,
+          batch: true,
+        },
+      })
+    } catch (error) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'error retrieving users' + error,
+      })
+    }
+  })
+
+export const getUsersfromDepartment = protectedProcedure
+  .input(
+    z.object({
+      department: z.string(),
+    })
+  )
+  .query(async ({ ctx, input }) => {
+    try {
+      return await ctx.prisma.user.findMany({
+        where: {
+          department: input.department,
+        },
+        select: {
+          id: true,
           name: true,
           batch: true,
         },

@@ -126,12 +126,12 @@ const ProfilePicture = ({
           width={150}
           unoptimized={true} // needed for use with objectURLs
         />
-        {session.user?.id === studentId ? (
+        {/* {session.user?.id === studentId ? (
           <Box className="flex justify-end">
             <UploadImageBtn setImage={setImage} studentId={studentId} />
             <DeleteImageBtn setImage={setImage} studentId={studentId} />
           </Box>
-        ) : null}
+        ) : null} */}
       </Box>
     </Box>
   )
