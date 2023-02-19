@@ -82,3 +82,16 @@ model Event {
   startDate  DateTime @default(now()) @db.Date
   attendees  User[]   @relation("EventToUser")
 }
+
+model Log {
+  date    DateTime? @default(now())
+  message String
+  id      String    @id @default(uuid())
+  title   String
+  type    LogType
+}
+
+enum LogType {
+  WARNING
+  ERROR
+}
