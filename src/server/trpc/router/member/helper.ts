@@ -90,7 +90,7 @@ async function sendEmail(email: string, password: string) {
     },
   })
 
-  return transporter.sendMail({
+  return await transporter.sendMail({
     from: env.GMAIL,
     to: email,
     subject: 'New Account Creation',
