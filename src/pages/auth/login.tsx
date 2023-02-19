@@ -7,7 +7,7 @@ import Container from '~/components/auth/Container'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useToast } from '@chakra-ui/react'
-import Image from 'next/image'
+// import Image from 'next/image'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -64,13 +64,13 @@ const LoginPage = () => {
         <meta name="description" content="The login page for Atlas" />
       </Head>
       <div>
-        <Image
+        {/* <Image
           alt="fintech-logo"
           width={200}
           height={200}
           src="/fintech_logo.png"
           className="top-5vh fixed max-w-xs cursor-pointer"
-        />
+        /> */}
         <Container>
           <form onSubmit={submitForm}>
             <div className="flex flex-col items-start">

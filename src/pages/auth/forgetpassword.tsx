@@ -5,7 +5,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { trpc } from '~/utils/trpc'
 import { useToast } from '@chakra-ui/react'
-import Image from 'next/image'
+// import Image from 'next/image'
 
 const ForgotPasswordPage = () => {
   const toast = useToast()
@@ -41,13 +41,13 @@ const ForgotPasswordPage = () => {
         <meta name="description" content="The reset password page for Atlas" />
       </Head>
       <div>
-        <Image
+        {/* <Image
           alt="fintech-logo"
           width={200}
           height={200}
           src="/fintech_logo.png"
           className="top-5vh fixed max-w-xs cursor-pointer"
-        />
+        /> */}
         <Container>
           <div className="flex w-full flex-col items-start">
             {/* ---- Heading ---- */}
