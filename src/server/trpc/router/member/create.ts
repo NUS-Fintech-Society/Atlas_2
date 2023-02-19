@@ -12,6 +12,7 @@ import {
   buildUserObject,
   createManyUsers,
 } from './helper'
+import { LogType } from '@prisma/client'
 
 /**
  * Create multiple accounts for many users and send out an
@@ -43,13 +44,23 @@ export const addMultipleUsers = protectedProcedure
       })
     )
   )
-  .mutation(async ({ input }) => {
-    const password = randomBytes(10).toString('hex')
-    const hashedPassword = await hash(password, 10)
+  .mutation(async ({ ctx, input }) => {
+    try {
+      const password = randomBytes(10).toString('hex')
+      const hashedPassword = await hash(password, 10)
 
-    const users: User[] = buildUserObject(input, hashedPassword)
-    await createManyUsers(users)
-    await sendMultipleEmails(users, password)
+      const users: User[] = buildUserObject(input, hashedPassword)
+      await createManyUsers(users)
+      await sendMultipleEmails(users, password)
+    } catch (e) {
+      await ctx.prisma.log.create({
+        data: {
+          title: 'Error: Add Multiple Users',
+          message: (e as Error).message,
+          type: LogType.ERROR,
+        },
+      })
+    }
   })
 
 export const createSingleUser = protectedProcedure
@@ -63,11 +74,21 @@ export const createSingleUser = protectedProcedure
     })
   )
   .mutation(async ({ ctx, input }) => {
-    const { email, id, level, isAdmin } = input
-    const password = input.password || randomBytes(10).toString('hex')
+    try {
+      const { email, id, level, isAdmin } = input
+      const password = input.password || randomBytes(10).toString('hex')
 
-    await checkUserPermission(ctx.session.user.id)
-    await checkIfUserExist(email)
-    await createNewUser(email, id, isAdmin, level, password)
-    await sendEmail(email, password)
+      await checkUserPermission(ctx.session.user.id)
+      await checkIfUserExist(email)
+      await createNewUser(email, id, isAdmin, level, password)
+      await sendEmail(email, password)
+    } catch (e) {
+      await ctx.prisma.log.create({
+        data: {
+          title: 'Error: Add Multiple Users',
+          message: (e as Error).message,
+          type: LogType.ERROR,
+        },
+      })
+    }
   })
