@@ -19,7 +19,7 @@ async function checkUserPermission(id: string) {
     where: { id },
   })
 
-  if (!personMakingRequest || personMakingRequest.level === 'member') {
+  if (!personMakingRequest || !personMakingRequest.isAdmin) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: 'User is not authorized to create a new account',
@@ -90,7 +90,7 @@ async function sendEmail(email: string, password: string) {
     },
   })
 
-  return await transporter.sendMail({
+  return transporter.sendMail({
     from: env.GMAIL,
     to: email,
     subject: 'New Account Creation',
