@@ -139,7 +139,6 @@ export default function dashboard({ session }: { session: Session }) {
         <meta name="description" content="The home page for Atlas" />
       </Head>
       <HamburgerNavbar />
-      {status === 'loading' ? <LoadingScreen /> : <div>Home Page</div>}
       <Grid templateColumns="repeat(6,1fr)">
         <GridItem colStart={3} colEnd={5}>
           <Container centerContent>
