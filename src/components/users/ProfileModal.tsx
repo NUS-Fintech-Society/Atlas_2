@@ -321,7 +321,7 @@ const PersonalInformationModal = ({
   return (
     <Modal size="xl" isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent backgroundColor="white" borderRadius="lg">
+      <ModalContent backgroundColor="black" borderRadius="lg">
         <ModalHeader borderTopRadius="lg" className="bg-blue-600">
           <p className="pl-4 text-white">Personal Information</p>
         </ModalHeader>
@@ -337,13 +337,19 @@ const PersonalInformationModal = ({
 
 type ProfilePageType = {
   name: string | null
-  roles: string | null
   gender: string | null
   batch: string | null
   year: string | null
   faculty: string | null
-  major: string | null
+  image: string | null
+  telegram: string | null
+  discord: string | null
+  email: string | null
+  personal_email: string | null
+  hobbies: string | null
   department: string | null
+  roles: string | null
+  major: string | null
 }
 
 export default ProfileInfoModal
