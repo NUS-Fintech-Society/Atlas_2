@@ -63,7 +63,7 @@ const MemberBoard = ({ session, department }: { session: Session, department: st
         </Text>
       </Container>
       <Grid
-        height="600px"
+        height="300px"
         templateColumns="repeat(7,1fr)"
         gap="9"
         paddingTop="30px"
@@ -72,7 +72,7 @@ const MemberBoard = ({ session, department }: { session: Session, department: st
       >
         {data?.map((p, i) => {
           return (
-            <GridItem rowStart={2} rowSpan={1} colSpan={1} key={i}>
+            <GridItem colStart={2*i+2} colEnd={2*i+3} key={i}>
               <Member session={session} id={p.id.toString()} />
             </GridItem>
           )
