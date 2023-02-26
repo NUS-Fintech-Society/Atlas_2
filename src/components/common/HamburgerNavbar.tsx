@@ -56,10 +56,9 @@ export default function HamburgerNavbar() {
                   aria-current={item.current ? 'page' : undefined}
                   onClick={
                     item.name === 'Sign Out'
-                      ? (e: React.MouseEvent<HTMLButtonElement>) => {
+                      ? async (e: React.MouseEvent<HTMLButtonElement>) => {
                           e.preventDefault()
-                          signOut()
-                          router.push(item.href)
+                          await signOut()
                         }
                       : () => router.push(item.href)
                   }

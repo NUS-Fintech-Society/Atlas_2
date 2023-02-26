@@ -18,34 +18,26 @@ const LoginPage = () => {
   const toast = useToast()
 
   const submitForm = async (e: FormEvent<HTMLElement>) => {
-    try {
-      e.preventDefault()
-      setSubmitting(true)
-      const res = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      })
+    e.preventDefault()
+    setSubmitting(true)
+    const res = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    })
 
-      if (res && res.error) {
-        setSubmitting(false)
-        toast({
-          description: res.error,
-          duration: 3000,
-          status: 'error',
-          title: 'Oops, something went wrong!',
-        })
-        return
-      }
-    } catch (e) {
+    if (res && res.error) {
       setSubmitting(false)
       toast({
-        description: (e as Error).message,
+        description: res.error,
         duration: 3000,
         status: 'error',
         title: 'Oops, something went wrong!',
       })
+      return
     }
+
+    router.push('/')
   }
 
   if (status === 'loading') {
