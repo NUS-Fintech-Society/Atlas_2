@@ -2,6 +2,9 @@ import Layout from '~/components/common/Layout'
 import Head from 'next/head'
 import DataTable from '~/components/users/Table'
 import HamburgerNavbar from '~/components/common/HamburgerNavbar'
+import { useSession } from 'next-auth/react'
+import LoadingScreen from '~/components/common/LoadingScreen'
+import { useRouter } from 'next/router'
 
 const SEO = () => {
   return (
@@ -14,13 +17,22 @@ const SEO = () => {
 }
 
 export default function AdminUserPage() {
-  return (
-    <>
-      <SEO />
-      <HamburgerNavbar />
-      <Layout>
-        <DataTable />
-      </Layout>
-    </>
-  )
+  const { status, data: session } = useSession({ required: true })
+  const router = useRouter()
+
+  if (status === 'loading') {
+    return <LoadingScreen />
+  } else if (!session.isAdmin) {
+    router.push('/')
+  } else {
+    return (
+      <>
+        <SEO />
+        <HamburgerNavbar />
+        <Layout>
+          <DataTable />
+        </Layout>
+      </>
+    )
+  }
 }

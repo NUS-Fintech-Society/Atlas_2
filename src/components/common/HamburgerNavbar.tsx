@@ -14,36 +14,34 @@ const navigation = [
 export default function HamburgerNavbar() {
   const router = useRouter()
   return (
-    <Disclosure as="nav" className="mb-3 bg-[#01003D]">
+    <Disclosure as="nav" className="sticky top-0 z-10 w-full bg-[#01003D]">
       {({ open }) => (
         <>
-          <div className="mx-auto px-2">
-            <div className="relative flex h-16 items-center justify-between">
-              <Image
-                src="/fintech_logo.png"
-                alt="fintech-logo"
-                width={100}
-                height={100}
-              />
-              <div className="absolute inset-y-0 right-0 flex items-center">
-                {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-800">
-                  <span className="sr-only">Open main menu</span>
-                  {open ? (
-                    <XMarkIcon
-                      stroke="white"
-                      className="block h-6 w-6"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <Bars3Icon
-                      stroke="white"
-                      className="block h-6 w-6"
-                      aria-hidden="true"
-                    />
-                  )}
-                </Disclosure.Button>
-              </div>
+          <div className="flex h-16 items-center justify-between px-2">
+            <Image
+              src="/fintech_logo.png"
+              alt="fintech-logo"
+              width={100}
+              height={100}
+            />
+            <div className="inset-y-0 flex items-center">
+              {/* Mobile menu button*/}
+              <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-800">
+                <span className="sr-only">Open main menu</span>
+                {open ? (
+                  <XMarkIcon
+                    stroke="white"
+                    className="block h-6 w-6"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <Bars3Icon
+                    stroke="white"
+                    className="block h-6 w-6"
+                    aria-hidden="true"
+                  />
+                )}
+              </Disclosure.Button>
             </div>
           </div>
 
@@ -56,10 +54,9 @@ export default function HamburgerNavbar() {
                   aria-current={item.current ? 'page' : undefined}
                   onClick={
                     item.name === 'Sign Out'
-                      ? (e: React.MouseEvent<HTMLButtonElement>) => {
+                      ? async (e: React.MouseEvent<HTMLButtonElement>) => {
                           e.preventDefault()
-                          signOut()
-                          router.push(item.href)
+                          await signOut()
                         }
                       : () => router.push(item.href)
                   }
