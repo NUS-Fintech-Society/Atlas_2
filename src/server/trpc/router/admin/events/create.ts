@@ -42,7 +42,6 @@ export const createEvent = protectedProcedure
     } catch (e) {
       await ctx.prisma.log.create({
         data: {
-          date: new Date(),
           message: (e as Error).message,
           title: ErrorTitle.ERROR_CREATING_EVENT,
           type: LogType.ERROR,
