@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { toDataURL } from 'qrcode'
 import { randomUUID } from 'crypto'
 import { LogType } from '@prisma/client'
+import { ErrorTitle } from '../../constants/ErrorTitle'
 
 export const createEvent = protectedProcedure
   .input(
@@ -43,7 +44,7 @@ export const createEvent = protectedProcedure
         data: {
           date: new Date(),
           message: (e as Error).message,
-          title: 'ERROR CREATING EVENT',
+          title: ErrorTitle.ERROR_CREATING_EVENT,
           type: LogType.ERROR,
         },
       })
