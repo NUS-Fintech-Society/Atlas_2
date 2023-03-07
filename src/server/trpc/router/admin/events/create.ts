@@ -1,6 +1,5 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
-import { PrismaClient } from '@prisma/client'
 import { toDataURL } from 'qrcode'
 import { randomUUID } from 'crypto'
 
@@ -16,25 +15,36 @@ export const createEvent = protectedProcedure
     })
   )
   .mutation(async ({ ctx, input }) => {
-    let qr_code: string | undefined
-    const id = randomUUID()
+    try {
+      let qr_code: string | undefined
+      const id = randomUUID()
 
-    if (input.isQrRequired) {
-      qr_code = await toDataURL(id)
-    }
+      if (input.isQrRequired) {
+        qr_code = await toDataURL(id)
+      }
 
-    await ctx.prisma.event.create({
-      data: {
-        attendees: {
-          connect: input.attendees.map((attendee) => {
-            return { id: attendee }
-          }),
+      await ctx.prisma.event.create({
+        data: {
+          attendees: {
+            connect: input.attendees.map((attendee) => {
+              return { id: attendee }
+            }),
+          },
+          id: input.isQrRequired ? id : randomUUID(),
+          name: input.name,
+          startDate: input.startDate,
+          endDate: input.endDate,
+          qr_code,
         },
-        id: input.isQrRequired ? id : randomUUID(),
-        name: input.name,
-        startDate: input.startDate,
-        endDate: input.endDate,
-        qr_code,
-      },
-    })
+      })
+    } catch (e) {
+      await ctx.prisma.log.create({
+        data: {
+          date: new Date(),
+          message: (e as Error).message,
+          title: 'ERROR CREATING EVENT',
+          type: 'ERROR',
+        },
+      })
+    }
   })
