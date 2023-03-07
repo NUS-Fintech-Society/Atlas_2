@@ -32,7 +32,7 @@ export const createEvent = protectedProcedure
               return { id: attendee }
             }),
           },
-          id: input.isQrRequired ? id : randomUUID(),
+          id,
           name: input.name,
           startDate: input.startDate,
           endDate: input.endDate,
