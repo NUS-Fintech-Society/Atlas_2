@@ -2,6 +2,7 @@ import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
 import { toDataURL } from 'qrcode'
 import { randomUUID } from 'crypto'
+import { LogType } from '@prisma/client'
 
 export const createEvent = protectedProcedure
   .input(
@@ -43,7 +44,7 @@ export const createEvent = protectedProcedure
           date: new Date(),
           message: (e as Error).message,
           title: 'ERROR CREATING EVENT',
-          type: 'ERROR',
+          type: LogType.ERROR,
         },
       })
     }
