@@ -1,5 +1,6 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
 
 export const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
@@ -20,3 +21,21 @@ export const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
     })
   }
 })
+
+export const getEvent = protectedProcedure
+  .input(z.string())
+  .query(async ({ ctx, input }) => {
+    const event = await ctx.prisma.event.findUnique({
+      where: { id: input },
+    })
+
+    // Check if there is such an event.
+    if (!event) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'No such event found.',
+      })
+    }
+
+    return event
+  })
