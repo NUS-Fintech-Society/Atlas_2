@@ -1,7 +1,22 @@
-import { trpc } from "~/utils/trpc"
+import { trpc } from '~/utils/trpc'
+import { useRouter } from 'next/router'
 
 const EventPage = () => {
-    return <h1>Hiß</h1>
+  const router = useRouter()
+  const getId = () => {
+    const { pid } = router.query
+    if (pid === undefined) {
+      return ''
+    }
+
+    if (typeof pid === 'string') {
+      return pid
+    }
+
+    return pid.join('')
+  }
+  const { data, error, isLoading } = trpc.event.getEvent.useQuery(getId())
+  return <h1>Hiß</h1>
 }
 
 export default EventPage
