@@ -2,26 +2,31 @@ import { trpc } from '~/utils/trpc'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
+import Image from 'next/image'
+import { useState } from 'react'
 
 const EventPage = () => {
   const { data: session, status } = useSession({ required: true })
+  const [shouldRefetch, setShouldRefetch] = useState(true)
   const router = useRouter()
-  const getId = () => {
-    const { pid } = router.query
-    if (pid === undefined) {
-      return ''
+
+  const { data, error, isLoading } = trpc.event.getEvent.useQuery(
+    router.query.id as string,
+    {
+      enabled: shouldRefetch,
+      onError: () => {
+        setShouldRefetch(false)
+      },
     }
+  )
 
-    if (typeof pid === 'string') {
-      return pid
-    }
-
-    return pid.join('')
-  }
-  const { data, error, isLoading } = trpc.event.getEvent.useQuery(getId())
-
-  if (status === 'loading') {
+  if (isLoading || status === 'loading') {
     return <LoadingScreen />
+  }
+
+  console.log('The data is ', data)
+  if (error) {
+    return <h1>No QR code</h1>
   }
 
   return <h1>Hiß</h1>
