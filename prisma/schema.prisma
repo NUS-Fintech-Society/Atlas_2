@@ -71,16 +71,18 @@ model User {
   announcements  Announcements[]
   events         Event[]         @relation("EventToUser")
   projects       Projects[]      @relation("ProjectsToUser")
+  Attendance     Attendance[]    @relation("attendanceToUser")
 }
 
 model Event {
-  endDate    DateTime @db.Date
-  hasStarted Boolean  @default(false)
+  endDate    DateTime     @db.Date
+  hasStarted Boolean      @default(false)
   name       String
-  id         String   @id @default(uuid())
+  id         String       @id @default(uuid())
   qr_code    String?
-  startDate  DateTime @default(now()) @db.Date
-  attendees  User[]   @relation("EventToUser")
+  startDate  DateTime     @default(now()) @db.Date
+  attendees  User[]       @relation("EventToUser")
+  attendance Attendance[]
 }
 
 model Log {
@@ -89,6 +91,13 @@ model Log {
   id      String    @id @default(uuid())
   title   String
   type    LogType
+}
+
+model Attendance {
+  id           String @id @default(uuid())
+  attendedUser User[] @relation("attendanceToUser")
+  event        Event  @relation(fields: [eventId], references: [id])
+  eventId      String
 }
 
 enum LogType {
