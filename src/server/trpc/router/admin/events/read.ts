@@ -27,6 +27,7 @@ export const getEvent = protectedProcedure
   .query(async ({ ctx, input }) => {
     const event = await ctx.prisma.event.findUnique({
       where: { id: input },
+      include: { attendees: true },
     })
 
     // Check if there is such an event.
