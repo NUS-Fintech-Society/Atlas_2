@@ -8,8 +8,6 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import ProfileGrid from '~/components/profile/ProfileGrid'
 
 const ProfilePage = () => {
-  const router = useRouter()
-  const toast = useToast()
   const { status, data: session } = useSession({ required: true })
 
   if (status == 'loading') return <LoadingScreen />
@@ -21,7 +19,7 @@ const ProfilePage = () => {
           <link rel="icon" href="/favicon.ico" />
           <meta name="description" content="The profile page for Atlas" />
         </Head>
-        <HamburgerNavbar />
+        <HamburgerNavbar studentId={session.user.id} />
         <Box className="flex flex-col">
           <Text className="m-8 text-center text-3xl font-semibold underline underline-offset-8">
             Profile
