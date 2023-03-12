@@ -28,7 +28,8 @@ const EventPage = () => {
   const toast = useToast()
   const { data: session } = useSession({ required: true })
   const [attendees, setAttendees] = useState<string[]>([])
-  const [submitBefore, setSubmitBefore] = useState<boolean>(false) // hacky use for attendees validation
+  const [submitBefore, setSubmitBefore] = useState(false) // hacky use for attendees validation
+  const [isQrRequired, setIsQrRequired] = useState(false)
 
   const FormSchema = z.object({
     eventName: z.string().min(1, { message: 'Invalid name' }),
@@ -78,6 +79,7 @@ const EventPage = () => {
         endDate: new Date(formData.endDate),
         departments: formData.dept,
         attendees: attendees,
+        isQrRequired
       })
       toast({
         duration: 3000,
@@ -188,7 +190,13 @@ const EventPage = () => {
             </div>
             <div className="flex items-center">
               <FormLabel>QR Code required</FormLabel>
-              <Checkbox disabled={isSubmitting}></Checkbox>
+              <Checkbox
+                disabled={isSubmitting}
+                onChange={(e) => {
+                  e.preventDefault()
+                  setIsQrRequired(!isQrRequired)
+                }}
+              ></Checkbox>
             </div>
             <DataTable data={data} setAttendees={setAttendees} />
             {submitBefore && invalidAttendees && (
