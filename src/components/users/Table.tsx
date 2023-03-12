@@ -58,17 +58,24 @@ const useColumns = () => {
             footer: (props) => props.column.id,
           },
           {
-            title: "Edit",
+            title: 'Edit',
             accessorKey: 'users',
             cell: (info) => {
-                const { 
-                  isOpen: editIsOpen,
-                  onOpen: editOnOpen,
-                  onClose: editOnClose } = useDisclosure();
-                return <>
+              const {
+                isOpen: editIsOpen,
+                onOpen: editOnOpen,
+                onClose: editOnClose,
+              } = useDisclosure()
+              return (
+                <>
                   <Button onClick={editOnOpen}>Edit</Button>
-                  <EditModal editIsOpen={editIsOpen} editOnClose={editOnClose} data={info.row.original} />
+                  <EditModal
+                    editIsOpen={editIsOpen}
+                    editOnClose={editOnClose}
+                    data={info.row.original}
+                  />
                 </>
+              )
             },
             footer: (props) => props.column.id,
           },
