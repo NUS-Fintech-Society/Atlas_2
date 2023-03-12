@@ -22,6 +22,12 @@ type User = {
 }
 
 const useColumns = () => {
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
+  } = useDisclosure()
+
   return useMemo<ColumnDef<User>[]>(
     () => [
       {
@@ -61,11 +67,6 @@ const useColumns = () => {
             title: 'Edit',
             accessorKey: 'users',
             cell: (info) => {
-              const {
-                isOpen: editIsOpen,
-                onOpen: editOnOpen,
-                onClose: editOnClose,
-              } = useDisclosure()
               return (
                 <>
                   <Button onClick={editOnOpen}>Edit</Button>
@@ -82,7 +83,7 @@ const useColumns = () => {
         ],
       },
     ],
-    []
+    [editIsOpen, editOnClose, editOnOpen]
   )
 }
 
