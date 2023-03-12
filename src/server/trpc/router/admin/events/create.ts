@@ -1,6 +1,5 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
-import { PrismaClient } from '@prisma/client'
 
 export const createEvent = protectedProcedure
   .input(
@@ -12,10 +11,8 @@ export const createEvent = protectedProcedure
       attendees: z.array(z.string()),
     })
   )
-  .mutation(async ({ input }) => {
-    const prisma = new PrismaClient()
-
-    await prisma.event.create({
+  .mutation(async ({ ctx, input }) => {
+    await ctx.prisma.event.create({
       data: {
         attendees: {
           connect: input.attendees.map((attendee) => {
