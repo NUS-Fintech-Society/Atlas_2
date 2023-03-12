@@ -17,9 +17,11 @@ import { IconContext } from 'react-icons'
 import {
   Box,
   Button,
+  Center,
   Grid,
   GridItem,
   Image,
+  Input,
   Stack,
   StackDivider,
   Table,
@@ -33,6 +35,9 @@ import {
 import type { Session } from 'next-auth'
 import type { Projects } from '@prisma/client'
 import { useRouter } from 'next/router'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const defaultImage = '/fintech_logo.png'
 
@@ -141,7 +146,6 @@ const UploadImageBtn = ({
 }
 
 const EditProfileBtn = ({
-  studentId,
   onEdit,
   edit,
 }: {
@@ -200,24 +204,25 @@ const ProfileGrid = ({
   }
 
   return (
-    <Grid className="m-2 mb-10 sm:m-10 sm:grid-cols-2">
-      {/*TODO: fix responsiveness for ProfileCard */}
-      <GridItem rowSpan={2} colSpan={1} className="lg:max-w-lg">
-        <ProfileCard
-          name={data.user.name}
-          dept={data.user.department}
-          role={data.user.roles}
-          studentId={studentId}
-          session={session}
-        />
-      </GridItem>
-      <GridItem rowSpan={2} colSpan={1} className="lg:max-w-xl">
-        <Stack divider={<StackDivider />} spacing="5">
-          <ProfileContactInfo studentId={studentId} {...data.user} />
-          <ProfileInfo {...data.user} />
-        </Stack>
-      </GridItem>
-    </Grid>
+    <Center>
+      <Grid className="m-2 mb-10 sm:m-10 sm:grid-cols-2">
+        <GridItem rowSpan={2} colSpan={1} className="lg:max-w-xl">
+          <ProfileCard
+            name={data.user.name}
+            dept={data.user.department}
+            role={data.user.roles}
+            studentId={studentId}
+            session={session}
+          />
+        </GridItem>
+        <GridItem rowSpan={2} colSpan={1} className="lg:max-w-xl">
+          <Stack divider={<StackDivider />} spacing="5">
+            <ProfileContactInfo studentId={studentId} {...data.user} />
+            <ProfileInfo {...data.user} />
+          </Stack>
+        </GridItem>
+      </Grid>
+    </Center>
   )
 }
 
@@ -248,12 +253,13 @@ const ProfileCard = ({
   })
 
   return (
-    <Box className="mb-10 flex flex-col items-center">
+    <Box className="mb-10 flex flex-col items-center ">
       <Box className="relative">
         <Image
           alt="profile-pic"
           src={image}
           fallbackSrc={defaultImage}
+          objectFit="cover"
           borderRadius="full"
           boxSize="170px"
         />
@@ -285,6 +291,43 @@ const ProfileCard = ({
   )
 }
 
+const DynamicInputField = ({
+  edit,
+  isSubmitting,
+  register,
+  field,
+  fieldValue,
+}: {
+  edit: boolean
+  isSubmitting: boolean
+  register: any
+  field: string
+  fieldValue: string | null
+}) => {
+  return (
+    <>
+      {edit ? (
+        <Input
+          size="xs"
+          variant="flushed"
+          htmlSize={26}
+          width="auto"
+          textColor="#01003D"
+          className="font-extralight"
+          fontSize="l"
+          type="text"
+          disabled={isSubmitting}
+          {...register(field)}
+        />
+      ) : (
+        <Text textColor="#01003D" className="text-base font-extralight">
+          {fieldValue}
+        </Text>
+      )}
+    </>
+  )
+}
+
 const ProfileContactInfo = (props: {
   studentId: string | null
   telegram: string | null
@@ -292,52 +335,130 @@ const ProfileContactInfo = (props: {
   personal_email: string | null
   email: string
 }) => {
-  // mutateAsync for editInfo
+  const toast = useToast()
+  const { isLoading: isSubmitting, mutateAsync } =
+    trpc.member.updateMemberContacts.useMutation()
 
-  // Form validation logic
-
-  // onClick need show the tick button
   const [edit, setEdit] = useState(false)
   const onEdit = () => {
     setEdit(!edit)
   }
 
-  // onClick tick button need to hide tick button
+  // Form validation logic
+  const preloadedValues = {
+    telegram: props.telegram ? props.telegram : '',
+    discord: props.discord ? props.discord : '',
+    personal_email: props.personal_email ? props.personal_email : '',
+    email: props.email ? props.email : '',
+  }
+
+  const FormSchema = z.object({
+    telegram: z.string(),
+    discord: z.string(),
+    personal_email: z.string().email(),
+    email: z.string().email(),
+  })
+
+  type FormSchemaType = z.infer<typeof FormSchema>
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: preloadedValues,
+  })
+
+  const formSubmit = async (formData: FormSchemaType) => {
+    try {
+      if (props.studentId) {
+        console.log(
+          props.studentId,
+          formData.telegram,
+          formData.discord,
+          formData.personal_email,
+          formData.email
+        )
+
+        await mutateAsync({
+          studentId: props.studentId,
+          telegram: formData.telegram,
+          discord: formData.discord,
+          personal_email: formData.personal_email,
+          email: formData.email,
+        })
+
+        toast({
+          duration: 3000,
+          status: 'success',
+          title: 'Success',
+          description: 'Your contact details have been updated!',
+        })
+      }
+    } catch (e) {
+      toast({
+        duration: 3000,
+        status: 'error',
+        title: 'Oops, an error occured!',
+        description: (e as Error).message,
+      })
+    }
+  }
+
   return (
     <Box className="relative">
       <EditProfileBtn studentId={props.studentId} onEdit={onEdit} edit={edit} />
-      <Box
-        backgroundColor="#F7FCFF"
-        borderRadius="55px"
-        boxShadow="0px 3px 3px rgba(0, 0, 0, 0.2)"
-        className="flex flex-col gap-3 py-6 px-10"
-      >
-        <Box className="flex items-center gap-1">
-          <BsTelegram size="20px" className="fill-[#0088cc]" />
-          <Text textColor="#01003D" className="text-base font-extralight">
-            {props.telegram}
-          </Text>
+      <form onSubmit={handleSubmit(formSubmit)}>
+        <Box
+          backgroundColor="#F7FCFF"
+          borderRadius="55px"
+          boxShadow="0px 3px 3px rgba(0, 0, 0, 0.2)"
+          className="flex flex-col gap-3 py-6 px-10"
+        >
+          <Box className="flex items-center gap-1">
+            <BsTelegram size="20px" className="fill-[#0088cc]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="telegram"
+              fieldValue={props.telegram}
+            />
+          </Box>
+          <Box className="flex items-center gap-1">
+            <BsDiscord size="20px" className="fill-[#5865F2]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="discord"
+              fieldValue={props.discord}
+            />
+          </Box>
+          <Box className="flex items-center gap-1">
+            <BsEnvelopeFill size="20px" className="fill-[#54CCFF]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="personal_email"
+              fieldValue={props.personal_email}
+            />
+          </Box>
+          <Box className="flex items-center gap-1">
+            <BsEnvelopeFill size="20px" className="fill-[#97AEFF]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="email"
+              fieldValue={props.email}
+            />
+          </Box>
         </Box>
-        <Box className="flex items-center gap-1">
-          <BsDiscord size="20px" className="fill-[#5865F2]" />
-          <Text textColor="#01003D" className="text-base font-extralight">
-            {props.discord}
-          </Text>
-        </Box>
-        <Box className="flex items-center gap-1">
-          <BsEnvelopeFill size="20px" className="fill-[#54CCFF]" />
-          <Text textColor="#01003D" className="text-base font-extralight">
-            {props.personal_email}
-          </Text>
-        </Box>
-        <Box className="flex items-center gap-1">
-          <BsEnvelopeFill size="20px" className="fill-[#97AEFF]" />
-          <Text textColor="#01003D" className="text-base font-extralight">
-            {props.email}
-          </Text>
-        </Box>
-      </Box>
-      {edit && <SubmitEditBtn />}
+        {edit && <SubmitEditBtn />}
+      </form>
     </Box>
   )
 }
