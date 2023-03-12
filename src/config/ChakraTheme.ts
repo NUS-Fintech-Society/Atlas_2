@@ -42,5 +42,17 @@ export const theme: ThemeConfig = extendTheme({
         onPrimaryContainer: '#FFFFFF',
       },
     },
+    progress: {
+      50: '#002D70',
+      100: '#002D70',
+      200: '#002D70',
+      300: '#002D70',
+      400: '#002D70',
+      500: '#002D70',
+      600: '#002D70',
+      700: '#002D70',
+      800: '#002D70',
+      900: '#002D70',
+    },
   },
 })

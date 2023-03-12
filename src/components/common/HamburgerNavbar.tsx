@@ -8,6 +8,7 @@ const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'User', href: '/users', current: false },
   { name: 'Events', href: '/events/create', current: false },
+  { name: 'Attendance', href: '/events/attendance', current: false },
   { name: 'Sign Out', href: '/api/auth/signout', current: false },
 ]
 
