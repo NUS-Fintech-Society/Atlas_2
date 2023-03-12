@@ -3,10 +3,9 @@ import { hash } from 'bcryptjs'
 import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
 import type { User } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
+import { type PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import type SMTPTransport from 'nodemailer/lib/smtp-transport'
-const prisma = new PrismaClient()
 
 /**
  * Validates whether the user has the necessary permissions
@@ -14,7 +13,7 @@ const prisma = new PrismaClient()
  * @param id The student id of the user
  * @throws {TRPCError} if the user does not have permission
  */
-async function checkUserPermission(id: string) {
+async function checkUserPermission(id: string, prisma: PrismaClient) {
   const personMakingRequest = await prisma.user.findUnique({
     where: { id },
   })
@@ -33,7 +32,7 @@ async function checkUserPermission(id: string) {
  * @param email The email of the user
  * @throws {TRPCError} if the user already exists
  */
-async function checkIfUserExist(email: string) {
+async function checkIfUserExist(email: string, prisma: PrismaClient) {
   const foundUser = await prisma.user.findUnique({ where: { email } })
   if (foundUser) {
     throw new TRPCError({
@@ -57,7 +56,8 @@ async function createNewUser(
   id: string,
   isAdmin: boolean,
   level: string,
-  password: string
+  password: string,
+  prisma: PrismaClient
 ) {
   const hashedPassword = await hash(password, 10)
 
@@ -195,7 +195,7 @@ async function sendMultipleEmails(users: User[], password: string) {
  *
  * @param users The array of users object
  */
-async function createManyUsers(users: User[]) {
+async function createManyUsers(users: User[], prisma: PrismaClient) {
   await prisma.user.createMany({
     data: users,
   })

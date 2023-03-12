@@ -49,7 +49,7 @@ export const addMultipleUsers = protectedProcedure
       const hashedPassword = await hash(password, 10)
 
       const users: User[] = buildUserObject(input, hashedPassword)
-      await createManyUsers(users)
+      await createManyUsers(users, ctx.prisma)
       await sendMultipleEmails(users, password)
     } catch (e) {
       await ctx.prisma.log.create({
@@ -77,8 +77,8 @@ export const createSingleUser = protectedProcedure
       const { email, id, level, isAdmin } = input
       const password = input.password || randomBytes(10).toString('hex')
 
-      await checkIfUserExist(email)
-      await createNewUser(email, id, isAdmin, level, password)
+      await checkIfUserExist(email, ctx.prisma)
+      await createNewUser(email, id, isAdmin, level, password, ctx.prisma)
       await sendEmail(email, password)
     } catch (e) {
       await ctx.prisma.log.create({
@@ -90,4 +90,3 @@ export const createSingleUser = protectedProcedure
       })
     }
   })
-  
