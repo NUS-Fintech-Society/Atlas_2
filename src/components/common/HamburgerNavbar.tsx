@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 const navigation = [
-  { name: 'Home', href: '/', current: true },
+  { name: 'Home', href: '/', current: true }, 
   { name: 'User', href: '/users', current: false },
   { name: 'Events', href: '/events/create', current: false },
   { name: 'Sign Out', href: '/api/auth/signout', current: false },
@@ -17,13 +17,15 @@ export default function HamburgerNavbar() {
     <Disclosure as="nav" className="sticky top-0 z-10 w-full bg-[#01003D]">
       {({ open }) => (
         <>
-          <div className="flex h-16 items-center justify-between px-2">
+          <div className="flex h-20 items-center justify-between px-2">
+            <div className='m-4'>
             <Image
               src="/fintech_logo.png"
               alt="fintech-logo"
               width={100}
               height={100}
             />
+            </div>
             <div className="inset-y-0 flex items-center">
               {/* Mobile menu button*/}
               <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-800">

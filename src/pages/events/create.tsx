@@ -21,7 +21,8 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
 import RestrictedScreen from '~/components/common/RestrictedScreen'
-import HamburgerNavbar from '~/components/common/HamburgerNavbar'
+// import HamburgerNavbar from '~/components/common/HamburgerNavbar'
+import TopNavbar from '~/components/common/TopNavbar'
 
 const EventPage = () => {
   const router = useRouter()
@@ -109,7 +110,7 @@ const EventPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create event page for Atlas" />
       </Head>
-      <HamburgerNavbar />
+      <TopNavbar/>
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">
