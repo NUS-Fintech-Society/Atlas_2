@@ -21,10 +21,10 @@ export const getMemberProfile = protectedProcedure
           discord: true,
           email: true,
           personal_email: true,
-          hobbies: true,
           department: true,
           roles: true,
           major: true,
+          projects: true,
         },
       })
 
