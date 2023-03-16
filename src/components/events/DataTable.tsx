@@ -186,7 +186,7 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
                   return (
                     <Th
                       key={header.id}
-                      className="text-white border-x-2 border-[#97AEFF]"
+                      className="border-x-2 border-[#97AEFF] text-white"
                     >
                       <div className="flex items-center justify-between ">
                         {/* Render header filter btn */}

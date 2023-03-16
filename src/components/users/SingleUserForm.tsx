@@ -104,7 +104,7 @@ const SingleUserForm = () => {
         Give admin rights?
       </Checkbox>
 
-      <div className="flex mt-5">
+      <div className="mt-5 flex">
         <Button
           bg="light.secondary.primary"
           className="mr-5 text-white"

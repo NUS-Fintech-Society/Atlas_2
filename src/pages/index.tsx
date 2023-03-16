@@ -14,7 +14,7 @@ const HomePage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The home page for Atlas" />
       </Head>
-      <TopNavbar/>
+      <TopNavbar />
       {status === 'loading' ? <LoadingScreen /> : <div>Home Page</div>}
     </>
   )

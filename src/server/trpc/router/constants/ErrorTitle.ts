@@ -1,6 +1,6 @@
 /**
  * An enum containing the error and where it happened.
- * Mainly used for logging purposes. 
+ * Mainly used for logging purposes.
  */
 export enum ErrorTitle {
   ERROR_ADDING_MULTIPLE_USERS = 'ERROR ADDING MULTIPLE USERS',

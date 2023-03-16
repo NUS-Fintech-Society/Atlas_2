@@ -80,7 +80,7 @@ const EventPage = () => {
         endDate: new Date(formData.endDate),
         departments: formData.dept,
         attendees: attendees,
-        isQrRequired
+        isQrRequired,
       })
       toast({
         duration: 3000,
@@ -110,7 +110,7 @@ const EventPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create event page for Atlas" />
       </Head>
-      <TopNavbar/>
+      <TopNavbar />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">
