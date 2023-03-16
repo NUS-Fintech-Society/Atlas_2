@@ -29,8 +29,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
     mode: 'onSubmit',
   })
 
-  const { mutateAsync, isLoading: isSubmitting } =
-    trpc.member.updateProfile.useMutation()
+  const { mutateAsync } = trpc.member.updateProfile.useMutation()
   const toast = useToast()
   const onSubmit = async (data: any) => {
     try {
@@ -46,12 +45,17 @@ const EditModal: React.FC<editModalProps> = (props) => {
         duration: 9000,
         description: 'User has been successfully updated',
         title: 'Successfully updated',
+        status: 'success',
       })
     } catch (e) {
-      console.log(e)
+      toast({
+        duration: 9000,
+        description: (e as Error).message,
+        title: 'Oops, something went wrong',
+        status: 'error',
+      })
     }
   }
-  // console.log('projdata', props.data);
 
   return (
     <Modal isOpen={props.editIsOpen} onClose={props.editOnClose}>
