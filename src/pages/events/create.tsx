@@ -28,7 +28,8 @@ const EventPage = () => {
   const toast = useToast()
   const { data: session } = useSession({ required: true })
   const [attendees, setAttendees] = useState<string[]>([])
-  const [submitBefore, setSubmitBefore] = useState<boolean>(false) // hacky use for attendees validation
+  const [submitBefore, setSubmitBefore] = useState(false) // hacky use for attendees validation
+  const [isQrRequired, setIsQrRequired] = useState(false)
 
   const FormSchema = z.object({
     eventName: z.string().min(1, { message: 'Invalid name' }),
@@ -78,6 +79,7 @@ const EventPage = () => {
         endDate: new Date(formData.endDate),
         departments: formData.dept,
         attendees: attendees,
+        isQrRequired,
       })
       toast({
         duration: 3000,
@@ -100,125 +102,132 @@ const EventPage = () => {
   if (!session?.isAdmin) {
     return <RestrictedScreen />
   }
-  return (
-    <>
-      <Head>
-        <title>Atlas | Create Event</title>
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="The create event page for Atlas" />
-      </Head>
-      <HamburgerNavbar />
-      <Container>
-        <form onSubmit={handleSubmit(formSubmit)}>
-          <h1 className="mb-10 text-center text-2xl font-bold">
-            Create New Event
-          </h1>
-          <VStack align="left" spacing="6">
-            <div>
-              <FormLabel>Event Name</FormLabel>
-              <Input
-                type="text"
-                disabled={isSubmitting}
-                {...register('eventName', { required: true })}
-              />
-              {errors.eventName && (
-                <Text color="tomato" className="pt-2">
-                  {errors.eventName.message}
-                </Text>
-              )}
-            </div>
-            <VStack align="left">
-              <div className="flex">
-                <FormLabel>Department</FormLabel>
-                <CheckboxGroup>
-                  <Stack spacing={[1, 5]} direction={['row', 'column']}>
-                    <Checkbox value="ml" {...register('dept')}>
-                      Machine Learning
-                    </Checkbox>
-                    <Checkbox value="sd" {...register('dept')}>
-                      Software Development
-                    </Checkbox>
-                    <Checkbox value="bc" {...register('dept')}>
-                      Blockchain
-                    </Checkbox>
-                    <Checkbox value="ir" {...register('dept')}>
-                      Internal Relations
-                    </Checkbox>
-                    <Checkbox value="ea" {...register('dept')}>
-                      External Affairs
-                    </Checkbox>
-                  </Stack>
-                </CheckboxGroup>
+  if (session.user)
+    return (
+      <>
+        <Head>
+          <title>Atlas | Create Event</title>
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="description" content="The create event page for Atlas" />
+        </Head>
+        <HamburgerNavbar studentId={session.user.id} />
+        <Container>
+          <form onSubmit={handleSubmit(formSubmit)}>
+            <h1 className="mb-10 text-center text-2xl font-bold">
+              Create New Event
+            </h1>
+            <VStack align="left" spacing="6">
+              <div>
+                <FormLabel>Event Name</FormLabel>
+                <Input
+                  type="text"
+                  disabled={isSubmitting}
+                  {...register('eventName', { required: true })}
+                />
+                {errors.eventName && (
+                  <Text color="tomato" className="pt-2">
+                    {errors.eventName.message}
+                  </Text>
+                )}
               </div>
-              {errors.dept && (
-                <Text color="tomato" className="pt-2">
-                  {errors.dept.message}
-                </Text>
+              <VStack align="left">
+                <div className="flex">
+                  <FormLabel>Department</FormLabel>
+                  <CheckboxGroup>
+                    <Stack spacing={[1, 5]} direction={['row', 'column']}>
+                      <Checkbox value="ml" {...register('dept')}>
+                        Machine Learning
+                      </Checkbox>
+                      <Checkbox value="sd" {...register('dept')}>
+                        Software Development
+                      </Checkbox>
+                      <Checkbox value="bc" {...register('dept')}>
+                        Blockchain
+                      </Checkbox>
+                      <Checkbox value="ir" {...register('dept')}>
+                        Internal Relations
+                      </Checkbox>
+                      <Checkbox value="ea" {...register('dept')}>
+                        External Affairs
+                      </Checkbox>
+                    </Stack>
+                  </CheckboxGroup>
+                </div>
+                {errors.dept && (
+                  <Text color="tomato" className="pt-2">
+                    {errors.dept.message}
+                  </Text>
+                )}
+              </VStack>
+              <div>
+                <FormLabel>Start Date</FormLabel>
+                <Input
+                  placeholder="Select Date and Time"
+                  size="md"
+                  type="datetime-local"
+                  disabled={isSubmitting}
+                  {...register('startDate', { required: true })}
+                />
+                {errors.startDate && (
+                  <Text color="tomato" className="pt-2">
+                    {errors.startDate.message}
+                  </Text>
+                )}
+              </div>
+              <div>
+                <FormLabel>End Date</FormLabel>
+                <Input
+                  placeholder="Select Date and Time"
+                  size="md"
+                  type="datetime-local"
+                  disabled={isSubmitting}
+                  {...register('endDate', { required: true })}
+                />
+                {errors.endDate && (
+                  <Text color="tomato" className="pt-2">
+                    {errors.endDate.message}
+                  </Text>
+                )}
+              </div>
+              <div className="flex items-center">
+                <FormLabel>QR Code required</FormLabel>
+                <Checkbox
+                  disabled={isSubmitting}
+                  onChange={(e) => {
+                    e.preventDefault()
+                    setIsQrRequired(!isQrRequired)
+                  }}
+                ></Checkbox>
+              </div>
+              <DataTable data={data} setAttendees={setAttendees} />
+              {submitBefore && invalidAttendees && (
+                <Text color="tomato">At least one attendee is required</Text>
               )}
+              <div className="flex justify-between">
+                <Button
+                  bgColor="#FF9900"
+                  width={150}
+                  textColor="white"
+                  onClick={redirectHome}
+                >
+                  Back
+                </Button>
+                <Button
+                  bgColor="#4365DD"
+                  width={150}
+                  className="text-white"
+                  type="submit"
+                  disabled={isSubmitting}
+                  onClick={() => setSubmitBefore(true)}
+                >
+                  Create Event
+                </Button>
+              </div>
             </VStack>
-            <div>
-              <FormLabel>Start Date</FormLabel>
-              <Input
-                placeholder="Select Date and Time"
-                size="md"
-                type="datetime-local"
-                disabled={isSubmitting}
-                {...register('startDate', { required: true })}
-              />
-              {errors.startDate && (
-                <Text color="tomato" className="pt-2">
-                  {errors.startDate.message}
-                </Text>
-              )}
-            </div>
-            <div>
-              <FormLabel>End Date</FormLabel>
-              <Input
-                placeholder="Select Date and Time"
-                size="md"
-                type="datetime-local"
-                disabled={isSubmitting}
-                {...register('endDate', { required: true })}
-              />
-              {errors.endDate && (
-                <Text color="tomato" className="pt-2">
-                  {errors.endDate.message}
-                </Text>
-              )}
-            </div>
-            <div className="flex items-center">
-              <FormLabel>QR Code required</FormLabel>
-              <Checkbox disabled={isSubmitting}></Checkbox>
-            </div>
-            <DataTable data={data} setAttendees={setAttendees} />
-            {submitBefore && invalidAttendees && (
-              <Text color="tomato">At least one attendee is required</Text>
-            )}
-            <div className="flex justify-between">
-              <Button
-                bgColor="#FF9900"
-                width={150}
-                textColor="white"
-                onClick={redirectHome}
-              >
-                Back
-              </Button>
-              <Button
-                bgColor="#4365DD"
-                width={150}
-                className="text-white"
-                type="submit"
-                disabled={isSubmitting}
-                onClick={() => setSubmitBefore(true)}
-              >
-                Create Event
-              </Button>
-            </div>
-          </VStack>
-        </form>
-      </Container>
-    </>
-  )
+          </form>
+        </Container>
+      </>
+    )
 }
 
 export default EventPage
