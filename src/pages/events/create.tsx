@@ -21,7 +21,6 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
 import RestrictedScreen from '~/components/common/RestrictedScreen'
-// import HamburgerNavbar from '~/components/common/HamburgerNavbar'
 import TopNavbar from '~/components/common/TopNavbar'
 
 const EventPage = () => {

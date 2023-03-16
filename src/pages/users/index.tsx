@@ -1,7 +1,6 @@
 import Layout from '~/components/common/Layout'
 import Head from 'next/head'
 import DataTable from '~/components/users/Table'
-// import HamburgerNavbar from '~/components/common/HamburgerNavbar'
 import TopNavbar from '~/components/common/TopNavbar'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
