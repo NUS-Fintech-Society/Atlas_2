@@ -38,6 +38,7 @@ import { useRouter } from 'next/router'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import LoadingScreen from '../common/LoadingScreen'
 
 const defaultImage = '/fintech_logo.png'
 
@@ -194,9 +195,16 @@ const ProfileGrid = ({
   session: Session
 }) => {
   // TRPC USEQUERY HOOK: SET REFETCH TO FALSE TO CACHE THE DATA
-  const { data, isError } = trpc.member.getMemberProfile.useQuery(studentId, {
-    refetchOnWindowFocus: false,
-  })
+  const { data, isError, isLoading } = trpc.member.getMemberProfile.useQuery(
+    studentId,
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  if (isLoading) {
+    return <LoadingScreen />
+  }
 
   // IF THERE IS SOMETHING WRONG WITH FETCHING THE USER, THROW AN ERROR
   if (!data || !data.user || isError) {
