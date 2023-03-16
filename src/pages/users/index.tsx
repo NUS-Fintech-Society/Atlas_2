@@ -25,14 +25,16 @@ export default function AdminUserPage() {
   } else if (!session.isAdmin) {
     router.push('/')
   } else {
-    return (
-      <>
-        <SEO />
-        <HamburgerNavbar />
-        <Layout>
-          <DataTable />
-        </Layout>
-      </>
-    )
+    if (session && session.user) {
+      return (
+        <>
+          <SEO />
+          <HamburgerNavbar studentId={session.user.id} />
+          <Layout>
+            <DataTable />
+          </Layout>
+        </>
+      )
+    }
   }
 }

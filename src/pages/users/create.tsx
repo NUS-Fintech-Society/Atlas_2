@@ -24,38 +24,40 @@ const UserForm = () => {
 
   // Required to prevent this page from showing to the user early
   if (session.isAdmin) {
-    return (
-      <>
-        <Head>
-          <title>Atlas | Create Users</title>
-          <link rel="icon" href="/favicon.ico" />
-          <meta name="description" content="The create user page for Atlas" />
-        </Head>
-        <HamburgerNavbar />
-        <div className="m-auto w-[90%]">
-          {/* Heading */}
-          <h1 className="mb-5 font-[Inter] text-4xl font-semibold">
-            Create User / Users
-          </h1>
+    if (session.user) {
+      return (
+        <>
+          <Head>
+            <title>Atlas | Create Users</title>
+            <link rel="icon" href="/favicon.ico" />
+            <meta name="description" content="The create user page for Atlas" />
+          </Head>
+          <HamburgerNavbar studentId={session.user.id} />
+          <div className="m-auto w-[90%]">
+            {/* Heading */}
+            <h1 className="mb-5 font-[Inter] text-4xl font-semibold">
+              Create User / Users
+            </h1>
 
-          <Tabs>
-            <TabList>
-              <Tab>Create Single User</Tab>
-              <Tab>Create Multiple Users</Tab>
-            </TabList>
+            <Tabs>
+              <TabList>
+                <Tab>Create Single User</Tab>
+                <Tab>Create Multiple Users</Tab>
+              </TabList>
 
-            <TabPanels>
-              <TabPanel>
-                <SingleUserForm />
-              </TabPanel>
-              <TabPanel>
-                <CreateMultipleUsers />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </div>
-      </>
-    )
+              <TabPanels>
+                <TabPanel>
+                  <SingleUserForm />
+                </TabPanel>
+                <TabPanel>
+                  <CreateMultipleUsers />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </div>
+        </>
+      )
+    }
   }
 }
 
