@@ -29,7 +29,7 @@ const handleSignout = async () => {
 const Tab = ({ name, href }: TabProps) => {
   if (name != 'Sign Out') {
     return (
-      <div className="text-center text-white">
+      <div className="text-center text-white hover:text-2xl">
         <Link href={href}>
           <div>
             <span className="text-large block">{name}</span>
@@ -39,7 +39,7 @@ const Tab = ({ name, href }: TabProps) => {
     )
   } else {
     return (
-      <div className="m-4 text-center text-white">
+      <div className="m-4 text-center text-white hover:text-2xl">
         <button onClick={handleSignout}>
           <div>
             <span className="text-large block">{name}</span>
@@ -59,5 +59,6 @@ const TabConfig: TabProps[] = [
   { name: 'Home', href: '/' },
   { name: 'User', href: '/users' },
   { name: 'Events', href: '/events/create' },
+  { name: 'Profile', href: '/profile' },
   { name: 'Sign Out', href: '/api/auth/signout' },
 ]
