@@ -152,6 +152,30 @@ const EventPage = () => {
                   </Stack>
                 </CheckboxGroup>
               </div>
+            </VStack>
+            <VStack align="left">
+              <div className="flex">
+                <FormLabel>Department</FormLabel>
+                <CheckboxGroup>
+                  <Stack spacing={[1, 5]} direction={['row', 'column']}>
+                    <Checkbox value="ml" {...register('dept')}>
+                      Machine Learning
+                    </Checkbox>
+                    <Checkbox value="sd" {...register('dept')}>
+                      Software Development
+                    </Checkbox>
+                    <Checkbox value="bc" {...register('dept')}>
+                      Blockchain
+                    </Checkbox>
+                    <Checkbox value="ir" {...register('dept')}>
+                      Internal Relations
+                    </Checkbox>
+                    <Checkbox value="ea" {...register('dept')}>
+                      External Affairs
+                    </Checkbox>
+                  </Stack>
+                </CheckboxGroup>
+              </div>
               {errors.dept && (
                 <Text color="tomato" className="pt-2">
                   {errors.dept.message}
