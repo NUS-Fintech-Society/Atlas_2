@@ -1,10 +1,14 @@
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Head from 'next/head'
-import HamburgerNavbar from '~/components/common/HamburgerNavbar'
+import TopNavbar from '~/components/common/TopNavbar'
 
 const HomePage = () => {
   const { status, data: session } = useSession({ required: true })
+
+  if (status === 'loading') {
+    return <LoadingScreen />
+  }
 
   if (session && session.user) {
     return (
@@ -14,8 +18,7 @@ const HomePage = () => {
           <link rel="icon" href="/favicon.ico" />
           <meta name="description" content="The home page for Atlas" />
         </Head>
-        <HamburgerNavbar studentId={session.user.id} />
-        <div>Home Page</div>
+        <TopNavbar />
       </>
     )
   }

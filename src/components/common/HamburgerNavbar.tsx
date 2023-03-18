@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { Image } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -43,18 +43,16 @@ const ProfileIcon = ({
   )
 }
 
-export default function HamburgerNavbar({ studentId }: { studentId: string }) {
+export default function HamburgerNavbar() {
+  const { data: session } = useSession({ required: true })
   const router = useRouter()
   const defaultImage = '/fintech_logo.png'
   const [profileBtnImage, setProfileBtnImage] = useState(defaultImage)
   const redirectToProfile = () => {
     router.push('/profile')
   }
-  const redirectHome = () => {
-    router.push('/')
-  }
 
-  trpc.member.getMemberImage.useQuery(studentId, {
+  trpc.member.getMemberImage.useQuery(session?.user?.id as string, {
     refetchOnWindowFocus: false,
     onSuccess(data) {
       if (!data || !data.image) return
@@ -66,20 +64,15 @@ export default function HamburgerNavbar({ studentId }: { studentId: string }) {
     <Disclosure as="nav" className="sticky top-0 z-10 w-full bg-[#01003D]">
       {({ open }) => (
         <>
-          <div className="flex h-16 items-center justify-between px-2">
-            <Button
-              variant="ghost"
-              _hover={{ bg: 'None' }}
-              padding="0"
-              onClick={redirectHome}
-            >
+          <div className="flex h-20 items-center justify-between px-2">
+            <div className="m-4">
               <Image
                 src="/fintech_logo.png"
                 alt="fintech-logo"
-                objectFit="contain"
-                boxSize="100px"
+                width={100}
+                height={100}
               />
-            </Button>
+            </div>
             <div className="inset-y-0 flex items-center">
               {/* Profile Menu */}
               <ProfileIcon

@@ -1,7 +1,7 @@
 import Layout from '~/components/common/Layout'
 import Head from 'next/head'
 import DataTable from '~/components/users/Table'
-import HamburgerNavbar from '~/components/common/HamburgerNavbar'
+import TopNavbar from '~/components/common/TopNavbar'
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import { useRouter } from 'next/router'
@@ -25,16 +25,14 @@ export default function AdminUserPage() {
   } else if (!session.isAdmin) {
     router.push('/')
   } else {
-    if (session && session.user) {
-      return (
-        <>
-          <SEO />
-          <HamburgerNavbar studentId={session.user.id} />
-          <Layout>
-            <DataTable />
-          </Layout>
-        </>
-      )
-    }
+    return (
+      <>
+        <SEO />
+        <TopNavbar />
+        <Layout>
+          <DataTable />
+        </Layout>
+      </>
+    )
   }
 }
