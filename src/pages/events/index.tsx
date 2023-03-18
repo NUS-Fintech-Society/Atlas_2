@@ -7,34 +7,24 @@ import { useRouter } from 'next/router'
 import HamburgerNavbar from '~/components/common/HamburgerNavbar'
 import { createColumnHelper } from '@tanstack/react-table'
 import { AddIcon } from '@chakra-ui/icons'
+import { useState } from 'react'
 
 const AttendancePage = () => {
   const router = useRouter()
   const isSmallScreen = useBreakpointValue({ base: true, md: false })
+  const [eventInfoData, setEventInfoData] = useState<eventInfos[]>([])
 
-  let queryResult = trpc.attendance.getAllAttendance.useQuery()
+  trpc.attendance.getAllAttendance.useQuery(undefined, {
+    onSuccess: (data: eventInfos[]) => setEventInfoData(data),
+  })
 
   type eventInfos = {
-    number: String
-    name: String
-    total_users: String
-    total_attendees: String
-    startDate: String
-    endDate: String
-  }
-
-  let eventInfosData: {
-    number: String
-    name: String
-    total_users: String
-    total_attendees: String
-    startDate: String
-    endDate: String
-  }[] = []
-
-  if (queryResult.isSuccess && queryResult.data) {
-    eventInfosData = [...(Object.values(queryResult.data) ?? [])]
-    console.log(eventInfosData)
+    number: string
+    name: string
+    total_users: string
+    total_attendees: string
+    startDate: string
+    endDate: string
   }
 
   const columnHelper = createColumnHelper<eventInfos>()
@@ -123,7 +113,7 @@ const AttendancePage = () => {
               Create Event
             </Button>
           )}
-          <DataTable columns={columns} data={eventInfosData} />
+          <DataTable columns={columns} data={eventInfoData} />
         </VStack>
       </div>
     </>
