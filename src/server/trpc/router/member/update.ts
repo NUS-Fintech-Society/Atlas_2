@@ -21,6 +21,26 @@ export const updateMemberImage = protectedProcedure
     return user
   })
 
+export const updateProfile = protectedProcedure
+  .input(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      roles: z.string(),
+      department: z.string(),
+    })
+  )
+  .mutation(async ({ ctx, input }) => {
+    await ctx.prisma.user.update({
+      where: { id: input.id },
+      data: {
+        department: input.department,
+        name: input.name,
+        roles: input.roles,
+      },
+    })
+  })
+
 export const updateMemberContacts = protectedProcedure
   .input(
     z.object({
