@@ -4,10 +4,10 @@ import { trpc } from '~/utils/trpc'
 import React from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import HamburgerNavbar from '~/components/common/HamburgerNavbar'
 import { createColumnHelper } from '@tanstack/react-table'
 import { AddIcon } from '@chakra-ui/icons'
 import { useState } from 'react'
+import TopNavbar from '~/components/common/TopNavbar'
 
 const AttendancePage = () => {
   const router = useRouter()
@@ -88,7 +88,7 @@ const AttendancePage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The attendance page for Atlas" />
       </Head>
-      <HamburgerNavbar />
+      <TopNavbar />
       <div className="px-2 sm:px-6 sm:pt-5 md:px-20 md:pt-5 lg:px-28 lg:pt-5">
         <h1 className="mb-10 text-center text-2xl font-bold">Attendance</h1>
         <VStack align="left" className="mb-10">
@@ -99,7 +99,7 @@ const AttendancePage = () => {
               className="mb-10 text-black"
               borderRadius="full"
               fontSize={15}
-              onClick={() => router.push('/events/create')}
+              onClick={() => router.push('/events')}
             >
               <AddIcon />
             </Button>
@@ -108,7 +108,7 @@ const AttendancePage = () => {
               bgColor="#97AEFF"
               width={215}
               className="mb-10 text-black"
-              onClick={() => router.push('/events/create')}
+              onClick={() => router.push('/events')}
             >
               Create Event
             </Button>

@@ -10,7 +10,7 @@ import { trpc } from '../../utils/trpc'
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'User', href: '/users', current: false },
-  { name: 'Events', href: '/events/create', current: false },
+  { name: 'Events', href: '/events', current: false },
   { name: 'Attendance', href: '/events/attendance', current: false },
   { name: 'Sign Out', href: '/api/auth/signout', current: false },
 ]
