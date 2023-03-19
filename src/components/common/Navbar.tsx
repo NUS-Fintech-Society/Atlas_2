@@ -58,7 +58,7 @@ type TabProps = {
 const TabConfig: TabProps[] = [
   { name: 'Home', href: '/' },
   { name: 'User', href: '/users' },
-  { name: 'Events', href: '/events/create' },
+  { name: 'Events', href: '/events' },
   { name: 'Profile', href: '/profile' },
   { name: 'Sign Out', href: '/api/auth/signout' },
 ]
