@@ -1,22 +1,27 @@
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Head from 'next/head'
-import HamburgerNavbar from '~/components/common/HamburgerNavbar'
+import TopNavbar from '~/components/common/TopNavbar'
 
 const HomePage = () => {
-  const { status } = useSession({ required: true })
+  const { status, data: session } = useSession({ required: true })
 
-  return (
-    <>
-      <Head>
-        <title>Atlas</title>
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="The home page for Atlas" />
-      </Head>
-      <HamburgerNavbar />
-      {status === 'loading' ? <LoadingScreen /> : <div>Home Page</div>}
-    </>
-  )
+  if (status === 'loading') {
+    return <LoadingScreen />
+  }
+
+  if (session && session.user) {
+    return (
+      <>
+        <Head>
+          <title>Atlas</title>
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="description" content="The home page for Atlas" />
+        </Head>
+        <TopNavbar />
+      </>
+    )
+  }
 }
 
 export default HomePage

@@ -10,6 +10,8 @@ import {
 import { useMemo, useState } from 'react'
 import LoadingScreen from '../common/LoadingScreen'
 import Link from 'next/link'
+import { Button, useDisclosure } from '@chakra-ui/react'
+import EditModal from './EditModal'
 
 type User = {
   name: string | null
@@ -20,6 +22,12 @@ type User = {
 }
 
 const useColumns = () => {
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
+  } = useDisclosure()
+
   return useMemo<ColumnDef<User>[]>(
     () => [
       {
@@ -55,10 +63,27 @@ const useColumns = () => {
             header: 'Role',
             footer: (props) => props.column.id,
           },
+          {
+            title: 'Edit',
+            accessorKey: 'users',
+            cell: (info) => {
+              return (
+                <>
+                  <Button onClick={editOnOpen}>Edit</Button>
+                  <EditModal
+                    editIsOpen={editIsOpen}
+                    editOnClose={editOnClose}
+                    data={info.row.original}
+                  />
+                </>
+              )
+            },
+            footer: (props) => props.column.id,
+          },
         ],
       },
     ],
-    []
+    [editIsOpen, editOnClose, editOnOpen]
   )
 }
 

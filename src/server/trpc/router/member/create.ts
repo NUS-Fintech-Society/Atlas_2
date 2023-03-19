@@ -12,6 +12,7 @@ import {
   createManyUsers,
 } from './helper'
 import { LogType } from '@prisma/client'
+import { ErrorTitle } from '../constants/ErrorTitle'
 
 /**
  * Create multiple accounts for many users and send out an
@@ -49,12 +50,12 @@ export const addMultipleUsers = protectedProcedure
       const hashedPassword = await hash(password, 10)
 
       const users: User[] = buildUserObject(input, hashedPassword)
-      await createManyUsers(users)
+      await createManyUsers(users, ctx.prisma)
       await sendMultipleEmails(users, password)
     } catch (e) {
       await ctx.prisma.log.create({
         data: {
-          title: 'Error: Add Multiple Users',
+          title: ErrorTitle.ERROR_ADDING_MULTIPLE_USERS,
           message: (e as Error).message,
           type: LogType.ERROR,
         },
@@ -77,13 +78,13 @@ export const createSingleUser = protectedProcedure
       const { email, id, level, isAdmin } = input
       const password = input.password || randomBytes(10).toString('hex')
 
-      await checkIfUserExist(email)
-      await createNewUser(email, id, isAdmin, level, password)
+      await checkIfUserExist(email, ctx.prisma)
+      await createNewUser(email, id, isAdmin, level, password, ctx.prisma)
       await sendEmail(email, password)
     } catch (e) {
       await ctx.prisma.log.create({
         data: {
-          title: 'Error: Add Single Users',
+          title: ErrorTitle.ERROR_ADDING_SINGLE_USER,
           message: (e as Error).message,
           type: LogType.ERROR,
         },

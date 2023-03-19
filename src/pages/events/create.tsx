@@ -21,14 +21,15 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
 import RestrictedScreen from '~/components/common/RestrictedScreen'
-import HamburgerNavbar from '~/components/common/HamburgerNavbar'
+import TopNavbar from '~/components/common/TopNavbar'
 
 const EventPage = () => {
   const router = useRouter()
   const toast = useToast()
   const { data: session } = useSession({ required: true })
   const [attendees, setAttendees] = useState<string[]>([])
-  const [submitBefore, setSubmitBefore] = useState<boolean>(false) // hacky use for attendees validation
+  const [submitBefore, setSubmitBefore] = useState(false) // hacky use for attendees validation
+  const [isQrRequired, setIsQrRequired] = useState(false)
 
   const FormSchema = z.object({
     eventName: z.string().min(1, { message: 'Invalid name' }),
@@ -78,6 +79,7 @@ const EventPage = () => {
         endDate: new Date(formData.endDate),
         departments: formData.dept,
         attendees: attendees,
+        isQrRequired,
       })
       toast({
         duration: 3000,
@@ -107,7 +109,7 @@ const EventPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create event page for Atlas" />
       </Head>
-      <HamburgerNavbar />
+      <TopNavbar />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">
@@ -127,6 +129,30 @@ const EventPage = () => {
                 </Text>
               )}
             </div>
+            <VStack align="left">
+              <div className="flex">
+                <FormLabel>Department</FormLabel>
+                <CheckboxGroup>
+                  <Stack spacing={[1, 5]} direction={['row', 'column']}>
+                    <Checkbox value="ml" {...register('dept')}>
+                      Machine Learning
+                    </Checkbox>
+                    <Checkbox value="sd" {...register('dept')}>
+                      Software Development
+                    </Checkbox>
+                    <Checkbox value="bc" {...register('dept')}>
+                      Blockchain
+                    </Checkbox>
+                    <Checkbox value="ir" {...register('dept')}>
+                      Internal Relations
+                    </Checkbox>
+                    <Checkbox value="ea" {...register('dept')}>
+                      External Affairs
+                    </Checkbox>
+                  </Stack>
+                </CheckboxGroup>
+              </div>
+            </VStack>
             <VStack align="left">
               <div className="flex">
                 <FormLabel>Department</FormLabel>
@@ -188,7 +214,13 @@ const EventPage = () => {
             </div>
             <div className="flex items-center">
               <FormLabel>QR Code required</FormLabel>
-              <Checkbox disabled={isSubmitting}></Checkbox>
+              <Checkbox
+                disabled={isSubmitting}
+                onChange={(e) => {
+                  e.preventDefault()
+                  setIsQrRequired(!isQrRequired)
+                }}
+              ></Checkbox>
             </div>
             <DataTable data={data} setAttendees={setAttendees} />
             {submitBefore && invalidAttendees && (

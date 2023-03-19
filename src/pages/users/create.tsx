@@ -8,7 +8,7 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import { useRouter } from 'next/router'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import Head from 'next/head'
-import HamburgerNavbar from '~/components/common/HamburgerNavbar'
+import TopNavbar from '~/components/common/TopNavbar'
 
 const UserForm = () => {
   const { data: session, status } = useSession({ required: true })
@@ -31,7 +31,7 @@ const UserForm = () => {
           <link rel="icon" href="/favicon.ico" />
           <meta name="description" content="The create user page for Atlas" />
         </Head>
-        <HamburgerNavbar />
+        <TopNavbar />
         <div className="m-auto w-[90%]">
           {/* Heading */}
           <h1 className="mb-5 font-[Inter] text-4xl font-semibold">
