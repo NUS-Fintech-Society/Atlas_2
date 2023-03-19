@@ -99,7 +99,7 @@ const AttendancePage = () => {
               className="mb-10 text-black"
               borderRadius="full"
               fontSize={15}
-              onClick={() => router.push('/events')}
+              onClick={() => router.push('/events/create')}
             >
               <AddIcon />
             </Button>
@@ -108,7 +108,7 @@ const AttendancePage = () => {
               bgColor="#97AEFF"
               width={215}
               className="mb-10 text-black"
-              onClick={() => router.push('/events')}
+              onClick={() => router.push('/events/create')}
             >
               Create Event
             </Button>
