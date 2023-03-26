@@ -11,20 +11,18 @@ const ProfilePage = () => {
   if (status == 'loading') return <LoadingScreen />
   if (session.user) {
     return (
-      <>
+      <Box className="h-screen">
         <Head>
           <title>Atlas | Profile</title>
           <link rel="icon" href="/favicon.ico" />
           <meta name="description" content="The profile page for Atlas" />
         </Head>
         <TopNavbar />
-        <Box className="flex flex-col">
-          <Text className="m-8 text-center text-3xl font-semibold underline underline-offset-8">
-            Profile
-          </Text>
-          <ProfileGrid session={session} studentId={session.user.id} />
-        </Box>
-      </>
+        <Text className="m-8 text-center text-3xl font-semibold underline underline-offset-8">
+          Profile
+        </Text>
+        <ProfileGrid session={session} studentId={session.user.id} />
+      </Box>
     )
   }
 }

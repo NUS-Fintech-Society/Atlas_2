@@ -17,13 +17,8 @@ import { IconContext } from 'react-icons'
 import {
   Box,
   Button,
-  Center,
-  Grid,
-  GridItem,
   Image,
   Input,
-  Stack,
-  StackDivider,
   Table,
   TableContainer,
   Tbody,
@@ -212,25 +207,23 @@ const ProfileGrid = ({
   }
 
   return (
-    <Center>
-      <Grid className="m-2 mb-10 sm:m-10 sm:grid-cols-2">
-        <GridItem rowSpan={2} colSpan={1} className="lg:max-w-xl">
-          <ProfileCard
-            name={data.user.name}
-            dept={data.user.department}
-            role={data.user.roles}
-            studentId={studentId}
-            session={session}
-          />
-        </GridItem>
-        <GridItem rowSpan={2} colSpan={1} className="lg:max-w-xl">
-          <Stack divider={<StackDivider />} spacing="5">
-            <ProfileContactInfo studentId={studentId} {...data.user} />
-            <ProfileInfo {...data.user} />
-          </Stack>
-        </GridItem>
-      </Grid>
-    </Center>
+    <div className="m-10 grid grid-cols-1 grid-rows-3 place-items-center gap-y-6 md:h-4/6 md:grid-cols-3">
+      <div className="row-span-3 h-full w-3/4 max-w-md bg-[#01003D] md:place-self-end">
+        <ProfileCard
+          name={data.user.name}
+          dept={data.user.department}
+          role={data.user.roles}
+          studentId={studentId}
+          session={session}
+        />
+      </div>
+      <div className="col-span-2 w-3/4">
+        <ProfileContactInfo studentId={studentId} {...data.user} />
+      </div>
+      <div className="col-span-2 row-span-2 mb-10 w-3/4">
+        <ProfileInfo {...data.user} />
+      </div>
+    </div>
   )
 }
 
@@ -261,7 +254,7 @@ const ProfileCard = ({
   })
 
   return (
-    <Box className="mb-10 flex flex-col items-center ">
+    <Box className="mb-10 flex flex-col items-center">
       <Box className="relative">
         <Image
           alt="profile-pic"
@@ -278,17 +271,17 @@ const ProfileCard = ({
         ) : null}
       </Box>
       <Box className="flex flex-col items-center py-2">
-        <Text textColor="#01003D" className="text-2xl font-medium">
+        <Text textColor="##FFFFFF" className="text-2xl font-medium">
           {name}
         </Text>
-        <Text textColor="#002D70">{dept}</Text>
-        <Text textColor="#002D70">{role}</Text>
+        <Text textColor="##FFFFFF">{dept}</Text>
+        <Text textColor="#FFFFFF">{role}</Text>
       </Box>
       <Button
         boxSizing="border-box"
-        border="1px solid #01003D"
+        border="1px solid #FFFFFF"
         className="mt-10 rounded-lg px-4 py-2"
-        textColor="#01003D"
+        textColor="#FFFFFF"
         variant="ghost"
         _hover={{ bg: '#97AEFF' }}
         onClick={redirectToResetPassword}
@@ -477,6 +470,7 @@ const ProfileInfo = (props: ProfilePageType) => {
       backgroundColor="rgba(242, 235, 255, 0.58)"
       borderRadius="55px"
       padding={10}
+      className="h-full"
     >
       <TableContainer>
         <Table variant="unstyled" size="sm">
