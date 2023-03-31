@@ -37,6 +37,7 @@ export const resetPassword = publicProcedure
             If you did not make this request, please ignore the email.
             Otherwise, click on the link below to reset the password.</p>
             <br />
+            <a href="${env.DOMAIN}${foundUser.id || 'user'}">Click Here</a>
             Thank You. <br /> 
             Fintech HR
           `,

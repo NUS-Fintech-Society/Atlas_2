@@ -6,18 +6,36 @@ import Link from 'next/link'
 import { trpc } from '~/utils/trpc'
 import { useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { hash } from 'bcryptjs'
 
 const ChangePasswordPage = () => {
+
   const toast = useToast()
   const [newPassword, setnewPassword] = useState('')
   const [confirmNewPassword, setconfirmNewPassword] = useState('')
   const router = useRouter()
-  const { mutateAsync, isLoading } = trpc.auth.resetPassword.useMutation()
+  const { mutateAsync, isLoading } = trpc.auth.changePassword.useMutation()
+  const handleChangePassword = async (password: string) => {
+    const userID = String(router.query.changepassworduserId)
+    console.log(userID)
+    const hashedPassword = await hash(password, 10)
+    console.log(hashedPassword)
+    await mutateAsync({userId: userID, password: hashedPassword})
+  }
   const formHandler = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault()
-      await mutateAsync(newPassword)
-      
+      if (newPassword == confirmNewPassword) {
+        handleChangePassword(newPassword)
+      } else {
+        toast({
+          title: 'Something went wrong',
+          description: 'Your 2 passwords do not match',
+          status: 'error',
+          duration: 3000,
+        })
+      }
+
     } catch (e) {
       toast({
         title: 'Something went wrong',
@@ -37,6 +55,8 @@ const ChangePasswordPage = () => {
     router.push('/')
     
   }
+
+
 
   return (
     <>

@@ -21,6 +21,7 @@ export const serverSchema = z.object({
   ),
   GMAIL: z.string(),
   GMAIL_PASSWORD: z.string(),
+  DOMAIN: z.string()
 });
 
 /**
