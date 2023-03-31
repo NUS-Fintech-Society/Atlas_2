@@ -15,6 +15,15 @@ const ForgotPasswordPage = () => {
     try {
       e.preventDefault()
       await mutateAsync(email)
+      
+      fetch ('../src/server/trpc/router/auth/post.ts', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(email)
+      })
     } catch (e) {
       toast({
         title: 'Something went wrong',
@@ -31,6 +40,7 @@ const ForgotPasswordPage = () => {
       status: 'success',
       duration: 3000,
     })
+    
   }
 
   return (

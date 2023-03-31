@@ -11,7 +11,7 @@ import { useToast } from '@chakra-ui/react'
 
 const LoginPage = () => {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { data:session , status } = useSession()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
