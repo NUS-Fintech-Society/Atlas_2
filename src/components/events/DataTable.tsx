@@ -155,10 +155,10 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
   }, [rowSelection, table, setAttendees])
 
   return (
-    <div>
-      <div className="flex items-center justify-between py-4">
+    <div >
+      <div className="flex items-center justify-between py-4 ">
         <p className="text-2xl">Attendees</p>
-        <div className="flex gap-4">
+        <div className="flex gap-4 ">
           <Button
             bgColor="#4365DD"
             className="text-white"
@@ -178,7 +178,7 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
         className="border-2 border-[#97AEFF]"
       >
         <Table variant="unstyled" className="border-collapse">
-          <Thead className="sticky top-0 bg-[#4365DD]">
+          <Thead className="sticky top-0 bg-[#01003D]">
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
