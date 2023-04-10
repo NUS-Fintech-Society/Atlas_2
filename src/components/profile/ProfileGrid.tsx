@@ -207,7 +207,7 @@ const ProfileGrid = ({
   }
 
   return (
-    <div className="m-10 grid grid-cols-1 grid-rows-3 place-items-center gap-y-6 md:h-4/6 md:grid-cols-3">
+    <div className="m-10 grid grid-cols-1 grid-rows-3 place-items-center gap-y-6 md:grid-cols-3">
       <div className="row-span-3 h-full w-3/4 max-w-md bg-[#01003D] md:place-self-end">
         <ProfileCard
           name={data.user.name}
