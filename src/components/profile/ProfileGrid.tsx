@@ -1,12 +1,6 @@
-import { type ChangeEvent, useRef, useState } from 'react'
+import { useState } from 'react'
 import { trpc } from '../../utils/trpc'
-import {
-  BsDiscord,
-  BsEnvelopeFill,
-  BsTelegram,
-  BsFillPencilFill,
-  BsCheckLg,
-} from 'react-icons/bs'
+import { BsDiscord, BsEnvelopeFill, BsTelegram } from 'react-icons/bs'
 import { IconContext } from 'react-icons'
 import {
   Box,
@@ -28,104 +22,11 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import LoadingScreen from '../common/LoadingScreen'
+import EditIcon from './EditIcon'
+import CheckIcon from './CheckIcon'
+import UploadImageBtn from './UploadImageButton'
 
 const defaultImage = '/fintech_logo.png'
-
-const EditIcon = () => {
-  return (
-    <Box
-      backgroundColor="#97AEFF"
-      padding={1}
-      borderRadius={5}
-      boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-    >
-      <BsFillPencilFill />
-    </Box>
-  )
-}
-
-const ActiveEditIcon = () => {
-  return (
-    <Box
-      backgroundColor="#445BAE"
-      padding={1}
-      borderRadius={5}
-      boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-    >
-      <BsFillPencilFill fill="#F5F5F5" />
-    </Box>
-  )
-}
-
-const CheckIcon = () => {
-  return (
-    <Box
-      backgroundColor="#97AEFF"
-      padding={1}
-      borderRadius={5}
-      boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-    >
-      <BsCheckLg />
-    </Box>
-  )
-}
-
-// reference: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
-// https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications
-const UploadImageBtn = ({ studentId }: { studentId: string }) => {
-  const toast = useToast()
-  // trigger a click event on the file input element when button is clicked
-  const uploadRef = useRef<HTMLInputElement>(null)
-  const { mutateAsync } = trpc.member.updateMemberImage.useMutation()
-  const onUpload = () => {
-    uploadRef.current?.click()
-  }
-  const handleFileSelected = (e: ChangeEvent<HTMLInputElement>): void => {
-    if (e.target.files) {
-      const file = e.target.files.item(0)
-      const reader = new FileReader()
-      reader.addEventListener('load', async () => {
-        try {
-          const imageDataURI = reader.result as string
-          const image = imageDataURI as string
-          await mutateAsync({ studentId, image })
-          toast({
-            duration: 3000,
-            description: 'Image successfully uploaded.',
-            title: 'Success',
-            status: 'success',
-          })
-        } catch (e) {
-          toast({
-            duration: 3000,
-            description: (e as Error).message,
-            status: 'error',
-            title: 'Something went wrong',
-          })
-        }
-      })
-    }
-  }
-  return (
-    <Button
-      variant={'ghost'}
-      size={'xs'}
-      onClick={onUpload}
-      _hover={{ bg: 'None' }}
-    >
-      <IconContext.Provider value={{ size: '20px' }}>
-        <EditIcon />
-      </IconContext.Provider>
-      <input
-        type={'file'}
-        accept="image/*"
-        ref={uploadRef}
-        onChange={handleFileSelected}
-        className={'hidden'}
-      />
-    </Button>
-  )
-}
 
 const EditProfileBtn = ({
   onEdit,
@@ -144,7 +45,7 @@ const EditProfileBtn = ({
         _hover={{ bg: 'None' }}
       >
         <IconContext.Provider value={{ size: '20px' }}>
-          {edit ? <ActiveEditIcon /> : <EditIcon />}
+          <EditIcon active={edit} />
         </IconContext.Provider>
       </Button>
     </Box>
