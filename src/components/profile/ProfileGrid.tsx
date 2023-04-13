@@ -1,10 +1,4 @@
-import {
-  type ChangeEvent,
-  type Dispatch,
-  type SetStateAction,
-  useRef,
-  useState,
-} from 'react'
+import { type ChangeEvent, useRef, useState } from 'react'
 import { trpc } from '../../utils/trpc'
 import {
   BsDiscord,
@@ -78,13 +72,7 @@ const CheckIcon = () => {
 
 // reference: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
 // https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications
-const UploadImageBtn = ({
-  setImage,
-  studentId,
-}: {
-  setImage: Dispatch<SetStateAction<string>>
-  studentId: string
-}) => {
+const UploadImageBtn = ({ studentId }: { studentId: string }) => {
   const toast = useToast()
   // trigger a click event on the file input element when button is clicked
   const uploadRef = useRef<HTMLInputElement>(null)
@@ -107,7 +95,6 @@ const UploadImageBtn = ({
             title: 'Success',
             status: 'success',
           })
-          setImage(imageDataURI)
         } catch (e) {
           toast({
             duration: 3000,
@@ -117,7 +104,6 @@ const UploadImageBtn = ({
           })
         }
       })
-      reader.readAsDataURL(file as Blob)
     }
   }
   return (
@@ -132,7 +118,7 @@ const UploadImageBtn = ({
       </IconContext.Provider>
       <input
         type={'file'}
-        accept={'image/png, image/jpeg'}
+        accept="image/*"
         ref={uploadRef}
         onChange={handleFileSelected}
         className={'hidden'}
@@ -240,25 +226,17 @@ const ProfileCard = ({
   studentId: string
   session: Session
 }) => {
-  const [image, setImage] = useState(defaultImage)
   const router = useRouter()
-  const redirectToResetPassword = () => {
-    router.push('/auth/forgetpassword')
-  }
-  trpc.member.getMemberImage.useQuery(studentId, {
-    refetchOnWindowFocus: false,
-    onSuccess(data) {
-      if (!data || !data.image) return
-      setImage(data.image)
-    },
-  })
+  const redirectToResetPassword = () => router.push('/auth/forgetpassword')
+
+  const { isLoading, data } = trpc.member.getMemberImage.useQuery(studentId)
 
   return (
     <Box className="mb-10 flex flex-col items-center">
       <Box className="relative">
         <Image
           alt="profile-pic"
-          src={image}
+          src={isLoading || !data || !data.image ? defaultImage : data.image}
           fallbackSrc={defaultImage}
           objectFit="cover"
           borderRadius="full"
@@ -266,7 +244,7 @@ const ProfileCard = ({
         />
         {session?.user?.id === studentId ? (
           <Box className="absolute bottom-0 right-0">
-            <UploadImageBtn setImage={setImage} studentId={studentId} />
+            <UploadImageBtn studentId={studentId} />
           </Box>
         ) : null}
       </Box>
@@ -362,11 +340,7 @@ const ProfileContactInfo = (props: {
 
   type FormSchemaType = z.infer<typeof FormSchema>
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormSchemaType>({
+  const { register, handleSubmit } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: preloadedValues,
   })
@@ -374,14 +348,6 @@ const ProfileContactInfo = (props: {
   const formSubmit = async (formData: FormSchemaType) => {
     try {
       if (props.studentId) {
-        console.log(
-          props.studentId,
-          formData.telegram,
-          formData.discord,
-          formData.personal_email,
-          formData.email
-        )
-
         await mutateAsync({
           studentId: props.studentId,
           telegram: formData.telegram,
