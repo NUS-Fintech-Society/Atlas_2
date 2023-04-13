@@ -3,10 +3,16 @@ import { trpc } from '../../utils/trpc'
 import { IconContext } from 'react-icons'
 import { Button, useToast } from '@chakra-ui/react'
 import EditIcon from './EditIcon'
+import { type QueryObserverResult } from '@tanstack/react-query'
+import { Message } from '~/constant/messages'
 
-// reference: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
-// https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications
-const UploadImageBtn = ({ studentId }: { studentId: string }) => {
+const UploadImageBtn = ({
+  studentId,
+  refetch,
+}: {
+  studentId: string
+  refetch: () => Promise<QueryObserverResult>
+}) => {
   const toast = useToast()
   // trigger a click event on the file input element when button is clicked
   const uploadRef = useRef<HTMLInputElement>(null)
@@ -15,30 +21,35 @@ const UploadImageBtn = ({ studentId }: { studentId: string }) => {
     uploadRef.current?.click()
   }
   const handleFileSelected = (e: ChangeEvent<HTMLInputElement>): void => {
-    e.preventDefault()
-    console.log('Triggered')
     if (e.target.files) {
       const reader = new FileReader()
       reader.addEventListener('load', async () => {
         try {
           const imageDataURI = reader.result as string
           const image = imageDataURI as string
+          toast({
+            duration: 1000,
+            title: Message.IMAGE_UPLOAD_LOADING,
+            status: 'loading',
+          })
           await mutateAsync({ studentId, image })
+          await refetch()
           toast({
             duration: 3000,
-            description: 'Image successfully uploaded.',
+            description: Message.IMAGE_UPLOAD_SUCCESS,
             title: 'Success',
             status: 'success',
           })
         } catch (e) {
           toast({
             duration: 3000,
-            description: (e as Error).message,
+            description: Message.IMAGE_UPLOAD_ERROR,
             status: 'error',
             title: 'Something went wrong',
           })
         }
       })
+      reader.readAsDataURL(e?.target?.files[0] as Blob)
     }
   }
   return (
@@ -53,7 +64,7 @@ const UploadImageBtn = ({ studentId }: { studentId: string }) => {
       </IconContext.Provider>
       <input
         type="file"
-        accept="image/*"
+        accept="image/png, image/jpeg"
         ref={uploadRef}
         onChange={handleFileSelected}
         className="hidden"

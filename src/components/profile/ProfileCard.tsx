@@ -3,6 +3,7 @@ import { Box, Button, Image, Text } from '@chakra-ui/react'
 import type { Session } from 'next-auth'
 import { useRouter } from 'next/router'
 import UploadImageBtn from './UploadImageButton'
+import { type QueryObserverResult } from '@tanstack/react-query'
 
 const DEFAULT_IMAGE = '/fintech_logo.png'
 
@@ -12,12 +13,14 @@ const ProfileCard = ({
   role,
   studentId,
   session,
+  refetch,
 }: {
   name: string | null
   dept: string | null
   role: string | null
   studentId: string
   session: Session
+  refetch: () => Promise<QueryObserverResult>
 }) => {
   const router = useRouter()
   const redirectToResetPassword = () => router.push('/auth/forgetpassword')
@@ -37,7 +40,7 @@ const ProfileCard = ({
         />
         {session?.user?.id === studentId ? (
           <Box className="absolute bottom-0 right-0">
-            <UploadImageBtn studentId={studentId} />
+            <UploadImageBtn refetch={refetch} studentId={studentId} />
           </Box>
         ) : null}
       </Box>

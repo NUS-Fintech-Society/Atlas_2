@@ -37,6 +37,7 @@ const ProfileGrid = ({
     <div className="m-10 grid grid-cols-1 grid-rows-3 place-items-center gap-y-6 md:grid-cols-3">
       <div className="row-span-3 h-full w-3/4 max-w-md bg-[#01003D] md:place-self-end">
         <ProfileCard
+          refetch={refetch}
           name={data.user.name}
           dept={data.user.department}
           role={data.user.roles}
