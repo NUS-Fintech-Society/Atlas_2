@@ -18,7 +18,6 @@ const UploadImageBtn = ({ studentId }: { studentId: string }) => {
     e.preventDefault()
     console.log('Triggered')
     if (e.target.files) {
-      const file = e.target.files.item(0)
       const reader = new FileReader()
       reader.addEventListener('load', async () => {
         try {
@@ -44,8 +43,8 @@ const UploadImageBtn = ({ studentId }: { studentId: string }) => {
   }
   return (
     <Button
-      variant={'ghost'}
-      size={'xs'}
+      variant="ghost"
+      size="xs"
       onClick={onUpload}
       _hover={{ bg: 'None' }}
     >

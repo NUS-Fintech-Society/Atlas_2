@@ -2,19 +2,8 @@ import { useState } from 'react'
 import { trpc } from '../../utils/trpc'
 import { type QueryObserverResult } from '@tanstack/react-query'
 import { BsDiscord, BsEnvelopeFill, BsTelegram } from 'react-icons/bs'
-import {
-  Box,
-  Input,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Tr,
-  useToast,
-} from '@chakra-ui/react'
+import { Box, Input, Text, useToast } from '@chakra-ui/react'
 import type { Session } from 'next-auth'
-import type { Projects } from '@prisma/client'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -22,6 +11,7 @@ import LoadingScreen from '../common/LoadingScreen'
 import EditProfileBtn from './EditProfileButton'
 import SubmitEditBtn from './SubmitEditButton'
 import ProfileCard from './ProfileCard'
+import ProfileInfo from './ProfileInfo'
 
 const ProfileGrid = ({
   studentId,
@@ -230,89 +220,6 @@ const ProfileContactInfo = (props: {
       </form>
     </Box>
   )
-}
-
-const ProfileInfo = (props: ProfilePageType) => {
-  return (
-    <Box
-      backgroundColor="rgba(242, 235, 255, 0.58)"
-      borderRadius="55px"
-      padding={10}
-      className="h-full"
-    >
-      <TableContainer>
-        <Table variant="unstyled" size="sm">
-          <Tbody>
-            <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                GENDER
-              </Td>
-              <Td textColor="#002D70" className="font-light">
-                {props.gender}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                BATCH
-              </Td>
-              <Td textColor="#002D70" className="font-light">
-                {props.batch}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                YEAR
-              </Td>
-              <Td textColor="#002D70" className="font-light">
-                {props.year}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                FACULTY
-              </Td>
-              <Td textColor="#002D70" className="font-light">
-                {props.faculty}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                MAJOR
-              </Td>
-              <Td textColor="#002D70" className="font-light">
-                {props.major}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                PROJECTS
-              </Td>
-              {props.projects.map((project) => {
-                return (
-                  <Td
-                    key={project.project_id}
-                    textColor="#002D70"
-                    className="font-light"
-                  >
-                    {project.name}
-                  </Td>
-                )
-              })}
-            </Tr>
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </Box>
-  )
-}
-
-type ProfilePageType = {
-  gender: string | null
-  batch: string | null
-  year: string | null
-  faculty: string | null
-  major: string | null
-  projects: Projects[]
 }
 
 export default ProfileGrid
