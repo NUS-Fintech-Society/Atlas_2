@@ -70,6 +70,7 @@ export default function HamburgerNavbar() {
               <Image
                 src="/fintech_logo.png"
                 alt="fintech-logo"
+                objectFit="contain"
                 width={100}
                 height={100}
               />

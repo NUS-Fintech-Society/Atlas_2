@@ -1,5 +1,5 @@
 import { signOut } from 'next-auth/react'
-import Image from 'next/image'
+import { Image } from '@chakra-ui/react'
 import Link from 'next/link'
 
 export default function Navbar() {
@@ -10,6 +10,7 @@ export default function Navbar() {
           <Image
             src="/fintech_logo.png"
             alt="fintech-logo"
+            objectFit="contain"
             width={100}
             height={100}
           />
