@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import { trpc } from '../../utils/trpc'
+import { type QueryObserverResult } from '@tanstack/react-query'
 import { BsDiscord, BsEnvelopeFill, BsTelegram } from 'react-icons/bs'
-import { IconContext } from 'react-icons'
 import {
   Box,
-  Button,
-  Image,
   Input,
   Table,
   TableContainer,
@@ -17,57 +15,13 @@ import {
 } from '@chakra-ui/react'
 import type { Session } from 'next-auth'
 import type { Projects } from '@prisma/client'
-import { useRouter } from 'next/router'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import LoadingScreen from '../common/LoadingScreen'
-import EditIcon from './EditIcon'
-import CheckIcon from './CheckIcon'
-import UploadImageBtn from './UploadImageButton'
-
-const defaultImage = '/fintech_logo.png'
-
-const EditProfileBtn = ({
-  onEdit,
-  edit,
-}: {
-  studentId: string | null
-  onEdit: () => void
-  edit: boolean
-}) => {
-  return (
-    <Box className="absolute top-7 right-5">
-      <Button
-        variant={'ghost'}
-        size={'xs'}
-        onClick={onEdit}
-        _hover={{ bg: 'None' }}
-      >
-        <IconContext.Provider value={{ size: '20px' }}>
-          <EditIcon active={edit} />
-        </IconContext.Provider>
-      </Button>
-    </Box>
-  )
-}
-
-const SubmitEditBtn = () => {
-  return (
-    <Box className="absolute bottom-7 right-5">
-      <Button
-        variant={'ghost'}
-        size={'xs'}
-        _hover={{ bg: 'None' }}
-        type="submit"
-      >
-        <IconContext.Provider value={{ size: '20px' }}>
-          <CheckIcon />
-        </IconContext.Provider>
-      </Button>
-    </Box>
-  )
-}
+import EditProfileBtn from './EditProfileButton'
+import SubmitEditBtn from './SubmitEditButton'
+import ProfileCard from './ProfileCard'
 
 const ProfileGrid = ({
   studentId,
@@ -77,12 +31,8 @@ const ProfileGrid = ({
   session: Session
 }) => {
   // TRPC USEQUERY HOOK: SET REFETCH TO FALSE TO CACHE THE DATA
-  const { data, isError, isLoading } = trpc.member.getMemberProfile.useQuery(
-    studentId,
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
+  const { data, isError, isLoading, refetch } =
+    trpc.member.getMemberProfile.useQuery(studentId)
 
   if (isLoading) {
     return <LoadingScreen />
@@ -105,69 +55,16 @@ const ProfileGrid = ({
         />
       </div>
       <div className="col-span-2 w-3/4">
-        <ProfileContactInfo studentId={studentId} {...data.user} />
+        <ProfileContactInfo
+          studentId={studentId}
+          {...data.user}
+          refetch={refetch}
+        />
       </div>
       <div className="col-span-2 row-span-2 mb-10 w-3/4">
         <ProfileInfo {...data.user} />
       </div>
     </div>
-  )
-}
-
-const ProfileCard = ({
-  name,
-  dept,
-  role,
-  studentId,
-  session,
-}: {
-  name: string | null
-  dept: string | null
-  role: string | null
-  studentId: string
-  session: Session
-}) => {
-  const router = useRouter()
-  const redirectToResetPassword = () => router.push('/auth/forgetpassword')
-
-  const { isLoading, data } = trpc.member.getMemberImage.useQuery(studentId)
-
-  return (
-    <Box className="mb-10 flex flex-col items-center">
-      <Box className="relative">
-        <Image
-          alt="profile-pic"
-          src={isLoading || !data || !data.image ? defaultImage : data.image}
-          fallbackSrc={defaultImage}
-          objectFit="cover"
-          borderRadius="full"
-          boxSize="170px"
-        />
-        {session?.user?.id === studentId ? (
-          <Box className="absolute bottom-0 right-0">
-            <UploadImageBtn studentId={studentId} />
-          </Box>
-        ) : null}
-      </Box>
-      <Box className="flex flex-col items-center py-2">
-        <Text textColor="##FFFFFF" className="text-2xl font-medium">
-          {name}
-        </Text>
-        <Text textColor="##FFFFFF">{dept}</Text>
-        <Text textColor="#FFFFFF">{role}</Text>
-      </Box>
-      <Button
-        boxSizing="border-box"
-        border="1px solid #FFFFFF"
-        className="mt-10 rounded-lg px-4 py-2"
-        textColor="#FFFFFF"
-        variant="ghost"
-        _hover={{ bg: '#97AEFF' }}
-        onClick={redirectToResetPassword}
-      >
-        Reset Password
-      </Button>
-    </Box>
   )
 }
 
@@ -214,6 +111,7 @@ const ProfileContactInfo = (props: {
   discord: string | null
   personal_email: string | null
   email: string
+  refetch: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
   const { isLoading: isSubmitting, mutateAsync } =
@@ -256,6 +154,9 @@ const ProfileContactInfo = (props: {
           personal_email: formData.personal_email,
           email: formData.email,
         })
+
+        await props.refetch()
+        setEdit(false)
 
         toast({
           duration: 3000,

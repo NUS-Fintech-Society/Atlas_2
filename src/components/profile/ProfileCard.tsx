@@ -1,0 +1,66 @@
+import { trpc } from '../../utils/trpc'
+import { Box, Button, Image, Text } from '@chakra-ui/react'
+import type { Session } from 'next-auth'
+import { useRouter } from 'next/router'
+import UploadImageBtn from './UploadImageButton'
+
+const DEFAULT_IMAGE = '/fintech_logo.png'
+
+const ProfileCard = ({
+  name,
+  dept,
+  role,
+  studentId,
+  session,
+}: {
+  name: string | null
+  dept: string | null
+  role: string | null
+  studentId: string
+  session: Session
+}) => {
+  const router = useRouter()
+  const redirectToResetPassword = () => router.push('/auth/forgetpassword')
+
+  const { isLoading, data } = trpc.member.getMemberImage.useQuery(studentId)
+
+  return (
+    <Box className="mb-10 flex flex-col items-center">
+      <Box className="relative">
+        <Image
+          alt="profile-pic"
+          src={isLoading || !data || !data.image ? DEFAULT_IMAGE : data.image}
+          fallbackSrc={DEFAULT_IMAGE}
+          objectFit="cover"
+          borderRadius="full"
+          boxSize="170px"
+        />
+        {session?.user?.id === studentId ? (
+          <Box className="absolute bottom-0 right-0">
+            <UploadImageBtn studentId={studentId} />
+          </Box>
+        ) : null}
+      </Box>
+      <Box className="flex flex-col items-center py-2">
+        <Text textColor="##FFFFFF" className="text-2xl font-medium">
+          {name}
+        </Text>
+        <Text textColor="##FFFFFF">{dept}</Text>
+        <Text textColor="#FFFFFF">{role}</Text>
+      </Box>
+      <Button
+        boxSizing="border-box"
+        border="1px solid #FFFFFF"
+        className="mt-10 rounded-lg px-4 py-2"
+        textColor="#FFFFFF"
+        variant="ghost"
+        _hover={{ bg: '#97AEFF' }}
+        onClick={redirectToResetPassword}
+      >
+        Reset Password
+      </Button>
+    </Box>
+  )
+}
+
+export default ProfileCard
