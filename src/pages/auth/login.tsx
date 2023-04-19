@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useSession, signIn } from 'next-auth/react'
 import { useState, useCallback } from 'react'
-import { Input } from '~/components/utilities'
+import { AuthInput } from '~/components/utilities'
 import { trpc } from '~/utils/trpc'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Head from 'next/head'
@@ -102,23 +102,21 @@ const LoginPage = () => {
             <h1 className="my-5 text-center text-5xl font-bold text-white">
               {pageState === PageState.LOGIN ? 'Login' : 'Reset Password'}
             </h1>
-            <Input
+            <AuthInput
               type="email"
               name="Email"
               required
               value={email}
               onChange={(e: any) => setEmail(e.target.value)}
-              placeholder=" "
             />
 
             {pageState === PageState.LOGIN && (
-              <Input
+              <AuthInput
                 type="password"
                 name="Password"
                 required
                 value={password}
                 onChange={(e: any) => setPassword(e.target.value)}
-                placeholder=" "
               />
             )}
 
