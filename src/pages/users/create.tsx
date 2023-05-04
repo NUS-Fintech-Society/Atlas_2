@@ -31,7 +31,7 @@ const UserForm = () => {
           <link rel="icon" href="/favicon.ico" />
           <meta name="description" content="The create user page for Atlas" />
         </Head>
-        <TopNavbar />
+        <TopNavbar isAdmin={session.isAdmin} />
         <div className="m-auto w-[90%]">
           {/* Heading */}
           <h1 className="mb-5 font-[Inter] text-4xl font-semibold">

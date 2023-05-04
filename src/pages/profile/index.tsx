@@ -17,7 +17,7 @@ const ProfilePage = () => {
           <link rel="icon" href="/favicon.ico" />
           <meta name="description" content="The profile page for Atlas" />
         </Head>
-        <TopNavbar />
+        <TopNavbar isAdmin={session.isAdmin} />
         <Text className="m-8 text-center text-3xl font-semibold underline underline-offset-8">
           Profile
         </Text>

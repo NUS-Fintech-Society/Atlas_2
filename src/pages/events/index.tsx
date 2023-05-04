@@ -8,11 +8,18 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { AddIcon } from '@chakra-ui/icons'
 import { useState } from 'react'
 import TopNavbar from '~/components/common/TopNavbar'
+import { useSession } from 'next-auth/react'
+import LoadingScreen from '~/components/common/LoadingScreen'
 
 const AttendancePage = () => {
   const router = useRouter()
   const isSmallScreen = useBreakpointValue({ base: true, md: false })
   const [eventInfoData, setEventInfoData] = useState<eventInfos[]>([])
+  const { status, data: session } = useSession({ required: true })
+
+  if (status === "loading") {
+    return <LoadingScreen />
+  }
 
   trpc.attendance.getAllAttendance.useQuery(undefined, {
     onSuccess: (data: eventInfos[]) => setEventInfoData(data),
@@ -88,7 +95,7 @@ const AttendancePage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The attendance page for Atlas" />
       </Head>
-      <TopNavbar />
+      <TopNavbar isAdmin={session.isAdmin} />
       <div className="px-2 sm:px-6 sm:pt-5 md:px-20 md:pt-5 lg:px-28 lg:pt-5">
         <h1 className="mb-10 text-center text-2xl font-bold">Attendance</h1>
         <VStack align="left" className="mb-10">

@@ -6,16 +6,6 @@ import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import { useRouter } from 'next/router'
 
-const SEO = () => {
-  return (
-    <Head>
-      <title>Atlas | Users</title>
-      <link rel="icon" href="/favicon.ico" />
-      <meta name="description" content="The login page for Atlas" />
-    </Head>
-  )
-}
-
 export default function AdminUserPage() {
   const { status, data: session } = useSession({ required: true })
   const router = useRouter()
@@ -27,8 +17,12 @@ export default function AdminUserPage() {
   } else {
     return (
       <>
-        <SEO />
-        <TopNavbar />
+        <Head>
+          <title>Atlas | Users</title>
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="description" content="The login page for Atlas" />
+        </Head>
+        <TopNavbar isAdmin={session.isAdmin} />
         <Layout>
           <DataTable />
         </Layout>

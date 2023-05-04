@@ -109,7 +109,7 @@ const EventPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create event page for Atlas" />
       </Head>
-      <TopNavbar />
+      <TopNavbar isAdmin={session.isAdmin} />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">

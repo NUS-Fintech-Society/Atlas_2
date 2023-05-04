@@ -1,9 +1,9 @@
 import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Head from 'next/head'
-import TopNavbar from '~/components/common/TopNavbar'
 import { useState } from 'react'
 import { Box, Circle, Grid, GridItem, Heading, Input } from '@chakra-ui/react'
+import TopNavbar from '~/components/common/TopNavbar'
 
 const HomePage = () => {
   const { status, data: session } = useSession({ required: true })
@@ -87,7 +87,7 @@ const HomePage = () => {
           <link rel="icon" href="/favicon.ico" />
           <meta name="description" content="The home page for Atlas" />
         </Head>
-        <TopNavbar />
+        <TopNavbar isAdmin={session.isAdmin} />
         <div className="flex flex-col bg-[#B1A6DB] p-16">
           <h1 className="text-left text-[50px] font-bold leading-none md:text-[88px]">
             Our
