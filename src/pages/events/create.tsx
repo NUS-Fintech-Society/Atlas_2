@@ -20,9 +20,9 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
-import withAuth from '~/utils/withAuth'
+import withAuth, { type BaseProps } from '~/utils/withAuth'
 
-const EventPage = () => {
+const EventPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
   const toast = useToast()
   const [attendees, setAttendees] = useState<string[]>([])
@@ -105,7 +105,7 @@ const EventPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create event page for Atlas" />
       </Head>
-      <TopNavbar />
+      <TopNavbar isAdmin={session.isAdmin} />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">

@@ -32,6 +32,8 @@
     "bcryptjs": "^2.4.3",
     "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
+    "flowbite": "^1.6.5",
+    "flowbite-react": "^0.4.4",
     "framer-motion": "^9.0.4",
     "next": "^13.1.6",
     "next-auth": "^4.19.2",

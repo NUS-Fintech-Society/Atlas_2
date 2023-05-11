@@ -6,9 +6,9 @@ const CreateMultipleUsers = dynamic(
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import Head from 'next/head'
 import TopNavbar from '~/components/common/TopNavbar'
-import withAuth from '~/utils/withAuth'
+import withAuth, { type BaseProps } from '~/utils/withAuth'
 
-const UserForm = () => {
+const UserForm: React.FC<BaseProps> = ({ session }) => {
   return (
     <>
       <Head>
@@ -16,7 +16,7 @@ const UserForm = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create user page for Atlas" />
       </Head>
-      <TopNavbar />
+      <TopNavbar isAdmin={session.isAdmin} />
       <div className="m-auto w-[90%]">
         {/* Heading */}
         <h1 className="mb-5 font-[Inter] text-4xl font-semibold">

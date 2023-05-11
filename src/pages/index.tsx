@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
 import { Box, Circle, Grid, GridItem, Heading, Input } from '@chakra-ui/react'
 
-const HomePage: React.FC<BaseProps> = () => {
+const HomePage: React.FC<BaseProps> = ({ session }) => { 
   const [searchQuery, setSearchQuery] = useState('')
   const data = [
     {
@@ -80,7 +80,7 @@ const HomePage: React.FC<BaseProps> = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The home page for Atlas" />
       </Head>
-      <TopNavbar />
+      <TopNavbar isAdmin={session.isAdmin} />
       <div className="flex flex-col bg-[#B1A6DB] p-16">
         <h1 className="text-left text-[50px] font-bold leading-none md:text-[88px]">
           Our
@@ -97,7 +97,7 @@ const HomePage: React.FC<BaseProps> = () => {
         borderWidth="3px"
         w={{ base: '150px', md: '300px' }}
         border="3px solid #F9813E"
-        borderColor="#F9813E"
+        borderColor="#F9813E" 
         borderRadius="10px"
         className="mt-10 ml-8 mb-4"
         _placeholder={{
