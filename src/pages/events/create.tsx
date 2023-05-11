@@ -13,20 +13,18 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { DataTable } from '~/components/events/DataTable'
 import { trpc } from '~/utils/trpc'
-import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Head from 'next/head'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
-import RestrictedScreen from '~/components/common/RestrictedScreen'
 import TopNavbar from '~/components/common/TopNavbar'
+import withAuth from '~/utils/withAuth'
 
 const EventPage = () => {
   const router = useRouter()
   const toast = useToast()
-  const { data: session } = useSession({ required: true })
   const [attendees, setAttendees] = useState<string[]>([])
   const [submitBefore, setSubmitBefore] = useState(false) // hacky use for attendees validation
   const [isQrRequired, setIsQrRequired] = useState(false)
@@ -99,9 +97,7 @@ const EventPage = () => {
   const redirectHome = () => router.push('/admin')
 
   if (!data) return <LoadingScreen />
-  if (!session?.isAdmin) {
-    return <RestrictedScreen />
-  }
+
   return (
     <>
       <Head>
@@ -224,4 +220,4 @@ const EventPage = () => {
   )
 }
 
-export default EventPage
+export default withAuth(EventPage, true)

@@ -8,6 +8,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { AddIcon } from '@chakra-ui/icons'
 import { useState } from 'react'
 import TopNavbar from '~/components/common/TopNavbar'
+import withAuth from '~/utils/withAuth'
 
 const AttendancePage = () => {
   const router = useRouter()
@@ -120,4 +121,4 @@ const AttendancePage = () => {
   )
 }
 
-export default AttendancePage
+export default withAuth(AttendancePage)
