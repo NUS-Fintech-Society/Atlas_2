@@ -18,12 +18,22 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
         <img alt="Fintech-Logo" className="mx-3 h-9" src="/fintech_logo.png" />
       </Navbar.Brand>
       <div className="flex md:order-2">
-        <Navbar.Toggle className="mr-2" />
         <Dropdown
           arrowIcon={false}
           inline={true}
           label={<Avatar alt="User-settings" rounded={true} />}
         >
+          <Link href="/" className="md:hidden">
+            <Dropdown.Item>Home</Dropdown.Item>
+          </Link>
+          {isAdmin && (
+            <Link href="/users" className="md:hidden">
+              <Dropdown.Item>User</Dropdown.Item>
+            </Link>
+          )}
+          <Link href="/events" className="md:hidden">
+            <Dropdown.Item>Events</Dropdown.Item>
+          </Link>
           <Link href="/profile">
             <Dropdown.Item>Profile</Dropdown.Item>
           </Link>
@@ -33,16 +43,16 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
         </Dropdown>
       </div>
 
-      <Navbar.Collapse>
-        <Navbar.Link href="/" className="text-white">
+      <Navbar.Collapse className="mr-auto">
+        <Navbar.Link href="/" className="ml-4 text-white">
           Home
         </Navbar.Link>
         {isAdmin && (
-          <Navbar.Link href="/users" className="text-white">
+          <Navbar.Link href="/users" className="ml-4 text-white">
             Users
           </Navbar.Link>
         )}
-        <Navbar.Link href="/events" className="text-white">
+        <Navbar.Link href="/events" className="ml-4 text-white">
           Events
         </Navbar.Link>
       </Navbar.Collapse>
