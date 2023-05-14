@@ -4,6 +4,12 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
+  Table,
+  Thead,
+  Th,
+  Tbody,
+  Td,
+  Tr,
 } from '@chakra-ui/react'
 import { useContext } from 'react'
 import { EventModalContext } from '~/context/events/EventModalContext'
@@ -12,6 +18,7 @@ import LoadingScreen from '../common/LoadingScreen'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import dayjs from 'dayjs'
 import Image from 'next/image'
+import { type BodyProps } from '~/types/event/event.type'
 
 const DataTableModal = () => {
   const modal = useContext(EventModalContext)
@@ -22,7 +29,12 @@ const DataTableModal = () => {
   }
 
   return (
-    <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
+    <Modal
+      isCentered
+      isOpen={modal.isOpen}
+      onClose={modal.onClose}
+      scrollBehavior="inside"
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
@@ -30,31 +42,12 @@ const DataTableModal = () => {
             ? 'Please wait while we are fetching the event'
             : data?.name}
         </ModalHeader>
-        <ModalBody>
+        <ModalBody className="bg-[#01003D] font-[Inter] text-xl text-white">
           {isLoading ? <LoadingScreen /> : <Body data={data} />}
         </ModalBody>
       </ModalContent>
     </Modal>
   )
-}
-
-interface BodyProps {
-  _count: {
-    Attendance: number
-    attendees: number
-  }
-  name: string
-  id: string
-  attendees: {
-    name: string | null
-    department: string | null
-    id: string
-    roles: string | null
-  }[]
-  endDate: Date
-  hasStarted: boolean
-  qr_code: string | null
-  startDate: Date
 }
 
 const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
@@ -75,6 +68,28 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
       <p>Department: </p>
       <p>Start Date: {startDate}</p>
       <p>End Date: {endDate}</p>
+      <p>Attendance: {`${data._count.Attendance}/${data._count.attendees}`}</p>
+      <p>Required Attendees:</p>
+      <Table>
+        <Thead>
+          <Th color="white">No.</Th>
+          <Th color="white">Name</Th>
+          <Th color="white">Department</Th>
+          <Th color="white">Role</Th>
+        </Thead>
+        <Tbody>
+          {data.attendees.map((attendee, index) => {
+            return (
+              <Tr key={index}>
+                <Td>{index + 1}</Td>
+                <Td>{attendee.name}</Td>
+                <Td>{attendee.department}</Td>
+                <Td>{attendee.roles}</Td>
+              </Tr>
+            )
+          })}
+        </Tbody>
+      </Table>
     </>
   )
 }
