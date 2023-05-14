@@ -94,7 +94,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
       })
     }
   }
-  const redirectHome = () => router.push('/admin')
+  const redirectHome = () => router.push('/events')
 
   if (!data) return <LoadingScreen />
 

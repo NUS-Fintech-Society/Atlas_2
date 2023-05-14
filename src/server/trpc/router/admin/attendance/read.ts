@@ -8,6 +8,7 @@ export const getAllAttendance = protectedProcedure.query(async ({ ctx }) => {
         name: true,
         startDate: true,
         endDate: true,
+        id: true,
         _count: {
           select: { Attendance: true, attendees: true },
         },
@@ -18,6 +19,7 @@ export const getAllAttendance = protectedProcedure.query(async ({ ctx }) => {
       return {
         endDate: query.endDate,
         name: query.name,
+        id: query.id,
         startDate: query.startDate,
         total_attendees: query._count.Attendance,
         total_users: query._count.attendees,

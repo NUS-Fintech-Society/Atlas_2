@@ -9,26 +9,28 @@ import {
   chakra,
   Box,
   Icon,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { BsArrowDownUp, BsChevronDown, BsChevronUp } from 'react-icons/bs'
 import {
   useReactTable,
   flexRender,
   getCoreRowModel,
-  type ColumnDef,
   type SortingState,
   getSortedRowModel,
 } from '@tanstack/react-table'
+import { EventModalContext } from '~/context/events/EventModalContext'
+import DataTableModal from './DataTableModal'
+import { type EventInfos } from '~/types/event/event.type'
 
-export type DataTableProps<Data extends object> = {
-  data: Data[]
-  columns: ColumnDef<Data, any>[]
+interface DataTableProps {
+  columns: any
+  data: EventInfos[]
 }
 
-export function DataTable<Data extends object>({
-  data,
-  columns,
-}: DataTableProps<Data>) {
+const DataTable: React.FC<DataTableProps> = ({ data, columns }) => {
+  const { onOpen, isOpen, onClose } = useDisclosure()
+  const [id, setId] = React.useState('')
   const [sorting, setSorting] = React.useState<SortingState>([])
   const table = useReactTable({
     columns,
@@ -159,6 +161,7 @@ export function DataTable<Data extends object>({
                 const meta: any = cell.column.columnDef.meta
                 return (
                   <Td
+                    className="hover:cursor-pointer hover:underline hover:opacity-80"
                     py={5}
                     px={{ base: '2px', md: '6px', lg: '10px' }}
                     fontSize={{ base: '10px', md: '16px', lg: '20px' }}
@@ -168,6 +171,10 @@ export function DataTable<Data extends object>({
                     fontWeight={600}
                     key={cell.id}
                     isNumeric={meta?.isNumeric}
+                    onClick={() => {
+                      setId(cell.row.original.id)
+                      onOpen()
+                    }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Td>
@@ -177,6 +184,17 @@ export function DataTable<Data extends object>({
           ))}
         </Tbody>
       </Table>
+      <EventModalContext.Provider
+        value={{
+          isOpen,
+          id,
+          onClose,
+        }}
+      >
+        <DataTableModal />
+      </EventModalContext.Provider>
     </Box>
   )
 }
+
+export default DataTable
