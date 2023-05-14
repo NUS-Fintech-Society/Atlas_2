@@ -25,7 +25,7 @@ const createEvent = protectedProcedure
       const id = randomUUID()
 
       if (input.isQrRequired) {
-        qr_code = await toDataURL(`${env.VERCEL_URL}/events/${id}`)
+        qr_code = await toDataURL(`${env.DOMAIN}/events/${id}`)
       }
 
       await ctx.prisma.event.create({
@@ -55,7 +55,7 @@ const createEvent = protectedProcedure
 
 const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
-    const users = await ctx.prisma.user.findMany({
+    return await ctx.prisma.user.findMany({
       select: {
         department: true,
         roles: true,
@@ -63,7 +63,6 @@ const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
         id: true,
       },
     })
-    return users
   } catch (e) {
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
