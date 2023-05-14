@@ -1,5 +1,5 @@
 // @ts-check
-import { z } from "zod";
+import {z} from "zod";
 
 /**
  * Specify your server-side environment variables schema here.
@@ -7,8 +7,8 @@ import { z } from "zod";
  */
 export const serverSchema = z.object({
   DATABASE_URL: z.string().url(),
+  DOMAIN: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
-  VERCEL_URL: z.string(),
   NEXTAUTH_SECRET:
     process.env.NODE_ENV === "production"
       ? z.string().min(1)
@@ -29,9 +29,7 @@ export const serverSchema = z.object({
  * This way you can ensure the app isn't built with invalid env vars.
  * To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
-export const clientSchema = z.object({
-  // NEXT_PUBLIC_CLIENTVAR: z.string(),
-});
+export const clientSchema = z.object({});
 
 /**
  * You can't destruct `process.env` as a regular object, so you have to do
