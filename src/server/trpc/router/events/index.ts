@@ -6,6 +6,7 @@ import { randomUUID } from 'crypto'
 import { LogType } from '@prisma/client'
 import { ErrorTitle } from '../constants/ErrorTitle'
 import { TRPCError } from '@trpc/server'
+import { env } from '~/env/server.mjs'
 
 const createEvent = protectedProcedure
   .input(
@@ -24,7 +25,7 @@ const createEvent = protectedProcedure
       const id = randomUUID()
 
       if (input.isQrRequired) {
-        qr_code = await toDataURL(id)
+        qr_code = await toDataURL(`${env.VERCEL_URL}/events/${id}`)
       }
 
       await ctx.prisma.event.create({
