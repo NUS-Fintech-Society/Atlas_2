@@ -1,5 +1,6 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
 
 export const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
@@ -20,3 +21,17 @@ export const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
     })
   }
 })
+
+export const getEventInfo = protectedProcedure
+  .input(z.string())
+  .query(async ({ ctx, input }) => {
+    try {
+      const event = await ctx.prisma.event.findUnique({ where: { id: input } })
+      return event
+    } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
+      })
+    }
+  })
