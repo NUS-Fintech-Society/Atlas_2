@@ -25,7 +25,7 @@ const createEvent = protectedProcedure
       const id = randomUUID()
 
       if (input.isQrRequired) {
-        qr_code = await toDataURL(`${env.VERCEL_URL}/events/${id}`)
+        qr_code = await toDataURL(`${env.NEXT_PUBLIC_VERCEL_URL}/events/${id}`)
       }
 
       await ctx.prisma.event.create({
