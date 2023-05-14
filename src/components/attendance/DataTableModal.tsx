@@ -8,7 +8,6 @@ import {
 import { useContext } from 'react'
 import { EventModalContext } from '~/context/events/EventModalContext'
 import { trpc } from '~/utils/trpc'
-import { type Event } from '@prisma/client'
 import LoadingScreen from '../common/LoadingScreen'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import dayjs from 'dayjs'
@@ -39,7 +38,26 @@ const DataTableModal = () => {
   )
 }
 
-const Body: React.FC<{ data: Event | null | undefined }> = ({ data }) => {
+interface BodyProps {
+  _count: {
+    Attendance: number
+    attendees: number
+  }
+  name: string
+  id: string
+  attendees: {
+    name: string | null
+    department: string | null
+    id: string
+    roles: string | null
+  }[]
+  endDate: Date
+  hasStarted: boolean
+  qr_code: string | null
+  startDate: Date
+}
+
+const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   if (!data) {
     return <div>No Event Found</div>
   }
@@ -54,6 +72,7 @@ const Body: React.FC<{ data: Event | null | undefined }> = ({ data }) => {
           <Image alt="event-qr" height={200} src={data.qr_code} width={200} />
         </div>
       )}
+      <p>Department: </p>
       <p>Start Date: {startDate}</p>
       <p>End Date: {endDate}</p>
     </>
