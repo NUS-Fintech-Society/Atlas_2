@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { toDataURL } from 'qrcode'
 import { randomUUID } from 'crypto'
 import { LogType } from '@prisma/client'
-import { ErrorTitle } from '../../constants/ErrorTitle'
+import { ErrorTitle } from '../constants/ErrorTitle'
 import { TRPCError } from '@trpc/server'
 
 const createEvent = protectedProcedure
@@ -98,8 +98,40 @@ const getEventInfo = protectedProcedure
     }
   })
 
+const getEvent = protectedProcedure
+  .input(z.string())
+  .query(async ({ ctx, input }) => {
+    try {
+      const event = await ctx.prisma.event.findUnique({
+        where: { id: input },
+        select: {
+          attendees: true,
+          name: true,
+          startDate: true,
+          hasStarted: true,
+        },
+      })
+
+      if (!event) {
+        return null
+      }
+
+      const user = ctx.session.user
+      const isAttendanceRequired =
+        event.attendees.filter((attendee) => attendee.id === user.id).length > 0
+
+      return { ...event, isAttendanceRequired }
+    } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
+      })
+    }
+  })
+
 export const eventRouter = router({
   createEvent,
   getAllUsers,
+  getEvent,
   getEventInfo,
 })
