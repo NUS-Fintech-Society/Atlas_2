@@ -15,8 +15,8 @@ import {
   useReactTable,
   flexRender,
   getCoreRowModel,
-  ColumnDef,
-  SortingState,
+  type ColumnDef,
+  type SortingState,
   getSortedRowModel,
 } from '@tanstack/react-table'
 
