@@ -2,45 +2,61 @@ import { useToast, Stack, Button } from '@chakra-ui/react'
 import { parse, type ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
 import DataTable from '~/components/users/DataTable'
-import { add } from '~/store/admin/dashboard'
-import { useDispatch, useSelector } from 'react-redux'
-import type { RootState } from '~/store/store'
-import type { AddUsersType, CSVType } from '~/store/types/admin.type'
-import type { MouseEvent } from 'react'
+import type { AddUsersType, CSVType } from '~/types/admin.type'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
-import LoadingScreen from '~/components/common/LoadingScreen'
+import { useState, useCallback } from 'react'
 
 const CreateMultipleUsers = () => {
   const router = useRouter()
   const toast = useToast()
-  const data = useSelector<RootState, AddUsersType[]>(
-    (state) => state.dashboard
-  )
+  const [users, setUsers] = useState<AddUsersType[]>([])
 
-  const dispatch = useDispatch()
   const { isLoading, mutateAsync } = trpc.member.addMultipleUsers.useMutation()
-  const { status, data: session } = useSession({ required: true })
-  if (status === 'loading') return <LoadingScreen />
-  if (!session.isAdmin) router.push('/user')
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
+  const handleFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length && e.target.files[0]) {
       parse(e.target.files[0], {
         header: true,
-        complete: (results: ParseResult<CSVType>) => dispatch(add(results)),
+        complete: (results: ParseResult<CSVType>) => {
+          const items = results.data.map((item) => {
+            return {
+              date_of_birth: item['Date of Birth'] || '',
+              department: item['Department'] || '',
+              diet:
+                item['Dietary Restrictions (eg. Allergic to seafood)'] || '',
+              discord:
+                item[
+                  'Discord ID (eg: _marcus#2873 please create an account if you do not have one as Discord will be one of our main forms of communication)'
+                ],
+              faculty: item['Faculty'] || '',
+              gender: item['Gender '] || 'Male',
+              hobbies: item['Hobbies '] || '',
+              linkedin:
+                item['LinkedIn profile LINK (eg. www.linkedin.com/in/XXX)'],
+              major: item['Major and Specialization (if any)'] || '',
+              name: item['Full Name'],
+              nus_email: item['NUS email (xxx@u.nus.edu)'],
+              personal_email: item['Gmail'],
+              phone: item['Phone Number'],
+              race: item['Race '] || '',
+              roles: item['Appointed Role '] || '',
+              shirt: item['Shirt size'] || '',
+              student_id: item['Student ID (AXXXXXXXX)'] || '',
+              telegram: item['Telegram Handle(@xxx)'] || '',
+              year: item['Year of Study'] || '',
+            }
+          })
+
+          setUsers(items)
+        },
       })
     }
-  }
+  }, [])
 
-  const clickHandler = async (
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) => {
+  const clickHandler = useCallback(async () => {
     try {
-      e.preventDefault()
-      if (!data.length) return
-      await mutateAsync(data)
+      if (!users.length) return
+      await mutateAsync(users)
       toast({
         title: 'Successfully Added!',
         description: 'You have successfully added all the users',
@@ -57,11 +73,11 @@ const CreateMultipleUsers = () => {
         isClosable: true,
       })
     }
-  }
+  }, [mutateAsync, toast, users])
 
   return (
     <div className="flex flex-col">
-      {data.length ? <DataTable /> : null}
+      {users.length ? <DataTable data={users} /> : null}
       <Stack direction={['row', 'column']}>
         <input accept=".csv" onChange={handleFile} type="file" />
         <div className="flex flex-row">
@@ -75,7 +91,7 @@ const CreateMultipleUsers = () => {
           <Button
             bg="light.secondary.primary"
             className="text-white"
-            disabled={!data.length}
+            disabled={!users.length}
             isLoading={isLoading}
             onClick={clickHandler}
           >
