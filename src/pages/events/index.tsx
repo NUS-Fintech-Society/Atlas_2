@@ -1,34 +1,25 @@
 import { VStack, Button, Progress, useBreakpointValue } from '@chakra-ui/react'
-import { DataTable } from '~/components/attendance/DataTable'
+import DataTable from '~/components/attendance/DataTable'
 import { trpc } from '~/utils/trpc'
-import React from 'react'
+import React, { useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { AddIcon } from '@chakra-ui/icons'
-import { useState } from 'react'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
+import { type EventInfos } from '~/types/event/event.type'
 
-const AttendancePage: React.FC<BaseProps> = ({session}) => {
+const AttendancePage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
   const isSmallScreen = useBreakpointValue({ base: true, md: false })
-  const [eventInfoData, setEventInfoData] = useState<eventInfos[]>([])
+  const [eventInfoData, setEventInfoData] = useState<EventInfos[]>([])
 
   trpc.attendance.getAllAttendance.useQuery(undefined, {
-    onSuccess: (data: eventInfos[]) => setEventInfoData(data),
+    onSuccess: (data: EventInfos[]) => setEventInfoData(data),
   })
 
-  type eventInfos = {
-    number: string
-    name: string
-    total_users: string
-    total_attendees: string
-    startDate: string
-    endDate: string
-  }
-
-  const columnHelper = createColumnHelper<eventInfos>()
+  const columnHelper = createColumnHelper<EventInfos>()
 
   const columns = [
     columnHelper.accessor('name', {
@@ -64,9 +55,9 @@ const AttendancePage: React.FC<BaseProps> = ({session}) => {
                 {info.getValue().total_attendees.toString()}/
                 {info.getValue().total_users.toString()}
               </p>
-              <Progress 
+              <Progress
                 rounded="md"
-                background="#4365DD" 
+                background="#4365DD"
                 colorScheme="progress"
                 value={
                   (Number(info.getValue().total_attendees.toString()) /
@@ -80,7 +71,7 @@ const AttendancePage: React.FC<BaseProps> = ({session}) => {
         header: 'Attendance',
       }
     ),
-  ] 
+  ]
 
   return (
     <>
@@ -93,8 +84,8 @@ const AttendancePage: React.FC<BaseProps> = ({session}) => {
       <div className="px-2 sm:px-6 sm:pt-5 md:px-20 md:pt-5 lg:px-28 lg:pt-5">
         <h1 className="mb-10 text-center text-2xl font-bold">Attendance</h1>
         <VStack align="left" className="mb-10">
-          {isSmallScreen ? ( 
-            <Button 
+          {isSmallScreen ? (
+            <Button
               bgColor="#97AEFF"
               width={45}
               className="mb-10 text-black"
@@ -109,7 +100,7 @@ const AttendancePage: React.FC<BaseProps> = ({session}) => {
               bgColor="#97AEFF"
               width={215}
               className="mb-10 text-black"
-              onClick={() => router.push('/events/create')} 
+              onClick={() => router.push('/events/create')}
             >
               Create Event
             </Button>
