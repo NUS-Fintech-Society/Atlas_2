@@ -58,6 +58,7 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   dayjs.extend(LocalizedFormat)
   const startDate = dayjs(data.startDate).format('lll')
   const endDate = dayjs(data.endDate).format('lll')
+
   return (
     <>
       {data.qr_code && (
@@ -76,6 +77,7 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
           <Th color="white">Name</Th>
           <Th color="white">Department</Th>
           <Th color="white">Role</Th>
+          <Th color="white">Attendance</Th>
         </Thead>
         <Tbody>
           {data.attendees.map((attendee, index) => {
@@ -85,6 +87,7 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
                 <Td>{attendee.name}</Td>
                 <Td>{attendee.department}</Td>
                 <Td>{attendee.roles}</Td>
+                <Td>{data.attended.has(attendee.id) ? 'Yes' : 'No'}</Td>
               </Tr>
             )
           })}

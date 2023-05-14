@@ -75,21 +75,37 @@ const getEventInfo = protectedProcedure
   .input(z.string())
   .query(async ({ ctx, input }) => {
     try {
-      return await ctx.prisma.event.findUnique({
-        where: { id: input },
-        select: {
-          attendees: {
-            select: { name: true, department: true, roles: true, id: true },
+      const [event, attendance] = await Promise.all([
+        ctx.prisma.event.findUnique({
+          where: { id: input },
+          select: {
+            attendees: {
+              select: { name: true, department: true, roles: true, id: true },
+            },
+            _count: { select: { Attendance: true, attendees: true } },
+            endDate: true,
+            id: true,
+            hasStarted: true,
+            name: true,
+            qr_code: true,
+            startDate: true,
           },
-          _count: { select: { Attendance: true, attendees: true } },
-          endDate: true,
-          id: true,
-          hasStarted: true,
-          name: true,
-          qr_code: true,
-          startDate: true,
-        },
-      })
+        }),
+        ctx.prisma.attendance.findMany({
+          where: {
+            eventId: input,
+          },
+        }),
+      ])
+
+      if (!event) {
+        return null
+      }
+
+      const attended = new Set<string>()
+      attendance.forEach((a) => attended.add(a.userId))
+
+      return { ...event, attended }
     } catch (e) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
