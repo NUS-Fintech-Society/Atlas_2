@@ -117,11 +117,51 @@ const getEvent = protectedProcedure
       }
 
       const user = ctx.session.user
+
+      const hasUserMarkedAttendance = await ctx.prisma.attendance.findFirst({
+        where: {
+          eventId: input,
+          userId: user.id,
+        },
+      })
+
       const isAttendanceRequired =
         event.attendees.filter((attendee) => attendee.id === user.id).length > 0
 
-      return { ...event, isAttendanceRequired }
+      return {
+        ...event,
+        isAttendanceRequired,
+        hasUserMarkedAttendance: hasUserMarkedAttendance !== null,
+      }
     } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
+      })
+    }
+  })
+
+const markAttendance = protectedProcedure
+  .input(z.string())
+  .mutation(async ({ ctx, input }) => {
+    try {
+      const user = ctx.session.user
+      const result = await ctx.prisma.attendance.create({
+        data: {
+          id: user.id + input,
+          eventId: input,
+          userId: user.id,
+        },
+      })
+      console.log('Success!', result)
+    } catch (e) {
+      await ctx.prisma.log.create({
+        data: {
+          type: LogType.ERROR,
+          title: 'Error signing attendance',
+          message: (e as Error).message,
+        },
+      })
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
         message: (e as Error).message,
@@ -134,4 +174,5 @@ export const eventRouter = router({
   getAllUsers,
   getEvent,
   getEventInfo,
+  markAttendance,
 })

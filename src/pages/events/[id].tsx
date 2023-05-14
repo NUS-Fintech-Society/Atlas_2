@@ -1,24 +1,67 @@
-import Container from '~/components/auth/Container'
 import { Button } from '~/components/utilities'
-import Head from 'next/head'
-import withAuth from '~/utils/withAuth'
+import { type BaseProps } from '~/utils/withAuth'
 import { trpc } from '~/utils/trpc'
 import { useRouter } from 'next/router'
+import { useCallback } from 'react'
+import { type MouseEventHandler } from 'react'
+import Container from '~/components/auth/Container'
+import Head from 'next/head'
+import withAuth from '~/utils/withAuth'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import LoadingScreen from '~/components/common/LoadingScreen'
-import { useEffect, useState } from 'react'
+import TopNavbar from '~/components/common/TopNavbar'
 
-const ConfirmAttendance = () => {
+interface UserActionRequiredProp {
+  hasUserMarkedAttendance: boolean
+  isAttendanceRequired: boolean
+  loading: boolean
+  markAttendance: MouseEventHandler<HTMLButtonElement> | undefined
+}
+
+const UserActionRequired: React.FC<UserActionRequiredProp> = ({
+  isAttendanceRequired,
+  hasUserMarkedAttendance,
+  loading,
+  markAttendance,
+}) => {
+  if (!isAttendanceRequired) {
+    return (
+      <h1 className="mb-2 self-center text-center text-xl font-medium">
+        Your attendance has been recorded
+      </h1>
+    )
+  } else if (hasUserMarkedAttendance) {
+    return (
+      <h1 className="mb-2 self-center text-center text-xl font-medium">
+        Your attendance has been recorded. No further action is required.
+      </h1>
+    )
+  }
+  return (
+    <Button
+      isLoading={loading}
+      onClick={markAttendance}
+      className="mt-2 self-center bg-orange-500 text-center"
+      type="button"
+    >
+      Confirm Attendance
+    </Button>
+  )
+}
+
+const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
   const route = useRouter()
-
-  const [eventId, setEventId] = useState('')
-  useEffect(() => {
-    setEventId(route.query.id as string)
-  }, [route.query.id])
-
-  const { data, isLoading } = trpc.event.getEvent.useQuery(eventId)
+  const eventId = route.query.id as string
+  const { data, isLoading, refetch } = trpc.event.getEvent.useQuery(eventId)
+  const { mutateAsync, isLoading: loading } =
+    trpc.event.markAttendance.useMutation()
   dayjs.extend(LocalizedFormat)
+
+  const markAttendance = useCallback(async () => {
+    await mutateAsync(eventId)
+    await refetch()
+  }, [mutateAsync, eventId, refetch])
 
   if (isLoading) {
     return <LoadingScreen />
@@ -34,6 +77,7 @@ const ConfirmAttendance = () => {
           content="The confirm attendance page for Atlas"
         />
       </Head>
+      <TopNavbar isAdmin={session.isAdmin} />
       <Container>
         <div className="flex w-full flex-col items-start">
           {data ? (
@@ -44,16 +88,12 @@ const ConfirmAttendance = () => {
               <h1 className="mb-2 self-center text-center text-3xl font-medium">
                 {dayjs(data.startDate).format('lll')}
               </h1>
-              {data.isAttendanceRequired ? (
-                <Button
-                  className="mt-2 self-center bg-orange-500 text-center"
-                  type="button"
-                >
-                  Confirm Attendance
-                </Button>
-              ) : (
-                'Your attendance is not required.'
-              )}
+              <UserActionRequired
+                isAttendanceRequired={data.isAttendanceRequired}
+                hasUserMarkedAttendance={data.hasUserMarkedAttendance}
+                loading={loading}
+                markAttendance={markAttendance}
+              />
             </>
           ) : (
             <h1 className="mb-2 self-center text-center text-3xl font-medium">
