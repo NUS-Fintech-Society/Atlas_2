@@ -37,6 +37,9 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
           <Link href="/profile">
             <Dropdown.Item>Profile</Dropdown.Item>
           </Link>
+          <Link href = "/calendar">
+            <Dropdown.Item>Calendar</Dropdown.Item>
+          </Link>
           <Dropdown.Item>
             <div onClick={logout}>Sign Out</div>
           </Dropdown.Item>
@@ -54,6 +57,9 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
         )}
         <Navbar.Link href="/events" className="ml-4 text-white">
           Events
+        </Navbar.Link>
+        <Navbar.Link href="/calendar" className="ml-4 text-white">
+          Calendar
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
