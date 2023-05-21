@@ -127,6 +127,7 @@ function buildUserObject(
     faculty: string
     gender: string
     hobbies: string
+    interviewNotes: string
     linkedin: string
     major: string
     name: string
@@ -155,6 +156,7 @@ function buildUserObject(
       hashedPassword,
       hobbies: user.hobbies,
       image: null,
+      interviewNotes: user.interviewNotes,
       level: 'member',
       linkedin: user.linkedin,
       major: user.major,

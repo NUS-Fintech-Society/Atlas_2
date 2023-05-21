@@ -3,7 +3,7 @@ import { TRPCError } from '@trpc/server'
 
 export default protectedProcedure.query(async ({ ctx }) => {
   try {
-    const announcements = await ctx.prisma.announcements.findMany({
+    const announcements = await ctx.prisma.announcement.findMany({
       include: {
         created_by: {
           select: { name: true },

@@ -24,7 +24,7 @@ export default protectedProcedure
         })
       }
 
-      await ctx.prisma.announcements.create({
+      await ctx.prisma.announcement.create({
         data: {
           announcement_id: randomUUID(),
           content: input.content,

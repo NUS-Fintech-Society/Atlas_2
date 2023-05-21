@@ -1,5 +1,5 @@
 import { Box, Table, TableContainer, Tbody, Td, Tr } from '@chakra-ui/react'
-import type { Projects } from '@prisma/client'
+import type { Project } from '@prisma/client'
 
 type ProfilePageType = {
   gender: string | null
@@ -7,7 +7,7 @@ type ProfilePageType = {
   year: string | null
   faculty: string | null
   major: string | null
-  projects: Projects[]
+  projects: Project[]
 }
 
 const ProfileInfo = (props: ProfilePageType) => {
@@ -65,7 +65,7 @@ const ProfileInfo = (props: ProfilePageType) => {
               <Td textColor="#002D70" className="font-medium">
                 PROJECTS
               </Td>
-              {props.projects.map((project: Projects) => {
+              {props.projects.map((project: Project) => {
                 return (
                   <Td
                     key={project.project_id}

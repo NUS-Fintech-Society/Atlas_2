@@ -29,6 +29,7 @@ export const addMultipleUsers = protectedProcedure
         faculty: z.string(),
         gender: z.string(),
         hobbies: z.string(),
+        interviewNotes: z.string(),
         linkedin: z.string(),
         major: z.string(),
         name: z.string(),
