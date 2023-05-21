@@ -17,21 +17,21 @@ import { useState } from 'react'
 import Meeting from './Meeting'
 
 export type Meeting = {
-    id: number 
-    title: string | null
-    start: string 
-    end: string
+  id: number
+  title: string | null
+  start: string
+  end: string
 }
 
 export type Meetings = {
-    meetings: Meeting[]
+  meetings: Meeting[]
 }
 
 function classNames(...classes: any[]) {
-    return classes.filter(Boolean).join(' ')
-  }
+  return classes.filter(Boolean).join(' ')
+}
 
-export default function SideCalendar({meetings}: Meetings) {
+export default function SideCalendar({ meetings }: Meetings) {
   const today = startOfToday()
   const [selectedDay, setSelectedDay] = useState(today)
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
@@ -54,15 +54,15 @@ export default function SideCalendar({meetings}: Meetings) {
 
   const selectedDayMeetings = meetings?.filter((meeting) =>
     isSameDay(parseISO(meeting.start), selectedDay)
-  ) 
+  )
 
   return (
-    <div className="pt-16 bg-zinc-900 col-span-1">
-      <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
+    <div className="col-span-1 bg-zinc-900 pt-16">
+      <div className="mx-auto max-w-md px-4 sm:px-7 md:max-w-4xl md:px-6">
         <div className="md:grid md:grid-rows-2">
           <div className="md:pr-14">
             <div className="flex items-center">
-              <h2 className="flex-auto font-semibold text-white text-4xl">
+              <h2 className="flex-auto text-4xl font-semibold text-white">
                 {format(firstDayCurrentMonth, 'MMMM yyyy')}
               </h2>
               <button
@@ -71,7 +71,7 @@ export default function SideCalendar({meetings}: Meetings) {
                 className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
               >
                 <span className="sr-only">Previous month</span>
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
               </button>
               <button
                 onClick={nextMonth}
@@ -79,10 +79,10 @@ export default function SideCalendar({meetings}: Meetings) {
                 className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
               >
                 <span className="sr-only">Next month</span>
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
+            <div className="mt-10 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
               <div>S</div>
               <div>M</div>
               <div>T</div>
@@ -91,7 +91,7 @@ export default function SideCalendar({meetings}: Meetings) {
               <div>F</div>
               <div>S</div>
             </div>
-            <div className="grid grid-cols-7 mt-2 text-sm">
+            <div className="mt-2 grid grid-cols-7 text-sm">
               {days.map((day, dayIdx) => (
                 <div
                   key={day.toString()}
@@ -125,16 +125,19 @@ export default function SideCalendar({meetings}: Meetings) {
                       'mx-auto flex h-8 w-8 items-center justify-center rounded-full'
                     )}
                   >
-                    <time className = "text-white" dateTime={format(day, 'yyyy-MM-dd')}>
+                    <time
+                      className="text-white"
+                      dateTime={format(day, 'yyyy-MM-dd')}
+                    >
                       {format(day, 'd')}
                     </time>
                   </button>
 
-                  <div className="w-1 h-1 mx-auto mt-1">
+                  <div className="mx-auto mt-1 h-1 w-1">
                     {meetings?.some((meeting) =>
                       isSameDay(parseISO(meeting.start), day)
                     ) && (
-                      <div className="w-1 h-1 rounded-full bg-violet-700"></div>
+                      <div className="h-1 w-1 rounded-full bg-violet-700"></div>
                     )}
                   </div>
                 </div>
@@ -142,11 +145,8 @@ export default function SideCalendar({meetings}: Meetings) {
             </div>
           </div>
           <section className="divide-y divide-gray-400">
-            <h2 className="font-semibold text-blue-700 text-center">
-              {isSameDay(today, selectedDay)
-              ?'TODAY ' 
-              : ''
-              }
+            <h2 className="text-center font-semibold text-blue-700">
+              {isSameDay(today, selectedDay) ? 'TODAY ' : ''}
               <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
                 {format(selectedDay, 'dd/LL/yyyy')}
               </time>
@@ -154,7 +154,7 @@ export default function SideCalendar({meetings}: Meetings) {
             <ol className="text-sm leading-6 text-gray-500">
               {selectedDayMeetings?.length > 0 ? (
                 selectedDayMeetings?.map((meeting) => (
-                  <Meeting meeting={meeting} key={meeting.id}/>
+                  <Meeting meeting={meeting} key={meeting.id} />
                 ))
               ) : (
                 <p>No meetings for today.</p>
@@ -166,7 +166,6 @@ export default function SideCalendar({meetings}: Meetings) {
     </div>
   )
 }
-
 
 const colStartClasses = [
   '',
