@@ -37,7 +37,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
           <Link href="/profile">
             <Dropdown.Item>Profile</Dropdown.Item>
           </Link>
-          <Link href = "/calendar">
+          <Link href="/calendar">
             <Dropdown.Item>Calendar</Dropdown.Item>
           </Link>
           <Dropdown.Item>
@@ -59,7 +59,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
           Events
         </Navbar.Link>
         <Navbar.Link href="/calendar" className="ml-4 text-white">
-          Calendar
+          Recruitment
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
