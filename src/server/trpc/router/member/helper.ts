@@ -96,6 +96,7 @@ function buildUserObject(
       gender: user.gender,
       hashedPassword,
       image: null,
+      interviewNotes: user.interviewNotes,
       level: 'member',
       linkedin: user.linkedin,
       major: user.major,

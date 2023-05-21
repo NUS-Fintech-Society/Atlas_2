@@ -2,8 +2,6 @@ import { Box, Table, TableContainer, Tbody, Td, Tr } from '@chakra-ui/react'
 
 type ProfilePageType = {
   batch: string | undefined
-
-  // projects: Projects[]
 }
 
 const ProfileInfo = (props: ProfilePageType) => {
