@@ -6,6 +6,7 @@ import { profileRouter } from './profile'
 import { userRouter } from './admin/users'
 import { eventRouter } from './events'
 import { attendanceRouter } from './admin/attendance'
+import { recruitmentRouter } from './admin/recruitment'
 
 export const appRouter = router({
   auth: authRouter,
@@ -15,6 +16,7 @@ export const appRouter = router({
   profile: profileRouter,
   user: userRouter,
   attendance: attendanceRouter,
+  recruitment: recruitmentRouter,
 })
 
 export type AppRouter = typeof appRouter
