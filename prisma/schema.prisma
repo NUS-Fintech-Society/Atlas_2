@@ -76,7 +76,6 @@ model User {
   projects        Project[]      @relation("ProjectToUser")
   Attendance      Attendance[]   @relation("attendanceToUser")
   AttendanceTaken Attendance[]
-  AppliedRole     AppliedRole[]
 }
 
 model Event {
@@ -113,16 +112,15 @@ enum LogType {
 }
 
 model AppliedRole {
-  id             String            @id
-  rank           Int
-  department     Department        @relation("appliedDepartment", fields: [departmentId], references: [department_id])
-  departmentId   String
-  role           String
-  status         ApplicationStatus
-  applicant      User              @relation("applicant", fields: [applicantEmail], references: [email])
-  applicantEmail String
-  User           User?             @relation(fields: [userId], references: [id])
-  userId         String?
+  id           String            @id
+  rank         Int
+  department   Department        @relation("appliedDepartment", fields: [departmentId], references: [department_id])
+  departmentId String
+  role         String
+  status       ApplicationStatus
+  applicant    User              @relation("applicant", fields: [applicantId], references: [id])
+  applicantId  String
+  userId       String?
 }
 
 enum ApplicationStatus {
