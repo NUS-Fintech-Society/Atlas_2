@@ -8,15 +8,9 @@ import ApplicantGrid from '~/components/recruitment/ApplicantGrid'
 import InfoPopup from '~/components/recruitment/InfoPopup'
 import { trpc } from '~/utils/trpc'
 import { useSelector } from 'react-redux'
-import { selectSearchValue } from '~/components/recruitment/searchNameSlice'
 
 const ApplicantsPage: React.FC<BaseProps> = ({ session }) => {
   const { data } = trpc.recruitment.getAllApplicants.useQuery()
-  const searchValue = useSelector(selectSearchValue)
-
-  const filteredData = data?.filter((item) =>
-    searchValue == '' ? item : item.name?.toLowerCase().includes(searchValue)
-  )
 
   return (
     <>
@@ -32,7 +26,7 @@ const ApplicantsPage: React.FC<BaseProps> = ({ session }) => {
       <Layout>
         <Text className="text-center text-4xl font-bold">Applicants</Text>
         <SearchBar />
-        <ApplicantGrid data={filteredData} />
+        <ApplicantGrid data={data} />
         <InfoPopup />
       </Layout>
     </>
