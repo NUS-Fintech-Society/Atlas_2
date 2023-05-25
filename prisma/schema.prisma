@@ -36,10 +36,8 @@ model User {
   hashedPassword  String
   id              String       @id
   image           String?
-  linkedin        String?
   major           String?
   name            String?
-  phone           String?
   personal_email  String?
   role            String
   telegram        String?
