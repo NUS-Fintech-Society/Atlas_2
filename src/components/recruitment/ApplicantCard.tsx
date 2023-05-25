@@ -5,19 +5,24 @@ import {
   CardHeader,
   Heading,
   Image,
-  ListIcon,
-  ListItem,
   Stack,
-  Text,
   UnorderedList,
 } from '@chakra-ui/react'
+import { User } from '@prisma/client'
 import { Avatar } from 'flowbite-react'
-import { BsCircleFill } from 'react-icons/bs'
+import AppliedRoleListItem from './AppliedRoleListItem'
 import DocumentModal from './DocumentModal'
-import EditModal from './EditModal'
 import NoteModal from './NoteModal'
+import type { AppliedRole } from '@prisma/client'
+import { trpc } from '~/utils/trpc'
+import { ApplicantWithAppliedRole } from '~/types/model'
 
-const ApplicantCard = () => {
+const ApplicantCard = ({
+  applicant,
+}: {
+  applicant: ApplicantWithAppliedRole
+}) => {
+  const { refetch } = trpc.recruitment.getApplicant.useQuery(applicant.id)
   return (
     <Card
       maxWidth="sm"
@@ -38,29 +43,28 @@ const ApplicantCard = () => {
         position="absolute"
         height="85px"
       />
-      <CardBody className="relative">
-        <Stack rowGap="3">
-          <Avatar alt="User-settings" rounded={true} />
-          <Box className="absolute top-8 left-0 flex w-full justify-between">
+      <CardBody className="relative" pt="10px">
+        <Stack>
+          <Avatar alt="User-settings" rounded={true} size="lg" />
+          <Box className="flex justify-center">
             <Box>
-              <NoteModal />
               <DocumentModal />
+              <NoteModal
+                applicantId={applicant.id}
+                interviewNotes={applicant.interviewNotes}
+                refetch={refetch}
+              />
             </Box>
-            <EditModal />
           </Box>
-          <UnorderedList styleType="none" spacing="2">
-            <ListItem className="flex items-center justify-between">
-              <Text>1. SD - Software Engineer</Text>
-              <ListIcon as={BsCircleFill} marginLeft="2" fill="#46FFDE" />
-            </ListItem>
-            <ListItem className="flex items-center justify-between">
-              <Text>2. ML - Role</Text>
-              <ListIcon as={BsCircleFill} marginLeft="2" fill="#FFBD3C" />
-            </ListItem>
-            <ListItem className="flex items-center justify-between">
-              <Text>3. IA - Director</Text>
-              <ListIcon as={BsCircleFill} marginLeft="2" fill="#0038FF" />
-            </ListItem>
+          <UnorderedList styleType="none">
+            {applicant.appliedRoles.map((appliedRole) => {
+              return (
+                <AppliedRoleListItem
+                  appliedRole={appliedRole}
+                  key={appliedRole.id}
+                />
+              )
+            })}
           </UnorderedList>
         </Stack>
       </CardBody>

@@ -69,6 +69,15 @@ const InfoPopup = () => {
                 />
                 <Text>Interviewed</Text>
               </ListItem>
+              <ListItem className="flex items-center">
+                <Icon
+                  as={BsCircleFill}
+                  marginLeft="2"
+                  marginRight="2"
+                  fill="#FF0000"
+                />
+                <Text>Rejected</Text>
+              </ListItem>
             </UnorderedList>
           </PopoverBody>
         </PopoverContent>
