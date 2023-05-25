@@ -22,6 +22,7 @@ const DocumentModal = () => {
         bg="None"
         _hover={{ background: 'None' }}
         onClick={onOpen}
+        fontSize="23px"
       />
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
