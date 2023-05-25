@@ -58,7 +58,7 @@ const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findMany({
       select: {
         department: true,
-        roles: true,
+        role: true,
         name: true,
         id: true,
       },
@@ -80,7 +80,7 @@ const getEventInfo = protectedProcedure
           where: { id: input },
           select: {
             attendees: {
-              select: { name: true, department: true, roles: true, id: true },
+              select: { name: true, department: true, role: true, id: true },
             },
             _count: { select: { Attendance: true, attendees: true } },
             endDate: true,

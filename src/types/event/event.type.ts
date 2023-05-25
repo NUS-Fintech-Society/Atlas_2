@@ -22,7 +22,7 @@ export interface BodyProps {
     name: string | null
     department: string | null
     id: string
-    roles: string | null
+    role: string | null
   }[]
   endDate: Date
   hasStarted: boolean

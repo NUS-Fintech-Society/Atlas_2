@@ -38,7 +38,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
         name: data.name,
         email: data.email,
         department: data.department,
-        roles: data.roles,
+        role: data.roles,
       }
       await mutateAsync(projData)
       toast({

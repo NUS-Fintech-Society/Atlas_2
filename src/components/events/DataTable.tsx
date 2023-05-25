@@ -31,7 +31,7 @@ import React, { useEffect, useRef, useState, type HTMLProps } from 'react'
 
 export type Attendees = {
   department: string | null
-  roles: string | null
+  role: string | null
   name: string | null
   id: string
 }
@@ -94,7 +94,7 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
       enableColumnFilter: true,
       filterFn: MultiSelectFilterFn,
     }),
-    columnHelper.accessor('roles', {
+    columnHelper.accessor('role', {
       cell: (info) => info.getValue(),
       header: 'Role',
       enableColumnFilter: true,

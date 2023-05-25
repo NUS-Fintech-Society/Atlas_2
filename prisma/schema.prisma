@@ -21,57 +21,33 @@ model Projects {
 }
 
 model Departments {
-  department_id String          @id
+  department_id String     @id
   name          String
-  announcements Announcements[]
   projects      Projects[]
 }
 
-model Announcements {
-  announcement_id String       @id
-  content         String
-  image           String?
-  title           String
-  updated_date    DateTime
-  uploaded_date   DateTime
-  department_id   String?
-  userId          String
-  Departments     Departments? @relation(fields: [department_id], references: [department_id])
-  created_by      User         @relation(fields: [userId], references: [id])
-}
-
 model User {
-  attendance      Int?            @default(0)
   batch           String?
-  department      String?
-  diet            String?
+  department      String
   discord         String?
-  email           String          @unique
+  email           String       @unique
   faculty         String?
   gender          String?
   hashedPassword  String
-  hobbies         String?
-  id              String          @id
+  id              String       @id
   image           String?
-  level           String
-  linkedin        String?
   major           String?
-  name            String?
-  phone           String?
+  name            String
   personal_email  String?
-  race            String?
-  roles           String?
-  shirt           String?
+  role            String
   telegram        String?
-  total_events    Int?            @default(0)
+  total_events    Int?         @default(0)
   wallet          String?
   year            String?
-  date_of_birth   DateTime?
-  isAdmin         Boolean?        @default(false)
-  announcements   Announcements[]
-  events          Event[]         @relation("EventToUser")
-  projects        Projects[]      @relation("ProjectsToUser")
-  Attendance      Attendance[]    @relation("attendanceToUser")
+  isAdmin         Boolean?     @default(false)
+  events          Event[]      @relation("EventToUser")
+  projects        Projects[]   @relation("ProjectsToUser")
+  Attendance      Attendance[] @relation("attendanceToUser")
   AttendanceTaken Attendance[]
 }
 

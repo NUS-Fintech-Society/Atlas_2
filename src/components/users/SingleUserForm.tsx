@@ -8,24 +8,175 @@ import {
   Checkbox,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useState, type FormEvent } from 'react'
+import { useState, useCallback } from 'react'
+
+const roles = [
+  {
+    department: 'Software Engineering',
+    role: 'Software Engineer',
+  },
+  {
+    department: 'Software Engineering',
+    role: 'Technical Lead',
+  },
+  {
+    department: 'Software Engineering',
+    role: 'UI/UX Designer',
+  },
+  {
+    department: 'Software Engineering',
+    role: 'Head of Design',
+  },
+  {
+    department: 'Software Engineering',
+    role: 'Co-Director',
+  },
+  {
+    department: 'Blockchain',
+    role: 'Co-Director',
+  },
+  {
+    department: 'Blockchain',
+    role: 'Core Developer',
+  },
+  {
+    department: 'Blockchain',
+    role: 'Community Manager',
+  },
+  {
+    department: 'Blockchain',
+    role: 'Developer',
+  },
+  {
+    department: 'Blockchain',
+    role: 'Lead Developer',
+  },
+  {
+    department: 'Blockchain',
+    role: 'Research Analyst',
+  },
+  {
+    department: 'Blockchain',
+    role: 'Research Community Developer',
+  },
+  {
+    department: 'Machine Learning',
+    role: 'Quant Tech Analyst',
+  },
+  ,
+  {
+    department: 'Machine Learning',
+    role: 'Quant Tech Lead',
+  },
+  {
+    department: 'Machine Learning',
+    role: 'Quant wing head',
+  },
+  {
+    department: 'Machine Learning',
+    role: 'Project Tech Analyst',
+  },
+  {
+    department: 'Machine Learning',
+    role: 'Project Tech Lead',
+  },
+  {
+    department: 'Machine Learning',
+    role: 'Tech Analyst/Trainee',
+  },
+  {
+    department: 'Machine Learning',
+    role: 'Training Head',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Co-Director',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Community Development Executive',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Community Development Lead',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Finance Executive',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Finance Lead',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Project Manager Executive',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Product Manager',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Talent Management Executive',
+  },
+  {
+    department: 'Internal Affairs',
+    role: 'Talent Management Lead',
+  },
+  {
+    department: 'External Relations',
+    role: 'Partnerships Executive',
+  },
+  {
+    department: 'External Relations',
+    role: 'Director',
+  },
+  {
+    department: 'External Relations',
+    role: 'Marketing Executive',
+  },
+  {
+    department: 'External Relations',
+    role: 'Marketing Lead',
+  },
+  {
+    department: 'External Relations',
+    role: 'Partnerships Lead',
+  },
+  {
+    department: 'External Relations',
+    role: 'Finance Executive',
+  },
+  {
+    department: 'External Relations',
+    role: 'Finance Lead',
+  },
+] as { department: string; role: string }[]
 
 const SingleUserForm = () => {
   const router = useRouter()
-  const { mutateAsync } = trpc.member.createSingleUser.useMutation()
+  const { mutateAsync, isLoading } = trpc.member.createSingleUser.useMutation()
   const toast = useToast()
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
+  const [department, setDepartment] = useState('')
   const [password, setPassword] = useState('')
-  const [level, setLevel] = useState('')
+  const [role, setRole] = useState('')
   const [id, setId] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback(async () => {
     try {
-      e.preventDefault()
-      setIsLoading(true)
-      await mutateAsync({ email, password, level, id, isAdmin })
+      await mutateAsync({
+        name,
+        department,
+        email,
+        password,
+        id,
+        isAdmin,
+        role,
+      })
       toast({
         title: 'Successfully updated!',
         description: 'User successfully created',
@@ -33,9 +184,7 @@ const SingleUserForm = () => {
         isClosable: true,
         duration: 9000,
       })
-      setIsLoading(false)
     } catch (e) {
-      setIsLoading(false)
       toast({
         title: 'Oops, something went wrong!',
         description: 'An error went wrong while creating the user',
@@ -44,17 +193,28 @@ const SingleUserForm = () => {
         duration: 9000,
       })
     }
-  }
+  }, [department, email, id, isAdmin, mutateAsync, name, password, role, toast])
 
   return (
-    <form onSubmit={handleSubmit}>
+    <>
+      <Input
+        id="name"
+        isRequired
+        marginY={5}
+        name="name"
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name"
+        value={name}
+        variant="outline"
+      />
+
       <Input
         id="id"
         isRequired
-        marginY={5}
+        marginBottom={5}
         name="id"
         onChange={(e) => setId(e.target.value)}
-        placeholder="Enter the student id"
+        placeholder="Matriculation Number"
         value={id}
         variant="outline"
       />
@@ -66,7 +226,7 @@ const SingleUserForm = () => {
           marginBottom={5}
           name="email"
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter a email"
+          placeholder="Email"
           value={email}
           variant="outline"
         />
@@ -77,8 +237,9 @@ const SingleUserForm = () => {
         marginBottom={5}
         name="password"
         type="password"
+        isRequired
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Enter a password. If no password is provided, a random one will be generated"
+        placeholder="Password"
         value={password}
         variant="outline"
       />
@@ -86,13 +247,22 @@ const SingleUserForm = () => {
       <Select
         marginBottom={5}
         isRequired
-        onChange={(e) => setLevel(e.target.value)}
-        placeholder="Select the level"
+        onChange={(e) => {
+          setRole(e.target.value)
+          if (!e.target.value) return
+          const element = roles.filter((role) => role.role === e.target.value)
+          if (!element || !element.length || !element[0]) return
+          setDepartment(element[0].department)
+        }}
+        placeholder="Select role"
       >
-        <option value="member">Member</option>
-        <option value="lead">Lead</option>
-        <option value="codirector">Co-Director</option>
-        <option value="director">Director</option>
+        {roles.map((role) => {
+          return (
+            <option key={role.role} value={role.role}>
+              {role.role} ({role.department})
+            </option>
+          )
+        })}
       </Select>
 
       <Checkbox
@@ -117,12 +287,12 @@ const SingleUserForm = () => {
           bg="light.secondary.primary"
           className="text-white"
           isLoading={isLoading}
-          type="submit"
+          onClick={handleSubmit}
         >
           Create User
         </Button>
       </div>
-    </form>
+    </>
   )
 }
 

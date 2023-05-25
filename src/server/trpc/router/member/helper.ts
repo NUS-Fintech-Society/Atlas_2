@@ -52,10 +52,12 @@ async function checkIfUserExist(email: string, prisma: PrismaClient) {
  * @param password The password of the user
  */
 async function createNewUser(
+  name: string,
+  department: string,
   email: string,
   id: string,
   isAdmin: boolean,
-  level: string,
+  role: string,
   password: string,
   prisma: PrismaClient
 ) {
@@ -64,13 +66,13 @@ async function createNewUser(
   await prisma.user.create({
     data: {
       batch: 'AY2022/2023',
-      name: '',
-      roles: '',
+      department,
+      name,
+      role,
       email,
       id,
       hashedPassword,
       isAdmin,
-      level,
     },
   })
 }
@@ -126,7 +128,6 @@ function buildUserObject(
     discord: string
     faculty: string
     gender: string
-    hobbies: string
     linkedin: string
     major: string
     name: string
@@ -134,8 +135,7 @@ function buildUserObject(
     personal_email: string
     phone: string
     race: string
-    roles: string
-    shirt: string
+    role: string
     student_id: string
     telegram: string
     year: string
@@ -144,7 +144,6 @@ function buildUserObject(
 ) {
   return input.map((user) => {
     return {
-      attendance: 0,
       batch: 'AY22/23',
       department: user.department,
       date_of_birth: dayjs().toDate(),
@@ -153,7 +152,6 @@ function buildUserObject(
       faculty: user.faculty,
       gender: user.gender,
       hashedPassword,
-      hobbies: user.hobbies,
       image: null,
       level: 'member',
       linkedin: user.linkedin,
@@ -165,8 +163,7 @@ function buildUserObject(
       personal_email: user.personal_email,
       phone: user.phone,
       race: user.race,
-      roles: user.roles,
-      shirt: user.shirt,
+      role: user.role,
       telegram: user.telegram,
       total_events: 0,
       wallet: null,
