@@ -152,7 +152,7 @@ const roles = [
     department: 'External Relations',
     role: 'Finance Lead',
   },
-]
+] as { department: string; role: string }[]
 
 const SingleUserForm = () => {
   const router = useRouter()
