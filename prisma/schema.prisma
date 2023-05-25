@@ -12,7 +12,7 @@ model Project {
   difficulty   Int
   rating       Int
   department   String?
-  project_id   Int         @id
+  project_id   String      @id @default(uuid())
   name         String
   team_lead    String
   created_date DateTime
@@ -29,7 +29,7 @@ model Department {
 }
 
 model Announcement {
-  announcement_id String      @id
+  announcement_id String      @id @default(uuid())
   content         String
   image           String?
   title           String
@@ -98,7 +98,7 @@ model Log {
 }
 
 model Attendance {
-  id      String @id
+  id      String @id @default(uuid())
   eventId String
   user    User   @relation(fields: [userId], references: [id])
   Event   Event  @relation(fields: [eventId], references: [id])
@@ -112,7 +112,7 @@ enum LogType {
 }
 
 model AppliedRole {
-  id           String            @id
+  id           String            @id @default(uuid())
   rank         Int
   department   Department        @relation("appliedDepartment", fields: [departmentId], references: [department_id])
   departmentId String
@@ -120,7 +120,6 @@ model AppliedRole {
   status       ApplicationStatus
   applicant    User              @relation("applicant", fields: [applicantId], references: [id])
   applicantId  String
-  userId       String?
 }
 
 enum ApplicationStatus {
