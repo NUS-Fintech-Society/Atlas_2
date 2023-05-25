@@ -28,7 +28,7 @@ model Departments {
 
 model User {
   batch           String?
-  department      String?
+  department      String
   discord         String?
   email           String       @unique
   faculty         String?
@@ -37,7 +37,7 @@ model User {
   id              String       @id
   image           String?
   major           String?
-  name            String?
+  name            String
   personal_email  String?
   role            String
   telegram        String?

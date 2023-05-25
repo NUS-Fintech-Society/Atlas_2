@@ -52,6 +52,8 @@ async function checkIfUserExist(email: string, prisma: PrismaClient) {
  * @param password The password of the user
  */
 async function createNewUser(
+  name: string,
+  department: string,
   email: string,
   id: string,
   isAdmin: boolean,
@@ -64,7 +66,8 @@ async function createNewUser(
   await prisma.user.create({
     data: {
       batch: 'AY2022/2023',
-      name: '',
+      department,
+      name,
       role,
       email,
       id,
