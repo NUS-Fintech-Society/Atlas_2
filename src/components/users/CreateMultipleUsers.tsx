@@ -30,7 +30,6 @@ const CreateMultipleUsers = () => {
                 ],
               faculty: item['Faculty'] || '',
               gender: item['Gender '] || 'Male',
-              hobbies: item['Hobbies '] || '',
               linkedin:
                 item['LinkedIn profile LINK (eg. www.linkedin.com/in/XXX)'],
               major: item['Major and Specialization (if any)'] || '',
@@ -39,8 +38,7 @@ const CreateMultipleUsers = () => {
               personal_email: item['Gmail'],
               phone: item['Phone Number'],
               race: item['Race '] || '',
-              roles: item['Appointed Role '] || '',
-              shirt: item['Shirt size'] || '',
+              role: item['Appointed Role '] || '',
               student_id: item['Student ID (AXXXXXXXX)'] || '',
               telegram: item['Telegram Handle(@xxx)'] || '',
               year: item['Year of Study'] || '',

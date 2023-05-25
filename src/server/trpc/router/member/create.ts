@@ -28,7 +28,6 @@ export const addMultipleUsers = protectedProcedure
         discord: z.string(),
         faculty: z.string(),
         gender: z.string(),
-        hobbies: z.string(),
         linkedin: z.string(),
         major: z.string(),
         name: z.string(),
@@ -36,8 +35,7 @@ export const addMultipleUsers = protectedProcedure
         personal_email: z.string(),
         phone: z.string(),
         race: z.string(),
-        roles: z.string(),
-        shirt: z.string(),
+        role: z.string(),
         student_id: z.string(),
         telegram: z.string(),
         year: z.string(),
@@ -68,18 +66,18 @@ export const createSingleUser = protectedProcedure
     z.object({
       id: z.string(),
       email: z.string(),
+      role: z.string(),
       password: z.optional(z.string()),
-      level: z.string(),
       isAdmin: z.boolean(),
     })
   )
   .mutation(async ({ ctx, input }) => {
     try {
-      const { email, id, level, isAdmin } = input
+      const { email, id, isAdmin, role } = input
       const password = input.password || randomBytes(10).toString('hex')
 
       await checkIfUserExist(email, ctx.prisma)
-      await createNewUser(email, id, isAdmin, level, password, ctx.prisma)
+      await createNewUser(email, id, isAdmin, role, password, ctx.prisma)
       await sendEmail(email, password)
     } catch (e) {
       await ctx.prisma.log.create({

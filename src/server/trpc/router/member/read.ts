@@ -22,7 +22,7 @@ export const getMemberProfile = protectedProcedure
           email: true,
           personal_email: true,
           department: true,
-          roles: true,
+          role: true,
           major: true,
           projects: true,
         },
@@ -69,8 +69,8 @@ export const getRoles = protectedProcedure.query(async ({ ctx }) => {
   try {
     return await ctx.prisma.user.findMany({
       where: {},
-      distinct: ['roles'],
-      select: { roles: true },
+      distinct: ['role'],
+      select: { role: true },
     })
   } catch (error) {
     throw new TRPCError({
@@ -90,7 +90,7 @@ export const getAllUsers = protectedProcedure
     try {
       return await ctx.prisma.user.findMany({
         where: {
-          roles: input.roles,
+          role: input.roles,
         },
         select: {
           name: true,

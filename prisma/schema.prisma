@@ -27,32 +27,25 @@ model Departments {
 }
 
 model User {
-  attendance      Int?         @default(0)
   batch           String?
   department      String?
-  diet            String?
   discord         String?
   email           String       @unique
   faculty         String?
   gender          String?
   hashedPassword  String
-  hobbies         String?
   id              String       @id
   image           String?
-  level           String
   linkedin        String?
   major           String?
   name            String?
   phone           String?
   personal_email  String?
-  race            String?
-  roles           String?
-  shirt           String?
+  role            String
   telegram        String?
   total_events    Int?         @default(0)
   wallet          String?
   year            String?
-  date_of_birth   DateTime?
   isAdmin         Boolean?     @default(false)
   events          Event[]      @relation("EventToUser")
   projects        Projects[]   @relation("ProjectsToUser")

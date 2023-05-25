@@ -12,20 +12,18 @@ import { useState, type FormEvent } from 'react'
 
 const SingleUserForm = () => {
   const router = useRouter()
-  const { mutateAsync } = trpc.member.createSingleUser.useMutation()
+  const { mutateAsync, isLoading } = trpc.member.createSingleUser.useMutation()
   const toast = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [level, setLevel] = useState('')
+  const [role, setRole] = useState('')
   const [id, setId] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault()
-      setIsLoading(true)
-      await mutateAsync({ email, password, level, id, isAdmin })
+      await mutateAsync({ email, password, id, isAdmin, role })
       toast({
         title: 'Successfully updated!',
         description: 'User successfully created',
@@ -33,9 +31,7 @@ const SingleUserForm = () => {
         isClosable: true,
         duration: 9000,
       })
-      setIsLoading(false)
     } catch (e) {
-      setIsLoading(false)
       toast({
         title: 'Oops, something went wrong!',
         description: 'An error went wrong while creating the user',
@@ -86,7 +82,7 @@ const SingleUserForm = () => {
       <Select
         marginBottom={5}
         isRequired
-        onChange={(e) => setLevel(e.target.value)}
+        onChange={(e) => setRole(e.target.value)}
         placeholder="Select the level"
       >
         <option value="member">Member</option>
