@@ -9,6 +9,7 @@ export const getAllApplicants = protectedProcedure.query(async ({ ctx }) => {
         level: 'applicant',
       },
       select: {
+        id: true,
         name: true,
         interviewNotes: true,
         appliedRoles: true,
@@ -34,6 +35,29 @@ export const getApplicant = protectedProcedure
           name: true,
           interviewNotes: true,
           appliedRoles: true,
+        },
+      })
+    } catch (error) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Error retrieving applicants: ' + error,
+      })
+    }
+  })
+
+export const getAppliedRole = protectedProcedure
+  .input(z.string())
+  .query(async ({ ctx, input }) => {
+    try {
+      return await ctx.prisma.appliedRole.findUnique({
+        where: {
+          id: input,
+        },
+        select: {
+          rank: true,
+          departmentId: true,
+          role: true,
+          status: true,
         },
       })
     } catch (error) {
