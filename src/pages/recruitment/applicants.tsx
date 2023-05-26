@@ -7,7 +7,6 @@ import withAuth, { type BaseProps } from '~/utils/withAuth'
 import ApplicantGrid from '~/components/recruitment/ApplicantGrid'
 import InfoPopup from '~/components/recruitment/InfoPopup'
 import { trpc } from '~/utils/trpc'
-import { useSelector } from 'react-redux'
 
 const ApplicantsPage: React.FC<BaseProps> = ({ session }) => {
   const { data } = trpc.recruitment.getAllApplicants.useQuery()
