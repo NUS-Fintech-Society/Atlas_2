@@ -21,60 +21,36 @@ model Project {
 }
 
 model Department {
-  department_id String         @id
+  department_id String        @id
   name          String
-  announcements Announcement[]
   projects      Project[]
-  AppliedRole   AppliedRole[]  @relation("appliedDepartment")
-}
-
-model Announcement {
-  announcement_id String      @id @default(uuid())
-  content         String
-  image           String?
-  title           String
-  updated_date    DateTime
-  uploaded_date   DateTime
-  department_id   String?
-  userId          String
-  Department      Department? @relation(fields: [department_id], references: [department_id])
-  created_by      User        @relation(fields: [userId], references: [id])
+  AppliedRole   AppliedRole[] @relation("appliedDepartment")
 }
 
 model User {
-  attendance      Int?           @default(0)
   batch           String?
-  department      String?
-  diet            String?
+  department      String
   discord         String?
-  email           String         @unique
+  email           String        @unique
   faculty         String?
   gender          String?
   hashedPassword  String
-  hobbies         String?
-  id              String         @id
+  id              String        @id
   image           String?
-  level           String
-  linkedin        String?
   major           String?
-  name            String?
-  phone           String?
+  name            String
   personal_email  String?
-  race            String?
-  roles           String?
-  shirt           String?
+  role            String
   telegram        String?
-  total_events    Int?           @default(0)
+  total_events    Int?          @default(0)
   wallet          String?
   year            String?
-  date_of_birth   DateTime?
-  isAdmin         Boolean?       @default(false)
+  isAdmin         Boolean?      @default(false)
   interviewNotes  String?
-  appliedRoles    AppliedRole[]  @relation("applicant")
-  announcements   Announcement[]
-  events          Event[]        @relation("EventToUser")
-  projects        Project[]      @relation("ProjectToUser")
-  Attendance      Attendance[]   @relation("attendanceToUser")
+  appliedRoles    AppliedRole[] @relation("applicant")
+  events          Event[]       @relation("EventToUser")
+  projects        Project[]     @relation("ProjectToUser")
+  Attendance      Attendance[]  @relation("attendanceToUser")
   AttendanceTaken Attendance[]
 }
 

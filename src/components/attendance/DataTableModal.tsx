@@ -63,12 +63,7 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
     <>
       {data.qr_code && (
         <div className="flex flex-row items-center justify-center">
-          <Image
-            alt="event-qr"
-            height={200}
-            src={data.qr_code}
-            width={200}
-          />
+          <Image alt="event-qr" height={200} src={data.qr_code} width={200} />
         </div>
       )}
       <p>Department: </p>
@@ -91,7 +86,7 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
                 <Td>{index + 1}</Td>
                 <Td>{attendee.name}</Td>
                 <Td>{attendee.department}</Td>
-                <Td>{attendee.roles}</Td>
+                <Td>{attendee.role}</Td>
                 <Td>{data.attended.has(attendee.id) ? 'Yes' : 'No'}</Td>
               </Tr>
             )

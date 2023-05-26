@@ -37,7 +37,7 @@ const UserTable = ({ session }: { session: Session }) => {
         </Button>
       </td>
       <td>{data.name}</td>
-      <td>{data.roles}</td>
+      <td>{data.role}</td>
       <td>{data.department}</td>
     </tr>
   ))

@@ -30,7 +30,7 @@ const ProfileGrid = ({
           refetch={refetch}
           name={data.user.name}
           dept={data.user.department}
-          role={data.user.roles}
+          role={data.user.role}
           studentId={studentId}
           session={session}
         />

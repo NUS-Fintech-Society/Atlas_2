@@ -252,7 +252,7 @@ const ProfileInfo = (props: ProfilePageType) => {
           <Tbody>
             <Tr>
               <Td>ROLE</Td>
-              <Td>{props.roles}</Td>
+              <Td>{props.role}</Td>
             </Tr>
             <Tr>
               <Td>GENDER</Td>
@@ -337,7 +337,7 @@ const PersonalInformationModal = ({
 
 type ProfilePageType = {
   name: string | null
-  roles: string | null
+  role: string | null
   gender: string | null
   batch: string | null
   year: string | null

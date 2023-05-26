@@ -11,7 +11,7 @@ const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
         email: true,
         id: true,
         name: true,
-        roles: true,
+        role: true,
       },
     })
 
@@ -39,7 +39,7 @@ const getAllUsersForTable = protectedProcedure
           email: true,
           id: true,
           name: true,
-          roles: true,
+          role: true,
         },
         skip: input.pageIndex * input.pageSize,
         take: input.pageSize,

@@ -26,7 +26,7 @@ export const updateProfile = protectedProcedure
     z.object({
       id: z.string(),
       name: z.string(),
-      roles: z.string(),
+      role: z.string(),
       department: z.string(),
     })
   )
@@ -36,7 +36,7 @@ export const updateProfile = protectedProcedure
       data: {
         department: input.department,
         name: input.name,
-        roles: input.roles,
+        role: input.role,
       },
     })
   })

@@ -15,7 +15,7 @@ import EditModal from './EditModal'
 
 type User = {
   name: string | null
-  roles: string | null
+  role: string | null
   department: string | null
   email: string
   id: string
@@ -58,7 +58,7 @@ const useColumns = () => {
             footer: (props) => props.column.id,
           },
           {
-            accessorKey: 'roles',
+            accessorKey: 'role',
             cell: (info) => info.getValue(),
             header: 'Role',
             footer: (props) => props.column.id,

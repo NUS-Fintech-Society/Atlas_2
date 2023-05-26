@@ -5,7 +5,6 @@ export type AddUsersType = {
   diet: string
   faculty: string
   gender: string
-  hobbies: string
   linkedin: string
   major: string
   name: string
@@ -13,8 +12,7 @@ export type AddUsersType = {
   personal_email: string
   phone: string
   race: string
-  roles: string
-  shirt: string
+  role: string
   student_id: string
   telegram: string
   year: string
