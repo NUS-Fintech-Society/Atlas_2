@@ -123,18 +123,14 @@ async function sendEmail(email: string, password: string) {
 function buildUserObject(
   input: {
     date_of_birth: string
-    diet: string
     department: string
     discord: string
     faculty: string
     gender: string
-    linkedin: string
     major: string
     name: string
     nus_email: string
     personal_email: string
-    phone: string
-    race: string
     role: string
     student_id: string
     telegram: string
@@ -147,23 +143,19 @@ function buildUserObject(
       batch: 'AY22/23',
       department: user.department,
       date_of_birth: dayjs().toDate(),
-      diet: user.diet,
       discord: user.discord,
       faculty: user.faculty,
       gender: user.gender,
       hashedPassword,
       image: null,
-      interviewNotes: user.interviewNotes,
       level: 'member',
-      linkedin: user.linkedin,
       major: user.major,
       id: user.student_id,
       isAdmin: false,
+      interviewNotes: null,
       name: user.name,
       email: user.nus_email,
       personal_email: user.personal_email,
-      phone: user.phone,
-      race: user.race,
       role: user.role,
       telegram: user.telegram,
       total_events: 0,
