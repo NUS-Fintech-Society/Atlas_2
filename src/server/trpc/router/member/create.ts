@@ -24,7 +24,7 @@ export const addMultipleUsers = protectedProcedure
       z.object({
         date_of_birth: z.string(),
         diet: z.string(),
-        department: z.string(),
+        departmentId: z.string(),
         discord: z.string(),
         faculty: z.string(),
         gender: z.string(),

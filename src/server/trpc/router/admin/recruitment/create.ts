@@ -8,6 +8,7 @@ import { ErrorTitle } from '../../constants/ErrorTitle'
 export const createSingleApplicant = protectedProcedure
   .input(
     z.object({
+      id: z.string(),
       email: z.string(),
       password: z.string(),
       name: z.string(),
@@ -24,25 +25,29 @@ export const createSingleApplicant = protectedProcedure
     try {
       await ctx.prisma.user.create({
         data: {
+          id: input.id,
           email: input.email,
           hashedPassword,
           name: input.name,
-          level: 'applicant',
+          role: 'Applicant',
           appliedRoles: {
             create: [
               {
+                id: input.id,
                 rank: 1,
                 departmentId: input.firstDepartmentId,
                 role: input.firstRole,
                 status: ApplicationStatus.PENDINGREVIEW,
               },
               {
+                id: input.id,
                 rank: 2,
                 departmentId: input.secondDepartmentId,
                 role: input.secondRole,
                 status: ApplicationStatus.PENDINGREVIEW,
               },
               {
+                id: input.id,
                 rank: 3,
                 departmentId: input.thirdDepartmentId,
                 role: input.thirdRole,

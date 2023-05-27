@@ -25,11 +25,13 @@ model Department {
   name          String
   projects      Project[]
   AppliedRole   AppliedRole[] @relation("appliedDepartment")
+  User          User[]
 }
 
 model User {
   batch           String?
-  department      String
+  department      Department?   @relation(fields: [departmentId], references: [department_id])
+  departmentId    String?
   discord         String?
   email           String        @unique
   faculty         String?
