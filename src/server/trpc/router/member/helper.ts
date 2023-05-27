@@ -66,7 +66,7 @@ async function sendEmail(email: string, password: string) {
 function buildUserObject(
   input: {
     date_of_birth: string
-    department: string
+    departmentId: string
     discord: string
     faculty: string
     gender: string
@@ -84,7 +84,7 @@ function buildUserObject(
   return input.map((user) => {
     return {
       batch: 'AY22/23',
-      department: user.department,
+      departmentId: user.departmentId,
       date_of_birth: dayjs().toDate(),
       discord: user.discord,
       faculty: user.faculty,
