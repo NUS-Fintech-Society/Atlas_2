@@ -27,13 +27,13 @@ const NoteModal = ({
   interviewNotes: string | null
   refetch: () => Promise<QueryObserverResult>
 }) => {
-  interviewNotes = 'hello there testing'
-
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateInterviewNotes.useMutation()
   const [edit, setEdit] = useState(false)
-  const [notes, setNotes] = useState('default notes')
-  const [tempNotes, setTempNotes] = useState('')
+  const [notes, setNotes] = useState(interviewNotes ? interviewNotes : '')
+  const [tempNotes, setTempNotes] = useState(
+    interviewNotes ? interviewNotes : ''
+  )
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   //TODO: checking inputs
@@ -61,20 +61,20 @@ const NoteModal = ({
     })
 
     toast({
-      duration: 3000,
+      duration: 2000,
       status: 'loading',
       title: 'Loading',
-      description: Message.PERSONAL_INFO_LOADING,
+      description: Message.APPLICANT_INFO_LOADING,
     })
 
     await refetch()
     setEdit(false)
 
     toast({
-      duration: 3000,
+      duration: 2000,
       status: 'success',
       title: 'Success',
-      description: Message.PERSONAL_INFO_SUCCESS,
+      description: Message.APPLICANT_INFO_SUCCESS,
     })
   }
 
@@ -99,25 +99,14 @@ const NoteModal = ({
           <ModalHeader textAlign="center">Interview Notes</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {tempNotes ? (
-              <Input
-                variant="unstyled"
-                value={tempNotes}
-                onChange={(e) => {
-                  setTempNotes(e.currentTarget.value)
-                  setEdit(true)
-                }}
-              />
-            ) : (
-              <Input
-                variant="unstyled"
-                placeholder="Write notes.."
-                onChange={(e) => {
-                  setTempNotes(e.currentTarget.value)
-                  setEdit(true)
-                }}
-              />
-            )}
+            <Input
+              variant="unstyled"
+              value={tempNotes || ''}
+              onChange={(e) => {
+                setTempNotes(e.currentTarget.value)
+                setEdit(true)
+              }}
+            />
           </ModalBody>
           <ModalFooter>
             {edit ? (

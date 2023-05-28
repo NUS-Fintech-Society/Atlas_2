@@ -5,12 +5,9 @@ import TopNavbar from '~/components/common/TopNavbar'
 import SearchBar from '~/components/common/SearchBar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
 import ApplicantGrid from '~/components/recruitment/ApplicantGrid'
-import InfoPopup from '~/components/recruitment/InfoPopup'
-import { trpc } from '~/utils/trpc'
+import SearchProvider from '~/context/recruitment/SearchProvider'
 
 const ApplicantsPage: React.FC<BaseProps> = ({ session }) => {
-  const { data } = trpc.recruitment.getAllApplicants.useQuery()
-
   return (
     <>
       <Head>
@@ -24,9 +21,10 @@ const ApplicantsPage: React.FC<BaseProps> = ({ session }) => {
       <TopNavbar isAdmin={session.isAdmin} />
       <Layout>
         <Text className="text-center text-4xl font-bold">Applicants</Text>
-        <SearchBar />
-        <ApplicantGrid data={data} />
-        <InfoPopup />
+        <SearchProvider>
+          <SearchBar />
+          <ApplicantGrid />
+        </SearchProvider>
       </Layout>
     </>
   )

@@ -8,14 +8,12 @@ import {
   Stack,
   UnorderedList,
 } from '@chakra-ui/react'
-import { User } from '@prisma/client'
 import { Avatar } from 'flowbite-react'
 import AppliedRoleListItem from './AppliedRoleListItem'
 import DocumentModal from './DocumentModal'
 import NoteModal from './NoteModal'
-import type { AppliedRole } from '@prisma/client'
 import { trpc } from '~/utils/trpc'
-import { ApplicantWithAppliedRole } from '~/types/model'
+import type { ApplicantWithAppliedRole } from '~/types/model'
 
 const ApplicantCard = ({
   applicant,
@@ -31,7 +29,7 @@ const ApplicantCard = ({
     >
       <CardHeader paddingBottom="0" zIndex={1}>
         <Heading size="md" textAlign="center" textColor="white">
-          Name
+          {applicant.name}
         </Heading>
       </CardHeader>
       <Image

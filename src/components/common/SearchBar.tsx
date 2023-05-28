@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
+import { searchContext } from '~/context/recruitment/SearchProvider'
 
 const SearchBar = () => {
+  const { search, setSearch } = useContext(searchContext)
+  console.log('searchbar: ', search)
   return (
     <InputGroup
       minWidth={'150px'}
@@ -24,6 +27,9 @@ const SearchBar = () => {
         border="3px solid #004586"
         borderColor="#004586"
         borderRadius="20px"
+        onChange={(e) => {
+          setSearch(e.currentTarget.value)
+        }}
       ></Input>
     </InputGroup>
   )
