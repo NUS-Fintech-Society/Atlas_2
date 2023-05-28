@@ -1,4 +1,4 @@
-import { AppliedRole, Prisma } from '@prisma/client'
+import type { AppliedRole } from '@prisma/client'
 
 export type ApplicantWithAppliedRole = {
   id: string
