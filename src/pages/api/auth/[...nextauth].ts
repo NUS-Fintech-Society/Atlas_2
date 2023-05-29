@@ -6,6 +6,9 @@ import { prisma } from '../../../server/db/client'
 import { env } from '../../../env/server.mjs'
 import type { User } from '@prisma/client'
 
+import { db } from '~/server/db/firebase'
+import { collection, addDoc } from 'firebase/firestore'
+
 export const authOptions: NextAuthOptions = {
   callbacks: {
     // We need this to ensure that the client knows when to log in
@@ -41,6 +44,10 @@ export const authOptions: NextAuthOptions = {
             email: string
             password: string
           }
+
+          await addDoc(collection(db, 'users'), {
+            name: 'John',
+          })
 
           // Step 2: If no credentials are provided, throw an error
           if (!credential || !email || !password) {
