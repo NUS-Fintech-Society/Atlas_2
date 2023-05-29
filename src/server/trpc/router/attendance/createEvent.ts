@@ -19,7 +19,7 @@ export const createEvent = protectedProcedure
       isQrRequired: z.boolean(),
     })
   )
-  .mutation(async ({ ctx, input }) => {
+  .mutation(async ({ input }) => {
     try {
       let qr_code: string | undefined
       const id = randomUUID()
@@ -31,8 +31,13 @@ export const createEvent = protectedProcedure
       const users = await Promise.all(
         input.attendees.map(async (attendee) => {
           const data = await userCollection.getById(attendee)
-          console.log("The data is ", data)
-          return { name: data.name || '', id: data.id as string }
+          return {
+            name: data.name,
+            id: data.id as string,
+            attended: false,
+            department: data.department,
+            role: data.role,
+          }
         })
       )
       const payload: Event = {
