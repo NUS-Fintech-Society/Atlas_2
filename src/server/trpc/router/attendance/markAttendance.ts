@@ -1,8 +1,8 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
-import { LogType } from '@prisma/client'
-import { TRPCError } from '@trpc/server'
 import eventCollection from '~/server/db/collections/EventCollection'
+import logCollection from '~/server/db/collections/LogCollection'
+import { Timestamp } from 'firebase/firestore'
 
 export const markAttendance = protectedProcedure
   .input(z.string())
@@ -22,16 +22,11 @@ export const markAttendance = protectedProcedure
         invitedAttendees: event.invitedAttendees,
       })
     } catch (e) {
-      await ctx.prisma.log.create({
-        data: {
-          type: LogType.ERROR,
-          title: 'Error signing attendance',
-          message: (e as Error).message,
-        },
-      })
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: (e as Error).message,
+      await logCollection.add({
+        createdAt: Timestamp.fromDate(new Date()),
+        level: 'WARNING',
+        title: 'Error marking attendance',
+        description: (e as Error).message,
       })
     }
   })
