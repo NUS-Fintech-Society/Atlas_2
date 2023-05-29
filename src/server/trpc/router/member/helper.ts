@@ -144,13 +144,10 @@ function buildUserObject(
  * @param users The array of users object
  * @param password The hashed password
  */
-async function sendMultipleEmails(users: User[], password: string) {
-  const promises: Promise<SMTPTransport.SentMessageInfo>[] = []
-  users.forEach((user) => {
-    const promise = sendEmail(user.email, password)
-    promises.push(promise)
-  })
-  await Promise.all(promises)
+async function sendMultipleEmails(emails: string[], password: string) {
+  await Promise.all(
+    emails.map(async (email) => await sendEmail(email, password))
+  )
 }
 
 /**
