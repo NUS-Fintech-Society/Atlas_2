@@ -11,7 +11,7 @@ export const getAllAttendance = protectedProcedure.query(async () => {
         id: event.id,
         name: event.name,
         startDate: event.startDate.toDate(),
-        total_attendees: event.attendees.length,
+        total_attendees: event.attendees,
         total_users: event.invitedAttendees.length,
       }
     })

@@ -9,10 +9,10 @@ type User = {
 }
 
 export type Event = {
-  attendees: User[]
+  attendees: number
   endDate: Timestamp
   hasStarted: boolean
-  id: string
+  id?: string
   invitedAttendees: User[]
   name: string
   qrCode?: string
