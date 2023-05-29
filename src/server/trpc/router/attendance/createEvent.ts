@@ -6,7 +6,6 @@ import { env } from '~/env/server.mjs'
 import eventCollection from '~/server/db/collections/EventCollection'
 import { Timestamp } from 'firebase/firestore'
 import userCollection from '~/server/db/collections/UserCollection'
-import type { Event } from '~/server/db/models/Event'
 
 export const createEvent = protectedProcedure
   .input(
@@ -40,18 +39,16 @@ export const createEvent = protectedProcedure
           }
         })
       )
-      const payload: Event = {
-        attendees: [],
+
+      await eventCollection.add({
+        attendees: 0,
         endDate: Timestamp.fromDate(input.endDate),
         hasStarted: false,
-        id,
         invitedAttendees: users,
         name: input.name,
         startDate: Timestamp.fromDate(input.startDate),
         qrCode: qr_code || '',
-      }
-
-      await eventCollection.add(payload)
+      })
     } catch (e) {
       console.error('The error is ', (e as Error).message)
     }

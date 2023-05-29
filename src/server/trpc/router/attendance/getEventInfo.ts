@@ -10,16 +10,19 @@ export const getEventInfo = protectedProcedure
   .input(z.string())
   .query(async ({ input }) => {
     try {
+      if (!input) return
       const event = await eventCollection.getById(input)
-      console.log('The event is ', event)
+      const attendees = event.invitedAttendees.filter(
+        (attendee) => attendee.attended
+      )
 
       return {
-        attendees: event.attendees,
+        attendees: attendees.length,
         endDate: event.endDate.toDate(),
         id: event.id,
         invitedAttendees: event.invitedAttendees,
         name: event.name,
-        showup: event.attendees.length,
+        showup: event.attendees,
         qr_code: event.qrCode,
         startDate: event.startDate.toDate(),
       }

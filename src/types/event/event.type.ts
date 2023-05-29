@@ -9,15 +9,9 @@ export type EventInfos = {
 }
 
 export interface BodyProps {
-  attendees: {
-    attended: boolean
-    department: string
-    name: string
-    id: string
-    role: string
-  }[]
+  attendees: number,
   endDate: Date
-  id: string
+  id?: string
   invitedAttendees: {
     attended: boolean
     department: string
