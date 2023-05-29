@@ -187,7 +187,7 @@ const SingleUserForm = () => {
     } catch (e) {
       toast({
         title: 'Oops, something went wrong!',
-        description: 'An error went wrong while creating the user',
+        description: (e as Error).message,
         status: 'error',
         isClosable: true,
         duration: 9000,
