@@ -60,9 +60,9 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
     resolver: zodResolver(FormSchema),
   })
 
-  const { data } = trpc.event.getAllUsers.useQuery()
+  const { data } = trpc.attendance.getAllAttendanceButSelf.useQuery()
   const { mutateAsync, isLoading: isSubmitting } =
-    trpc.event.createEvent.useMutation()
+    trpc.attendance.createEvent.useMutation()
 
   const invalidAttendees = attendees.length === 0
   const formSubmit = async (formData: FormSchemaType) => {
@@ -220,4 +220,4 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(EventPage, true)
+export default withAuth(EventPage)

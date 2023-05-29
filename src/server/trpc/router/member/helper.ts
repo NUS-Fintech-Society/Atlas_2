@@ -34,7 +34,6 @@ async function checkUserPermission(id: string, prisma: PrismaClient) {
  */
 async function checkIfUserExist(id: string) {
   const results = await userCollection.findById(id)
-
   if (results) {
     throw new TRPCError({
       code: 'CONFLICT',
