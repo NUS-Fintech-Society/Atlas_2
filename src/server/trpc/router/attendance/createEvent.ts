@@ -6,6 +6,7 @@ import { env } from '~/env/server.mjs'
 import eventCollection from '~/server/db/collections/EventCollection'
 import { Timestamp } from 'firebase/firestore'
 import userCollection from '~/server/db/collections/UserCollection'
+import logCollection from '~/server/db/collections/LogCollection'
 
 export const createEvent = protectedProcedure
   .input(
@@ -50,6 +51,11 @@ export const createEvent = protectedProcedure
         qrCode: qr_code || '',
       })
     } catch (e) {
-      console.error('The error is ', (e as Error).message)
+      await logCollection.add({
+        createdAt: Timestamp.fromDate(new Date()),
+        level: 'INFO',
+        description: (e as Error).message,
+        title: 'Create event failed',
+      })
     }
   })
