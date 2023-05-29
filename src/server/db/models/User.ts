@@ -1,5 +1,9 @@
 export type User = {
+  department: string
   email: string
   hashedPassword: string
-  name: number
+  isAdmin: boolean
+  id?: string
+  name: string
+  role: string
 }
