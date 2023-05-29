@@ -6,6 +6,7 @@ import {
   doc,
   query,
   getDocs,
+  addDoc,
   where,
   deleteDoc,
   updateDoc,
@@ -26,14 +27,17 @@ export abstract class BaseCollection<T> {
   protected abstract collectionName: string
   protected abstract objectName: string
 
-  async set(payload: T, id?: string) {
-    const docRef = id
-      ? doc(db, this.collectionName, id)
-      : doc(db, this.collectionName)
+  async add(payload: T) {
+    return await addDoc(
+      collection(db, this.collectionName),
+      payload as WithFieldValue<DocumentData>
+    )
+  }
 
+  async set(payload: T, id: string) {
+    const docRef = doc(db, this.collectionName, id)
     return await setDoc(docRef, {
       ...payload,
-      id: id ? id : docRef.id,
     } as WithFieldValue<DocumentData>)
   }
 
@@ -52,7 +56,7 @@ export abstract class BaseCollection<T> {
     if (!result.exists) {
       throw Error(`The ${this.objectName} does not exist`)
     }
-    return { ...result, id: result.id as string } as T
+    return { ...result.data(), id: result.id as string } as T
   }
 
   async queries(queries: Queries<T>[]) {
