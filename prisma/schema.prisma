@@ -28,7 +28,7 @@ model Departments {
 
 model User {
   batch           String?
-  department      String
+  department      String       @default("")
   discord         String?
   email           String       @unique
   faculty         String?

@@ -55,7 +55,7 @@ const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
   const eventId = route.query.id as string
   const { data, isLoading, refetch } = trpc.event.getEvent.useQuery(eventId)
   const { mutateAsync, isLoading: loading } =
-    trpc.event.markAttendance.useMutation()
+    trpc.attendance.markAttendance.useMutation()
   dayjs.extend(LocalizedFormat)
 
   const markAttendance = useCallback(async () => {

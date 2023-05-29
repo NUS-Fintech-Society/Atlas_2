@@ -1,57 +1,7 @@
 import { router } from '~/server/trpc/trpc'
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
-import { toDataURL } from 'qrcode'
-import { randomUUID } from 'crypto'
-import { LogType } from '@prisma/client'
-import { ErrorTitle } from '../constants/ErrorTitle'
 import { TRPCError } from '@trpc/server'
-import { env } from '~/env/server.mjs'
-
-const createEvent = protectedProcedure
-  .input(
-    z.object({
-      name: z.string(),
-      startDate: z.date(),
-      endDate: z.date(),
-      departments: z.array(z.string()),
-      attendees: z.array(z.string()),
-      isQrRequired: z.boolean(),
-    })
-  )
-  .mutation(async ({ ctx, input }) => {
-    try {
-      let qr_code: string | undefined
-      const id = randomUUID()
-
-      if (input.isQrRequired) {
-        qr_code = await toDataURL(`${env.DOMAIN}/events/${id}`)
-      }
-
-      await ctx.prisma.event.create({
-        data: {
-          attendees: {
-            connect: input.attendees.map((attendee) => {
-              return { id: attendee }
-            }),
-          },
-          id,
-          name: input.name,
-          startDate: input.startDate,
-          endDate: input.endDate,
-          qr_code,
-        },
-      })
-    } catch (e) {
-      await ctx.prisma.log.create({
-        data: {
-          message: (e as Error).message,
-          title: ErrorTitle.ERROR_CREATING_EVENT,
-          type: LogType.ERROR,
-        },
-      })
-    }
-  })
 
 const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
@@ -157,38 +107,8 @@ const getEvent = protectedProcedure
     }
   })
 
-const markAttendance = protectedProcedure
-  .input(z.string())
-  .mutation(async ({ ctx, input }) => {
-    try {
-      const user = ctx.session.user
-      const result = await ctx.prisma.attendance.create({
-        data: {
-          id: user.id + input,
-          eventId: input,
-          userId: user.id,
-        },
-      })
-      console.log('Success!', result)
-    } catch (e) {
-      await ctx.prisma.log.create({
-        data: {
-          type: LogType.ERROR,
-          title: 'Error signing attendance',
-          message: (e as Error).message,
-        },
-      })
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: (e as Error).message,
-      })
-    }
-  })
-
 export const eventRouter = router({
-  createEvent,
   getAllUsers,
   getEvent,
   getEventInfo,
-  markAttendance,
 })

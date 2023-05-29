@@ -22,6 +22,14 @@ export const serverSchema = z.object({
   ),
   GMAIL: z.string(),
   GMAIL_PASSWORD: z.string(),
+
+  // Firestore Services
+  APP_ID: z.string(),
+  MESSAGING_SENDER_ID: z.string(),
+  API_KEY: z.string(),
+  AUTH_DOMAIN: z.string(),
+  PROJECT_ID: z.string(),
+  STORAGE_BUCKET: z.string()
 });
 
 /**
