@@ -1,8 +1,11 @@
 import type { Timestamp } from 'firebase/firestore'
 
 type User = {
+  attended: boolean
+  department: string
   id: string
   name: string
+  role: string
 }
 
 export type Event = {
