@@ -46,7 +46,10 @@ const ApplicantCard = ({
           <Avatar alt="User-settings" rounded={true} size="lg" />
           <Box className="flex justify-center">
             <Box>
-              <DocumentModal />
+              <DocumentModal
+                applicantId={applicant.id}
+                applicantName={applicant.name}
+              />
               <NoteModal
                 applicantId={applicant.id}
                 interviewNotes={applicant.interviewNotes}
