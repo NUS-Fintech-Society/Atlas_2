@@ -5,7 +5,6 @@ import { hash } from 'bcryptjs'
 import type { User } from '@prisma/client'
 import {
   checkIfUserExist,
-  createNewUser,
   sendEmail,
   sendMultipleEmails,
   buildUserObject,
@@ -13,6 +12,7 @@ import {
 } from './helper'
 import { LogType } from '@prisma/client'
 import { ErrorTitle } from '../constants/ErrorTitle'
+import userCollection from '~/server/db/collections/UserCollection'
 
 /**
  * Create multiple accounts for many users and send out an
@@ -73,21 +73,25 @@ export const createSingleUser = protectedProcedure
       isAdmin: z.boolean(),
     })
   )
-  .mutation(async ({ ctx, input }) => {
-    try {
-      const { email, id, isAdmin, role, department, name } = input
-      const password = input.password
+  .mutation(async ({ input }) => {
+    const { email, id, isAdmin, role, department, name, password } = input
 
-      await checkIfUserExist(email, ctx.prisma)
-      await createNewUser(name, department, email, id, isAdmin, role, password, ctx.prisma)
-      await sendEmail(email, password)
-    } catch (e) {
-      await ctx.prisma.log.create({
-        data: {
-          title: ErrorTitle.ERROR_ADDING_SINGLE_USER,
-          message: (e as Error).message,
-          type: LogType.ERROR,
-        },
-      })
-    }
+    const [hashedPassword] = await Promise.all([
+      hash(password, 10),
+      checkIfUserExist(id),
+    ])
+
+    await userCollection.set(
+      {
+        department,
+        email,
+        isAdmin,
+        name,
+        hashedPassword,
+        role,
+      },
+      id
+    )
+
+    await sendEmail(email, hashedPassword)
   })

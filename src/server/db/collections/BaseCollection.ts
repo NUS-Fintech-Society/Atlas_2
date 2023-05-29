@@ -1,7 +1,7 @@
 import { db } from '../firebase'
 import {
   collection,
-  addDoc,
+  setDoc,
   getDoc,
   doc,
   query,
@@ -27,11 +27,23 @@ export abstract class BaseCollection<T> {
   protected abstract objectName: string
 
   async set(payload: T, id?: string) {
-    const c = id
-      ? collection(db, this.collectionName, id)
-      : collection(db, this.collectionName)
+    const docRef = id
+      ? doc(db, this.collectionName, id)
+      : doc(db, this.collectionName)
 
-    return await addDoc(c, payload as WithFieldValue<DocumentData>)
+    return await setDoc(docRef, {
+      ...payload,
+      id: id ? id : docRef.id,
+    } as WithFieldValue<DocumentData>)
+  }
+
+  async findById(id: string) {
+    const docRef = doc(db, this.collectionName, id)
+    const result = await getDoc(docRef)
+    if (!result.exists) {
+      return null
+    }
+    return { ...result.data(), id: result.id } as T
   }
 
   async getById(id: string) {
