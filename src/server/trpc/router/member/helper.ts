@@ -4,7 +4,6 @@ import { env } from '~/env/server.mjs'
 import type { User } from '@prisma/client'
 import { type PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
-import type SMTPTransport from 'nodemailer/lib/smtp-transport'
 import userCollection from '~/server/db/collections/UserCollection'
 
 /**

@@ -2,12 +2,11 @@ import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
 import { toDataURL } from 'qrcode'
 import { randomUUID } from 'crypto'
-import { LogType } from '@prisma/client'
-import { ErrorTitle } from '../constants/ErrorTitle'
 import { env } from '~/env/server.mjs'
 import eventCollection from '~/server/db/collections/EventCollection'
 import { Timestamp } from 'firebase/firestore'
 import userCollection from '~/server/db/collections/UserCollection'
+import type { Event } from '~/server/db/models/Event'
 
 export const createEvent = protectedProcedure
   .input(
@@ -32,11 +31,11 @@ export const createEvent = protectedProcedure
       const users = await Promise.all(
         input.attendees.map(async (attendee) => {
           const data = await userCollection.getById(attendee)
-          return { name: data.name, id: data.id as string }
+          console.log("The data is ", data)
+          return { name: data.name || '', id: data.id as string }
         })
       )
-
-      await eventCollection.set({
+      const payload: Event = {
         attendees: [],
         endDate: Timestamp.fromDate(input.endDate),
         hasStarted: false,
@@ -44,15 +43,11 @@ export const createEvent = protectedProcedure
         invitedAttendees: users,
         name: input.name,
         startDate: Timestamp.fromDate(input.startDate),
-        qrCode: qr_code,
-      })
+        qrCode: qr_code || '',
+      }
+
+      await eventCollection.add(payload)
     } catch (e) {
-      await ctx.prisma.log.create({
-        data: {
-          message: (e as Error).message,
-          title: ErrorTitle.ERROR_CREATING_EVENT,
-          type: LogType.ERROR,
-        },
-      })
+      console.error('The error is ', (e as Error).message)
     }
   })
