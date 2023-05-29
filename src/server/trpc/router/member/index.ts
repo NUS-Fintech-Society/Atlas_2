@@ -6,10 +6,11 @@ import {
   updateMemberContacts,
 } from './update'
 import { deleteMemberImage } from './delete'
-import { addMultipleUsers, createSingleUser } from './create'
+import {  createSingleUser } from './createSingleUser'
+import { createMultipleUsers } from './createMultipleUsers'
 
 export const memberRouter = router({
-  addMultipleUsers,
+  createMultipleUsers,
   createSingleUser,
   deleteMemberImage,
   getAllUsers,

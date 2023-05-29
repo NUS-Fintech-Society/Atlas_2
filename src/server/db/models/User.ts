@@ -4,6 +4,7 @@ export type User = {
   hashedPassword: string
   isAdmin: boolean
   id?: string
+  image?: string
   name: string
   role: string
 }
