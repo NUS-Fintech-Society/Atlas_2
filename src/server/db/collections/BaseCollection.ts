@@ -40,10 +40,10 @@ export abstract class BaseCollection<T> {
   async findById(id: string) {
     const docRef = doc(db, this.collectionName, id)
     const result = await getDoc(docRef)
-    if (!result.exists) {
+    if (!result.exists()) {
       return null
     }
-    return { ...result.data(), id: result.id } as T
+    return { ...result.data(), id: result.id as string } as T
   }
 
   async getById(id: string) {
@@ -52,7 +52,7 @@ export abstract class BaseCollection<T> {
     if (!result.exists) {
       throw Error(`The ${this.objectName} does not exist`)
     }
-    return { ...result, id: result.id } as T
+    return { ...result, id: result.id as string } as T
   }
 
   async queries(queries: Queries<T>[]) {
@@ -62,7 +62,7 @@ export abstract class BaseCollection<T> {
     const q = query(collection(db, this.collectionName), ...items)
     const snapshots = await getDocs(q)
     return snapshots.docs.map((doc) => {
-      return { ...doc.data(), id: doc.id } as T
+      return { ...doc.data(), id: doc.id as string } as T
     })
   }
 
