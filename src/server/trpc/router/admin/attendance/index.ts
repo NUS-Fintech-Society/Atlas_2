@@ -1,5 +1,5 @@
 import { router } from '~/server/trpc/trpc'
-import { getAllAttendance } from './read'
+import { getAllAttendance } from './getAllAttendance'
 
 export const attendanceRouter = router({
   getAllAttendance,
