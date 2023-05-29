@@ -3,9 +3,6 @@ import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import eventCollection from '~/server/db/collections/EventCollection'
 
-/**
- * @param {string} id The event id
- */
 export const getEventInfo = protectedProcedure
   .input(z.string())
   .query(async ({ input }) => {
