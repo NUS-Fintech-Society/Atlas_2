@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 const ChangePasswordPage = () => {
   const toast = useToast()
-  const { mutateAsync, isLoading } = trpc.profile.changePassword.useMutation()
+  const { mutateAsync, isLoading } = trpc.user.changePassword.useMutation()
   const { status } = useSession({ required: true })
   const [oldPassword, setOldPassword] = useState('')
   const [password, setPassword] = useState('')

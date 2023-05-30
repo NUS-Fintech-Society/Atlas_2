@@ -13,13 +13,13 @@ const ProfileGrid = ({
   session: Session
 }) => {
   const { data, isError, isLoading, refetch } =
-    trpc.member.getMemberProfile.useQuery(studentId)
+    trpc.user.getUserProfile.useQuery(studentId)
 
   if (isLoading) {
     return <LoadingScreen />
   }
 
-  if (!data || !data.user || isError) {
+  if (!data || isError) {
     return <p className="text-3xl">Something is wrong</p>
   }
 
@@ -28,9 +28,9 @@ const ProfileGrid = ({
       <div className="row-span-3 h-full w-3/4 max-w-md bg-[#01003D] md:place-self-end">
         <ProfileCard
           refetch={refetch}
-          name={data.user.name}
-          dept={data.user.department}
-          role={data.user.role}
+          name={data.name}
+          dept={data.department}
+          role={data.role}
           studentId={studentId}
           session={session}
         />
@@ -38,12 +38,12 @@ const ProfileGrid = ({
       <div className="col-span-2 w-3/4">
         <ProfileContactInfo
           studentId={studentId}
-          {...data.user}
+          {...data}
           refetch={refetch}
         />
       </div>
       <div className="col-span-2 row-span-2 mb-10 w-3/4">
-        <ProfileInfo {...data.user} />
+        {/* <ProfileInfo {...data} /> */}
       </div>
     </div>
   )

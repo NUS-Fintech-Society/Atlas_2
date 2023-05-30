@@ -22,7 +22,7 @@ export const createMultipleUsers = protectedProcedure
       })
     )
   )
-  .mutation(async ({ ctx, input }) => {
+  .mutation(async ({ input }) => {
     try {
       const password = randomBytes(10).toString('hex')
       const hashedPassword = await hash(password, 10)
