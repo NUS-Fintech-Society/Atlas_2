@@ -11,7 +11,7 @@ const CreateMultipleUsers = () => {
   const toast = useToast()
   const [users, setUsers] = useState<AddUsersType[]>([])
 
-  const { isLoading, mutateAsync } = trpc.member.addMultipleUsers.useMutation()
+  const { isLoading, mutateAsync } = trpc.user.createManyUsers.useMutation()
 
   const handleFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length && e.target.files[0]) {

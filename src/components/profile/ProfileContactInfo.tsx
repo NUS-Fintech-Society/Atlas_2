@@ -13,15 +13,15 @@ import { Message } from '~/constant/messages'
 
 const ProfileContactInfo = (props: {
   studentId: string | null
-  telegram: string | null
-  discord: string | null
-  personal_email: string | null
+  // telegram: string | null
+  // discord: string | null
+  // personal_email: string | null
   email: string
   refetch: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
   const { isLoading: isSubmitting, mutateAsync } =
-    trpc.member.updateMemberContacts.useMutation()
+    trpc.user.updateUserContacts.useMutation()
 
   const [edit, setEdit] = useState(false)
   const onEdit = () => {
@@ -30,9 +30,9 @@ const ProfileContactInfo = (props: {
 
   // Form validation logic
   const preloadedValues = {
-    telegram: props.telegram ? props.telegram : '',
-    discord: props.discord ? props.discord : '',
-    personal_email: props.personal_email ? props.personal_email : '',
+    // telegram: props.telegram ? props.telegram : '',
+    // discord: props.discord ? props.discord : '',
+    // personal_email: props.personal_email ? props.personal_email : '',
     email: props.email ? props.email : '',
   }
 
@@ -98,7 +98,7 @@ const ProfileContactInfo = (props: {
           boxShadow="0px 3px 3px rgba(0, 0, 0, 0.2)"
           className="flex flex-col gap-3 py-6 px-10"
         >
-          <Box className="flex items-center gap-1">
+          {/* <Box className="flex items-center gap-1">
             <BsTelegram size="20px" className="fill-[#0088cc]" />
             <DynamicInputField
               edit={edit}
@@ -117,7 +117,7 @@ const ProfileContactInfo = (props: {
               field="discord"
               fieldValue={props.discord}
             />
-          </Box>
+          </Box> 
           <Box className="flex items-center gap-1">
             <BsEnvelopeFill size="20px" className="fill-[#54CCFF]" />
             <DynamicInputField
@@ -127,7 +127,7 @@ const ProfileContactInfo = (props: {
               field="personal_email"
               fieldValue={props.personal_email}
             />
-          </Box>
+          </Box> */}
           <Box className="flex items-center gap-1">
             <BsEnvelopeFill size="20px" className="fill-[#97AEFF]" />
             <DynamicInputField

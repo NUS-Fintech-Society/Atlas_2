@@ -29,7 +29,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
     mode: 'onSubmit',
   })
 
-  const { mutateAsync } = trpc.member.updateProfile.useMutation()
+  const { mutateAsync } = trpc.user.updateUserProfile.useMutation()
   const toast = useToast()
   const onSubmit = async (data: any) => {
     try {

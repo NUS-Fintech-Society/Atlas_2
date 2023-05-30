@@ -1,11 +1,10 @@
 import { TRPCError } from '@trpc/server'
-import { hash } from 'bcryptjs'
 import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
 import type { User } from '@prisma/client'
 import { type PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
-import type SMTPTransport from 'nodemailer/lib/smtp-transport'
+import userCollection from '~/server/db/collections/UserCollection'
 
 /**
  * Validates whether the user has the necessary permissions
@@ -32,49 +31,14 @@ async function checkUserPermission(id: string, prisma: PrismaClient) {
  * @param email The email of the user
  * @throws {TRPCError} if the user already exists
  */
-async function checkIfUserExist(email: string, prisma: PrismaClient) {
-  const foundUser = await prisma.user.findUnique({ where: { email } })
-  if (foundUser) {
+async function checkIfUserExist(id: string) {
+  const results = await userCollection.findById(id)
+  if (results) {
     throw new TRPCError({
       code: 'CONFLICT',
-      message: 'User already exists',
+      message: 'The user already exists',
     })
   }
-}
-
-/**
- * CREATE a new user into the database
- *
- * @param email The email of the user
- * @param id The student id of the user
- * @param isAdmin Whether the user has admin rights
- * @param level The role of the user
- * @param password The password of the user
- */
-async function createNewUser(
-  name: string,
-  departmentId: string,
-  email: string,
-  id: string,
-  isAdmin: boolean,
-  role: string,
-  password: string,
-  prisma: PrismaClient
-) {
-  const hashedPassword = await hash(password, 10)
-
-  await prisma.user.create({
-    data: {
-      batch: 'AY2022/2023',
-      departmentId,
-      name,
-      role,
-      email,
-      id,
-      hashedPassword,
-      isAdmin,
-    },
-  })
 }
 
 /**
@@ -171,13 +135,10 @@ function buildUserObject(
  * @param users The array of users object
  * @param password The hashed password
  */
-async function sendMultipleEmails(users: User[], password: string) {
-  const promises: Promise<SMTPTransport.SentMessageInfo>[] = []
-  users.forEach((user) => {
-    const promise = sendEmail(user.email, password)
-    promises.push(promise)
-  })
-  await Promise.all(promises)
+async function sendMultipleEmails(emails: string[], password: string) {
+  await Promise.all(
+    emails.map(async (email) => await sendEmail(email, password))
+  )
 }
 
 /**
@@ -195,7 +156,6 @@ export {
   createManyUsers,
   checkUserPermission,
   checkIfUserExist,
-  createNewUser,
   sendEmail,
   sendMultipleEmails,
   buildUserObject,

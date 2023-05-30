@@ -7,7 +7,7 @@ type ProfilePageType = {
   year: string | null
   faculty: string | null
   major: string | null
-  projects: Project[]
+  // projects: Projects[]
 }
 
 const ProfileInfo = (props: ProfilePageType) => {
@@ -61,7 +61,7 @@ const ProfileInfo = (props: ProfilePageType) => {
                 {props.major}
               </Td>
             </Tr>
-            <Tr>
+            {/* <Tr>
               <Td textColor="#002D70" className="font-medium">
                 PROJECTS
               </Td>
@@ -76,7 +76,7 @@ const ProfileInfo = (props: ProfilePageType) => {
                   </Td>
                 )
               })}
-            </Tr>
+            </Tr> */}
           </Tbody>
         </Table>
       </TableContainer>

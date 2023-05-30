@@ -3,7 +3,6 @@ import { Box, Button, Image, Text } from '@chakra-ui/react'
 import type { Session } from 'next-auth'
 import { useRouter } from 'next/router'
 import UploadImageBtn from './UploadImageButton'
-import { type QueryObserverResult } from '@tanstack/react-query'
 
 const DEFAULT_IMAGE = '/fintech_logo.png'
 
@@ -13,36 +12,38 @@ const ProfileCard = ({
   role,
   studentId,
   session,
-  refetch,
 }: {
   name: string | null
   dept: string | null
   role: string | null
   studentId: string
   session: Session
-  refetch: () => Promise<QueryObserverResult>
 }) => {
   const router = useRouter()
   const redirectToResetPassword = () => router.push('/auth/forgetpassword')
 
-  const { isLoading, data } = trpc.member.getMemberImage.useQuery(studentId)
+  const {
+    isLoading,
+    data,
+    refetch: refetchImage,
+  } = trpc.user.getUserImage.useQuery(studentId)
 
   return (
     <Box className="mb-10 flex flex-col items-center">
       <Box className="relative">
         <Image
           alt="profile-pic"
-          src={isLoading || !data || !data.image ? DEFAULT_IMAGE : data.image}
+          src={isLoading || !data ? DEFAULT_IMAGE : data}
           fallbackSrc={DEFAULT_IMAGE}
           objectFit="cover"
           borderRadius="full"
           boxSize="170px"
         />
-        {session?.user?.id === studentId ? (
+        {session?.user?.id === studentId ?? (
           <Box className="absolute bottom-0 right-0">
-            <UploadImageBtn refetch={refetch} studentId={studentId} />
+            <UploadImageBtn refetchImage={refetchImage} studentId={studentId} />
           </Box>
-        ) : null}
+        )}
       </Box>
       <Box className="flex flex-col items-center py-2">
         <Text textColor="##FFFFFF" className="text-2xl font-medium">

@@ -2,9 +2,10 @@ import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcryptjs'
 
-import { prisma } from '../../../server/db/client'
 import { env } from '../../../env/server.mjs'
-import type { User } from '@prisma/client'
+import type { User } from '~/server/db/models/User'
+
+import userCollection from '~/server/db/collections/UserCollection'
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -48,24 +49,31 @@ export const authOptions: NextAuthOptions = {
           }
 
           // Step 3: Get the user by the email
-          const adapterUser = await prisma.user.findUnique({
-            where: { email },
-          })
-          if (!adapterUser) throw new Error('Invalid email or password')
+          const users = await userCollection.queries([
+            {
+              type: "where",
+              fieldPath: 'email',
+              direction: '==',
+              value: email,
+            },
+          ])
 
-          // Step 4: Type cast it to the type of User
-          const account = adapterUser as User
+          if (users.length === 0) {
+            throw Error('Invalid email or password')
+          }
 
-          // If the account is found, challenge the hashPassword with the password
-          const success = await compare(password, account.hashedPassword)
-          if (!success) throw new Error('Invalid email or password')
+          const user = users[0] as User
+          const isSuccess = await compare(password, user.hashedPassword)
+          if (!isSuccess) {
+            throw Error('Incorrect password')
+          }
 
           // The user object is passed to the session callback in session.data.user
           return {
-            id: account.id,
-            name: account.name,
-            email: account.email,
-            isAdmin: account.isAdmin,
+            id: user.id as string,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
           }
         } catch (e) {
           throw new Error((e as Error).message)

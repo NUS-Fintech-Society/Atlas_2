@@ -17,7 +17,7 @@ const LoginPage = () => {
   const { status } = useSession()
   const toast = useToast()
   const router = useRouter()
-  const { mutateAsync, isLoading } = trpc.auth.resetPassword.useMutation()
+  const { mutateAsync, isLoading } = trpc.user.resetPassword.useMutation()
   const [loginLoading, setLoginLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

@@ -156,7 +156,7 @@ const roles = [
 
 const SingleUserForm = () => {
   const router = useRouter()
-  const { mutateAsync, isLoading } = trpc.member.createSingleUser.useMutation()
+  const { mutateAsync, isLoading } = trpc.user.createSingleUser.useMutation()
   const toast = useToast()
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
@@ -187,7 +187,7 @@ const SingleUserForm = () => {
     } catch (e) {
       toast({
         title: 'Oops, something went wrong!',
-        description: 'An error went wrong while creating the user',
+        description: (e as Error).message,
         status: 'error',
         isClosable: true,
         duration: 9000,

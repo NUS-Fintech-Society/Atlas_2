@@ -1,10 +1,9 @@
-import Layout from '~/components/common/Layout'
 import Head from 'next/head'
 import DataTable from '~/components/users/Table'
 import TopNavbar from '~/components/common/TopNavbar'
-import withAuth, {type BaseProps} from '~/utils/withAuth'
+import withAuth, { type BaseProps } from '~/utils/withAuth'
 
-const AdminUserPage: React.FC<BaseProps> = ({session}) => {
+const AdminUserPage: React.FC<BaseProps> = ({ session }) => {
   return (
     <>
       <Head>
@@ -13,9 +12,8 @@ const AdminUserPage: React.FC<BaseProps> = ({session}) => {
         <meta name="description" content="The login page for Atlas" />
       </Head>
       <TopNavbar isAdmin={session.isAdmin} />
-      <Layout>
-        <DataTable />
-      </Layout>
+
+      <DataTable />
     </>
   )
 }
