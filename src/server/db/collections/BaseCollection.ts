@@ -15,17 +15,27 @@ import {
   type DocumentData,
   type WhereFilterOp,
   type FieldPath,
+  orderBy,
+  startAt,
+  endAt,
+  limit,
+  getCountFromServer,
 } from 'firebase/firestore'
 
 type Queries<T> = {
-  fieldPath: keyof T
-  direction: WhereFilterOp
-  value: T[keyof T]
+  fieldPath?: keyof T
+  direction?: WhereFilterOp
+  value?: T[keyof T] | number
+  type: 'where' | 'orderBy' | 'limit'
 }
 
 export abstract class BaseCollection<T> {
   protected abstract collectionName: string
   protected abstract objectName: string
+
+  async count() {
+    return await getCountFromServer(collection(db, this.collectionName))
+  }
 
   async add(payload: T) {
     return await addDoc(
@@ -61,7 +71,18 @@ export abstract class BaseCollection<T> {
 
   async queries(queries: Queries<T>[]) {
     const items = queries.map((q) => {
-      return where(q.fieldPath as string | FieldPath, q.direction, q.value)
+      switch (q.type) {
+        case 'where':
+          return where(
+            q.fieldPath as string | FieldPath,
+            q.direction as WhereFilterOp,
+            q.value
+          )
+        case 'orderBy':
+          return orderBy(q.fieldPath as string | FieldPath)
+        case 'limit':
+          return limit(q.value as number)
+      }
     })
     const q = query(collection(db, this.collectionName), ...items)
     const snapshots = await getDocs(q)
