@@ -27,15 +27,15 @@ model Departments {
 }
 
 model User {
-  attendance      Int?            @default(0)
+  attendance      Int?         @default(0)
   batch           String?
   department      String?
   diet            String?
-  email           String          @unique
+  email           String       @unique
   course          String?
   gender          String?
   hashedPassword  String
-  id              String          @id
+  id              String       @id
   image           String?
   linkedin        String?
   name            String?
@@ -43,15 +43,13 @@ model User {
   personal_email  String?
   roles           String?
   shirt           String?
-  telegram        String?        @default(0)
+  telegram        String?
   year            String?
   date_of_birth   DateTime?
-
-  isAdmin         Boolean?        @default(false)
-  announcements   Announcements[]
-  events          Event[]         @relation("EventToUser")
-  projects        Projects[]      @relation("ProjectsToUser")
-  Attendance      Attendance[]    @relation("attendanceToUser")
+  isAdmin         Boolean?     @default(false)
+  events          Event[]      @relation("EventToUser")
+  projects        Projects[]   @relation("ProjectsToUser")
+  Attendance      Attendance[] @relation("attendanceToUser")
   AttendanceTaken Attendance[]
 }
 
