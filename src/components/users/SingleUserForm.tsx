@@ -156,7 +156,7 @@ const roles = [
 
 const SingleUserForm = () => {
   const router = useRouter()
-  const { mutateAsync, isLoading } = trpc.member.createSingleUser.useMutation()
+  const { mutateAsync, isLoading } = trpc.user.createSingleUser.useMutation()
   const toast = useToast()
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
