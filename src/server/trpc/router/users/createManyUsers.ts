@@ -3,14 +3,14 @@ import { z } from 'zod'
 import { randomBytes } from 'crypto'
 import { hash } from 'bcryptjs'
 
-import { sendMultipleEmails } from './helper'
+import { sendMultipleEmails } from '../member/helper'
 import { type WriteBatch, doc, writeBatch } from 'firebase/firestore'
 import { db } from '~/server/db/firebase'
 import type { User } from '~/server/db/models/User'
 import logCollection from '~/server/db/collections/LogCollection'
 import { Timestamp } from 'firebase/firestore'
 
-export const createMultipleUsers = protectedProcedure
+export const createManyUsers = protectedProcedure
   .input(
     z.array(
       z.object({
