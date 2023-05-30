@@ -25,14 +25,18 @@ const ProfileCard = ({
   const router = useRouter()
   const redirectToResetPassword = () => router.push('/auth/forgetpassword')
 
-  const { isLoading, data } = trpc.member.getMemberImage.useQuery(studentId)
+  const {
+    isLoading,
+    data,
+    refetch: refetchImage,
+  } = trpc.user.getUserImage.useQuery(studentId)
 
   return (
     <Box className="mb-10 flex flex-col items-center">
       <Box className="relative">
         <Image
           alt="profile-pic"
-          src={isLoading || !data || !data.image ? DEFAULT_IMAGE : data.image}
+          src={isLoading || !data ? DEFAULT_IMAGE : data}
           fallbackSrc={DEFAULT_IMAGE}
           objectFit="cover"
           borderRadius="full"
@@ -40,7 +44,11 @@ const ProfileCard = ({
         />
         {session?.user?.id === studentId ? (
           <Box className="absolute bottom-0 right-0">
-            <UploadImageBtn refetch={refetch} studentId={studentId} />
+            <UploadImageBtn
+              refetchImage={refetchImage}
+              refetch={refetch}
+              studentId={studentId}
+            />
           </Box>
         ) : null}
       </Box>
