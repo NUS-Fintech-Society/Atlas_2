@@ -51,6 +51,7 @@ export const authOptions: NextAuthOptions = {
           // Step 3: Get the user by the email
           const users = await userCollection.queries([
             {
+              type: "where",
               fieldPath: 'email',
               direction: '==',
               value: email,

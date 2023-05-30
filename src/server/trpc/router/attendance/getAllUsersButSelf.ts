@@ -6,6 +6,7 @@ export const getAllAttendanceButSelf = protectedProcedure.query(async ({ ctx }) 
   try {
     const users = await userCollection.queries([
       {
+        type: "where",
         fieldPath: 'id',
         direction: '!=',
         value: ctx.session.user.id,

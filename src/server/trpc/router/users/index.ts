@@ -2,7 +2,7 @@ import { router } from '~/server/trpc/trpc'
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { TRPCError } from '@trpc/server'
 import { resetPassword } from './post'
-import { z } from 'zod'
+import { getAllUsersForTable } from './getAllUsersForTable'
 
 const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
@@ -24,39 +24,6 @@ const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
     })
   }
 })
-
-const getAllUsersForTable = protectedProcedure
-  .input(
-    z.object({
-      pageIndex: z.number(),
-      pageSize: z.number(),
-    })
-  )
-  .query(async ({ ctx, input }) => {
-    try {
-      const users = await ctx.prisma.user.findMany({
-        select: {
-          department: true,
-          email: true,
-          id: true,
-          name: true,
-          role: true,
-        },
-        skip: input.pageIndex * input.pageSize,
-        take: input.pageSize,
-      })
-
-      const total = await ctx.prisma.user.count()
-      const pageCount = Math.ceil(total / input.pageSize)
-
-      return { users, pageCount }
-    } catch (e) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: (e as Error).message,
-      })
-    }
-  })
 
 export const userRouter = router({
   getAllUsers,
