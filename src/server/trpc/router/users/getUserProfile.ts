@@ -5,9 +5,9 @@ import userCollection from '~/server/db/collections/UserCollection'
 
 export const getUserProfile = protectedProcedure
   .input(z.string())
-  .query(async ({ ctx }) => {
+  .query(async ({ input }) => {
     try {
-      return await userCollection.getById(ctx.session.user.id)
+      return await userCollection.getById(input)
     } catch (e) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',

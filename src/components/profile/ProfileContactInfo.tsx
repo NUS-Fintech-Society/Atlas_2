@@ -21,7 +21,7 @@ const ProfileContactInfo = (props: {
 }) => {
   const toast = useToast()
   const { isLoading: isSubmitting, mutateAsync } =
-    trpc.member.updateMemberContacts.useMutation()
+    trpc.user.updateUserContacts.useMutation()
 
   const [edit, setEdit] = useState(false)
   const onEdit = () => {
