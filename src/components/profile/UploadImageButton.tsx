@@ -5,18 +5,13 @@ import { Button, useToast } from '@chakra-ui/react'
 import EditIcon from './EditIcon'
 import { type QueryObserverResult } from '@tanstack/react-query'
 import { Message } from '~/constant/messages'
-
-// TODO: Fix the environment variables.
-import { storage } from '~/utils/storage'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { StorageService } from '~/utils/storage'
 
 const UploadImageBtn = ({
   studentId,
-  refetch,
-  refetchImage
+  refetchImage,
 }: {
   studentId: string
-  refetch: () => Promise<QueryObserverResult>
   refetchImage: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
@@ -35,9 +30,11 @@ const UploadImageBtn = ({
             title: Message.IMAGE_UPLOAD_LOADING,
             status: 'loading',
           })
-          const storageRef = ref(storage, `${studentId}/image/profile_pic`)
-          await uploadBytes(storageRef, e.target.files[0] as File)
-          const image = await getDownloadURL(storageRef)
+
+          const image = await StorageService.uploadFile(
+            e.target.files[0] as Blob,
+            `${studentId}/image/profile_pic`
+          )
           await mutateAsync({
             studentId,
             image,
@@ -59,7 +56,7 @@ const UploadImageBtn = ({
         })
       }
     },
-    [refetch, studentId, mutateAsync, toast]
+    [studentId, mutateAsync, toast, refetchImage]
   )
   return (
     <Button

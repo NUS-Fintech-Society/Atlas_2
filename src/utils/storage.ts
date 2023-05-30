@@ -1,5 +1,11 @@
 import { initializeApp } from 'firebase/app'
-import { getStorage } from 'firebase/storage'
+import {
+  ref,
+  getStorage,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage'
 import { env } from '~/env/client.mjs'
 
 const firebaseConfig = {
@@ -12,4 +18,17 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
-export const storage = getStorage(app)
+export class StorageService {
+  private static storage = getStorage(app)
+
+  static async uploadFile(file: Blob, pathName: string) {
+    const storageRef = ref(this.storage, pathName)
+    await uploadBytes(storageRef, file)
+    return await getDownloadURL(storageRef)
+  }
+
+  static async deleteFile(pathName: string) {
+    const storageRef = ref(this.storage, pathName)
+    await deleteObject(storageRef)
+  }
+}

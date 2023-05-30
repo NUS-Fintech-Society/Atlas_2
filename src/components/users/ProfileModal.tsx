@@ -34,6 +34,7 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import type { Session } from 'next-auth'
+import { StorageService } from '~/utils/storage'
 
 const defaultImage = '/150.png'
 
@@ -148,7 +149,7 @@ const UploadImageBtn = ({
   const toast = useToast()
   // trigger a click event on the file input element when button is clicked
   const uploadRef = useRef<HTMLInputElement>(null)
-  const { mutateAsync } = trpc.member.updateMemberImage.useMutation()
+  const { mutateAsync } = trpc.user.updateUserImage.useMutation()
   const onUpload = () => {
     uploadRef.current?.click()
   }
@@ -206,7 +207,7 @@ const DeleteImageBtn = ({
   studentId: string
 }) => {
   const toast = useToast()
-  const { mutateAsync } = trpc.member.deleteMemberImage.useMutation({
+  const { mutateAsync } = trpc.user.deleteUserImage.useMutation({
     onSuccess: () => {
       setImage(defaultImage)
     },
@@ -215,7 +216,8 @@ const DeleteImageBtn = ({
   // DELETE IMAGE LOGIC
   const handleDelete = async () => {
     try {
-      await mutateAsync(studentId)
+      await StorageService.deleteFile(`${studentId}/image/profile_pic`)
+      await mutateAsync()
       toast({
         duration: 3000,
         description: 'Image successfully deleted.',
