@@ -10,6 +10,8 @@ import { updateUserImage } from './updateUserImage'
 import { getUserImage } from './getUserImage'
 import { createSingleUser } from './createSingleUser'
 import { deleteUserImage } from './deleteUserImage'
+import { updateUserProfile } from './updateUserProfile'
+import { updateUserContacts } from './updateUserContacts'
 
 const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
@@ -42,5 +44,7 @@ export const userRouter = router({
   getUserImage,
   getUserProfile,
   resetPassword,
+  updateUserContacts,
   updateUserImage,
+  updateUserProfile,
 })

@@ -16,8 +16,6 @@ import {
   type WhereFilterOp,
   type FieldPath,
   orderBy,
-  startAt,
-  endAt,
   limit,
   getCountFromServer,
 } from 'firebase/firestore'

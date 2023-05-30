@@ -28,7 +28,6 @@ model Departments {
 
 model User {
   batch           String?
-  department      String       @default("")
   discord         String?
   email           String       @unique
   faculty         String?
@@ -42,13 +41,14 @@ model User {
   role            String
   telegram        String?
   total_events    Int?         @default(0)
-  wallet          String?
   year            String?
   isAdmin         Boolean?     @default(false)
+  wallet          String?
+  department      String       @default("")
+  AttendanceTaken Attendance[]
   events          Event[]      @relation("EventToUser")
   projects        Projects[]   @relation("ProjectsToUser")
   Attendance      Attendance[] @relation("attendanceToUser")
-  AttendanceTaken Attendance[]
 }
 
 model Event {
@@ -73,10 +73,10 @@ model Log {
 model Attendance {
   id      String @id
   eventId String
-  user    User   @relation(fields: [userId], references: [id])
-  Event   Event  @relation(fields: [eventId], references: [id])
-  User    User[] @relation("attendanceToUser")
   userId  String
+  Event   Event  @relation(fields: [eventId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+  User    User[] @relation("attendanceToUser")
 }
 
 enum LogType {
