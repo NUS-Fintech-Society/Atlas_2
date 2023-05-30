@@ -17,7 +17,7 @@ import { BsCircleFill } from 'react-icons/bs'
 const InfoPopup = () => {
   return (
     <Box className="bottom-25 absolute right-20">
-      <Popover placement="left">
+      <Popover placement="left" trigger="hover">
         <PopoverTrigger>
           <IconButton
             aria-label="Info popup for applicant detail"
@@ -29,8 +29,7 @@ const InfoPopup = () => {
             stroke="#02005A"
           />
         </PopoverTrigger>
-        <PopoverContent>
-          <PopoverCloseButton />
+        <PopoverContent rootProps={{ style: { right: 0 } }}>
           <PopoverBody>
             <UnorderedList styleType="none" spacing="2">
               <ListItem className="flex items-center">
