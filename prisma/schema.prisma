@@ -27,27 +27,31 @@ model Departments {
 }
 
 model User {
+  attendance      Int?            @default(0)
   batch           String?
-  department      String
-  discord         String?
-  email           String       @unique
-  faculty         String?
+  department      String?
+  diet            String?
+  email           String          @unique
+  course          String?
   gender          String?
   hashedPassword  String
-  id              String       @id
+  id              String          @id
   image           String?
-  major           String?
-  name            String
+  linkedin        String?
+  name            String?
+  phone           String?
   personal_email  String?
-  role            String
-  telegram        String?
-  total_events    Int?         @default(0)
-  wallet          String?
+  roles           String?
+  shirt           String?
+  telegram        String?        @default(0)
   year            String?
-  isAdmin         Boolean?     @default(false)
-  events          Event[]      @relation("EventToUser")
-  projects        Projects[]   @relation("ProjectsToUser")
-  Attendance      Attendance[] @relation("attendanceToUser")
+  date_of_birth   DateTime?
+
+  isAdmin         Boolean?        @default(false)
+  announcements   Announcements[]
+  events          Event[]         @relation("EventToUser")
+  projects        Projects[]      @relation("ProjectsToUser")
+  Attendance      Attendance[]    @relation("attendanceToUser")
   AttendanceTaken Attendance[]
 }
 
@@ -73,10 +77,10 @@ model Log {
 model Attendance {
   id      String @id
   eventId String
-  user    User   @relation(fields: [userId], references: [id])
-  Event   Event  @relation(fields: [eventId], references: [id])
-  User    User[] @relation("attendanceToUser")
   userId  String
+  Event   Event  @relation(fields: [eventId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+  User    User[] @relation("attendanceToUser")
 }
 
 enum LogType {

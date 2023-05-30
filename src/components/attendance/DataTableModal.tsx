@@ -22,7 +22,7 @@ import { type BodyProps } from '~/types/event/event.type'
 
 const DataTableModal = () => {
   const modal = useContext(EventModalContext)
-  const { data, isLoading } = trpc.event.getEventInfo.useQuery(modal.id)
+  const { data, isLoading } = trpc.attendance.getEventInfo.useQuery(modal.id)
 
   if (!modal.id) {
     return null
@@ -69,7 +69,7 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
       <p>Department: </p>
       <p>Start Date: {startDate}</p>
       <p>End Date: {endDate}</p>
-      <p>Attendance: {`${data._count.Attendance}/${data._count.attendees}`}</p>
+      <p>Attendance: {`${data.showup}/${data.invitedAttendees.length}`}</p>
       <p>Required Attendees:</p>
       <Table>
         <Thead>
@@ -80,14 +80,14 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
           <Th color="white">Attendance</Th>
         </Thead>
         <Tbody>
-          {data.attendees.map((attendee, index) => {
+          {data.invitedAttendees.map((attendee, index) => {
             return (
               <Tr key={index}>
                 <Td>{index + 1}</Td>
                 <Td>{attendee.name}</Td>
                 <Td>{attendee.department}</Td>
                 <Td>{attendee.role}</Td>
-                <Td>{data.attended.has(attendee.id) ? 'Yes' : 'No'}</Td>
+                <Td>{attendee.attended ? 'Yes' : 'No'}</Td>
               </Tr>
             )
           })}

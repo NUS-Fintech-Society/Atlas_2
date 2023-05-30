@@ -34,6 +34,7 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import type { Session } from 'next-auth'
+import { StorageService } from '~/utils/storage'
 
 const defaultImage = '/150.png'
 
@@ -45,7 +46,7 @@ const ProfilePage = ({
   session: Session
 }) => {
   // TRPC USEQUERY HOOK: SET REFETCH TO FALSE TO CACHE THE DATA
-  const { data, isLoading, isError } = trpc.member.getMemberProfile.useQuery(
+  const { data, isLoading, isError } = trpc.user.getUserProfile.useQuery(
     studentId,
     {
       refetchOnWindowFocus: false,
@@ -56,48 +57,43 @@ const ProfilePage = ({
   if (isLoading) return <LoadingScreen />
 
   // IF THERE IS SOMETHING WRONG WITH FETCHING THE USER, THROW AN ERROR
-  if (!data || !data.user || isError) {
+  if (!data || isError) {
     return <p className="text-3xl">Something is wrong</p>
   }
 
   return (
     <div className="mt-4 flex flex-wrap justify-between gap-6">
-      <ProfileInfo {...data.user} />
+      {/* <ProfileInfo {...data} /> */}
       <div className="flex flex-col">
         <ProfilePicture studentId={studentId} session={session} />
-        <ProfileContactInfo {...data.user} />
+        {/* <ProfileContactInfo {...data} /> */}
       </div>
     </div>
   )
 }
 
-const ProfileContactInfo = (props: {
-  telegram: string | null
-  discord: string | null
-  personal_email: string | null
-  email: string
-}) => {
-  return (
-    <Box className="flex flex-col gap-1">
-      <Box className="flex items-center gap-1">
-        <BsTelegram className="fill-[#0088cc]" />
-        <p>{props.telegram}</p>
-      </Box>
-      <Box className="flex items-center gap-1">
-        <BsDiscord className="fill-[#5865F2]" />
-        <p>{props.discord}</p>
-      </Box>
-      <Box className="flex items-center gap-1">
-        <BsEnvelopeFill />
-        <p>{props.personal_email}</p>
-      </Box>
-      <Box className="flex items-center gap-1">
-        <BsEnvelopeFill className="fill-blue-300" />
-        <p>{props.email}</p>
-      </Box>
-    </Box>
-  )
-}
+// const ProfileContactInfo = (props: { email: string }) => {
+//   return (
+//     <Box className="flex flex-col gap-1">
+//       <Box className="flex items-center gap-1">
+//         <BsTelegram className="fill-[#0088cc]" />
+//         <p>{props.telegram}</p>
+//       </Box>
+//       <Box className="flex items-center gap-1">
+//         <BsDiscord className="fill-[#5865F2]" />
+//         <p>{props.discord}</p>
+//       </Box>
+//       <Box className="flex items-center gap-1">
+//         <BsEnvelopeFill />
+//         <p>{props.personal_email}</p>
+//       </Box>
+//       <Box className="flex items-center gap-1">
+//         <BsEnvelopeFill className="fill-blue-300" />
+//         <p>{props.email}</p>
+//       </Box>
+//     </Box>
+//   )
+// }
 
 const ProfilePicture = ({
   studentId,
@@ -108,11 +104,11 @@ const ProfilePicture = ({
 }) => {
   const [image, setImage] = useState(defaultImage)
 
-  trpc.member.getMemberImage.useQuery(studentId, {
+  trpc.user.getUserImage.useQuery(studentId, {
     refetchOnWindowFocus: false,
     onSuccess(data) {
-      if (!data || !data.image) return
-      setImage(data.image)
+      if (!data) return
+      setImage(data)
     },
   })
 
@@ -148,7 +144,7 @@ const UploadImageBtn = ({
   const toast = useToast()
   // trigger a click event on the file input element when button is clicked
   const uploadRef = useRef<HTMLInputElement>(null)
-  const { mutateAsync } = trpc.member.updateMemberImage.useMutation()
+  const { mutateAsync } = trpc.user.updateUserImage.useMutation()
   const onUpload = () => {
     uploadRef.current?.click()
   }
@@ -206,7 +202,7 @@ const DeleteImageBtn = ({
   studentId: string
 }) => {
   const toast = useToast()
-  const { mutateAsync } = trpc.member.deleteMemberImage.useMutation({
+  const { mutateAsync } = trpc.user.deleteUserImage.useMutation({
     onSuccess: () => {
       setImage(defaultImage)
     },
@@ -215,7 +211,8 @@ const DeleteImageBtn = ({
   // DELETE IMAGE LOGIC
   const handleDelete = async () => {
     try {
-      await mutateAsync(studentId)
+      await StorageService.deleteFile(`${studentId}/image/profile_pic`)
+      await mutateAsync()
       toast({
         duration: 3000,
         description: 'Image successfully deleted.',

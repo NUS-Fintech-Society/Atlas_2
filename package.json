@@ -33,6 +33,7 @@
     "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.7",
+    "firebase": "^9.22.1",
     "flowbite": "^1.6.5",
     "flowbite-react": "^0.4.4",
     "framer-motion": "^9.0.4",

@@ -53,9 +53,10 @@ const UserActionRequired: React.FC<UserActionRequiredProp> = ({
 const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
   const route = useRouter()
   const eventId = route.query.id as string
-  const { data, isLoading, refetch } = trpc.event.getEvent.useQuery(eventId)
+  const { data, isLoading, refetch } =
+    trpc.attendance.getEventForUser.useQuery(eventId)
   const { mutateAsync, isLoading: loading } =
-    trpc.event.markAttendance.useMutation()
+    trpc.attendance.markAttendance.useMutation()
   dayjs.extend(LocalizedFormat)
 
   const markAttendance = useCallback(async () => {
@@ -86,7 +87,7 @@ const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
                 {data.name}
               </h1>
               <h1 className="mb-2 self-center text-center text-3xl font-medium">
-                {dayjs(data.startDate).format('lll')}
+                {dayjs(data.startDate.toDate()).format('lll')}
               </h1>
               <UserActionRequired
                 isAttendanceRequired={data.isAttendanceRequired}

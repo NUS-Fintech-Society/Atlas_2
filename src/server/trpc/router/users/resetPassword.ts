@@ -1,37 +1,33 @@
 import { publicProcedure } from '../../trpc'
 import { z } from 'zod'
-import { TRPCError } from '@trpc/server'
-import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
+import { transporter } from '../util/transporter'
+import userCollection from '~/server/db/collections/UserCollection'
+import logCollection from '~/server/db/collections/LogCollection'
+import { Timestamp } from 'firebase/firestore'
 
 export const resetPassword = publicProcedure
   .input(z.string())
-  .mutation(async ({ ctx, input }) => {
+  .mutation(async ({ input: email }) => {
     try {
-      const email = input
-      const foundUser = await ctx.prisma.user.findFirst({
-        where: {
-          email,
+      const foundUser = await userCollection.queries([
+        {
+          type: 'where',
+          fieldPath: 'email',
+          direction: '==',
+          value: email,
         },
-      })
+      ])
 
       // Do not tell the user if the account cannot be found for security reasons
-      if (!foundUser) return
-
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: env.GMAIL,
-          pass: env.GMAIL_PASSWORD,
-        },
-      })
+      if (!foundUser.length) return
 
       await transporter.sendMail({
         from: env.GMAIL,
         to: email,
         subject: 'Reset Password',
         html: `
-            Hi ${foundUser.name || 'user'},
+            Hi ${foundUser[0]?.name || 'user'},
             <br />
             <p>A request to reset your account's password has been made. 
             If you did not make this request, please ignore the email.
@@ -42,9 +38,11 @@ export const resetPassword = publicProcedure
           `,
       })
     } catch (e) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: (e as Error).message,
+      await logCollection.add({
+        level: 'WARNING',
+        title: 'Error resetting password',
+        description: (e as Error).message,
+        createdAt: Timestamp.fromDate(new Date()),
       })
     }
   })
