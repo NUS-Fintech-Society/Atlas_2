@@ -1,8 +1,10 @@
 import { router } from '~/server/trpc/trpc'
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { TRPCError } from '@trpc/server'
-import { resetPassword } from './post'
+import { resetPassword } from './resetPassword'
+import { changePassword } from './changePassword'
 import { getAllUsersForTable } from './getAllUsersForTable'
+import { getUserProfile } from './getUserProfile'
 
 const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
@@ -26,7 +28,9 @@ const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
 })
 
 export const userRouter = router({
+  changePassword,
   getAllUsers,
   getAllUsersForTable,
+  getUserProfile,
   resetPassword,
 })
