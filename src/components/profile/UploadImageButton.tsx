@@ -7,7 +7,8 @@ import { type QueryObserverResult } from '@tanstack/react-query'
 import { Message } from '~/constant/messages'
 
 // TODO: Fix the environment variables.
-
+import { storage } from '~/utils/storage'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const UploadImageBtn = ({
   studentId,
@@ -31,8 +32,13 @@ const UploadImageBtn = ({
           title: Message.IMAGE_UPLOAD_LOADING,
           status: 'loading',
         })
-
-
+        const storageRef = ref(storage, `${studentId}/image/profile_pic`)
+        await uploadBytes(storageRef, e.target.files[0] as File)
+        const image = await getDownloadURL(storageRef)
+        await mutateAsync({
+          studentId,
+          image,
+        })
         await refetch()
         toast({
           duration: 3000,

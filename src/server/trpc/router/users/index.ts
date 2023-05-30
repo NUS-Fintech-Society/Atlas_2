@@ -5,6 +5,7 @@ import { resetPassword } from './resetPassword'
 import { changePassword } from './changePassword'
 import { getAllUsersForTable } from './getAllUsersForTable'
 import { getUserProfile } from './getUserProfile'
+import { createManyUsers } from './createManyUsers'
 
 const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
   try {
@@ -29,6 +30,7 @@ const getAllUsers = protectedProcedure.query(async ({ ctx }) => {
 
 export const userRouter = router({
   changePassword,
+  createManyUsers,
   getAllUsers,
   getAllUsersForTable,
   getUserProfile,
