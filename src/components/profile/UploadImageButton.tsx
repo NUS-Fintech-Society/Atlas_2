@@ -1,4 +1,4 @@
-import { type ChangeEvent, useRef } from 'react'
+import { type ChangeEvent, useRef, useCallback } from 'react'
 import { trpc } from '../../utils/trpc'
 import { IconContext } from 'react-icons'
 import { Button, useToast } from '@chakra-ui/react'
@@ -13,49 +13,54 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 const UploadImageBtn = ({
   studentId,
   refetch,
+  refetchImage
 }: {
   studentId: string
   refetch: () => Promise<QueryObserverResult>
+  refetchImage: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
   // trigger a click event on the file input element when button is clicked
   const uploadRef = useRef<HTMLInputElement>(null)
-  const { mutateAsync } = trpc.member.updateMemberImage.useMutation()
+  const { mutateAsync } = trpc.user.updateUserImage.useMutation()
   const onUpload = () => {
     uploadRef.current?.click()
   }
-  const handleFileSelected = async (e: ChangeEvent<HTMLInputElement>) => {
-    try {
-      if (e.target.files) {
-        toast({
-          duration: 1000,
-          title: Message.IMAGE_UPLOAD_LOADING,
-          status: 'loading',
-        })
-        const storageRef = ref(storage, `${studentId}/image/profile_pic`)
-        await uploadBytes(storageRef, e.target.files[0] as File)
-        const image = await getDownloadURL(storageRef)
-        await mutateAsync({
-          studentId,
-          image,
-        })
-        await refetch()
+  const handleFileSelected = useCallback(
+    async (e: ChangeEvent<HTMLInputElement>) => {
+      try {
+        if (e.target.files) {
+          toast({
+            duration: 1000,
+            title: Message.IMAGE_UPLOAD_LOADING,
+            status: 'loading',
+          })
+          const storageRef = ref(storage, `${studentId}/image/profile_pic`)
+          await uploadBytes(storageRef, e.target.files[0] as File)
+          const image = await getDownloadURL(storageRef)
+          await mutateAsync({
+            studentId,
+            image,
+          })
+          await refetchImage()
+          toast({
+            duration: 3000,
+            description: Message.IMAGE_UPLOAD_SUCCESS,
+            title: 'Success',
+            status: 'success',
+          })
+        }
+      } catch (e) {
         toast({
           duration: 3000,
-          description: Message.IMAGE_UPLOAD_SUCCESS,
-          title: 'Success',
-          status: 'success',
+          description: Message.IMAGE_UPLOAD_ERROR,
+          status: 'error',
+          title: 'Something went wrong',
         })
       }
-    } catch (e) {
-      toast({
-        duration: 3000,
-        description: Message.IMAGE_UPLOAD_ERROR,
-        status: 'error',
-        title: 'Something went wrong',
-      })
-    }
-  }
+    },
+    [refetch, studentId, mutateAsync, toast]
+  )
   return (
     <Button
       variant="ghost"

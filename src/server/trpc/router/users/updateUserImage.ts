@@ -1,24 +1,19 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
+import userCollection from '~/server/db/collections/UserCollection'
 
-export const updateMemberImage = protectedProcedure
+export const updateUserImage = protectedProcedure
   .input(
     z.object({
       image: z.string(),
       studentId: z.string(),
     })
   )
-  .mutation(async ({ ctx, input }) => {
-    const user = await ctx.prisma.user.update({
-      where: {
-        id: input.studentId,
-      },
-      data: {
-        image: input.image,
-      },
+  .mutation(async ({ input }) => {
+    await userCollection.update(input.studentId, {
+      image: input.image,
     })
-    return user
   })
 
 export const updateProfile = protectedProcedure
