@@ -12,7 +12,7 @@ import {
   Tr,
 } from '@chakra-ui/react'
 import { useContext } from 'react'
-import { EventModalContext } from '~/context/events/EventModalContext'
+import { ModalContext } from '~/context/ModalContext'
 import { trpc } from '~/utils/trpc'
 import LoadingScreen from '../common/LoadingScreen'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
@@ -21,7 +21,7 @@ import Image from 'next/image'
 import { type BodyProps } from '~/types/event/event.type'
 
 const DataTableModal = () => {
-  const modal = useContext(EventModalContext)
+  const modal = useContext(ModalContext)
   const { data, isLoading } = trpc.attendance.getEventInfo.useQuery(modal.id)
 
   if (!modal.id) {

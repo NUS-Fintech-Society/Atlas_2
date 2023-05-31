@@ -19,7 +19,7 @@ import {
   type SortingState,
   getSortedRowModel,
 } from '@tanstack/react-table'
-import { EventModalContext } from '~/context/events/EventModalContext'
+import { ModalContext } from '~/context/ModalContext'
 import DataTableModal from './DataTableModal'
 import { type EventInfos } from '~/types/event/event.type'
 
@@ -184,7 +184,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, columns }) => {
           ))}
         </Tbody>
       </Table>
-      <EventModalContext.Provider
+      <ModalContext.Provider
         value={{
           isOpen,
           id,
@@ -192,7 +192,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, columns }) => {
         }}
       >
         <DataTableModal />
-      </EventModalContext.Provider>
+      </ModalContext.Provider>
     </Box>
   )
 }

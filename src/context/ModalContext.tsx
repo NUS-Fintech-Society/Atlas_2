@@ -1,12 +1,12 @@
 import { createContext } from 'react'
 
-type EventModalType = {
+type ModalType = {
   id: string
   isOpen: boolean
   onClose: () => void
 }
 
-export const EventModalContext = createContext<EventModalType>({
+export const ModalContext = createContext<ModalType>({
   id: '',
   isOpen: false,
   onClose: () => {

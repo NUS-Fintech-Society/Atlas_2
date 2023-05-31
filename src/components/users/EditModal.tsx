@@ -17,20 +17,20 @@ import {
 
 import { useForm } from 'react-hook-form'
 import { trpc } from '~/utils/trpc'
+import { useContext } from 'react'
+import { ModalContext } from '~/context/ModalContext'
+import type { User } from '~/server/db/models/User'
 
-interface editModalProps {
-  editIsOpen: boolean
-  editOnClose: () => void
-  data: any
-}
-
-const EditModal: React.FC<editModalProps> = (props) => {
+const EditModal = () => {
+  const modal = useContext(ModalContext)
+  const toast = useToast()
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
   })
 
+  const { data, isLoading } = trpc.user.getUserProfile.useQuery(modal.id)
   const { mutateAsync } = trpc.user.updateUserProfile.useMutation()
-  const toast = useToast()
+
   const onSubmit = async (data: any) => {
     try {
       const projData = {
@@ -57,8 +57,10 @@ const EditModal: React.FC<editModalProps> = (props) => {
     }
   }
 
+  if (!modal.id || isLoading) return null
+
   return (
-    <Modal isOpen={props.editIsOpen} onClose={props.editOnClose}>
+    <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={handleSubmit((data) => onSubmit(data))}>
@@ -73,7 +75,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
                 {...register('id')}
                 mb={'5'}
                 type="text"
-                defaultValue={props.data.id}
+                defaultValue={(data as User).id}
               />
 
               <FormLabel fontWeight={'semibold'}>Name</FormLabel>
@@ -81,7 +83,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
                 mb={'5'}
                 type="text"
                 {...register('name')}
-                defaultValue={props.data.name}
+                defaultValue={(data as User).name}
               />
 
               <FormLabel fontWeight={'semibold'}>Email address</FormLabel>
@@ -89,14 +91,14 @@ const EditModal: React.FC<editModalProps> = (props) => {
                 mb={'5'}
                 {...register('email')}
                 type="email"
-                defaultValue={props.data.email}
+                defaultValue={(data as User).email}
               />
 
               <FormLabel fontWeight={'semibold'}>Department</FormLabel>
               <Select
                 mb={'5'}
                 {...register('department')}
-                defaultValue={props.data.department}
+                defaultValue={(data as User).department}
               >
                 <option value="EXCO">EXCO</option>
                 <option value="Software Development">
@@ -108,7 +110,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
               <Select
                 mb={'5'}
                 {...register('roles')}
-                defaultValue={props.data.roles}
+                defaultValue={(data as User).role}
               >
                 <option value="President">President</option>
                 <option value="Vice">Vice</option>
@@ -118,7 +120,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button variant={'ghost'} mr={3} onClick={props.editOnClose}>
+            <Button variant={'ghost'} mr={3} onClick={modal.onClose}>
               Close
             </Button>
             <Button colorScheme="facebook" type="submit">
