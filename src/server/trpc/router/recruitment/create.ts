@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs'
 import { randomUUID } from 'crypto'
 import { z } from 'zod'
 import { protectedProcedure } from '~/server/trpc/trpc'
-import { ErrorTitle } from '../../constants/ErrorTitle'
+import { ErrorTitle } from '../constants/ErrorTitle'
 
 export const createSingleApplicant = protectedProcedure
   .input(
