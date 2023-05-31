@@ -62,7 +62,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
           Recruitment
         </Navbar.Link>
         <Navbar.Link href="/application_status" className="ml-4 text-white">
-          Application status
+          Application Status
         </Navbar.Link>
         <Navbar.Link href="/tasks" className="ml-4 text-white">
           Tasks
