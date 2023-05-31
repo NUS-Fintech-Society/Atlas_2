@@ -48,7 +48,7 @@ const application_status:React.FC<BaseProps> = ({ session }) =>{
           {/* Login */}
           <div className="flex flex-col justify-center gap-8 font-[Inter]">
           
-            <h1 className='flex justify-center font-bold text-8xl mt-10'>
+            <h1 className='flex justify-center font-bold text-8xl mt-4'>
               Hi User,
             </h1>
             <h2 className='flex justify-center  mt-3 font-bold text-6xl'>
@@ -117,7 +117,7 @@ const application_status:React.FC<BaseProps> = ({ session }) =>{
             }
             
             
-            <div className="flex justify-center items-center mt-[80px]">
+            <div className="flex justify-center items-center mt-5">
             {application_status != "rejected" &&
             <button
           
