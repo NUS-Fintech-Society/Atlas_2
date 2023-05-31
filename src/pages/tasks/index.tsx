@@ -16,11 +16,8 @@ enum PageState {
 }
 
 const tasks:React.FC<BaseProps> = ({ session }) => {
-  const { status } = useSession()
-  //this part needs backend to update the status
-  const [pageState, setPageState] = useState(PageState.LOGIN)
+
   const [searchQuery, setSearchQuery] = useState('')
-  const [showModal, setShowModal] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [currentDetails, setCurrentDetails] = useState('')
   const [currentName, setCurrentName] = useState('')
@@ -125,13 +122,13 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
   >
     {/* Column headings */}
     <GridItem colSpan={1} className="justify-content-center flex flex-col">
-      <h1 className="text-lg font-bold text-white">Status</h1>
+      <h1 className="text-xl font-bold text-white">Status</h1>
     </GridItem>
     <GridItem colSpan={1} className="justify-content-center flex flex-col">
-      <h1 className="text-lg font-bold text-white">Task</h1>
+      <h1 className="text-xl font-bold text-white">Task</h1>
     </GridItem>
     <GridItem colSpan={1} className="justify-content-center flex flex-col">
-      <h1 className="text-lg font-bold text-white">Do By</h1>
+      <h1 className="text-xl font-bold text-white">Do By</h1>
     </GridItem>
     </Grid>
 
