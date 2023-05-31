@@ -1,5 +1,4 @@
 import { Box, Table, TableContainer, Tbody, Td, Tr } from '@chakra-ui/react'
-import type { Projects } from '@prisma/client'
 
 type ProfilePageType = {
   gender: string | null
