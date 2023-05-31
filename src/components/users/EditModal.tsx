@@ -14,48 +14,56 @@ import {
   Select,
   useToast,
 } from '@chakra-ui/react'
-
 import { useForm } from 'react-hook-form'
 import { trpc } from '~/utils/trpc'
-import { useContext } from 'react'
+import { useContext, useCallback, useState } from 'react'
 import { ModalContext } from '~/context/ModalContext'
 import type { User } from '~/server/db/models/User'
+import { roles } from '~/constant/roles'
 
 const EditModal = () => {
   const modal = useContext(ModalContext)
   const toast = useToast()
+  const [department, setDepartment] = useState('')
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
   })
 
-  const { data, isLoading } = trpc.user.getUserProfile.useQuery(modal.id)
-  const { mutateAsync } = trpc.user.updateUserProfile.useMutation()
+  const { data, isLoading, refetch } = trpc.user.getUserProfile.useQuery(
+    modal.id
+  )
+  const { mutateAsync, isLoading: loading } =
+    trpc.user.updateUserProfile.useMutation()
 
-  const onSubmit = async (data: any) => {
-    try {
-      const projData = {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        department: data.department,
-        role: data.roles,
+  const onSubmit = useCallback(
+    async (data: Partial<User>) => {
+      try {
+        const projData = {
+          id: data.id as string,
+          name: data.name as string,
+          email: data.email as string,
+          department,
+          role: data.role as string,
+        }
+        await mutateAsync(projData)
+        await refetch()
+        toast({
+          duration: 9000,
+          description: 'User has been successfully updated',
+          title: 'Successfully updated',
+          status: 'success',
+        })
+      } catch (e) {
+        toast({
+          duration: 9000,
+          description: (e as Error).message,
+          title: 'Oops, something went wrong',
+          status: 'error',
+        })
       }
-      await mutateAsync(projData)
-      toast({
-        duration: 9000,
-        description: 'User has been successfully updated',
-        title: 'Successfully updated',
-        status: 'success',
-      })
-    } catch (e) {
-      toast({
-        duration: 9000,
-        description: (e as Error).message,
-        title: 'Oops, something went wrong',
-        status: 'error',
-      })
-    }
-  }
+    },
+    [mutateAsync, toast, department, refetch]
+  )
 
   if (!modal.id || isLoading) return null
 
@@ -94,28 +102,28 @@ const EditModal = () => {
                 defaultValue={(data as User).email}
               />
 
-              <FormLabel fontWeight={'semibold'}>Department</FormLabel>
-              <Select
-                mb={'5'}
-                {...register('department')}
-                defaultValue={(data as User).department}
-              >
-                <option value="EXCO">EXCO</option>
-                <option value="Software Development">
-                  Software Development
-                </option>
-              </Select>
-
               <FormLabel fontWeight={'semibold'}>Role</FormLabel>
               <Select
-                mb={'5'}
-                {...register('roles')}
-                defaultValue={(data as User).role}
+                marginBottom={5}
+                isRequired
+                {...register("role")}
+                onChange={(e) => {
+                  if (!e.target.value) return
+                  const element = roles.filter(
+                    (role) => role.role === e.target.value
+                  )
+                  if (!element || !element.length || !element[0]) return
+                  setDepartment(element[0].department)
+                }}
+                placeholder="Select role"
               >
-                <option value="President">President</option>
-                <option value="Vice">Vice</option>
-                <option value="SWE">SWE</option>
-                <option value="Director">Director</option>
+                {roles.map((role, index) => {
+                  return (
+                    <option key={index} value={role.role}>
+                      {role.role} ({role.department})
+                    </option>
+                  )
+                })}
               </Select>
             </FormControl>
           </ModalBody>
@@ -123,7 +131,7 @@ const EditModal = () => {
             <Button variant={'ghost'} mr={3} onClick={modal.onClose}>
               Close
             </Button>
-            <Button colorScheme="facebook" type="submit">
+            <Button colorScheme="facebook" type="submit" disabled={loading}>
               Submit
             </Button>
           </ModalFooter>
