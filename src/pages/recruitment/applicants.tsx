@@ -1,6 +1,5 @@
-import { Text } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import Head from 'next/head'
-import Layout from '~/components/common/Layout'
 import TopNavbar from '~/components/common/TopNavbar'
 import SearchBar from '~/components/common/SearchBar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
@@ -19,13 +18,13 @@ const ApplicantsPage: React.FC<BaseProps> = ({ session }) => {
         />
       </Head>
       <TopNavbar isAdmin={session.isAdmin} />
-      <Layout>
+      <Box position="relative" mt="10">
         <Text className="text-center text-4xl font-bold">Applicants</Text>
         <SearchProvider>
           <SearchBar />
           <ApplicantGrid />
         </SearchProvider>
-      </Layout>
+      </Box>
     </>
   )
 }
