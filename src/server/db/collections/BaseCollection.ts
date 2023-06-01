@@ -7,25 +7,15 @@ import {
   query,
   getDocs,
   addDoc,
-  where,
   deleteDoc,
   updateDoc,
   type Transaction,
   type WithFieldValue,
   type DocumentData,
-  type WhereFilterOp,
-  type FieldPath,
-  orderBy,
-  limit,
   getCountFromServer,
+  type QueryConstraint,
+  type Query,
 } from 'firebase/firestore'
-
-type Queries<T> = {
-  fieldPath?: keyof T
-  direction?: WhereFilterOp
-  value?: T[keyof T] | number
-  type: 'where' | 'orderBy' | 'limit'
-}
 
 export abstract class BaseCollection<T> {
   protected abstract collectionName: string
@@ -67,22 +57,14 @@ export abstract class BaseCollection<T> {
     return { ...result.data(), id: result.id as string } as T
   }
 
-  async queries(queries: Queries<T>[]) {
-    const items = queries.map((q) => {
-      switch (q.type) {
-        case 'where':
-          return where(
-            q.fieldPath as string | FieldPath,
-            q.direction as WhereFilterOp,
-            q.value
-          )
-        case 'orderBy':
-          return orderBy(q.fieldPath as string | FieldPath)
-        case 'limit':
-          return limit(q.value as number)
-      }
-    })
-    const q = query(collection(db, this.collectionName), ...items)
+  async queries(queries?: QueryConstraint[]) {
+    let q: Query<DocumentData>
+    if (queries) {
+      q = query(collection(db, this.collectionName), ...queries)
+    } else {
+      q = query(collection(db, this.collectionName))
+    }
+
     const snapshots = await getDocs(q)
     return snapshots.docs.map((doc) => {
       return { ...doc.data(), id: doc.id as string } as T
