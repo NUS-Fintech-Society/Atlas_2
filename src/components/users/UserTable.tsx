@@ -29,7 +29,7 @@ const UserTable = ({ session }: { session: Session }) => {
           colorScheme="black"
           onClick={(e) => {
             e.preventDefault()
-            setSelected(data.id)
+            setSelected(data.id as string)
             onOpen()
           }}
         >
