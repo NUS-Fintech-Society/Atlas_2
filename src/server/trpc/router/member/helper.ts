@@ -1,29 +1,8 @@
 import { TRPCError } from '@trpc/server'
 import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
-import type { User } from '@prisma/client'
-import { type PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
 import userCollection from '~/server/db/collections/UserCollection'
-
-/**
- * Validates whether the user has the necessary permissions
- *
- * @param id The student id of the user
- * @throws {TRPCError} if the user does not have permission
- */
-async function checkUserPermission(id: string, prisma: PrismaClient) {
-  const personMakingRequest = await prisma.user.findUnique({
-    where: { id },
-  })
-
-  if (!personMakingRequest || !personMakingRequest.isAdmin) {
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'User is not authorized to create a new account',
-    })
-  }
-}
 
 /**
  * Validates whether the user already exists in the database
@@ -148,22 +127,4 @@ async function sendMultipleEmails(emails: string[], password: string) {
   )
 }
 
-/**
- * Creates many users in the database
- *
- * @param users The array of users object
- */
-async function createManyUsers(users: User[], prisma: PrismaClient) {
-  await prisma.user.createMany({
-    data: users,
-  })
-}
-
-export {
-  createManyUsers,
-  checkUserPermission,
-  checkIfUserExist,
-  sendEmail,
-  sendMultipleEmails,
-  buildUserObject,
-}
+export { checkIfUserExist, sendEmail, sendMultipleEmails, buildUserObject }

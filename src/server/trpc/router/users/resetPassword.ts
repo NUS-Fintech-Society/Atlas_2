@@ -4,19 +4,14 @@ import { env } from '~/env/server.mjs'
 import { transporter } from '../util/transporter'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
-import { Timestamp } from 'firebase/firestore'
+import { Timestamp, where } from 'firebase/firestore'
 
 export const resetPassword = publicProcedure
   .input(z.string())
   .mutation(async ({ input: email }) => {
     try {
       const foundUser = await userCollection.queries([
-        {
-          type: 'where',
-          fieldPath: 'email',
-          direction: '==',
-          value: email,
-        },
+        where('email', '==', email),
       ])
 
       // Do not tell the user if the account cannot be found for security reasons

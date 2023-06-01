@@ -2,9 +2,9 @@ import { BaseCollection } from './BaseCollection'
 import type { AppliedRole } from '../models/AppliedRole'
 
 class AppliedRoleCollection extends BaseCollection<AppliedRole> {
-  protected override collectionName = 'appliedroles'
-  protected override objectName = 'appliedrole'
+  protected override collectionName = 'applied_roles'
+  protected override objectName = 'applied role'
 }
 
-const userCollection = new AppliedRoleCollection()
-export default userCollection
+const appliedRoleCollection = new AppliedRoleCollection()
+export default appliedRoleCollection

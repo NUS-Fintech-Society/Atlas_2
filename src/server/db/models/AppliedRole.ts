@@ -1,17 +1,14 @@
-import type { User } from './User'
-
-export type AppliedRole = {
-  rank: number
+type Roles = {
+  rank: 1 | 2 | 3
   department: string
   role: string
-  status: ApplicationStatus
-  applicant: User
-}
+  status: 'accepted' | 'offered' | 'pending' | 'interviewed' | 'rejected'
+  interviewNotes: string
+}[]
 
-export enum ApplicationStatus {
-  ACCEPTED = 'Accepted',
-  OFFERED = 'Offered',
-  PENDINGREVIEW = 'Pending Review',
-  INTERVIEWED = 'Interviewed',
-  REJECTED = 'Rejected',
+export type AppliedRole = {
+  email: string
+  id?: string
+  name: string
+  roles: Roles
 }
