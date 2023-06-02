@@ -1,5 +1,3 @@
-import type { ApplicationStatus } from '~/constant/applicationStatus'
-
 export type AppliedRole = {
   applicantId: string
   id: string
@@ -8,4 +6,12 @@ export type AppliedRole = {
   interviewNotes?: string
   role: string
   status: ApplicationStatus
+}
+
+export enum ApplicationStatus {
+  ACCEPTED = 'accepted',
+  OFFERED = 'offered',
+  PENDING = 'pending',
+  INTERVIEWED = 'interviewed',
+  REJECTED = 'rejected',
 }
