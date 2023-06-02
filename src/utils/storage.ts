@@ -5,6 +5,7 @@ import {
   uploadBytes,
   getDownloadURL,
   deleteObject,
+  listAll,
 } from 'firebase/storage'
 import { env } from '~/env/client.mjs'
 
@@ -30,5 +31,23 @@ export class StorageService {
   static async deleteFile(pathName: string) {
     const storageRef = ref(this.storage, pathName)
     await deleteObject(storageRef)
+  }
+
+  // returns a list of URL associated with the path
+  static async getFiles(pathName: string) {
+    const storageRef = ref(this.storage, pathName)
+    const urlList: string[] = []
+    listAll(storageRef)
+      .then((res) => {
+        res.items.forEach((item) => {
+          getDownloadURL(item).then((url) => {
+            urlList.push(url)
+          })
+        })
+      })
+      .catch((err) => {
+        console.log('Error while retrieving file from firestore: ', err)
+      })
+    return urlList
   }
 }

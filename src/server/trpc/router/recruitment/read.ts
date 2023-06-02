@@ -1,20 +1,32 @@
 import { TRPCError } from '@trpc/server'
+import { where } from 'firebase/firestore'
 import { z } from 'zod'
+import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
+import userCollection from '~/server/db/collections/UserCollection'
+import type { Applicant } from '~/server/db/models/Applicant'
 import { protectedProcedure } from '~/server/trpc/trpc'
 
-export const getAllApplicants = protectedProcedure.query(async ({ ctx }) => {
+export const getAllApplicants = protectedProcedure.query(async ({}) => {
   try {
-    return await ctx.prisma.user.findMany({
-      where: {
-        role: 'Applicant',
-      },
-      select: {
-        id: true,
-        name: true,
-        interviewNotes: true,
-        appliedRoles: true,
-      },
-    })
+    const applicants = await userCollection.queries([
+      where('role', '==', 'Applicant'),
+    ])
+    const applicantsWithRoles: Applicant[] = []
+
+    for (let i = 0; i < applicants.length; i++) {
+      const applicant = applicants[i]
+      if (applicant) {
+        const appliedRoles = await appliedRoleCollection.queries([
+          where('applicantId', '==', applicant.id),
+        ])
+        applicantsWithRoles.push({
+          id: applicant?.id,
+          name: applicant?.name,
+          appliedRoles: appliedRoles,
+        })
+      }
+    }
+    return applicantsWithRoles
   } catch (error) {
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
@@ -25,18 +37,17 @@ export const getAllApplicants = protectedProcedure.query(async ({ ctx }) => {
 
 export const getApplicant = protectedProcedure
   .input(z.string())
-  .query(async ({ ctx, input }) => {
+  .query(async ({ input }) => {
     try {
-      return await ctx.prisma.user.findUnique({
-        where: {
-          id: input,
-        },
-        select: {
-          name: true,
-          interviewNotes: true,
-          appliedRoles: true,
-        },
-      })
+      const applicant = await userCollection.getById(input)
+      const appliedRoles = await appliedRoleCollection.queries([
+        where('applicantId', '==', applicant.id),
+      ])
+      return {
+        id: applicant.id,
+        name: applicant.name,
+        appliedRoles: appliedRoles,
+      }
     } catch (error) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
@@ -47,23 +58,13 @@ export const getApplicant = protectedProcedure
 
 export const getAppliedRole = protectedProcedure
   .input(z.string())
-  .query(async ({ ctx, input }) => {
+  .query(async ({ input }) => {
     try {
-      return await ctx.prisma.appliedRole.findUnique({
-        where: {
-          id: input,
-        },
-        select: {
-          rank: true,
-          departmentId: true,
-          role: true,
-          status: true,
-        },
-      })
+      return await appliedRoleCollection.getById(input)
     } catch (error) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
-        message: 'Error retrieving applicants: ' + error,
+        message: 'Error retrieving applied role: ' + error,
       })
     }
   })

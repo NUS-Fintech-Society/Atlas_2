@@ -1,7 +1,7 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Box, IconButton, Input, useToast } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { storage } from '../../../firebase'
+import { useState } from 'react'
+import { StorageService } from '~/utils/storage'
 import { ref, uploadBytes } from 'firebase/storage'
 import { uuidv4 } from '@firebase/util'
 import { Message } from '~/constant/messages'
@@ -12,8 +12,9 @@ const DocumentModalAdd = ({ applicantId }: { applicantId: string }) => {
 
   const uploadFile = () => {
     if (file == null) return
-    const fileRef = ref(storage, `${applicantId}/${file.name + uuidv4()}`)
-    uploadBytes(fileRef, file)
+    const filePath = `${applicantId}/documents/${file.name + uuidv4()}`
+
+    StorageService.uploadFile(file, filePath)
       .then(() => {
         toast({
           duration: 2000,
