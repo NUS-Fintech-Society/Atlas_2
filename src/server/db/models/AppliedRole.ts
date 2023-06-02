@@ -1,14 +1,11 @@
-type Roles = {
-  rank: 1 | 2 | 3
-  department: string
-  role: string
-  status: 'accepted' | 'offered' | 'pending' | 'interviewed' | 'rejected'
-  interviewNotes: string
-}[]
+import type { ApplicationStatus } from '~/constant/applicationStatus'
 
 export type AppliedRole = {
-  email: string
-  id?: string
-  name: string
-  roles: Roles
+  applicantId: string
+  id: string
+  rank: 1 | 2 | 3
+  department: string
+  interviewNotes?: string
+  role: string
+  status: ApplicationStatus
 }

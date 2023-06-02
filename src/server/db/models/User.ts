@@ -1,11 +1,9 @@
-import type { AppliedRole } from './AppliedRole'
-
 export type User = {
   department: string
   email: string
   hashedPassword: string
   isAdmin: boolean
-  id?: string
+  id: string
   name: string
   role: string
 
@@ -20,8 +18,4 @@ export type User = {
   phone?: string
   telegram?: string
   dob?: string // Store in DD-MM format so that we can get their birthday easily.
-
-  // Applicant fields
-  interviewNotes?: string
-  appliedRoles?: AppliedRole[]
 }
