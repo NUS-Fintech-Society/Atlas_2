@@ -1,4 +1,3 @@
-import Layout from '~/components/common/Layout'
 import Head from 'next/head'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
@@ -13,9 +12,7 @@ const RecruitmentPage: React.FC<BaseProps> = ({ session }) => {
         <meta name="description" content="The recruitment page for Atlas" />
       </Head>
       <TopNavbar isAdmin={session.isAdmin} />
-      <Layout>
-        <Text className="text-center text-4xl font-bold">Recruitment</Text>
-      </Layout>
+      <Text className="text-center text-4xl font-bold">Recruitment</Text>
     </>
   )
 }

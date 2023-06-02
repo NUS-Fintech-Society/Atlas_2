@@ -19,12 +19,12 @@ import { Message } from '~/constant/messages'
 import type { QueryObserverResult } from '@tanstack/react-query'
 
 const NoteModal = ({
-  applicantId,
+  appliedRoleId,
   interviewNotes,
   refetch,
 }: {
-  applicantId: string
-  interviewNotes: string | null
+  appliedRoleId: string
+  interviewNotes: string | undefined
   refetch: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
@@ -36,12 +36,6 @@ const NoteModal = ({
   )
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  //TODO: checking inputs
-  useEffect(() => {
-    console.log('notes:', notes)
-    console.log('temp notes:', tempNotes)
-  })
-  //TODO: checking inputs
   useEffect(() => {
     if (interviewNotes) {
       setNotes(interviewNotes)
@@ -57,7 +51,7 @@ const NoteModal = ({
   const updateNotes = async () => {
     await mutateAsync({
       interviewNotes: tempNotes,
-      applicantId: applicantId,
+      appliedRoleId: appliedRoleId,
     })
 
     toast({

@@ -10,7 +10,7 @@ import {
   UnorderedList,
   useToast,
 } from '@chakra-ui/react'
-import { ApplicationStatus } from '@prisma/client'
+import { ApplicationStatus } from '~/constant/applicationStatus'
 import type { QueryObserverResult } from '@tanstack/react-query'
 import { BsCircleFill } from 'react-icons/bs'
 import { trpc } from '~/utils/trpc'
@@ -18,7 +18,7 @@ import { trpc } from '~/utils/trpc'
 const statusFillMap = {
   [ApplicationStatus.ACCEPTED]: '#46FFDE',
   [ApplicationStatus.OFFERED]: '#0038FF',
-  [ApplicationStatus.PENDINGREVIEW]: '#FFBD3C',
+  [ApplicationStatus.PENDING]: '#FFBD3C',
   [ApplicationStatus.INTERVIEWED]: '#CE44FF',
   [ApplicationStatus.REJECTED]: '#FF0000',
 }
@@ -26,14 +26,14 @@ const statusFillMap = {
 const StatusPopup = ({
   status,
   appliedRoleId,
+  refetch,
 }: {
   appliedRoleId: string
   status: ApplicationStatus
+  refetch: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
-  const { refetch } = trpc.recruitment.getAppliedRole.useQuery(appliedRoleId)
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleStatus.useMutation()
-
   const updateStatus = async (status: ApplicationStatus) => {
     try {
       await mutateAsync({
@@ -65,7 +65,6 @@ const StatusPopup = ({
           icon={<BsCircleFill fill={statusFillMap[status]} />}
           bg="None"
           _hover={{ background: 'None' }}
-          marginLeft="2"
         ></IconButton>
       </PopoverTrigger>
       <PopoverContent>
@@ -106,9 +105,7 @@ const StatusPopup = ({
                 _hover={{ background: 'None' }}
                 marginLeft="2"
                 onClick={() =>
-                  updateStatus(
-                    ApplicationStatus.PENDINGREVIEW as ApplicationStatus
-                  )
+                  updateStatus(ApplicationStatus.PENDING as ApplicationStatus)
                 }
               />
               <Text>Pending Review</Text>
@@ -116,7 +113,7 @@ const StatusPopup = ({
             <ListItem className="flex items-center">
               <IconButton
                 aria-label="interviewed status"
-                icon={<BsCircleFill fill="#FF0099" />}
+                icon={<BsCircleFill fill="#CE44FF" />}
                 bg="None"
                 _hover={{ background: 'None' }}
                 marginLeft="2"
