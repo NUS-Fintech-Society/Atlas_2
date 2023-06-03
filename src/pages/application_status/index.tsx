@@ -2,10 +2,11 @@ import { useRouter } from 'next/router'
 import { useSession, signIn } from 'next-auth/react'
 import { useState, useCallback } from 'react'
 import Head from 'next/head'
-import { useToast } from '@chakra-ui/react'
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react'
 import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { BaseProps } from '~/utils/withAuth'
+import { Button } from 'flowbite-react'
 
 enum PageState {
   LOGIN,
@@ -16,8 +17,34 @@ const application_status:React.FC<BaseProps> = ({ session }) =>{
 
   //this part needs backend to update the status
   const application_status = "accepted"
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [pageState, setPageState] = useState(PageState.LOGIN)
+  const roles = [
+    { 
+      id:1,
+      name: 'Software Engineer',
+      status: 'accepted'
+    },
+    { 
+      id:2,
+      name: 'Technical Analyst',
+      status: 'interviewed'
+    },
+    {
+      id:3,
+      name: 'Research Analyst',
+      status: 'rejected'
+    }
+
+
+
+  ]
+  const status =[
+    {status: 'accepty'}
+  ]
+
+  
 
   return (
     <>
@@ -52,135 +79,186 @@ const application_status:React.FC<BaseProps> = ({ session }) =>{
               Hi User,
             </h1>
             <h2 className='flex justify-center  mt-3 font-bold text-6xl'>
-              your current status is:
+              your current statuses are:
             </h2>
-            {application_status == 'accepted' && 
-            <h3 className='flex mt-3 justify-center text-5xl'>
-        
-              <Image
-                alt="logo"
-                src="/images/Ellipse 1.svg"
-                height={35}
-                width={35}
-                className='mr-5'              
-              />
-                Accepted
-              </h3>
-            }
-            {application_status == 'offered' && <h3 className='flex justify-center text-[55px]'>
-        
-              <Image
-                alt="logo"
-                src="/images/blue_dot.svg"
-                height={35}
-                width={35}
-                className='mr-5'
-              />
-                Offered
-              </h3>
-            }
-            {application_status == 'pending_review' && <h3 className='flex justify-center text-[55px]'>
+      
+            {roles.map((item) => ( 
+              <div key={item.id} className="flex  items-center mt-3 ">
+                  <div className="flex-grow">
+                {item.status == 'accepted' && 
+                <h3 className='flex mt-3 justify-center text-5xl'>
+                  {item.name}
+                  <Image
+                    alt="logo"
+                    src="/images/Ellipse 1.svg"
+                    height={35}
+                    width={35}
+                    className='flex flex-col  ml-14'              
+                  />
+                    {/* Accepted */}
+                  </h3>
+                }
               
-              <Image
-                alt="logo"
-                src="/images/yellow_dot.svg"
-                height={35}
-                width={35}
-                className='mr-5'             
-              />
-                Pending Review
-              </h3>
-            }
-            {application_status == 'interviewed' && <h3 className='flex justify-center text-[55px]'>
-              
-              <Image
-                alt="logo"
-                src="/images/pink_dot.svg"
-                height={35}
-                width={35}
-                className='mr-5'             
-              />
-                Interviewed
-              </h3>
-            }
-            {application_status == 'rejected' && <h3 className='flex justify-center text-[55px]'>
-              
-              <Image
-                alt="logo"
-                src="/images/red_dot.svg"
-                height={35}
-                width={35}
-                className='mr-5'             
-              />
-                Rejected
-              </h3>
-            }
-            
-            
-            <div className="flex justify-center items-center mt-5">
-            {application_status != "rejected" &&
-            <button
-          
-              className="shadow-[0_4px_4px_rgba(0,0,0,0.25)] flex-col w-357px h-109px items-center bg-opacity-0 border-2 border-[#86C5FF]  text-md mx-auto rounded-full  bg-[#86C5FF] py-4 px-20 font-medium transition hover:bg-opacity-80"
-             
-            >
-              <div className='font-[Inter] text-[25px]'>
-                Update 
-                  <div className="relative">
-                  </div>
-                Information
-              </div>
-            </button>
-            }
-            {application_status == "rejected" &&
-            <button
-              disabled = {true}
-              className="shadow-[0_4px_4px_rgba(0,0,0,0.25)] flex-col w-357px h-109px items-center bg-opacity-0 border-2 border-[#BFE0FF]  text-md mx-auto rounded-full  bg-[#86C5FF] py-4 px-20 font-medium transition"
-             
-            >
-              <div className='font-[Inter] text-[25px] text-[#9AA8B6]'>
-                Update 
-                  <div className="relative">
-                  </div>
-                Information
-              </div>
-            </button>
-            }
-
-            
-            
-            {(application_status == "accepted" || application_status == "offered") && 
-            <button
-          
-              className="shadow-[0_4px_4px_rgba(0,0,0,0.25)] -ml-5 w-357px h-109px items-center bg-opacity-0 border-2 border-[#86C5FF]  text-md mx-auto rounded-full  bg-[#86C5FF] py-4 px-20 font-medium transition hover:bg-opacity-80"
-        
-            >
-              <div className='font-[Inter] text-[25px]'>
-                Tasks to be
-                  <div className="relative">
-                  </div>
-                Completed
-              </div>
-         
-            </button>
-            }
-            
-            {(application_status != "offered" && application_status != "accepted") &&
-            <button
-            disabled = {true}
-            className="shadow-[0_4px_4px_rgba(0,0,0,0.25)] -ml-5 flex-col w-357px h-109px -ml-5 items-center bg-opacity-0 border-2 border-[#BFE0FF]  text-md mx-auto rounded-full  bg-[#86C5FF] py-4 px-20 font-medium transition"
-           
-            >
-            <div className='font-[Inter] text-[25px] text-[#9AA8B6]'>
-              Tasks to be
-                <div className="relative">
+                {item.status == 'offered' && <h3 className='flex justify-center text-5xl'>
+                {item.name}
+                  <Image
+                    alt="logo"
+                    src="/images/blue_dot.svg"
+                    height={35}
+                    width={35}
+                    className='flex flex-col ml-14'
+                  />
+                    {/* Offered */}
+                  </h3>
+                }
+                
+                {item.status == 'pending_review' && <h3 className='flex justify-center text-5xl'>
+                {item.name}
+                  <Image
+                    alt="logo"
+                    src="/images/yellow_dot.svg"
+                    height={35}
+                    width={35}
+                    className='ml-14'             
+                  />
+                    {/* Pending Review */}
+                  </h3>
+                }
+                {item.status == 'interviewed' && <h3 className='flex justify-center text-5xl'>
+                {item.name}
+                  <Image
+                    alt="logo"
+                    src="/images/pink_dot.svg"
+                    height={35}
+                    width={35}
+                    className='ml-14'             
+                  />
+                    {/* Interviewed */}
+                  </h3>
+                }
+                {item.status == 'rejected' && <h3 className='flex justify-center text-5xl'>
+                {item.name}
+                  <Image
+                    alt="logo"
+                    src="/images/red_dot.svg"
+                    height={35}
+                    width={35}
+                    className='ml-14'             
+                  />
+                    {/* Rejected */}
+                  </h3>
+                }
+                
+                
+                
+               
                 </div>
-              Completed
-            </div>
-          </button>
-            }
+                </div>
+
+
+            ))}
+             <div style={{ position: 'fixed', bottom: '40px', right: '60px' }}>
+              <button 
+                onClick={onOpen}       
+                className="w-20 h-20 rounded-full 
+                       bg-[#FFEBC5]  
+                       hover:bg-[#FFD27C]
+                       text-white
+                       
+                       
+                       ">
+                         <Image
+                    alt="question_mark"
+                    src="/images/question_mark.svg"
+                    height={20}
+                    width={20}
+                    className='ml-7'  
+                  
+                        
+                  />
             
-            </div>
+        </button>
+        </div>
+        <Modal   isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay 
+            bg='none'
+            backdropFilter='auto'
+            
+          
+            />
+           
+           
+            <ModalContent 
+        
+             
+            
+        
+            >
+                
+            <ModalHeader fontSize='5xl' ></ModalHeader>
+            <ModalCloseButton />
+            <ModalBody fontSize='3xl' >
+              <div className='flex justify-left ml-24'>
+              <Image
+                    alt="logo"
+                    src="/images/Ellipse 1.svg"
+                    height={35}
+                    width={35}
+                    className='flex flex-col mr-5'              
+                  />
+                Accepted</div>
+              <div  className='flex justify-left ml-24'>
+              <Image
+                    alt="logo"
+                    src="/images/blue_dot.svg"
+                    height={35}
+                    width={35}
+                    className='flex flex-col mr-5'
+                  />
+                  Offered</div>
+              <div  className='flex justify-left ml-24'>
+              <Image
+                    alt="logo"
+                    src="/images/yellow_dot.svg"
+                    height={35}
+                    width={35}
+                    className='mr-5'             
+                  />
+                  Pending Review</div>
+              <div className='flex justify-left ml-24'>
+              <Image
+                    alt="logo"
+                    src="/images/pink_dot.svg"
+                    height={35}
+                    width={35}
+                    className='mr-5'             
+                  />Interviewed</div>
+              <div className='flex justify-left ml-24'>
+              <Image
+                    alt="logo"
+                    src="/images/red_dot.svg"
+                    height={35}
+                    width={35}
+                    className='mr-5'             
+                  />Rejected</div>
+
+
+              
+            
+            </ModalBody>
+
+            <ModalFooter>
+           
+            </ModalFooter>
+        </ModalContent>
+        
+        </Modal>
+      
+       
+
+           
+            
+          
 
           
           </div>
