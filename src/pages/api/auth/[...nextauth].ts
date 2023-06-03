@@ -70,6 +70,7 @@ export const authOptions: NextAuthOptions = {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            image: user.image || '',
           }
         } catch (e) {
           throw new Error((e as Error).message)
