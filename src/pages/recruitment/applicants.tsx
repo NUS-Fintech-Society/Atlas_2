@@ -5,8 +5,13 @@ import SearchBar from '~/components/common/SearchBar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
 import ApplicantGrid from '~/components/recruitment/ApplicantGrid'
 import SearchProvider from '~/context/recruitment/SearchProvider'
+import type { Session } from 'next-auth'
 
-const ApplicantsPage: React.FC<BaseProps> = ({ session }) => {
+const ApplicantsPage: React.FC<BaseProps> = ({
+  session,
+}: {
+  session: Session
+}) => {
   return (
     <>
       <Head>

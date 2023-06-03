@@ -12,8 +12,13 @@ import { Avatar } from 'flowbite-react'
 import AppliedRoleListItem from './AppliedRoleListItem'
 import DocumentModal from './DocumentModal'
 import type { Applicant } from '~/server/db/models/Applicant'
+import NoteModal from './NoteModal'
+import type { AppliedRole } from '~/server/db/models/AppliedRole'
+import { trpc } from '~/utils/trpc'
 
 const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
+  const appliedRole = applicant.appliedRoles[0] as AppliedRole
+  const { refetch } = trpc.recruitment.getAppliedRole.useQuery(appliedRole.id)
   return (
     <Card
       maxWidth="sm"
@@ -43,19 +48,19 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
                 applicantId={applicant.id}
                 applicantName={applicant.name}
               />
+              <NoteModal
+                appliedRoleId={appliedRole.id}
+                interviewNotes={appliedRole.interviewNotes}
+                refetch={refetch}
+              />
             </Box>
           </Box>
           <UnorderedList styleType="none">
-            {applicant.appliedRoles
-              .sort((a, b) => a.rank - b.rank)
-              .map((appliedRole) => {
-                return (
-                  <AppliedRoleListItem
-                    appliedRole={appliedRole}
-                    key={appliedRole.id}
-                  />
-                )
-              })}
+            <AppliedRoleListItem
+              appliedRole={appliedRole}
+              key={appliedRole.id}
+              refetch={refetch}
+            />
           </UnorderedList>
         </Stack>
       </CardBody>

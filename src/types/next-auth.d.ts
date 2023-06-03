@@ -10,6 +10,7 @@ declare module 'next-auth' {
     user?: {
       level?: string
       id: string
+      department: string
     } & DefaultSession['user']
   }
 }
