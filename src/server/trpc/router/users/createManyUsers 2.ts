@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { randomBytes } from 'crypto'
 import { hash } from 'bcryptjs'
 
-import { sendMultipleEmails } from '../member/helper'
+import { sendMultipleEmails } from '../util/helper'
 import { type WriteBatch, doc, writeBatch } from 'firebase/firestore'
 import { db } from '~/server/db/firebase'
 import type { User } from '~/server/db/models/User'
