@@ -2,10 +2,11 @@ import { useRouter, } from 'next/router'
 import { useSession} from 'next-auth/react'
 import { useState, useCallback, useRef } from 'react'
 import Head from 'next/head'
-import {  Box, Button, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Portal, useDisclosure, useToast, Text } from '@chakra-ui/react'
+import {  Box, Button, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Portal, useDisclosure, useToast, Text, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
+import { SearchIcon } from '@chakra-ui/icons'
 
 
 
@@ -30,7 +31,7 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
       status: 'Done',
       name: 'Join Telegram Group',
       due: '09/12/23',
-      details: 'User should join the telegram group before they due date.'
+      details: 'User should join the telegram group before their due date.'
     },
     {
         id: 2,
@@ -80,7 +81,16 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
              Tasks
             </h1>
             
-            <Input
+           
+                <InputGroup>
+      <InputLeftElement
+        className="mt-[1%] ml-[8%] mb-4"
+        pointerEvents="none"
+        >
+        <SearchIcon className="SearchIcon" color="gray.300" />
+        
+        </InputLeftElement>
+       <Input
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -91,10 +101,14 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
                 borderRadius="30px"
                 className="mt-[1%] ml-[8%] mb-4 text-white"
                 _placeholder={{
-                pl: { base: '65px', lg: '210px' },
+                pl: { base: '65px', lg: '5px' },
                 fontStyle: 'italic',
                 }}
             />
+    </InputGroup>
+              
+                
+              
            <Box
   overflowY="auto"
   maxHeight="40vh"
@@ -184,21 +198,31 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
         
       
         
-       
+        <div  
+        ref={el => {
+            // el can be null - see https://reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
+            if (!el) return;
+    
+            console.log(el.offsetLeft); // prints 200px
+          }}
+          >
         <GridItem colSpan={1} className="justify-content-center flex flex-col">
          
+         
           <Text
+        
         as="span"
         cursor="pointer"
         _hover={{ textDecoration: 'underline' }}
         className='text-xl text-white'
-        onClick={() => { setCurrentName(item.name); setCurrentDetails(item.details); onOpen()}}
+        onClick={() => {;setCurrentName(item.name); setCurrentDetails(item.details); onOpen()}}
        
       >
         {item.name}
       </Text>
      
-          <Modal  isOpen={isOpen} onClose={onClose}>
+    
+          <Modal isCentered={true} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay 
             bg='none'
             backdropFilter='auto'
@@ -206,12 +230,14 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
             backdropBlur='2px'
             />
            
-            
-            <ModalContent 
            
+            <ModalContent 
+        
+             
             
         
             >
+                
             <ModalHeader fontSize='5xl' >{currentName}</ModalHeader>
             <ModalCloseButton />
             <ModalBody fontSize='3xl' >
@@ -225,9 +251,12 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
         </ModalContent>
         
         </Modal>
+      
        
  
         </GridItem>
+        </div>
+        
         <GridItem colSpan={1} className="justify-content-center flex flex-col">
           <h1 className="text-xl text-white">{item.due}</h1>
         </GridItem>
