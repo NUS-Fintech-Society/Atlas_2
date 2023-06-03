@@ -8,12 +8,10 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import { getDownloadURL, listAll, ref } from 'firebase/storage'
 import { useEffect, useState } from 'react'
 import { BsFolder2Open } from 'react-icons/bs'
 import { StorageService } from '~/utils/storage'
 import DocumentModalAdd from './DocumentModalAdd'
-import DocumentModalCard from './DocumentModalCard'
 
 const DocumentModal = ({
   applicantId,
@@ -28,6 +26,11 @@ const DocumentModal = ({
 
   // Hook to get the files associated with the applicant
   useEffect(() => {
+    const getFilesList = async () => {
+      const fileList = await StorageService.getFiles(docsFilePath)
+      setFileList(fileList)
+    }
+    getFilesList()
     console.log('fileList: ', fileList)
   }, [])
 

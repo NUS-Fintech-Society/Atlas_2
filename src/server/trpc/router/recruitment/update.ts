@@ -2,7 +2,7 @@ import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
-import { ApplicationStatus } from '~/constant/applicationStatus'
+import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 
 export const updateAppliedRoleStatus = protectedProcedure
   .input(

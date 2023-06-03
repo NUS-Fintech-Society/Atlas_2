@@ -6,7 +6,7 @@ import InfoPopup from '~/components/recruitment/InfoPopup'
 
 const ApplicantGrid = () => {
   const { search } = useContext(searchContext)
-  const { data } = trpc.recruitment.getAllApplicants.useQuery()
+  const { data } = trpc.recruitment.getAllApplicantsTopRoleByDept.useQuery()
   if (!data) return <></>
 
   const filteredData =

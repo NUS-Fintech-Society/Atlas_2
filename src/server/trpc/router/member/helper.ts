@@ -95,7 +95,6 @@ function buildUserObject(
       major: user.major,
       id: user.student_id,
       isAdmin: false,
-      interviewNotes: null,
       name: user.name,
       email: user.nus_email,
       personal_email: user.personal_email,

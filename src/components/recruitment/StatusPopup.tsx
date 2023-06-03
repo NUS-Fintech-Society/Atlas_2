@@ -10,7 +10,7 @@ import {
   UnorderedList,
   useToast,
 } from '@chakra-ui/react'
-import { ApplicationStatus } from '~/constant/applicationStatus'
+import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import type { QueryObserverResult } from '@tanstack/react-query'
 import { BsCircleFill } from 'react-icons/bs'
 import { trpc } from '~/utils/trpc'
