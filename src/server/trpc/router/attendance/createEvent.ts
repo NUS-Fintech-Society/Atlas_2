@@ -1,8 +1,5 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
-import { toDataURL } from 'qrcode'
-import { randomUUID } from 'crypto'
-import { env } from '~/env/server.mjs'
 import eventCollection from '~/server/db/collections/EventCollection'
 import { Timestamp } from 'firebase/firestore'
 import userCollection from '~/server/db/collections/UserCollection'
@@ -21,13 +18,6 @@ export const createEvent = protectedProcedure
   )
   .mutation(async ({ input }) => {
     try {
-      let qr_code: string | undefined
-      const id = randomUUID()
-
-      if (input.isQrRequired) {
-        qr_code = await toDataURL(`${env.DOMAIN}/events/${id}`)
-      }
-
       const users = await Promise.all(
         input.attendees.map(async (attendee) => {
           const data = await userCollection.getById(attendee)
@@ -48,7 +38,7 @@ export const createEvent = protectedProcedure
         invitedAttendees: users,
         name: input.name,
         startDate: Timestamp.fromDate(input.startDate),
-        qrCode: qr_code || '',
+        qrCode: input.isQrRequired,
       })
     } catch (e) {
       await logCollection.add({

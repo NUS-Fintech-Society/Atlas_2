@@ -12,18 +12,23 @@ export const getEventForUser = protectedProcedure
       const user = ctx.session.user
 
       // Check if the user is within the array of objects and whether the attended flag is true.
-      const hasUserMarkedAttendance =
-        event.invitedAttendees.filter((attendee) => {
-          return attendee.id === user.id && attendee.attended
-        }).length === 1
+      let hasUserMarkedAttendance = false
+      let isAttendanceRequired = false
+      if (event.invitedAttendees) {
+        hasUserMarkedAttendance =
+          event.invitedAttendees.filter((attendee) => {
+            return attendee.id === user.id && attendee.attended
+          }).length === 1
 
-      // Check whether the user is within the array of objects.
-      const isAttendanceRequired =
-        event.invitedAttendees.filter((attendee) => attendee.id === user.id)
-          .length > 0
+        isAttendanceRequired =
+          event.invitedAttendees.filter((attendee) => attendee.id === user.id)
+            .length > 0
+      }
 
       return {
         ...event,
+        startDate: event.startDate.toDate(),
+        endDate: event.endDate.toDate(),
         isAttendanceRequired,
         hasUserMarkedAttendance: hasUserMarkedAttendance !== null,
       }
