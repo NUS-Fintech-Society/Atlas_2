@@ -31,14 +31,13 @@ const ProfileGrid = ({
           dept={data.department}
           role={data.role}
           studentId={studentId}
-          session={session}
         />
       </div>
       <div className="col-span-2 w-3/4">
         <ProfileContactInfo studentId={studentId} {...data} refetch={refetch} />
       </div>
       <div className="col-span-2 row-span-2 mb-10 w-3/4">
-        {/* <ProfileInfo {...data} /> */}
+        <ProfileInfo batch={data.batch as string} />
       </div>
     </div>
   )
