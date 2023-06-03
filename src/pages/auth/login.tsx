@@ -37,7 +37,7 @@ const LoginPage = () => {
       redirect: false,
     })
 
-    if (res && res.error) {
+    if (res && res.error && res.error !== 'SessionRequired') {
       toast({
         description: res.error,
         duration: 3000,
@@ -47,8 +47,6 @@ const LoginPage = () => {
       setLoginLoading(false)
       return
     }
-
-    router.push('/')
   }
 
   const resetPassword = async () => {

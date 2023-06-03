@@ -2,6 +2,8 @@ import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import eventCollection from '~/server/db/collections/EventCollection'
+import { toDataURL } from 'qrcode'
+import { env } from '~/env/server.mjs'
 
 export const getEventInfo = protectedProcedure
   .input(z.string())
@@ -13,6 +15,11 @@ export const getEventInfo = protectedProcedure
         (attendee) => attendee.attended
       )
 
+      let qr_code = undefined
+      if (event.isQrRequired) {
+        qr_code = await toDataURL(`${env.DOMAIN}/events/${event.id as string}`)
+      }
+
       return {
         attendees: attendees.length,
         endDate: event.endDate.toDate(),
@@ -20,7 +27,7 @@ export const getEventInfo = protectedProcedure
         invitedAttendees: event.invitedAttendees,
         name: event.name,
         showup: event.attendees,
-        qr_code: event.qrCode,
+        qr_code,
         startDate: event.startDate.toDate(),
       }
     } catch (e) {
