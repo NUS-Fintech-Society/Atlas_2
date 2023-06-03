@@ -16,7 +16,7 @@ export const getEventInfo = protectedProcedure
       )
 
       let qr_code = undefined
-      if (qr_code) {
+      if (event.isQrRequired) {
         qr_code = await toDataURL(`${env.DOMAIN}/events/${event.id as string}`)
       }
 

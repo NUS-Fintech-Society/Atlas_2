@@ -30,7 +30,7 @@ export const getEventForUser = protectedProcedure
         startDate: event.startDate.toDate(),
         endDate: event.endDate.toDate(),
         isAttendanceRequired,
-        hasUserMarkedAttendance: hasUserMarkedAttendance !== null,
+        hasUserMarkedAttendance,
       }
     } catch (e) {
       await logCollection.add({

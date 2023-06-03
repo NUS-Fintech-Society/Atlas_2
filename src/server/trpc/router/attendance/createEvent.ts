@@ -38,7 +38,7 @@ export const createEvent = protectedProcedure
         invitedAttendees: users,
         name: input.name,
         startDate: Timestamp.fromDate(input.startDate),
-        qrCode: input.isQrRequired,
+        isQrRequired: input.isQrRequired,
       })
     } catch (e) {
       await logCollection.add({
