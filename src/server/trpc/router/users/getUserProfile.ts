@@ -7,7 +7,6 @@ export const getUserProfile = protectedProcedure
   .input(z.string())
   .query(async ({ input }) => {
     try {
-      if (!input) return null
       return await userCollection.getById(input)
     } catch (e) {
       throw new TRPCError({

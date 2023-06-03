@@ -1,7 +1,7 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
 import { hash } from 'bcryptjs'
-import { checkIfUserExist, sendEmail } from '../util/helper'
+import { checkIfUserExist, sendEmail } from '../member/helper'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
 import { Timestamp } from 'firebase/firestore'
