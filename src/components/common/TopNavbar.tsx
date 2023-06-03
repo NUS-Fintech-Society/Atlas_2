@@ -5,9 +5,10 @@ import { useCallback } from 'react'
 
 interface TopNavbarProps {
   isAdmin: boolean
+  image: string
 }
 
-const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
+const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
   const logout = useCallback(async () => {
     await signOut()
   }, [])
@@ -21,7 +22,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
         <Dropdown
           arrowIcon={false}
           inline={true}
-          label={<Avatar alt="User-settings" rounded={true} />}
+          label={<Avatar alt="User-settings" img={image} rounded={true} />}
         >
           <Link href="/" className="md:hidden">
             <Dropdown.Item>Home</Dropdown.Item>

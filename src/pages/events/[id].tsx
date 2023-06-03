@@ -78,7 +78,10 @@ const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
           content="The confirm attendance page for Atlas"
         />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
       <Container>
         <div className="flex w-full flex-col items-start">
           {data ? (

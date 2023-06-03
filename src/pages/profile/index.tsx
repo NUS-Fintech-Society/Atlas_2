@@ -13,10 +13,13 @@ const ProfilePage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The profile page for Atlas" />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
-      <Text className="m-8 text-center text-3xl font-semibold underline underline-offset-8"> 
-        Profile 
-      </Text> 
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
+      <Text className="m-8 text-center text-3xl font-semibold underline underline-offset-8">
+        Profile
+      </Text>
       <ProfileGrid session={session} studentId={session?.user?.id as string} />
     </Box>
   )

@@ -16,7 +16,10 @@ const UserForm: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create user page for Atlas" />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
       <div className="m-auto w-[90%]">
         {/* Heading */}
         <h1 className="mb-5 font-[Inter] text-4xl font-semibold">
