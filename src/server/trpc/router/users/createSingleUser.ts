@@ -29,6 +29,7 @@ export const createSingleUser = protectedProcedure
 
       await userCollection.set(
         {
+          id,
           department,
           email,
           isAdmin,
