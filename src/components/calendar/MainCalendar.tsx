@@ -1,7 +1,7 @@
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import timeGridPlugin from '@fullcalendar/timegrid'
+// import FullCalendar from '@fullcalendar/react' // must go before plugins
+// import dayGridPlugin from '@fullcalendar/daygrid'
+// import interactionPlugin from '@fullcalendar/interaction'
+// import timeGridPlugin from '@fullcalendar/timegrid'
 import styled from '@emotion/styled'
 import { useState } from 'react'
 
@@ -15,7 +15,7 @@ const MainCalendar = () => {
 
   return (
     <StyleWrapper className="col-span-4">
-      <FullCalendar
+      {/* <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         headerToolbar={{
@@ -28,7 +28,7 @@ const MainCalendar = () => {
         eventClick={(info) => {
           alert('Event: ' + info.event.title)
         }}
-      />
+      /> */}
     </StyleWrapper>
   )
 }

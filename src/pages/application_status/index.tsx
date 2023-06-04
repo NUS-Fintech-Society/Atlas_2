@@ -13,11 +13,13 @@ enum PageState {
   FORGET_PASSWORD,
 }
 
-const application_status:React.FC<BaseProps> = ({ session }) =>{
+const Application_Status:React.FC<BaseProps> = ({ session }) =>{
 
   //this part needs backend to update the status
   const application_status = "accepted"
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isOpen, setIsOpen] = useState(false)
+  const onOpen = () => setIsOpen(true)
+  const onClose = () => setIsOpen(false)  
 
   const [pageState, setPageState] = useState(PageState.LOGIN)
   const roles = [
@@ -37,15 +39,10 @@ const application_status:React.FC<BaseProps> = ({ session }) =>{
       status: 'rejected'
     }
 
-
-
   ]
   const status =[
     {status: 'accepty'}
   ]
-
-  
-
   return (
     <>
       <Head>
@@ -148,13 +145,8 @@ const application_status:React.FC<BaseProps> = ({ session }) =>{
                     {/* Rejected */}
                   </h3>
                 }
-                
-                
-                
-               
                 </div>
                 </div>
-
 
             ))}
              <div style={{ position: 'fixed', bottom: '40px', right: '60px' }}>
@@ -179,7 +171,7 @@ const application_status:React.FC<BaseProps> = ({ session }) =>{
             
         </button>
         </div>
-        <Modal   isOpen={isOpen} onClose={onClose}>
+        <Modal  isOpen={isOpen} onClose={onClose}>
             <ModalOverlay 
             bg='none'
             backdropFilter='auto'
@@ -269,4 +261,4 @@ const application_status:React.FC<BaseProps> = ({ session }) =>{
 }
 
 
-export default withAuth(application_status, true)
+export default withAuth(Application_Status)
