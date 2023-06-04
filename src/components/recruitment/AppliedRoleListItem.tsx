@@ -1,4 +1,4 @@
-import { Box, ListItem, Text } from '@chakra-ui/react'
+import { ListItem, Text } from '@chakra-ui/react'
 import type { QueryObserverResult } from '@tanstack/react-query'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import StatusPopup from './StatusPopup'
