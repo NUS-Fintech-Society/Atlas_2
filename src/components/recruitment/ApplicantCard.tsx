@@ -43,22 +43,19 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
       <CardBody className="relative" pt="10px">
         <Stack>
           <Avatar alt="User-settings" rounded={true} size="lg" />
-          <Box className="flex justify-center">
-            <Box>
-              <DocumentModal
-                applicantId={applicant.id}
-                applicantName={applicant.name}
-              />
-              <NoteModal
-                appliedRoleId={appliedRole.id}
-                interviewNotes={appliedRole.interviewNotes}
-                refetch={refetch}
-              />
-            </Box>
-          </Box>
-          <Text className="text-center" fontSize="xl" fontWeight="medium">
-            {appliedRole.department}
+          <DocumentModal
+            applicantId={applicant.id}
+            applicantName={applicant.name}
+          />
+          <NoteModal
+            appliedRoleId={appliedRole.id}
+            interviewNotes={appliedRole.interviewNotes}
+            refetch={refetch}
+          />
+          <Text className="text-center">
+            {appliedRole.department.toUpperCase()}
           </Text>
+          <Text>Role Applied:</Text>
           <UnorderedList styleType="none">
             <AppliedRoleListItem
               appliedRole={appliedRole}

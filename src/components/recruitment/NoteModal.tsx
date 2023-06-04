@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   IconButton,
   Input,
@@ -73,7 +74,7 @@ const NoteModal = ({
   }
 
   return (
-    <>
+    <Box className="absolute right-5 top-10">
       <IconButton
         aria-label="Interview notes"
         icon={<BsFileEarmark />}
@@ -120,7 +121,7 @@ const NoteModal = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </Box>
   )
 }
 
