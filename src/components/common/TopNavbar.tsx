@@ -31,9 +31,10 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
               <Dropdown.Item>User</Dropdown.Item>
             </Link>
           )}
-          <Link href="/events" className="md:hidden">
+          {isAdmin && (<Link href="/events" className="md:hidden">
             <Dropdown.Item>Events</Dropdown.Item>
-          </Link>
+          </Link>)
+          }
           <Link href="/profile">
             <Dropdown.Item>Profile</Dropdown.Item>
           </Link>
@@ -55,12 +56,14 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin }) => {
             Users
           </Navbar.Link>
         )}
-        <Navbar.Link href="/events" className="ml-4 text-white">
+        {isAdmin && (<Navbar.Link href="/events" className="ml-4 text-white">
           Events
-        </Navbar.Link>
-        <Navbar.Link href="/calendar" className="ml-4 text-white">
+        </Navbar.Link>)
+        }
+        {isAdmin && (<Navbar.Link href="/calendar" className="ml-4 text-white">
           Recruitment
-        </Navbar.Link>
+        </Navbar.Link>)
+        }
         <Navbar.Link href="/application_status" className="ml-4 text-white">
           Application Status
         </Navbar.Link>

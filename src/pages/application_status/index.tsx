@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router'
-import { useSession, signIn } from 'next-auth/react'
 import { useState, useCallback } from 'react'
 import Head from 'next/head'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react'
@@ -40,9 +38,7 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
     }
 
   ]
-  const status =[
-    {status: 'accepty'}
-  ]
+
   return (
     <>
       <Head>
@@ -54,7 +50,7 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
       <main>
         <div className="relative h-screen w-screen bg-[url('/images/applicants_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
           {/* Nav element containing the logo */}
-       
+          
           <nav className="flex justify-center items-center  px-2 py-2 " >
           
             <Image
