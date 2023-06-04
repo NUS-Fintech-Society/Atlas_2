@@ -16,7 +16,7 @@ enum PageState {
   FORGET_PASSWORD,
 }
 
-const tasks:React.FC<BaseProps> = ({ session }) => {
+const Tasks:React.FC<BaseProps> = ({ session }) => {
 
   const [searchQuery, setSearchQuery] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -149,6 +149,7 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
     {/* Data rows */}
     {filteredData.map((item) => (
       <Grid
+      key={item.id}
       className='mt-[2%] ml-[11%]'
       templateColumns={{
         base: 'repeat(3, 1fr)',
@@ -215,7 +216,7 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
         cursor="pointer"
         _hover={{ textDecoration: 'underline' }}
         className='text-xl text-white'
-        onClick={() => {;setCurrentName(item.name); setCurrentDetails(item.details); onOpen()}}
+        onClick={() => {setCurrentName(item.name); setCurrentDetails(item.details); onOpen()}}
        
       >
         {item.name}
@@ -276,4 +277,4 @@ const tasks:React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(tasks, true)
+export default withAuth(Tasks, true)
