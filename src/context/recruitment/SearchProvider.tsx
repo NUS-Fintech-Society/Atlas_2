@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useState } from 'react'
+import { createContext, useState } from 'react'
 
 type SearchContextType = {
   search: string

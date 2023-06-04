@@ -6,6 +6,7 @@ import {
   Heading,
   Image,
   Stack,
+  Text,
   UnorderedList,
 } from '@chakra-ui/react'
 import { Avatar } from 'flowbite-react'
@@ -21,7 +22,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
   const { refetch } = trpc.recruitment.getAppliedRole.useQuery(appliedRole.id)
   return (
     <Card
-      maxWidth="sm"
+      maxWidth="xs"
       borderRadius="20"
       boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
     >
@@ -35,7 +36,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
         alt="blue wave background"
         borderTopLeftRadius="20"
         borderTopRightRadius="20"
-        boxSize="300px"
+        boxSize="500px"
         position="absolute"
         height="85px"
       />
@@ -55,6 +56,9 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
               />
             </Box>
           </Box>
+          <Text className="text-center" fontSize="xl" fontWeight="medium">
+            {appliedRole.department}
+          </Text>
           <UnorderedList styleType="none">
             <AppliedRoleListItem
               appliedRole={appliedRole}

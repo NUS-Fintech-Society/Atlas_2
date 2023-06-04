@@ -23,7 +23,7 @@ const ApplicantsPage: React.FC<BaseProps> = ({
         />
       </Head>
       <TopNavbar isAdmin={session.isAdmin} />
-      <Box position="relative" mt="10">
+      <Box position="relative" mt="10" mb="10">
         <Text className="text-center text-4xl font-bold">Applicants</Text>
         <SearchProvider>
           <SearchBar />
