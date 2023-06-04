@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import Head from 'next/head'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react'
+import { Center, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react'
 import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { BaseProps } from '~/utils/withAuth'
@@ -46,7 +46,7 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar  image={session.user?.image as string} isAdmin={session.isAdmin} />
       <main>
         <div className="relative h-screen w-screen bg-[url('/images/applicants_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
           {/* Nav element containing the logo */}
@@ -63,23 +63,22 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
             />
          
           </nav>
-       
-
+      
           {/* Login */}
           <div className="flex flex-col justify-center gap-8 font-[Inter]">
           
-            <h1 className='flex justify-center font-bold text-8xl mt-4'>
+            <h1 className='flex justify-center font-bold text-4xl md:text-8xl mt-4'>
               Hi User,
             </h1>
-            <h2 className='flex justify-center  mt-3 font-bold text-6xl'>
+            <h2 className='flex justify-center mt-3 font-bold text-2xl md:text-6xl'>
               your current statuses are:
             </h2>
       
             {roles.map((item) => ( 
-              <div key={item.id} className="flex  items-center mt-3 ">
+              <div key={item.id} className="flex items-center mt-3 ">
                   <div className="flex-grow">
                 {item.status == 'accepted' && 
-                <h3 className='flex mt-3 justify-center text-5xl'>
+                <h3 className='flex mt-3 justify-center text-2xl md:text-5xl'>
                   {item.name}
                   <Image
                     alt="logo"
@@ -92,7 +91,7 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                   </h3>
                 }
               
-                {item.status == 'offered' && <h3 className='flex justify-center text-5xl'>
+                {item.status == 'offered' && <h3 className='flex justify-center text-2xl md:text-5xl'>
                 {item.name}
                   <Image
                     alt="logo"
@@ -105,7 +104,7 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                   </h3>
                 }
                 
-                {item.status == 'pending_review' && <h3 className='flex justify-center text-5xl'>
+                {item.status == 'pending_review' && <h3 className='flex justify-centertext-2xl md:text-5xl'>
                 {item.name}
                   <Image
                     alt="logo"
@@ -117,7 +116,7 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                     {/* Pending Review */}
                   </h3>
                 }
-                {item.status == 'interviewed' && <h3 className='flex justify-center text-5xl'>
+                {item.status == 'interviewed' && <h3 className='flex justify-center text-2xl md:text-5xl'>
                 {item.name}
                   <Image
                     alt="logo"
@@ -129,7 +128,7 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                     {/* Interviewed */}
                   </h3>
                 }
-                {item.status == 'rejected' && <h3 className='flex justify-center text-5xl'>
+                {item.status == 'rejected' && <h3 className='flex justify-center text-2xl md:text-5xl'>
                 {item.name}
                   <Image
                     alt="logo"
@@ -148,7 +147,7 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
              <div style={{ position: 'fixed', bottom: '40px', right: '60px' }}>
               <button 
                 onClick={onOpen}       
-                className="w-20 h-20 rounded-full 
+                className="w-16 h-16 md:w-20 md:h-20 rounded-full 
                        bg-[#FFEBC5]  
                        hover:bg-[#FFD27C]
                        text-white
@@ -158,35 +157,30 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                          <Image
                     alt="question_mark"
                     src="/images/question_mark.svg"
-                    height={20}
+                    height='20'
                     width={20}
-                    className='ml-7'  
+                    className='md:ml-7 ml-5'  
                   
                         
                   />
             
         </button>
         </div>
-        <Modal  isOpen={isOpen} onClose={onClose}>
+        <Modal  isOpen={isOpen} onClose={onClose} size="xs">
             <ModalOverlay 
             bg='none'
-            backdropFilter='auto'
-            
-          
+            backdropFilter='auto'         
             />
            
            
-            <ModalContent 
-        
-             
-            
-        
-            >
+            <ModalContent > 
                 
             <ModalHeader fontSize='5xl' ></ModalHeader>
             <ModalCloseButton />
             <ModalBody fontSize='3xl' >
-              <div className='flex justify-left ml-24'>
+          
+            <div className="flex flex-col items-start">
+              <div className='flex items-center'>
               <Image
                     alt="logo"
                     src="/images/Ellipse 1.svg"
@@ -195,7 +189,10 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                     className='flex flex-col mr-5'              
                   />
                 Accepted</div>
-              <div  className='flex justify-left ml-24'>
+                </div>
+            
+              <div className="flex flex-col items-start">
+              <div className='flex items-center'>
               <Image
                     alt="logo"
                     src="/images/blue_dot.svg"
@@ -204,7 +201,9 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                     className='flex flex-col mr-5'
                   />
                   Offered</div>
-              <div  className='flex justify-left ml-24'>
+                  </div>
+                  <div className="flex flex-col items-start">
+              <div className='flex items-center'>
               <Image
                     alt="logo"
                     src="/images/yellow_dot.svg"
@@ -213,7 +212,9 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                     className='mr-5'             
                   />
                   Pending Review</div>
-              <div className='flex justify-left ml-24'>
+                  </div>
+                  <div className="flex flex-col items-start">
+              <div className='flex items-center'>
               <Image
                     alt="logo"
                     src="/images/pink_dot.svg"
@@ -221,34 +222,22 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                     width={35}
                     className='mr-5'             
                   />Interviewed</div>
-              <div className='flex justify-left ml-24'>
+                  </div>
+                <div className="flex flex-col items-start">
+              <div className='flex items-center'>
               <Image
                     alt="logo"
                     src="/images/red_dot.svg"
                     height={35}
                     width={35}
                     className='mr-5'             
-                  />Rejected</div>
-
-
-              
-            
+                  />Rejected</div>      
+                </div>
             </ModalBody>
-
             <ModalFooter>
-           
             </ModalFooter>
         </ModalContent>
-        
         </Modal>
-      
-       
-
-           
-            
-          
-
-          
           </div>
         </div>
       </main>
@@ -257,4 +246,4 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
 }
 
 
-export default withAuth(Application_Status)
+export default withAuth(Application_Status, false)

@@ -36,12 +36,14 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
             <Dropdown.Item>Events</Dropdown.Item>
           </Link>)
           }
-          <Link href="/profile">
+         <Link href="/profile">
             <Dropdown.Item>Profile</Dropdown.Item>
           </Link>
-          <Link href="/calendar">
+        
+          {isAdmin && <Link href="/calendar">
             <Dropdown.Item>Calendar</Dropdown.Item>
           </Link>
+          }
           <Dropdown.Item>
             <div onClick={logout}>Sign Out</div>
           </Dropdown.Item>
@@ -65,12 +67,19 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
           Recruitment
         </Navbar.Link>)
         }
-        <Navbar.Link href="/application_status" className="ml-4 text-white">
-          Application Status
+        {!isAdmin && <Navbar.Link href="/application_status" className="ml-4 text-white">
+          Status
         </Navbar.Link>
-        <Navbar.Link href="/tasks" className="ml-4 text-white">
+        }
+
+        {!isAdmin && <Navbar.Link href="/tasks" className="ml-4 text-white">
           Tasks
         </Navbar.Link>
+        }
+        {!isAdmin && <Navbar.Link  className="ml-4 text-white">
+          Update Information
+        </Navbar.Link>
+        }
       </Navbar.Collapse>
     </Navbar>
   )

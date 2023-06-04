@@ -1,8 +1,8 @@
 import { useRouter, } from 'next/router'
 import { useSession} from 'next-auth/react'
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, Fragment } from 'react'
 import Head from 'next/head'
-import {  Box, Button, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Portal, useDisclosure, useToast, Text, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import {  Box, Button, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Portal, useDisclosure, useToast, Text, InputGroup, InputLeftElement, TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td, Tfoot, Center } from '@chakra-ui/react'
 import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
@@ -65,9 +65,9 @@ const Tasks:React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar  image={session.user?.image as string} isAdmin={session.isAdmin} />
       <main>
-        <div className="relative h-screen w-screen bg-[url('/images/tasks_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
+        <div className="relative h-screen w-screen  bg-[url('/images/tasks_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
           {/* Nav element containing the logo */}
        
 
@@ -82,7 +82,7 @@ const Tasks:React.FC<BaseProps> = ({ session }) => {
             </h1>
             
            
-                <InputGroup>
+                {/* <InputGroup>
       <InputLeftElement
         className="mt-[1%] ml-[8%] mb-4"
         pointerEvents="none"
@@ -101,172 +101,125 @@ const Tasks:React.FC<BaseProps> = ({ session }) => {
                 borderRadius="30px"
                 className="mt-[1%] ml-[8%] mb-4 text-white"
                 _placeholder={{
-                pl: { base: '65px', lg: '5px' },
+                pl: { base: '5px', lg: '3px' },
                 fontStyle: 'italic',
                 }}
             />
-    </InputGroup>
+    </InputGroup> */}
               
                 
               
-           <Box
-  overflowY="auto"
-  maxHeight="40vh"
-  sx={{
-    '&::-webkit-scrollbar': {
-      width: '30px',
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: `#004B90`,
-      borderRadius: '20px',
-      border: '5px solid transparent',
-      backgroundClip: 'content-box',
-    },
-  }}
-  className="p-16"
->
-  <Grid
-  className='ml-[11%]'
-    templateColumns={{
-      base: 'repeat(3, 1fr)',
-      md: 'repeat(3, 1fr)',
-    }}
-    gridGap={{ base: '4' }}
-    gridRowGap={{ base: '4', md: '12' }}
-  >
-    {/* Column headings */}
-    <GridItem colSpan={1} className="justify-content-center flex flex-col">
-      <h1 className="text-xl font-bold text-white">Status</h1>
-    </GridItem>
-    <GridItem colSpan={1} className="justify-content-center flex flex-col">
-      <h1 className="text-xl font-bold text-white">Task</h1>
-    </GridItem>
-    <GridItem colSpan={1} className="justify-content-center flex flex-col">
-      <h1 className="text-xl font-bold text-white">Do By</h1>
-    </GridItem>
-    </Grid>
+              <Center>
+              <div className="max-w-screen-lg mx-auto md:max-w-screen-md">
 
-    {/* Data rows */}
-    {filteredData.map((item) => (
-      <Grid
-      key={item.id}
-      className='mt-[2%] ml-[11%]'
-      templateColumns={{
-        base: 'repeat(3, 1fr)',
-        md: 'repeat(3, 1fr)',
-      }}
-      gridGap={{ base: '4' }}
-      gridRowGap={{ base: '4', md: '12' }}
-
-    >
-      
-        <GridItem colSpan={1} className="justify-content-center flex flex-col">
-          
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="">
+          <tr>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Status
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Task
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Do By
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200">
+        {filteredData.map((item) => (
+           
+      <tr key={item.id}>
+         <td className="px-6 py-4 whitespace-nowrap">
+         
           <h1 className="  text-white">{item.status == "Incomplete" && 
           <button
           disabled = {true}
-          className="flex-col  items-center w-[150px] bg-opacity-100  text-md mx-auto rounded-full  bg-[#C51F29] py-1 px-5 font-medium transition"
+          className="flex-col  items-center w-24 md:w-[150px] bg-opacity-100  text-md mx-auto rounded-full  bg-[#C51F29] py-1 px-5 font-medium transition"
 
             >
-          <div className='font-[Inter] text-xl text-white'>
+          <div className='font-[Inter] text-xs md:text-xl text-white'>
           {item.status}
           </div>
         </button>
           }
           {item.status == "In Progress" && <button
           disabled = {true}
-          className="flex-col items-center w-[150px] bg-opacity-100  text-md mx-auto rounded-full  bg-[#FFBD3C] py-1 px-5 font-medium transition"
+          className="flex-col items-center w-24 md:w-[150px] bg-opacity-100  text-md mx-auto rounded-full  bg-[#FFBD3C] py-1 px-5 font-medium transition"
          
             >
-          <div className='font-[Inter] text-xl text-white'>
+          <div className='font-[Inter] text-xs md:text-xl text-white'>
           {item.status}
           </div>
         </button>}
           {item.status == "Done" && <button
           disabled = {true}
-          className="flex-col items-center w-[150px] max-w-20 bg-opacity-100  text-md mx-auto rounded-full  bg-[#00C09D] py-1 px-5 font-medium transition"
+          className="flex-col items-center w-24 md:w-[150px] max-w-20 bg-opacity-100  text-md mx-auto rounded-full  bg-[#00C09D] py-1 px-5 font-medium transition"
          
             >
-          <div className='font-[Inter] text-xl text-white'>
+          <div className='font-[Inter] text-xs md:text-xl text-white'>
           {item.status}
           </div>
         </button>}
           </h1>
-          
-        </GridItem>
-      
-       
-        
-      
-        
-        <div  
-        ref={el => {
-            // el can be null - see https://reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
-            if (!el) return;
-    
-            console.log(el.offsetLeft); // prints 200px
-          }}
-          >
-        <GridItem colSpan={1} className="justify-content-center flex flex-col">
-         
-         
-          <Text
-        
+          </td>
+          <td>  
+            <Text
         as="span"
         cursor="pointer"
         _hover={{ textDecoration: 'underline' }}
-        className='text-xl text-white'
+        className='md:text-xl text-white'
         onClick={() => {setCurrentName(item.name); setCurrentDetails(item.details); onOpen()}}
        
       >
         {item.name}
       </Text>
-     
-    
-          <Modal isCentered={true} isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay 
-            bg='none'
-            backdropFilter='auto'
-            
-            backdropBlur='2px'
-            />
-           
-           
-            <ModalContent 
-        
-             
-            
-        
-            >
-                
-            <ModalHeader fontSize='5xl' >{currentName}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody fontSize='3xl' >
-                {currentDetails}
-            
-            </ModalBody>
-
-            <ModalFooter>
-           
-            </ModalFooter>
-        </ModalContent>
-        
-        </Modal>
-      
-       
- 
-        </GridItem>
-        </div>
-        
-        <GridItem colSpan={1} className="justify-content-center flex flex-col">
-          <h1 className="text-xl text-white">{item.due}</h1>
-        </GridItem>
-    </Grid>
-  
-       
+      </td>
+      <td>  <h1 className="md:text-xl text-white">{item.due}</h1></td>
+          
+          </tr>
+          
     ))}
- 
-</Box>
+
+     
+        
+        </tbody>
+      </table>
+      
+      <Modal isCentered={true} isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay 
+      bg='none'
+      backdropFilter='auto'
+      
+      backdropBlur='2px'
+      />
+            
+      <ModalContent>
+      <ModalHeader fontSize='5xl' >{currentName}</ModalHeader>
+      <ModalCloseButton />
+      <ModalBody fontSize='3xl' >
+          {currentDetails}
+      
+      </ModalBody>
+
+      <ModalFooter>
+     
+      </ModalFooter>
+  </ModalContent>
+  
+  </Modal>
+    </div>
+    
+</Center>
             
 
           
@@ -277,4 +230,4 @@ const Tasks:React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(Tasks, true)
+export default withAuth(Tasks, false)
