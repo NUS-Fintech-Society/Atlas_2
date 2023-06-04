@@ -144,7 +144,9 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                 </div>
 
             ))}
-             <div style={{ position: 'fixed', bottom: '40px', right: '60px' }}>
+             <div 
+             className='fixed bottom-20 md:right-28 right-6'
+             >
               <button 
                 onClick={onOpen}       
                 className="w-16 h-16 md:w-20 md:h-20 rounded-full 
@@ -160,8 +162,6 @@ const Application_Status:React.FC<BaseProps> = ({ session }) =>{
                     height='20'
                     width={20}
                     className='md:ml-7 ml-5'  
-                  
-                        
                   />
             
         </button>
