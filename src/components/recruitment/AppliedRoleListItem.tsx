@@ -12,7 +12,7 @@ const AppliedRoleListItem = ({
 }) => {
   return (
     <ListItem className="flex items-center justify-between">
-      <Text>
+      <Text fontWeight="medium">
         {appliedRole.rank}. {appliedRole.role}
       </Text>
       <StatusPopup

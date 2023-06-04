@@ -1,4 +1,5 @@
 import {
+  Box,
   IconButton,
   Modal,
   ModalBody,
@@ -34,7 +35,7 @@ const DocumentModal = ({
   }, [])
 
   return (
-    <>
+    <Box className="absolute left-5 top-10">
       <IconButton
         aria-label="Upload documents"
         icon={<BsFolder2Open />}
@@ -64,7 +65,7 @@ const DocumentModal = ({
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </Box>
   )
 }
 
