@@ -18,4 +18,5 @@ export type User = {
   phone?: string
   telegram?: string
   dob?: string // Store in DD-MM format so that we can get their birthday easily.
+  shirtSize?: string
 }

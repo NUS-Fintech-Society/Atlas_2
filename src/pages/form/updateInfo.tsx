@@ -26,6 +26,8 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
   const [selectedShirtSize, setShirtSize] = useState<string>()
   const [submitBefore, setSubmitBefore] = useState(false)
 
+  const studentId = session?.user?.id as string
+
   const options = [
     { value: 'xs', label: 'XS' },
     { value: 's', label: 'S' },
@@ -41,7 +43,7 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
 
   //Form Data Integrity
   const FormSchema = z.object({
-    telehandle: z.string().min(1, { message: 'Invalid name' }),
+    telegram: z.string().min(1, { message: 'Invalid name' }),
     linkedin: z.string().min(1, { message: 'Invalid url' }),
     shirtSize: z.string().min(1, { message: 'Invalid size' })
   })
@@ -57,7 +59,7 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
   })
 
   const { mutateAsync, isLoading: isSubmitting } =
-    trpc.user.updateUserProfile.useMutation()
+    trpc.user.updateUserInfo.useMutation()
 
     const formSubmit = async (formData: FormSchemaType) => {
       try {
@@ -65,9 +67,10 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
         await mutateAsync({
 
           //toDO: add json attributes
-          telehandle: formData.telehandle,
+          studentId: studentId,
+          telegram: formData.telegram,
+          shirtSize: formData.shirtSize,
           linkedin: formData.linkedin,
-          shirtSize: formData.shirtsize
 
         })
         toast({
@@ -76,6 +79,10 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
           title: 'Success',
           description: 'User profile has been successfully updated',
         })
+
+        redirectHome()
+
+        
       } catch (e) {
         toast({
           description: (e as Error).message,
@@ -87,7 +94,7 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
     }
 
   //toDO: Route to applicant status page created by Zeyu
-  const redirectHome = () => router.push('')
+  const redirectHome = () => router.push('/events')
 
   return (
     <>
@@ -102,7 +109,7 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
       <TopNavbar isAdmin={session.isAdmin} />
 
       <Container>
-        <form>
+        <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">
             Update Member Particulars
           </h1>
@@ -136,7 +143,7 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
             <Input
             type='text'
             disabled={isSubmitting}
-            {...register('telehandle', {required: true})}
+            {...register('telegram', {required: true})}
             placeholder='Telegram Handle' />
             </div>
             <br/>
