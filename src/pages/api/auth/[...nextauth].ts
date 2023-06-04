@@ -59,6 +59,7 @@ export const authOptions: NextAuthOptions = {
           // If the account is found, challenge the hashPassword with the password
           const success = await compare(password, account.hashedPassword)
           if (!success) throw new Error('Invalid email or password')
+          console.log(account.isAdmin)
 
           // The user object is passed to the session callback in session.data.user
           return {
