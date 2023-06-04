@@ -11,7 +11,10 @@ const AdminUserPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
 
       <DataTable />
     </>

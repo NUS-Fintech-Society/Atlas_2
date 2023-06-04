@@ -14,51 +14,61 @@ import {
   Select,
   useToast,
 } from '@chakra-ui/react'
-
 import { useForm } from 'react-hook-form'
 import { trpc } from '~/utils/trpc'
+import { useContext, useCallback, useState } from 'react'
+import { ModalContext } from '~/context/ModalContext'
+import type { User } from '~/server/db/models/User'
+import { roles } from '~/constant/roles'
 
-interface editModalProps {
-  editIsOpen: boolean
-  editOnClose: () => void
-  data: any
-}
-
-const EditModal: React.FC<editModalProps> = (props) => {
+const EditModal = () => {
+  const modal = useContext(ModalContext)
+  const toast = useToast()
+  const [department, setDepartment] = useState('')
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
   })
 
-  const { mutateAsync } = trpc.member.updateProfile.useMutation()
-  const toast = useToast()
-  const onSubmit = async (data: any) => {
-    try {
-      const projData = {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        department: data.department,
-        role: data.roles,
+  const { data, isLoading, refetch } = trpc.user.getUserProfile.useQuery(
+    modal.id
+  )
+  const { mutateAsync, isLoading: loading } =
+    trpc.user.updateUserProfile.useMutation()
+
+  const onSubmit = useCallback(
+    async (data: Partial<User>) => {
+      try {
+        const projData = {
+          id: data.id as string,
+          name: data.name as string,
+          email: data.email as string,
+          department,
+          role: data.role as string,
+        }
+        await mutateAsync(projData)
+        await refetch()
+        toast({
+          duration: 9000,
+          description: 'User has been successfully updated',
+          title: 'Successfully updated',
+          status: 'success',
+        })
+      } catch (e) {
+        toast({
+          duration: 9000,
+          description: (e as Error).message,
+          title: 'Oops, something went wrong',
+          status: 'error',
+        })
       }
-      await mutateAsync(projData)
-      toast({
-        duration: 9000,
-        description: 'User has been successfully updated',
-        title: 'Successfully updated',
-        status: 'success',
-      })
-    } catch (e) {
-      toast({
-        duration: 9000,
-        description: (e as Error).message,
-        title: 'Oops, something went wrong',
-        status: 'error',
-      })
-    }
-  }
+    },
+    [mutateAsync, toast, department, refetch]
+  )
+
+  if (!modal.id || isLoading) return null
 
   return (
-    <Modal isOpen={props.editIsOpen} onClose={props.editOnClose}>
+    <Modal isOpen={modal.isOpen} onClose={modal.onClose}>
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={handleSubmit((data) => onSubmit(data))}>
@@ -73,7 +83,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
                 {...register('id')}
                 mb={'5'}
                 type="text"
-                defaultValue={props.data.id}
+                defaultValue={(data as User).id}
               />
 
               <FormLabel fontWeight={'semibold'}>Name</FormLabel>
@@ -81,7 +91,7 @@ const EditModal: React.FC<editModalProps> = (props) => {
                 mb={'5'}
                 type="text"
                 {...register('name')}
-                defaultValue={props.data.name}
+                defaultValue={(data as User).name}
               />
 
               <FormLabel fontWeight={'semibold'}>Email address</FormLabel>
@@ -89,39 +99,39 @@ const EditModal: React.FC<editModalProps> = (props) => {
                 mb={'5'}
                 {...register('email')}
                 type="email"
-                defaultValue={props.data.email}
+                defaultValue={(data as User).email}
               />
-
-              <FormLabel fontWeight={'semibold'}>Department</FormLabel>
-              <Select
-                mb={'5'}
-                {...register('department')}
-                defaultValue={props.data.department}
-              >
-                <option value="EXCO">EXCO</option>
-                <option value="Software Development">
-                  Software Development
-                </option>
-              </Select>
 
               <FormLabel fontWeight={'semibold'}>Role</FormLabel>
               <Select
-                mb={'5'}
-                {...register('roles')}
-                defaultValue={props.data.roles}
+                marginBottom={5}
+                isRequired
+                {...register("role")}
+                onChange={(e) => {
+                  if (!e.target.value) return
+                  const element = roles.filter(
+                    (role) => role.role === e.target.value
+                  )
+                  if (!element || !element.length || !element[0]) return
+                  setDepartment(element[0].department)
+                }}
+                placeholder="Select role"
               >
-                <option value="President">President</option>
-                <option value="Vice">Vice</option>
-                <option value="SWE">SWE</option>
-                <option value="Director">Director</option>
+                {roles.map((role, index) => {
+                  return (
+                    <option key={index} value={role.role}>
+                      {role.role} ({role.department})
+                    </option>
+                  )
+                })}
               </Select>
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button variant={'ghost'} mr={3} onClick={props.editOnClose}>
+            <Button variant={'ghost'} mr={3} onClick={modal.onClose}>
               Close
             </Button>
-            <Button colorScheme="facebook" type="submit">
+            <Button colorScheme="facebook" type="submit" disabled={loading}>
               Submit
             </Button>
           </ModalFooter>

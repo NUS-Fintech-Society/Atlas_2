@@ -53,9 +53,10 @@ const UserActionRequired: React.FC<UserActionRequiredProp> = ({
 const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
   const route = useRouter()
   const eventId = route.query.id as string
-  const { data, isLoading, refetch } = trpc.event.getEvent.useQuery(eventId)
+  const { data, isLoading, refetch } =
+    trpc.attendance.getEventForUser.useQuery(eventId)
   const { mutateAsync, isLoading: loading } =
-    trpc.event.markAttendance.useMutation()
+    trpc.attendance.markAttendance.useMutation()
   dayjs.extend(LocalizedFormat)
 
   const markAttendance = useCallback(async () => {
@@ -77,7 +78,10 @@ const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
           content="The confirm attendance page for Atlas"
         />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
       <Container>
         <div className="flex w-full flex-col items-start">
           {data ? (
