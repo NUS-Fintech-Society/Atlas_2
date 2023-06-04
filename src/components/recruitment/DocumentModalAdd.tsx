@@ -2,7 +2,6 @@ import { AddIcon } from '@chakra-ui/icons'
 import { Box, IconButton, Input, useToast } from '@chakra-ui/react'
 import { useState } from 'react'
 import { StorageService } from '~/utils/storage'
-import { ref, uploadBytes } from 'firebase/storage'
 import { uuidv4 } from '@firebase/util'
 import { Message } from '~/constant/messages'
 

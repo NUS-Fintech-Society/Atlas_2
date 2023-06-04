@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from 'react'
 import { BsFolder2Open } from 'react-icons/bs'
 import { StorageService } from '~/utils/storage'
-import DocumentModalAdd from './DocumentModalAdd'
+import DocumentModalCard from './DocumentModalCard'
 
 const DocumentModal = ({
   applicantId,
@@ -31,7 +31,6 @@ const DocumentModal = ({
       setFileList(fileList)
     }
     getFilesList()
-    console.log('fileList: ', fileList)
   }, [])
 
   return (
@@ -58,12 +57,10 @@ const DocumentModal = ({
           <ModalCloseButton />
           <ModalBody>
             <div className="my-5 mx-10 grid grid-cols-1 place-items-center gap-y-10 lg:grid-cols-2 ">
-              {/* {fileList.map((file) => {
-                console.log('file: ', file)
+              {fileList.map((file) => {
                 return <DocumentModalCard file={file} key={file} />
-              })} */}
+              })}
             </div>
-            <DocumentModalAdd applicantId={applicantId} />
           </ModalBody>
         </ModalContent>
       </Modal>
