@@ -6,6 +6,7 @@ import { env } from '../../../env/server.mjs'
 import type { User } from '~/server/db/models/User'
 
 import userCollection from '~/server/db/collections/UserCollection'
+import { where } from 'firebase/firestore'
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -50,12 +51,7 @@ export const authOptions: NextAuthOptions = {
 
           // Step 3: Get the user by the email
           const users = await userCollection.queries([
-            {
-              type: "where",
-              fieldPath: 'email',
-              direction: '==',
-              value: email,
-            },
+            where('email', '==', email),
           ])
 
           if (users.length === 0) {
