@@ -12,11 +12,12 @@ export type User = {
 
   // Optional fields in create single user.
   batch?: string
-  diet?: string
+  dietary?: string
   course?: string
   linkedin?: string
   phone?: string
   telegram?: string
   dob?: string // Store in DD-MM format so that we can get their birthday easily.
   shirtSize?: string
+  discord?: string
 }

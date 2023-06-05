@@ -54,4 +54,4 @@ const CalendarPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(CalendarPage, true)
+export default withAuth(CalendarPage, false)

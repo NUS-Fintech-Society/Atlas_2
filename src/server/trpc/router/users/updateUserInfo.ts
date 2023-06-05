@@ -9,13 +9,17 @@ export const updateUserInfo = protectedProcedure
       telegram: z.string(),
       shirtSize: z.string(),
       linkedin: z.string(),
+      discord: z.string(),
+      dietary: z.string()
     })
   )
   .mutation(async ({ input }) => {
     return await userCollection.update(input.studentId, {
     shirtSize: input.shirtSize,
     linkedin: input.linkedin,
-    telegram: input.telegram
+    telegram: input.telegram,
+    discord: input.discord,
+    dietary: input.dietary
 
     })
   })

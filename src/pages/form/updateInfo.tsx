@@ -45,7 +45,9 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
   const FormSchema = z.object({
     telegram: z.string().min(1, { message: 'Invalid name' }),
     linkedin: z.string().min(1, { message: 'Invalid url' }),
-    shirtSize: z.string().min(1, { message: 'Invalid size' })
+    shirtSize: z.string().min(1, { message: 'Invalid size' }),
+    dietary: z.string().min(1, {message:'Invalid dietary requirement'}),
+    discord: z.string().min(1, { message: 'Invalid ID' }),
   })
 
   type FormSchemaType = z.infer<typeof FormSchema>
@@ -71,6 +73,8 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
           telegram: formData.telegram,
           shirtSize: formData.shirtSize,
           linkedin: formData.linkedin,
+          discord: formData.discord,
+          dietary: formData.dietary
 
         })
         toast({
@@ -103,7 +107,7 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"
-          content="Onboarding memebr particulars for Atlas"
+          content="Onboarding member particulars for Atlas"
         />
       </Head>
       <TopNavbar isAdmin={session.isAdmin} />
@@ -155,6 +159,28 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
             {...register('linkedin', {required: true})}
             placeholder='Linkedin URL' />
             </div>
+            <br/>
+
+            <div>
+            <FormLabel> Discord Handle </FormLabel>
+            <Input
+            type='text'
+            disabled={isSubmitting}
+            {...register('discord', {required: true})}
+            placeholder='Discord Handle' />
+            </div>
+
+            <br/>
+
+            <div>
+            <FormLabel> Dietary Requirements </FormLabel>
+            <Input
+            type='text'
+            disabled={isSubmitting}
+            {...register('dietary', {required: true})}
+            placeholder='Dietary Requirements (Vegetarian etc)' />
+            </div>
+
             <br/>
 
             <div className="flex justify-between">
