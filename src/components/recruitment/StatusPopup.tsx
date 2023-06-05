@@ -24,10 +24,12 @@ const statusFillMap = {
 }
 
 const StatusPopup = ({
+  applicantId,
   status,
   appliedRoleId,
   refetch,
 }: {
+  applicantId: string
   appliedRoleId: string
   status: ApplicationStatus
   refetch: () => Promise<QueryObserverResult>
@@ -37,6 +39,7 @@ const StatusPopup = ({
   const updateStatus = async (status: ApplicationStatus) => {
     try {
       await mutateAsync({
+        applicantId: applicantId,
         status: status,
         appliedRoleId: appliedRoleId,
       })
