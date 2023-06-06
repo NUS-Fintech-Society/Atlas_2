@@ -11,6 +11,7 @@ import { deleteUserImage } from './deleteUserImage'
 import { updateUserProfile } from './updateUserProfile'
 import { updateUserContacts } from './updateUserContacts'
 import { getAllUsers } from './getAllUsers'
+import { updateUserInfo } from './updateUserInfo'
 
 export const userRouter = router({
   changePassword,
@@ -25,4 +26,5 @@ export const userRouter = router({
   updateUserContacts,
   updateUserImage,
   updateUserProfile,
+  updateUserInfo
 })
