@@ -5,12 +5,25 @@ type SearchContextType = {
   setSearch: (s: string) => void
 }
 
+type filterContextType = {
+  filter: string
+  setFilter: (s: string) => void
+}
+
 export const searchContext = createContext<SearchContextType>({
   search: '',
   setSearch: () => {
     return
   },
 })
+
+export const filterContext = createContext<ContextType>({
+  filter: '',
+  setFilter: () => {
+    return
+  },
+})
+
 
 const SearchProvider = (props: any) => {
   const [search, setSearch] = useState<string>('')
