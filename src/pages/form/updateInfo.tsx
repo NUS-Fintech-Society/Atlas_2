@@ -7,20 +7,18 @@ import {
   Select,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import withAuth, { BaseProps }from '~/utils/withAuth'
+import withAuth, { BaseProps } from '~/utils/withAuth'
 import React, { useState, ChangeEvent } from 'react'
 import Head from 'next/head'
 import Container from '~/components/auth/Container'
 import TopNavbar from '~/components/common/TopNavbar'
 import UploadImage from '~/components/profile/UploadImage'
-import { registerVersion } from '@firebase/app'
 import { trpc } from '~/utils/trpc'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-
-const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
+const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
   const toast = useToast()
   const [selectedShirtSize, setShirtSize] = useState<string>()
@@ -40,13 +38,12 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
     setShirtSize(event.target.value) // Update the selected value in the state
   }
 
-
   //Form Data Integrity
   const FormSchema = z.object({
     telegram: z.string().min(1, { message: 'Invalid name' }),
     linkedin: z.string().min(1, { message: 'Invalid url' }),
     shirtSize: z.string().min(1, { message: 'Invalid size' }),
-    dietary: z.string().min(1, {message:'Invalid dietary requirement'}),
+    dietary: z.string().min(1, { message: 'Invalid dietary requirement' }),
     discord: z.string().min(1, { message: 'Invalid ID' }),
   })
 
@@ -63,39 +60,34 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
   const { mutateAsync, isLoading: isSubmitting } =
     trpc.user.updateUserInfo.useMutation()
 
-    const formSubmit = async (formData: FormSchemaType) => {
-      try {
+  const formSubmit = async (formData: FormSchemaType) => {
+    try {
+      await mutateAsync({
+        //toDO: add json attributes
+        studentId: studentId,
+        telegram: formData.telegram,
+        shirtSize: formData.shirtSize,
+        linkedin: formData.linkedin,
+        discord: formData.discord,
+        dietary: formData.dietary,
+      })
+      toast({
+        duration: 3000,
+        status: 'success',
+        title: 'Success',
+        description: 'User profile has been successfully updated',
+      })
 
-        await mutateAsync({
-
-          //toDO: add json attributes
-          studentId: studentId,
-          telegram: formData.telegram,
-          shirtSize: formData.shirtSize,
-          linkedin: formData.linkedin,
-          discord: formData.discord,
-          dietary: formData.dietary
-
-        })
-        toast({
-          duration: 3000,
-          status: 'success',
-          title: 'Success',
-          description: 'User profile has been successfully updated',
-        })
-
-        redirectHome()
-
-        
-      } catch (e) {
-        toast({
-          description: (e as Error).message,
-          duration: 3000,
-          status: 'error',
-          title: 'Oops, an error occured!',
-        })
-      }
+      redirectHome()
+    } catch (e) {
+      toast({
+        description: (e as Error).message,
+        duration: 3000,
+        status: 'error',
+        title: 'Oops, an error occured!',
+      })
     }
+  }
 
   //toDO: Route to applicant status page created by Zeyu
   const redirectHome = () => router.push('/events')
@@ -117,22 +109,25 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
           <h1 className="mb-10 text-center text-2xl font-bold">
             Update Member Particulars
           </h1>
-          
 
           <div className="justify-center">
-          <UploadImage session={session} studentId={session?.user?.id as string} />
+            <UploadImage
+              session={session}
+              studentId={session?.user?.id as string}
+            />
           </div>
 
           <VStack align="left">
-
             <div>
-
               <FormLabel>Fintech Society Shirt Size</FormLabel>
-              </div>
+            </div>
 
-              <div className="flex justify-center">
-
-              <Select  {...register('shirtSize', { required: true })} value={selectedShirtSize} onChange={handleSelectChange}>
+            <div className="flex justify-center">
+              <Select
+                {...register('shirtSize', { required: true })}
+                value={selectedShirtSize}
+                onChange={handleSelectChange}
+              >
                 <option value="">Select Shirt Size</option>
                 {options.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -141,47 +136,51 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
                 ))}
               </Select>
             </div>
-            <br/>
+            <br />
             <div>
-            <FormLabel> Telegram Handle</FormLabel>
-            <Input
-            type='text'
-            disabled={isSubmitting}
-            {...register('telegram', {required: true})}
-            placeholder='Telegram Handle' />
+              <FormLabel> Telegram Handle</FormLabel>
+              <Input
+                type="text"
+                disabled={isSubmitting}
+                {...register('telegram', { required: true })}
+                placeholder="Telegram Handle"
+              />
             </div>
-            <br/>
+            <br />
             <div>
-            <FormLabel> Linkedin URL </FormLabel>
-            <Input
-            type='text'
-            disabled={isSubmitting}
-            {...register('linkedin', {required: true})}
-            placeholder='Linkedin URL' />
+              <FormLabel> Linkedin URL </FormLabel>
+              <Input
+                type="text"
+                disabled={isSubmitting}
+                {...register('linkedin', { required: true })}
+                placeholder="Linkedin URL"
+              />
             </div>
-            <br/>
+            <br />
 
             <div>
-            <FormLabel> Discord Handle </FormLabel>
-            <Input
-            type='text'
-            disabled={isSubmitting}
-            {...register('discord', {required: true})}
-            placeholder='Discord Handle' />
+              <FormLabel> Discord Handle </FormLabel>
+              <Input
+                type="text"
+                disabled={isSubmitting}
+                {...register('discord', { required: true })}
+                placeholder="Discord Handle"
+              />
             </div>
 
-            <br/>
+            <br />
 
             <div>
-            <FormLabel> Dietary Requirements </FormLabel>
-            <Input
-            type='text'
-            disabled={isSubmitting}
-            {...register('dietary', {required: true})}
-            placeholder='Dietary Requirements (Vegetarian etc)' />
+              <FormLabel> Dietary Requirements </FormLabel>
+              <Input
+                type="text"
+                disabled={isSubmitting}
+                {...register('dietary', { required: true })}
+                placeholder="Dietary Requirements (Vegetarian etc)"
+              />
             </div>
 
-            <br/>
+            <br />
 
             <div className="flex justify-between">
               <Button
@@ -203,7 +202,6 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
                 Update
               </Button>
             </div>
-
           </VStack>
         </form>
       </Container>
@@ -211,4 +209,4 @@ const updateInfoPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(updateInfoPage)
+export default withAuth(UpdateInfoPage)
