@@ -7,8 +7,8 @@ import {
   Select,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import withAuth, { BaseProps } from '~/utils/withAuth'
-import React, { useState, ChangeEvent } from 'react'
+import withAuth, { type BaseProps } from '~/utils/withAuth'
+import React, { useState, type ChangeEvent } from 'react'
 import Head from 'next/head'
 import Container from '~/components/auth/Container'
 import TopNavbar from '~/components/common/TopNavbar'
@@ -22,7 +22,6 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
   const toast = useToast()
   const [selectedShirtSize, setShirtSize] = useState<string>()
-  const [submitBefore, setSubmitBefore] = useState(false)
 
   const studentId = session?.user?.id as string
 
@@ -49,11 +48,7 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
 
   type FormSchemaType = z.infer<typeof FormSchema>
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormSchemaType>({
+  const { register, handleSubmit } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   })
 
@@ -102,7 +97,10 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
           content="Onboarding member particulars for Atlas"
         />
       </Head>
-      <TopNavbar image={session.user?.image as string} isAdmin={session.isAdmin} />
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
 
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
@@ -197,7 +195,6 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
                 className="text-white"
                 type="submit"
                 disabled={isSubmitting}
-                onClick={() => setSubmitBefore(true)}
               >
                 Update
               </Button>
