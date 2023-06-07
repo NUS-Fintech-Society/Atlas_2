@@ -13,9 +13,16 @@ const ApplicantGrid = () => {
   const filteredData =
     search === ''
       ? data
-      : data?.filter((applicant) => {
+      : data.filter((applicant) => {
           return applicant.name.toLowerCase().includes(search.toLowerCase())
         })
+
+  
+ 
+
+ 
+    
+
 
   
 
