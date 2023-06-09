@@ -5,7 +5,7 @@ import eventCollection from '~/server/db/collections/EventCollection'
 import { toDataURL } from 'qrcode'
 import { env } from '~/env/server.mjs'
 
-export const getEventInfo = protectedProcedure
+export const getEvent = protectedProcedure
   .input(z.string())
   .query(async ({ input }) => {
     try {

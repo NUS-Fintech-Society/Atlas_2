@@ -19,10 +19,11 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import dayjs from 'dayjs'
 import Image from 'next/image'
 import { type BodyProps } from '~/types/event/event.type'
+import Link from 'next/link'
 
 const DataTableModal = () => {
   const modal = useContext(ModalContext)
-  const { data, isLoading } = trpc.attendance.getEventInfo.useQuery(modal.id)
+  const { data, isLoading } = trpc.event.getEvent.useQuery(modal.id)
 
   if (!modal.id) {
     return null
@@ -93,6 +94,16 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
           })}
         </Tbody>
       </Table>
+      <p>
+        <Link href={'/events/' + data.id} className="mb-10 text-black">
+          Edit Event
+        </Link>
+      </p>
+      <p>
+        <Link href={'/events/' + data.id} className="mb-10 text-black">
+          DELETE Event
+        </Link>
+      </p>
     </>
   )
 }
