@@ -21,6 +21,7 @@ import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
+import { query } from 'firebase/firestore'
 
 const EventPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
@@ -60,11 +61,13 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
     resolver: zodResolver(FormSchema),
   })
 
-  const { data } = trpc.attendance.getAllAttendanceButSelf.useQuery()
+  const attendeesData =
+    trpc.attendance.getAllAttendanceButSelf.useQuery()['data']
+  const queryID = router.query.id?.toString?.() ?? ''
+  const eventData = trpc.event.getEvent.useQuery(queryID)['data']
 
   const { mutateAsync, isLoading: isSubmitting } =
-    trpc.event.createEvent.useMutation()
-
+    trpc.event.updateEvent.useMutation()
   const invalidAttendees = attendees.length === 0
   const formSubmit = async (formData: FormSchemaType) => {
     try {
@@ -73,6 +76,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
         return false
       }
       await mutateAsync({
+        id: eventData!.id!,
         name: formData.eventName,
         startDate: new Date(formData.startDate),
         endDate: new Date(formData.endDate),
@@ -84,7 +88,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
         duration: 3000,
         status: 'success',
         title: 'Success',
-        description: 'A new event has been successfully created',
+        description: 'The event has been successfully updated',
       })
     } catch (e) {
       toast({
@@ -97,16 +101,16 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
   }
   const redirectHome = () => router.push('/events')
 
-  if (!data) return <LoadingScreen />
+  if (!attendeesData) return <LoadingScreen />
 
-  console.log(register)
+  // console.log(register)
 
   return (
     <>
       <Head>
-        <title>Atlas | Create Event</title>
+        <title>Atlas | Update Event</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="The create event page for Atlas" />
+        <meta name="description" content="The update event page for Atlas" />
       </Head>
       <TopNavbar
         isAdmin={session.isAdmin}
@@ -122,7 +126,6 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
                 type="text"
                 disabled={isSubmitting}
                 {...register('eventName', { required: true })}
-                value={'AAAAA'}
               />
               {errors.eventName && (
                 <Text color="tomato" className="pt-2">
@@ -194,7 +197,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
                 }}
               ></Checkbox>
             </div>
-            <DataTable data={data} setAttendees={setAttendees} />
+            <DataTable data={attendeesData} setAttendees={setAttendees} />
             {submitBefore && invalidAttendees && (
               <Text color="tomato">At least one attendee is required</Text>
             )}

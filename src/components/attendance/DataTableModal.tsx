@@ -1,4 +1,5 @@
 import {
+  Button,
   ModalHeader,
   Modal,
   ModalOverlay,
@@ -10,6 +11,7 @@ import {
   Tbody,
   Td,
   Tr,
+  useToast,
 } from '@chakra-ui/react'
 import { useContext } from 'react'
 import { ModalContext } from '~/context/ModalContext'
@@ -20,6 +22,7 @@ import dayjs from 'dayjs'
 import Image from 'next/image'
 import { type BodyProps } from '~/types/event/event.type'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const DataTableModal = () => {
   const modal = useContext(ModalContext)
@@ -59,6 +62,30 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   dayjs.extend(LocalizedFormat)
   const startDate = dayjs(data.startDate).format('lll')
   const endDate = dayjs(data.endDate).format('lll')
+  const modal = useContext(EventModalContext)
+  const confirmDelete = trpc.event.deleteEvent.useQuery(modal.id)
+  const router = useRouter()
+
+  // const toast = useToast()
+  // const confirmDelete = async() => {
+  //   try {
+  //     await mutateAsync
+  //     console.log("ping")
+  //     toast({
+  //       duration: 3000,
+  //       status: 'success',
+  //       title: 'Success',
+  //       description: 'The event has been successfully deleted',
+  //     })
+  //   } catch (e) {
+  //     toast({
+  //       description: (e as Error).message,
+  //       duration: 3000,
+  //       status: 'error',
+  //       title: 'Oops, an error occured!',
+  //     })
+  //   }
+  // }
 
   return (
     <>
@@ -100,9 +127,15 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
         </Link>
       </p>
       <p>
-        <Link href={'/events/' + data.id} className="mb-10 text-black">
+        <Button
+          className="mb-10 text-black"
+          onClick={() => {
+            confirmDelete
+            router.refresh()
+          }}
+        >
           DELETE Event
-        </Link>
+        </Button>
       </p>
     </>
   )
