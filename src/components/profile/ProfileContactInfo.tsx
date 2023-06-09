@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { trpc } from '../../utils/trpc'
 import { type QueryObserverResult } from '@tanstack/react-query'
-import { BsDiscord, BsEnvelopeFill, BsTelegram } from 'react-icons/bs'
+import { BsEnvelopeFill } from 'react-icons/bs'
 import { Box, useToast } from '@chakra-ui/react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -13,9 +13,6 @@ import { Message } from '~/constant/messages'
 
 const ProfileContactInfo = (props: {
   studentId: string | null
-  // telegram: string | null
-  // discord: string | null
-  // personal_email: string | null
   email: string
   refetch: () => Promise<QueryObserverResult>
 }) => {
@@ -30,9 +27,6 @@ const ProfileContactInfo = (props: {
 
   // Form validation logic
   const preloadedValues = {
-    // telegram: props.telegram ? props.telegram : '',
-    // discord: props.discord ? props.discord : '',
-    // personal_email: props.personal_email ? props.personal_email : '',
     email: props.email ? props.email : '',
   }
 
@@ -98,36 +92,6 @@ const ProfileContactInfo = (props: {
           boxShadow="0px 3px 3px rgba(0, 0, 0, 0.2)"
           className="flex flex-col gap-3 py-6 px-10"
         >
-          {/* <Box className="flex items-center gap-1">
-            <BsTelegram size="20px" className="fill-[#0088cc]" />
-            <DynamicInputField
-              edit={edit}
-              isSubmitting={isSubmitting}
-              register={register}
-              field="telegram"
-              fieldValue={props.telegram}
-            />
-          </Box>
-          <Box className="flex items-center gap-1">
-            <BsDiscord size="20px" className="fill-[#5865F2]" />
-            <DynamicInputField
-              edit={edit}
-              isSubmitting={isSubmitting}
-              register={register}
-              field="discord"
-              fieldValue={props.discord}
-            />
-          </Box> 
-          <Box className="flex items-center gap-1">
-            <BsEnvelopeFill size="20px" className="fill-[#54CCFF]" />
-            <DynamicInputField
-              edit={edit}
-              isSubmitting={isSubmitting}
-              register={register}
-              field="personal_email"
-              fieldValue={props.personal_email}
-            />
-          </Box> */}
           <Box className="flex items-center gap-1">
             <BsEnvelopeFill size="20px" className="fill-[#97AEFF]" />
             <DynamicInputField

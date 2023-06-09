@@ -6,6 +6,7 @@ declare module 'next-auth' {
    */
   interface Session {
     isAdmin: boolean
+    isApplicant: boolean
     level?: string
     user?: {
       level?: string
