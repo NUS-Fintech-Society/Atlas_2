@@ -17,7 +17,7 @@ export const searchContext = createContext<SearchContextType>({
   },
 })
 
-export const filterContext = createContext<ContextType>({
+export const filterContext = createContext<filterContextType>({
   filter: '',
   setFilter: () => {
     return
