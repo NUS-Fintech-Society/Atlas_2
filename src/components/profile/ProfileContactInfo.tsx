@@ -31,7 +31,6 @@ const FormSchema = z.object({
 type FormSchemaType = z.infer<typeof FormSchema>
 
 const ProfileContactInfo = (props: {
-  studentId: string | null
   user: User
   refetch: () => Promise<QueryObserverResult>
 }) => {
@@ -57,33 +56,24 @@ const ProfileContactInfo = (props: {
   const formSubmit = useCallback(
     async (formData: FormSchemaType) => {
       try {
-        if (props.studentId) {
-          toast({
-            duration: 3000,
-            status: 'loading',
-            title: 'Loading',
-            description: Message.PERSONAL_INFO_LOADING,
-          })
+        await mutateAsync({
+          dietary: formData.dietary,
+          discord: formData.discord,
+          email: formData.email,
+          linkedin: formData.linkedin,
+          shirtSize: formData.shirtSize,
+          telegram: formData.telegram,
+        })
 
-          await mutateAsync({
-            dietary: formData.dietary,
-            discord: formData.discord,
-            email: formData.email,
-            linkedin: formData.linkedin,
-            shirtSize: formData.shirtSize,
-            telegram: formData.telegram,
-          })
+        await props.refetch()
+        setEdit(false)
 
-          await props.refetch()
-          setEdit(false)
-
-          toast({
-            duration: 3000,
-            status: 'success',
-            title: 'Success',
-            description: Message.PERSONAL_INFO_SUCCESS,
-          })
-        }
+        toast({
+          duration: 3000,
+          status: 'success',
+          title: 'Success',
+          description: Message.PERSONAL_INFO_SUCCESS,
+        })
       } catch (e) {
         toast({
           duration: 3000,

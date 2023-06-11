@@ -20,7 +20,7 @@ const ProfileCard = ({
   session: Session
 }) => {
   const router = useRouter()
-  const redirectToResetPassword = () => router.push('/auth/forgetpassword')
+  const redirectToResetPassword = () => router.push('/profile/reset-password')
 
   const {
     isLoading,
@@ -29,7 +29,7 @@ const ProfileCard = ({
   } = trpc.user.getUserImage.useQuery(studentId)
 
   return (
-    <Box className="mb-10 flex flex-col items-center">
+    <Box className="my-5 flex flex-col items-center">
       <Box className="relative">
         <Image
           alt="profile-pic"
