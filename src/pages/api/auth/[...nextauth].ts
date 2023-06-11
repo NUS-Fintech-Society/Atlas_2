@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.isAdmin = (user as User).isAdmin as boolean
         token.department = (user as User).department as string
-        token.isApplicant = (user as User).role === 'Applicant'
+        token.isApplicant = (user as any).isApplicant
         token.picture = user.image
       }
       return token
@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
             department: user.department as string,
             name: user.name,
             email: user.email,
-            isApplicant: user.role === 'ROLE',
+            isApplicant: user.role === 'Applicant',
             isAdmin: user.isAdmin,
             image: user.image || '',
           }
