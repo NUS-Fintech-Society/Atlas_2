@@ -1,6 +1,7 @@
-import { useState} from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import {
+  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,7 +14,6 @@ import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { BaseProps } from '~/utils/withAuth'
 
-
 enum PageState {
   LOGIN,
   FORGET_PASSWORD,
@@ -22,8 +22,17 @@ enum PageState {
 const Application_Status: React.FC<BaseProps> = ({ session }) => {
   //this part needs backend to update the status
   const [isOpen, setIsOpen] = useState(false)
+  const [isAcceptOpen, setIsAcceptOpen] = useState(false)
+  const [isRejectOpen, setIsRejectOpen] = useState(false)
+  const onOpenAccept = () => setIsAcceptOpen(true)
+  const onCloseAccept = () => setIsAcceptOpen(false)
+  const onOpenReject = () => setIsRejectOpen(true)
+  const onCloseReject = () => setIsRejectOpen(false)
   const onOpen = () => setIsOpen(true)
   const onClose = () => setIsOpen(false)
+  //better to fetch from backend
+  const [isRejected, setIsRejected] = useState(false)
+  const [isAccepted, setIsAccepted] = useState(false)
 
   const roles = [
     {
@@ -80,17 +89,132 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
               <div key={item.id} className="mt-3 flex items-center ">
                 <div className="flex-grow">
                   {item.status == 'accepted' && (
-                    <h3 className="mt-3 flex justify-center text-2xl md:text-5xl">
-                      {item.name}
-                      <Image
-                        alt="logo"
-                        src="/images/Ellipse 1.svg"
-                        height={35}
-                        width={35}
-                        className="ml-14 flex  flex-col"
-                      />
-                      {/* Accepted */}
-                    </h3>
+                    <div className="flex justify-center">
+                      <h3 className="mt-3  flex justify-center text-2xl md:text-5xl">
+                        {item.name}
+                        <Image
+                          alt="logo"
+                          src="/images/Ellipse 1.svg"
+                          height={35}
+                          width={35}
+                          className="ml-14 flex  flex-col"
+                        />
+                      </h3>
+
+                      {isAccepted || isRejected ? (
+                        <div></div>
+                      ) : (
+                        <div className="ml-14 flex">
+                          <button
+                            onClick={onOpenAccept}
+                            className=" ml-5  rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
+                          >
+                            Accept
+                          </button>
+                          <button
+                            onClick={onOpenReject}
+                            className="ml-5  rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
+                      <Modal
+                        isOpen={isAcceptOpen}
+                        onClose={onCloseAccept}
+                        size="xs"
+                      >
+                        <ModalOverlay bg="none" backdropFilter="auto" />
+                        <ModalContent>
+                          <ModalHeader fontSize="5xl"></ModalHeader>
+                          <ModalCloseButton />
+                          <ModalBody fontSize="3xl ">
+                            <div className=" flex-col justify-center">
+                              <div className="items-center">
+                                Confirm Acceptance?
+                                <button
+                                  onClick={() => {
+                                    onCloseAccept()
+                                    setIsAccepted(true)
+                                  }}
+                                  className="mt-5 rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
+                                >
+                                  Confirm
+                                </button>
+                                <button
+                                  onClick={onCloseAccept}
+                                  className="ml-10 mt-5 rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          </ModalBody>
+                          <ModalFooter></ModalFooter>
+                        </ModalContent>
+                      </Modal>
+                      <Modal
+                        isOpen={isRejectOpen}
+                        onClose={onCloseReject}
+                        size="xs"
+                      >
+                        <ModalOverlay bg="none" backdropFilter="auto" />
+                        <ModalContent>
+                          <ModalHeader fontSize="5xl"></ModalHeader>
+                          <ModalCloseButton />
+                          <ModalBody fontSize="3xl">
+                            <div className="flex flex-col items-start">
+                              <div className="items-center">
+                                Confirm Rejection?
+                                <button
+                                  onClick={() => {
+                                    onCloseReject()
+                                    setIsRejected(true)
+                                  }}
+                                  className="mt-5 rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
+                                >
+                                  Confirm
+                                </button>
+                                <button
+                                  onClick={onCloseReject}
+                                  className="ml-10 mt-5 rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          </ModalBody>
+                          <ModalFooter></ModalFooter>
+                        </ModalContent>
+                      </Modal>
+                    </div>
+
+                    /* <div>
+      <h3 className="text-2xl inline  justify-center md:text-5xl">
+        {item.name}
+      
+      <Image
+        alt="logo"
+        src="/images/Ellipse 1.svg"
+        height={35}
+        width={35}
+        className="ml-14"
+      />
+   </h3>
+   <span className="inline-flex items-baseline">
+        <button
+          className="bg-green-500 inline hover:bg-green-600 text-white text-2xl py-2 px-4 font-bold rounded"
+        
+        >
+          Accept
+        </button>
+        <button
+          className="ml-2 bg-red-500 inline hover:bg-red-600 text-white text-2xl py-2 px-4 font-bold rounded"
+        >
+          Reject
+        </button>
+        </span>
+        </div> */
                   )}
 
                   {item.status == 'offered' && (
@@ -156,8 +280,6 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                        hover:bg-[#FFD27C]  
                        md:h-20
                        md:w-20
-                       
-                       
                        "
               >
                 <Image
