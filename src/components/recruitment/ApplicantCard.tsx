@@ -57,7 +57,6 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
           <Text>Role Applied:</Text>
           <UnorderedList styleType="none">
             <AppliedRoleListItem
-              applicantId={applicant.id}
               appliedRole={appliedRole}
               key={appliedRole.id}
               refetch={refetch}

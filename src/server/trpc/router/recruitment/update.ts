@@ -3,25 +3,19 @@ import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
-import userCollection from '~/server/db/collections/UserCollection'
 
 export const updateAppliedRoleStatus = protectedProcedure
   .input(
     z.object({
-      applicantId: z.string(),
       appliedRoleId: z.string(),
       status: z.nativeEnum(ApplicationStatus),
     })
   )
   .mutation(async ({ input }) => {
     try {
-      const res = await appliedRoleCollection.update(input.appliedRoleId, {
+      return await appliedRoleCollection.update(input.appliedRoleId, {
         status: input.status,
       })
-      if (input.status == ApplicationStatus.ACCEPTED) {
-        updateAcceptedApplicant(input.applicantId, input.appliedRoleId)
-      }
-      return res
     } catch (e) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
@@ -49,16 +43,3 @@ export const updateInterviewNotes = protectedProcedure
       })
     }
   })
-
-// update the current User model's department and role as the applicant is now a FTS member
-const updateAcceptedApplicant = async (
-  applicantId: string,
-  appliedRoleId: string
-) => {
-  const appliedRole = await appliedRoleCollection.findById(appliedRoleId)
-  const user = await userCollection.update(applicantId, {
-    department: appliedRole?.department,
-    role: appliedRole?.role,
-  })
-  return user
-}
