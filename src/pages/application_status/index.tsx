@@ -13,6 +13,7 @@ import {
 import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { BaseProps } from '~/utils/withAuth'
+import React from 'react'
 
 enum PageState {
   LOGIN,

@@ -1,30 +1,21 @@
 import { useContext } from 'react'
-import { filterContext, searchContext } from '~/context/recruitment/SearchProvider'
+import {searchContext } from '~/context/recruitment/SearchProvider'
 import { trpc } from '~/utils/trpc'
 import ApplicantCard from './ApplicantCard'
 import InfoPopup from '~/components/recruitment/InfoPopup'
 
 const ApplicantGrid = () => {
   const { search } = useContext(searchContext)
-  const { filter } = useContext(filterContext)
+  // const { filter } = useContext(filterContext)
   const { data } = trpc.recruitment.getAllApplicantsTopRoleByDept.useQuery()
   if (!data) return <></>
 
   const filteredData =
     search === ''
       ? data
-      : data.filter((applicant) => {
+      : data?.filter((applicant) => {
           return applicant.name.toLowerCase().includes(search.toLowerCase())
         })
-
-  
- 
-
- 
-    
-
-
-  
 
   return (
     <>
