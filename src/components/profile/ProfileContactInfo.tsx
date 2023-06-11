@@ -1,7 +1,14 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { trpc } from '../../utils/trpc'
 import { type QueryObserverResult } from '@tanstack/react-query'
-import { BsEnvelopeFill } from 'react-icons/bs'
+import {
+  BsEnvelopeFill,
+  BsTelegram,
+  BsDiscord,
+  BsLinkedin,
+} from 'react-icons/bs'
+import { FaTshirt } from 'react-icons/fa'
+import { MdFastfood } from 'react-icons/md'
 import { Box, useToast } from '@chakra-ui/react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -10,10 +17,22 @@ import EditProfileBtn from './EditProfileButton'
 import SubmitEditBtn from './SubmitEditButton'
 import DynamicInputField from './DynamicInputField'
 import { Message } from '~/constant/messages'
+import type { User } from '~/server/db/models/User'
+
+const FormSchema = z.object({
+  discord: z.string(),
+  dietary: z.string(),
+  email: z.string().email(),
+  linkedin: z.string(),
+  telegram: z.string(),
+  shirtSize: z.string(),
+})
+
+type FormSchemaType = z.infer<typeof FormSchema>
 
 const ProfileContactInfo = (props: {
   studentId: string | null
-  email: string
+  user: User
   refetch: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
@@ -21,70 +40,65 @@ const ProfileContactInfo = (props: {
     trpc.user.updateUserContacts.useMutation()
 
   const [edit, setEdit] = useState(false)
-  const onEdit = () => {
-    setEdit(!edit)
-  }
-
-  // Form validation logic
-  const preloadedValues = {
-    email: props.email ? props.email : '',
-  }
-
-  const FormSchema = z.object({
-    telegram: z.string(),
-    discord: z.string(),
-    personal_email: z.string().email(),
-    email: z.string().email(),
-  })
-
-  type FormSchemaType = z.infer<typeof FormSchema>
+  const onEdit = useCallback(() => setEdit(!edit), [edit])
 
   const { register, handleSubmit } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
-    defaultValues: preloadedValues,
+    defaultValues: {
+      discord: props.user.discord || '',
+      dietary: props.user.dietary || '',
+      email: props.user.email || '',
+      linkedin: props.user.linkedin || '',
+      shirtSize: props.user.shirtSize || '',
+      telegram: props.user.telegram || '',
+    },
   })
 
-  const formSubmit = async (formData: FormSchemaType) => {
-    try {
-      if (props.studentId) {
-        await mutateAsync({
-          studentId: props.studentId,
-          telegram: formData.telegram,
-          discord: formData.discord,
-          personal_email: formData.personal_email,
-          email: formData.email,
-        })
+  const formSubmit = useCallback(
+    async (formData: FormSchemaType) => {
+      try {
+        if (props.studentId) {
+          toast({
+            duration: 3000,
+            status: 'loading',
+            title: 'Loading',
+            description: Message.PERSONAL_INFO_LOADING,
+          })
 
+          await mutateAsync({
+            dietary: formData.dietary,
+            discord: formData.discord,
+            email: formData.email,
+            linkedin: formData.linkedin,
+            shirtSize: formData.shirtSize,
+            telegram: formData.telegram,
+          })
+
+          await props.refetch()
+          setEdit(false)
+
+          toast({
+            duration: 3000,
+            status: 'success',
+            title: 'Success',
+            description: Message.PERSONAL_INFO_SUCCESS,
+          })
+        }
+      } catch (e) {
         toast({
           duration: 3000,
-          status: 'loading',
-          title: 'Loading',
-          description: Message.PERSONAL_INFO_LOADING,
-        })
-
-        await props.refetch()
-        setEdit(false)
-
-        toast({
-          duration: 3000,
-          status: 'success',
-          title: 'Success',
-          description: Message.PERSONAL_INFO_SUCCESS,
+          status: 'error',
+          title: 'Oops, an error occured!',
+          description: (e as Error).message,
         })
       }
-    } catch (e) {
-      toast({
-        duration: 3000,
-        status: 'error',
-        title: 'Oops, an error occured!',
-        description: Message.PERSONAL_INFO_ERROR,
-      })
-    }
-  }
+    },
+    [mutateAsync, props, toast]
+  )
 
   return (
-    <Box className="relative">
-      <EditProfileBtn studentId={props.studentId} onEdit={onEdit} edit={edit} />
+    <div className="relative">
+      <EditProfileBtn onEdit={onEdit} edit={edit} />
       <form onSubmit={handleSubmit(formSubmit)}>
         <Box
           backgroundColor="#F7FCFF"
@@ -99,13 +113,68 @@ const ProfileContactInfo = (props: {
               isSubmitting={isSubmitting}
               register={register}
               field="email"
-              fieldValue={props.email}
+              fieldValue={props.user.email}
+            />
+          </Box>
+
+          <Box className="flex items-center gap-1">
+            <MdFastfood size="20px" className="fill-[#97AEFF]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="dietary"
+              fieldValue={props.user.dietary as string}
+            />
+          </Box>
+
+          <Box className="flex items-center gap-1">
+            <BsTelegram size="20px" className="fill-[#97AEFF]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="telegram"
+              fieldValue={props.user.telegram as string}
+            />
+          </Box>
+
+          <Box className="flex items-center gap-1">
+            <BsDiscord size="20px" className="fill-[#97AEFF]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="discord"
+              fieldValue={props.user.discord as string}
+            />
+          </Box>
+
+          <Box className="flex items-center gap-1">
+            <BsLinkedin size="20px" className="fill-[#97AEFF]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="linkedin"
+              fieldValue={props.user.linkedin as string}
+            />
+          </Box>
+
+          <Box className="flex items-center gap-1">
+            <FaTshirt size="20px" className="fill-[#97AEFF]" />
+            <DynamicInputField
+              edit={edit}
+              isSubmitting={isSubmitting}
+              register={register}
+              field="shirtSize"
+              fieldValue={props.user.shirtSize as string}
             />
           </Box>
         </Box>
         {edit && <SubmitEditBtn />}
       </form>
-    </Box>
+    </div>
   )
 }
 

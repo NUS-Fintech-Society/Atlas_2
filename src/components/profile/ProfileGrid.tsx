@@ -1,17 +1,9 @@
 import { trpc } from '../../utils/trpc'
-import type { Session } from 'next-auth'
 import LoadingScreen from '../common/LoadingScreen'
 import ProfileCard from './ProfileCard'
-import ProfileInfo from './ProfileInfo'
 import ProfileContactInfo from './ProfileContactInfo'
 
-const ProfileGrid = ({
-  studentId,
-  session,
-}: {
-  studentId: string
-  session: Session
-}) => {
+const ProfileGrid = ({ studentId }: { studentId: string }) => {
   const { data, isError, isLoading, refetch } =
     trpc.user.getUserProfile.useQuery(studentId)
 
@@ -35,10 +27,7 @@ const ProfileGrid = ({
         />
       </div>
       <div className="col-span-2 w-3/4">
-        <ProfileContactInfo studentId={studentId} {...data} refetch={refetch} />
-      </div>
-      <div className="col-span-2 row-span-2 mb-10 w-3/4">
-        {/* <ProfileInfo {...data} /> */}
+        <ProfileContactInfo studentId={studentId} user={data} refetch={refetch} />
       </div>
     </div>
   )

@@ -20,7 +20,7 @@ const ProfilePage: React.FC<BaseProps> = ({ session }) => {
       <Text className="m-8 text-center text-3xl font-semibold underline underline-offset-8">
         Profile
       </Text>
-      <ProfileGrid session={session} studentId={session?.user?.id as string} />
+      <ProfileGrid studentId={session?.user?.id as string} />
     </Box>
   )
 }

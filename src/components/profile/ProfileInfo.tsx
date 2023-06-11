@@ -1,15 +1,7 @@
 import { Box, Table, TableContainer, Tbody, Td, Tr } from '@chakra-ui/react'
+import type { User } from '~/server/db/models/User'
 
-type ProfilePageType = {
-  gender: string | null
-  batch: string | null
-  year: string | null
-  faculty: string | null
-  major: string | null
-
-}
-
-const ProfileInfo = (props: ProfilePageType) => {
+const ProfileInfo = (props: User) => {
   return (
     <Box
       backgroundColor="rgba(242, 235, 255, 0.58)"
@@ -22,10 +14,10 @@ const ProfileInfo = (props: ProfilePageType) => {
           <Tbody>
             <Tr>
               <Td textColor="#002D70" className="font-medium">
-                BATCH
+                Dietary
               </Td>
               <Td textColor="#002D70" className="font-light">
-                {props.batch}
+                {props.dietary}
               </Td>
             </Tr>
             <Tr>
