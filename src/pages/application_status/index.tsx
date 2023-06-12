@@ -90,34 +90,34 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                 <div className="flex-grow">
                   {item.status == 'accepted' && (
                     <div className="flex justify-center">
-                      <h3 className="mt-3  flex justify-center text-2xl md:text-5xl">
+                      <span className="mt-3  flex  text-2xl md:text-5xl">
                         {item.name}
                         <Image
                           alt="logo"
                           src="/images/Ellipse 1.svg"
                           height={35}
                           width={35}
-                          className="ml-14 flex  flex-col"
+                          className="md:ml-14 ml-2 flex  flex-col"
                         />
-                      </h3>
+                      </span>
 
                       {isAccepted || isRejected ? (
                         <div></div>
                       ) : (
-                        <div className="ml-14 flex">
+                        <div className="md:ml-14 ml-3 flex ">
                           <button
                             onClick={onOpenAccept}
-                            className=" ml-5  rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
+                            className=" md:ml-5  rounded bg-green-500 md:py-2 md:px-4 md:text-2xl font-bold text-white hover:bg-green-600"
                           >
                             Accept
                           </button>
                           <button
                             onClick={onOpenReject}
-                            className="ml-5  rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
+                            className="md:ml-5 ml-3 rounded bg-red-500 md:py-2 md:px-4  md:text-2xl font-bold text-white hover:bg-red-600"
                           >
                             Reject
                           </button>
-                        </div>
+                       </div>
                       )}
                       <Modal
                         isOpen={isAcceptOpen}
@@ -273,7 +273,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                 </div>
               </div>
             ))}
-            <div className="fixed bottom-20 right-6 md:right-28">
+            <div className="fixed bottom-10 right-6 md:right-20">
               <button
                 onClick={onOpen}
                 className="h-16 w-16 rounded-full bg-[#FFEBC5] text-white 
