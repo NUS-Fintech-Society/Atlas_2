@@ -55,6 +55,8 @@ const DataTableModal = () => {
 }
 
 const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
+  const modal = useContext(ModalContext)
+  const router = useRouter()
   if (!data) {
     return <div>No Event Found</div>
   }
@@ -62,9 +64,7 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   dayjs.extend(LocalizedFormat)
   const startDate = dayjs(data.startDate).format('lll')
   const endDate = dayjs(data.endDate).format('lll')
-  const modal = useContext(EventModalContext)
   const confirmDelete = trpc.event.deleteEvent.useQuery(modal.id)
-  const router = useRouter()
 
   // const toast = useToast()
   // const confirmDelete = async() => {
@@ -122,20 +122,27 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
         </Tbody>
       </Table>
       <p>
-        <Link href={'/events/' + data.id} className="mb-10 text-black">
-          Edit Event
-        </Link>
-      </p>
-      <p>
-        <Button
-          className="mb-10 text-black"
-          onClick={() => {
-            confirmDelete
-            router.refresh()
-          }}
-        >
-          DELETE Event
-        </Button>
+        <div className="mt-5 flex flex-row items-center justify-between">
+          <Link href={'/events/' + data.id} className="mb-10">
+            <Button
+              textColor="white"
+              bgColor="transparent"
+              border="2px solid #FFFFFF"
+            >
+              Edit
+            </Button>
+          </Link>
+          <Button
+            className="mb-10 text-black"
+            bgColor="#4365DD"
+            onClick={() => {
+              confirmDelete
+              router.refresh()
+            }}
+          >
+            Delete
+          </Button>
+        </div>
       </p>
     </>
   )
