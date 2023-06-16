@@ -57,6 +57,7 @@ const DataTableModal = () => {
 const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   const modal = useContext(ModalContext)
   const router = useRouter()
+  const toast = useToast()
   if (!data) {
     return <div>No Event Found</div>
   }
@@ -64,28 +65,30 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   dayjs.extend(LocalizedFormat)
   const startDate = dayjs(data.startDate).format('lll')
   const endDate = dayjs(data.endDate).format('lll')
-  const confirmDelete = trpc.event.deleteEvent.useQuery(modal.id)
 
-  // const toast = useToast()
-  // const confirmDelete = async() => {
-  //   try {
-  //     await mutateAsync
-  //     console.log("ping")
-  //     toast({
-  //       duration: 3000,
-  //       status: 'success',
-  //       title: 'Success',
-  //       description: 'The event has been successfully deleted',
-  //     })
-  //   } catch (e) {
-  //     toast({
-  //       description: (e as Error).message,
-  //       duration: 3000,
-  //       status: 'error',
-  //       title: 'Oops, an error occured!',
-  //     })
-  //   }
-  // }
+  const { mutateAsync, isLoading: isSubmitting } =
+    trpc.event.deleteEvent.useMutation()
+  const confirmDelete = async () => {
+    try {
+      await mutateAsync({
+        id: modal.id,
+      })
+      // console.log("ping")
+      toast({
+        duration: 3000,
+        status: 'success',
+        title: 'Success',
+        description: 'The event has been successfully deleted',
+      })
+    } catch (e) {
+      toast({
+        description: (e as Error).message,
+        duration: 3000,
+        status: 'error',
+        title: 'Oops, an error occured!',
+      })
+    }
+  }
 
   return (
     <>
@@ -128,20 +131,21 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
               textColor="white"
               bgColor="transparent"
               border="2px solid #FFFFFF"
+              disabled={isSubmitting}
             >
               Edit
             </Button>
           </Link>
-          <Button
-            className="mb-10 text-black"
-            bgColor="#4365DD"
-            onClick={() => {
-              confirmDelete
-              router.refresh()
-            }}
-          >
-            Delete
-          </Button>
+          <form onSubmit={confirmDelete}>
+            <Button
+              className="mb-10 text-black"
+              bgColor="#4365DD"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              Delete
+            </Button>
+          </form>
         </div>
       </p>
     </>

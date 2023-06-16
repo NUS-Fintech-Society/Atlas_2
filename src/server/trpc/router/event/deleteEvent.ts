@@ -9,11 +9,12 @@ import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
 
 export const deleteEvent = protectedProcedure
-    .input(z.string())
-    .query(async ({ input }) => {
+    .input(z.object({
+        id: z.string()
+    }))
+    .mutation(async ({ input }) => {
         try {
-            if (!input) return
-                await eventCollection.delete(input)
+                await eventCollection.delete(input.id)
             } catch (e) {
                 await logCollection.add({
                     createdAt: Timestamp.fromDate(new Date()),
