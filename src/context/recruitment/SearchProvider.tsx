@@ -8,11 +8,6 @@ type SearchContextType = {
   setFilter: (s: string) => void
 }
 
-// type filterContextType = {
-//   filter: string
-//   setFilter: (s: string) => void
-// }
-
 export const searchContext = createContext<SearchContextType>({
   search: '',
   setSearch: () => {
@@ -23,14 +18,6 @@ export const searchContext = createContext<SearchContextType>({
     return
   },
 })
-
-// export const filterContext = createContext<filterContextType>({
-//   filter: '',
-//   setFilter: () => {
-//     return
-//   },
-// })
-
 
 const SearchProvider = (props: any) => {
   const [search, setSearch] = useState<string>('')
