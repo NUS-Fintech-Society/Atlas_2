@@ -43,3 +43,25 @@ export const updateInterviewNotes = protectedProcedure
       })
     }
   })
+
+  export const updateAppliedRoleFlag = protectedProcedure
+  .input(
+    z.object({
+      appliedRoleId: z.string(),
+      flag: z.boolean(),
+    })
+  )
+  .mutation(async ({ input }) => {
+    try {
+      return await appliedRoleCollection.update(input.appliedRoleId, {
+        flag: input.flag,
+      })
+    } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
+      })
+    }
+  })
+
+

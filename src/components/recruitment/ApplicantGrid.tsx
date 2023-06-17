@@ -29,11 +29,13 @@ const ApplicantGrid = () => {
           (search === '' ?        
           data?.filter((applicant) => {
               return (applicant.appliedRoles.some((role) => (role.role.toLowerCase() === filter.toLowerCase())) || 
-              applicant.appliedRoles.some((role) =>role.status.toLowerCase() === filter.toLowerCase()))
+              applicant.appliedRoles.some((role) =>role.status.toLowerCase() === filter.toLowerCase()) ||
+              applicant.appliedRoles.some((role) => role.flag.toString() === filter))
             }) :
             data?.filter((applicant) => {
               return (applicant.appliedRoles.some((role) => (role.role.toLowerCase() === filter.toLowerCase())) || 
-              applicant.appliedRoles.some((role) =>role.status.toLowerCase() === filter.toLowerCase()))
+              applicant.appliedRoles.some((role) =>role.status.toLowerCase() === filter.toLowerCase()) ||
+              applicant.appliedRoles.some((role) => role.flag.toString() === filter))
             }).filter((remaining) => {
               return remaining.name.toLowerCase().includes(search.toLowerCase())
             })

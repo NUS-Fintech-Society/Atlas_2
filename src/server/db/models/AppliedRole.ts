@@ -6,6 +6,7 @@ export type AppliedRole = {
   interviewNotes?: string
   role: string
   status: ApplicationStatus
+  flag: boolean
 }
 
 export enum ApplicationStatus {

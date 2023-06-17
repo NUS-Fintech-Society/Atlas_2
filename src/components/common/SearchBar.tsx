@@ -223,10 +223,10 @@ const SearchBar = () => {
       return (
         <ul className="ml-2">
           <button 
-          onClick={() => {setShowOptions(false), setShowDropdown(true), setFilter('flagged')}}
+          onClick={() => {setShowOptions(false), setShowDropdown(true), setFilter('true')}}
           className="px-3 py-2 cursor-pointer">Flagged</button>
           <button 
-          onClick={() => {setShowOptions(false), setShowDropdown(true), setFilter('unflagged')}}
+          onClick={() => {setShowOptions(false), setShowDropdown(true), setFilter('false')}}
           className="px-3 py-2 cursor-pointer">Unflagged</button>
         </ul>
       );
