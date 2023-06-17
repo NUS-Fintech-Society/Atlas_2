@@ -37,16 +37,19 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
   const roles = [
     {
       id: 1,
+      department: 'Software Engineering',
       name: 'Software Engineer',
       status: 'accepted',
     },
     {
       id: 2,
+      department: 'Machine Learning',
       name: 'Technical Analyst',
       status: 'interviewed',
     },
     {
       id: 3,
+      department: 'Blockchain',
       name: 'Research Analyst',
       status: 'rejected',
     },
@@ -90,8 +93,8 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                 <div className="flex-grow">
                   {item.status == 'accepted' && (
                     <div className="flex justify-center">
-                      <span className="mt-3  flex  text-2xl md:text-5xl">
-                        {item.name}
+                      <span className="mt-3  flex  text-2xl md:text-4xl">
+                        {item.department} - {item.name}
                         <Image
                           alt="logo"
                           src="/images/Ellipse 1.svg"
@@ -218,8 +221,8 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
 
                   {item.status == 'offered' && (
-                    <h3 className="flex justify-center text-2xl md:text-5xl">
-                      {item.name}
+                    <h3 className="flex justify-center text-2xl md:text-4xl">
+                        {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/blue_dot.svg"
@@ -232,8 +235,8 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
 
                   {item.status == 'pending_review' && (
-                    <h3 className="justify-centertext-2xl flex md:text-5xl">
-                      {item.name}
+                    <h3 className="justify-centertext-2xl flex md:text-4xl">
+                        {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/yellow_dot.svg"
@@ -245,8 +248,8 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                     </h3>
                   )}
                   {item.status == 'interviewed' && (
-                    <h3 className="flex justify-center text-2xl md:text-5xl">
-                      {item.name}
+                    <h3 className="flex justify-center text-2xl md:text-4xl">
+                       {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/pink_dot.svg"
@@ -258,8 +261,8 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                     </h3>
                   )}
                   {item.status == 'rejected' && (
-                    <h3 className="flex justify-center text-2xl md:text-5xl">
-                      {item.name}
+                    <h3 className="flex justify-center text-2xl md:text-4xl">
+                     {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/red_dot.svg"
