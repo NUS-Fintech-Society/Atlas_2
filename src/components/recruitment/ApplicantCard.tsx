@@ -26,6 +26,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
       boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
     >
       <CardHeader paddingBottom="0" zIndex={1}>
+        <span>flag</span>
         <Heading size="md" textAlign="center" textColor="white">
           {applicant.name}
         </Heading>

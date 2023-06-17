@@ -1,6 +1,7 @@
+import { filter } from '@chakra-ui/react'
 import { TRPCError } from '@trpc/server'
 import { limit, orderBy, where } from 'firebase/firestore'
-import { z } from 'zod'
+import { object, z } from 'zod'
 import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
 import userCollection from '~/server/db/collections/UserCollection'
 import type { Applicant } from '~/server/db/models/Applicant'
@@ -14,12 +15,21 @@ import { protectedProcedure } from '~/server/trpc/trpc'
  * rejected. So each applicant will have one applied role at any
  * point in time, from the perspective of a director.
  * */
-export const getAllApplicantsTopRoleByDept = protectedProcedure.query(
+export const getAllApplicantsTopRoleByDept = protectedProcedure
+//.input(z.object({
+//   filter: z.string(),
+//   search: z.string()
+// }))
+.query(
   async ({ ctx }) => {
     try {
-      const applicants = await userCollection.queries([
+      const filtersForUsers = [
         where('role', '==', 'Applicant'),
-      ])
+      ]
+      // if (input.search && input.search.length) {
+      //   filtersForUsers.push(where('name', '==', input.search))
+      // }
+      const applicants = await userCollection.queries(filtersForUsers)
       const applicantsWithRoles: Applicant[] = []
 
       for (let i = 0; i < applicants.length; i++) {
