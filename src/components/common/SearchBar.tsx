@@ -356,7 +356,7 @@ const SearchBar = () => {
           </div>
         )}
       </button>
-      <div className='grid grid-cols-2 flex flex-col absolute top-0 gap-x-1 gap-y-1 left-0 mt-10'>
+      {/* <div className='grid grid-cols-2 flex flex-col absolute top-0 gap-x-1 gap-y-1 left-0 mt-10'>
       {filterArray.map((value) => {
         return (
          <div className='w-30  rounded-full flex flex-col text-center border border-gray-200 bg-white shadow-md '>
@@ -365,7 +365,17 @@ const SearchBar = () => {
         )
       }
         )}
-        </div>
+        </div> */}
+
+        <div className='flex flex-wrap absolute  mx-6 top-0 left-0 mt-10' >
+  {filterArray.map((value) => {
+    return (
+      <div className='w-30 rounded-full flex flex-col text-center border border-gray-200 bg-white shadow-md'>
+        {value === 'true' ? 'seen' : value === 'false' ? 'unseen' : value}
+      </div>
+    )
+  })}
+</div>
       
      
     
