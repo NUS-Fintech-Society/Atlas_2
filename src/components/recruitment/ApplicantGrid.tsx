@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import {searchContext } from '~/context/recruitment/SearchProvider'
 import { trpc } from '~/utils/trpc'
 import ApplicantCard from './ApplicantCard'
@@ -8,9 +8,20 @@ import { Button, VStack } from '@chakra-ui/react'
 
 const ApplicantGrid = () => {
   const { filter, search } = useContext(searchContext)
+  const {
+    data,
+    refetch: refetchAllApplicantsTopRoleByDept,
+  } = trpc.recruitment.getAllApplicantsTopRoleByDept.useQuery();
+  
+  useEffect(() => {
+    refetchAllApplicantsTopRoleByDept();
+  }, [filter]);
 
-  const { data } = trpc.recruitment.getAllApplicantsTopRoleByDept.useQuery()
+ 
+
   if (!data) return <></>
+
+ 
 
   // const filteredData =
   //   search === ''
@@ -41,6 +52,8 @@ const ApplicantGrid = () => {
             })
             
           )
+
+
 
   const totalNumber = filteredData.length
 
