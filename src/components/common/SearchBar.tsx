@@ -151,11 +151,13 @@ const SearchBar = () => {
   ] as { department: string; role: string }[]
   const ctx = useSession()
   const department = ctx.data?.user?.department
-  console.log(department)
   const filteredRoles = roles.filter(
     (combination) => combination.department === department
   )
   const { search, filter, setFilter, setSearch } = useContext(searchContext)
+  const filterArray = filter.split(',')
+  const firstElement = filterArray.shift()
+  console.log(filterArray)
   const [showDropdown, setShowDropdown] = useState(false)
   console.log(filteredRoles)
 
@@ -179,7 +181,7 @@ const SearchBar = () => {
               onClick={() => {
                 setShowOptions(false),
                   setShowDropdown(true),
-                  setFilter(role.role)
+                  setFilter(filter.concat(',' + role.role))
               }}
               className="cursor-pointer px-3 py-2"
             >
@@ -209,7 +211,7 @@ const SearchBar = () => {
             onClick={() => {
               setShowOptions(false),
                 setShowDropdown(true),
-                setFilter('accepted')
+                setFilter(filter.concat(',accepted'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -217,7 +219,7 @@ const SearchBar = () => {
           </button>
           <button
             onClick={() => {
-              setShowOptions(false), setShowDropdown(true), setFilter('offered')
+              setShowOptions(false), setShowDropdown(true), setFilter(filter.concat(',offered'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -225,7 +227,7 @@ const SearchBar = () => {
           </button>
           <button
             onClick={() => {
-              setShowOptions(false), setShowDropdown(true), setFilter('pending')
+              setShowOptions(false), setShowDropdown(true), setFilter(filter.concat(',pending'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -235,7 +237,7 @@ const SearchBar = () => {
             onClick={() => {
               setShowOptions(false),
                 setShowDropdown(true),
-                setFilter('interviewed')
+                setFilter(filter.concat(',interviewed'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -245,7 +247,7 @@ const SearchBar = () => {
             onClick={() => {
               setShowOptions(false),
                 setShowDropdown(true),
-                setFilter('rejected')
+                setFilter(filter.concat(',rejected'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -259,7 +261,7 @@ const SearchBar = () => {
         <ul className="ml-2">
           <button
             onClick={() => {
-              setShowOptions(false), setShowDropdown(true), setFilter('true')
+              setShowOptions(false), setShowDropdown(true), setFilter(filter.concat(',true'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -267,7 +269,7 @@ const SearchBar = () => {
           </button>
           <button
             onClick={() => {
-              setShowOptions(false), setShowDropdown(true), setFilter('false')
+              setShowOptions(false), setShowDropdown(true), setFilter(filter.concat(',false'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -350,9 +352,23 @@ const SearchBar = () => {
             ) : (
               renderOptions()
             )}
+        
           </div>
         )}
       </button>
+      <div className='grid grid-cols-2 absolute top-0 gap-x-1 gap-y-1 left-0 mt-10'>
+      {filterArray.map((value) => {
+        return (
+         <div className='rounded-full text-center border border-gray-200 bg-white shadow-md '>
+          {value}
+         </div>
+        )
+      }
+        )}
+        </div>
+      
+     
+    
     </InputGroup>
   )
 }
