@@ -99,7 +99,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                     {filteredData.map((item) => (
                       <tr key={item.id}>
                         <td className="whitespace-nowrap px-6 py-4">
-                          <h1 className="  text-white">
+                          <h1 className="text-white">
                             {item.status == 'Incomplete' && (
                               <button
                                 disabled={true}
