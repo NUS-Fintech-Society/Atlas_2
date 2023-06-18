@@ -16,8 +16,8 @@ const ProfileGrid = ({ studentId }: { studentId: string }) => {
   }
 
   return (
-    <div className="m-10 grid grid-cols-1 grid-rows-3 place-items-center gap-y-6 md:grid-cols-3">
-      <div className="row-span-3 h-full w-3/4 max-w-md rounded-3xl bg-[#01003D] md:place-self-end">
+    <div className="flex flex-col items-center md:items-start md:flex-row md:justify-evenly">
+      <div className="mb-5 w-3/4 max-w-xs rounded-3xl bg-[#01003D]">
         <ProfileCard
           name={data.name}
           dept={data.department}
@@ -26,7 +26,7 @@ const ProfileGrid = ({ studentId }: { studentId: string }) => {
           session={session}
         />
       </div>
-      <div className="col-span-2 w-3/4">
+      <div className="h-full w-3/4 max-w-xs justify-center md:max-w-xl">
         <ProfileContactInfo user={data} refetch={refetch} />
       </div>
     </div>
