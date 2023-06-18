@@ -1,3 +1,5 @@
+import type Task from './Task'
+
 export type User = {
   department: string
   email: string
@@ -6,6 +8,7 @@ export type User = {
   id: string
   name: string
   role: string
+  pendingTask?: Task[]
 
   // Optional field: User can upload their image later.
   image?: string

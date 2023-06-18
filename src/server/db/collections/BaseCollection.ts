@@ -1,6 +1,7 @@
 import { db } from '../firebase'
 import {
   collection,
+  where,
   setDoc,
   getDoc,
   doc,
