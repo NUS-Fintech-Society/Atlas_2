@@ -14,6 +14,7 @@ import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { BaseProps } from '~/utils/withAuth'
 import React from 'react'
+import Head from 'next/head'
 
 enum PageState {
   LOGIN,
@@ -64,7 +65,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
         <meta name="description" content="The login page for Atlas" />
       </Head>
       <TopNavbar
-        image={session.user?.image as string}
+        // image={session.user?.image as string}
         isAdmin={session.isAdmin}
       />
       <main>

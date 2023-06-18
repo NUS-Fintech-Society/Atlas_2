@@ -219,7 +219,9 @@ const SearchBar = () => {
           </button>
           <button
             onClick={() => {
-              setShowOptions(false), setShowDropdown(true), setFilter(filter.concat(',offered'))
+              setShowOptions(false),
+                setShowDropdown(true),
+                setFilter(filter.concat(',offered'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -227,7 +229,9 @@ const SearchBar = () => {
           </button>
           <button
             onClick={() => {
-              setShowOptions(false), setShowDropdown(true), setFilter(filter.concat(',pending'))
+              setShowOptions(false),
+                setShowDropdown(true),
+                setFilter(filter.concat(',pending'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -261,7 +265,9 @@ const SearchBar = () => {
         <ul className="ml-2">
           <button
             onClick={() => {
-              setShowOptions(false), setShowDropdown(true), setFilter(filter.concat(',true'))
+              setShowOptions(false),
+                setShowDropdown(true),
+                setFilter(filter.concat(',true'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -269,7 +275,9 @@ const SearchBar = () => {
           </button>
           <button
             onClick={() => {
-              setShowOptions(false), setShowDropdown(true), setFilter(filter.concat(',false'))
+              setShowOptions(false),
+                setShowDropdown(true),
+                setFilter(filter.concat(',false'))
             }}
             className="cursor-pointer px-3 py-2"
           >
@@ -352,7 +360,6 @@ const SearchBar = () => {
             ) : (
               renderOptions()
             )}
-        
           </div>
         )}
       </button>
@@ -367,18 +374,17 @@ const SearchBar = () => {
         )}
         </div> */}
 
-        <div className='flex flex-wrap absolute  mx-6 top-0 left-0 mt-10' >
-  {filterArray.map((value) => {
-    return (
-      <div className='w-30 rounded-full flex flex-col text-center border border-gray-200 bg-white shadow-md'>
-        {value === 'true' ? 'seen' : value === 'false' ? 'unseen' : value}
+      <div className="absolute top-0 left-0  mx-6 mt-10 flex flex-wrap">
+        {filterArray.map((value) => {
+          return (
+            <div 
+            key={value}
+            className="w-30 flex flex-col rounded-full border border-gray-200 bg-white text-center shadow-md">
+              {value === 'true' ? 'seen' : value === 'false' ? 'unseen' : value}
+            </div>
+          )
+        })}
       </div>
-    )
-  })}
-</div>
-      
-     
-    
     </InputGroup>
   )
 }
