@@ -1,10 +1,9 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect} from 'react'
 import { searchContext } from '~/context/recruitment/SearchProvider'
 import { trpc } from '~/utils/trpc'
 import ApplicantCard from './ApplicantCard'
 import InfoPopup from '~/components/recruitment/InfoPopup'
-import applicants from '~/pages/recruitment/applicants'
-import { Button, VStack } from '@chakra-ui/react'
+
 
 const ApplicantGrid = () => {
   const { filter, search } = useContext(searchContext)
@@ -18,12 +17,6 @@ const ApplicantGrid = () => {
 
   if (!data) return <></>
 
-  // const filteredData =
-  //   search === ''
-  //     ? data
-  //     : data?.filter((applicant) => {
-  //         return applicant.name.toLowerCase().includes(search.toLowerCase())
-  //       })
   const filterArray = filter.split(',')
   const removedFirst = filterArray.shift()
   console.log(filterArray)
@@ -63,13 +56,13 @@ const ApplicantGrid = () => {
           return filterArray.every((filter) => {
             return (
               applicant.appliedRoles.some(
-                (role) => role.role.toLowerCase() === filter.toLowerCase()
+                (role) => role?.role.toLowerCase() === filter.toLowerCase()
               ) ||
               applicant.appliedRoles.some(
-                (role) => role.status.toLowerCase() === filter.toLowerCase()
+                (role) => role?.status.toLowerCase() === filter.toLowerCase()
               ) ||
               applicant.appliedRoles.some(
-                (role) => role.flag.toString() === filter
+                (role) => role?.flag.toString() === filter
               )
             )
           })
@@ -79,13 +72,13 @@ const ApplicantGrid = () => {
             return filterArray.every((filter) => {
               return (
                 applicant.appliedRoles.some(
-                  (role) => role.role.toLowerCase() === filter.toLowerCase()
+                  (role) => role?.role.toLowerCase() === filter.toLowerCase()
                 ) ||
                 applicant.appliedRoles.some(
-                  (role) => role.status.toLowerCase() === filter.toLowerCase()
+                  (role) => role?.status.toLowerCase() === filter.toLowerCase()
                 ) ||
                 applicant.appliedRoles.some(
-                  (role) => role.flag.toString() === filter
+                  (role) => role?.flag.toString() === filter
                 )
               )
             })
