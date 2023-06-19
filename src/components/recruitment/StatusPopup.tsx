@@ -14,6 +14,10 @@ import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import type { QueryObserverResult } from '@tanstack/react-query'
 import { BsCircleFill } from 'react-icons/bs'
 import { trpc } from '~/utils/trpc'
+import Router from 'next/router'
+import { useState } from 'react'
+
+
 
 const statusFillMap = {
   [ApplicationStatus.ACCEPTED]: '#46FFDE',
@@ -34,6 +38,7 @@ const StatusPopup = ({
 }) => {
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleStatus.useMutation()
+  const [currentStatus, setCurrentStatus] = useState(status);
   const updateStatus = async (status: ApplicationStatus) => {
     try {
       await mutateAsync({
@@ -41,12 +46,15 @@ const StatusPopup = ({
         appliedRoleId: appliedRoleId,
       })
       await refetch()
+      setCurrentStatus(status)
       toast({
         duration: 2000,
         status: 'success',
         title: 'Success',
         description: 'Application status updated successfully!',
       })
+     
+
     } catch (e) {
       toast({
         description: (e as Error).message,
@@ -62,7 +70,7 @@ const StatusPopup = ({
       <PopoverTrigger>
         <IconButton
           aria-label="status"
-          icon={<BsCircleFill fill={statusFillMap[status]} />}
+          icon={<BsCircleFill fill={statusFillMap[currentStatus]} />}
           bg="None"
           _hover={{ background: 'None' }}
         ></IconButton>
