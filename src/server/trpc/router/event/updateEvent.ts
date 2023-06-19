@@ -58,7 +58,7 @@ export const updateEvent = protectedProcedure
                 createdAt: Timestamp.fromDate(new Date()),
                 level: 'INFO',
                 description: (e as Error).message,
-                title: 'Create event failed',
+                title: 'Update event failed',
             })
         }
     })
