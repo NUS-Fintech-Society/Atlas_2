@@ -29,7 +29,7 @@ const CreateMultipleApplicants = () => {
         complete: (results: ParseResult<AddApplicantsCSVType>) => {
           const usersFromData = results.data.map((item) => {
             return {
-              department: 'unassigned',
+              department: 'Unassigned',
               name: item['Full Name'],
               nus_email: item['NUS email (xxx@u.nus.edu)'],
               role: 'Applicant',
