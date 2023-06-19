@@ -1,6 +1,13 @@
 import {
   IconButton,
   ListItem,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Popover,
   PopoverBody,
   PopoverCloseButton,
@@ -39,6 +46,7 @@ const StatusPopup = ({
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleStatus.useMutation()
   const [currentStatus, setCurrentStatus] = useState(status);
+  isAcceptOpen, 
   const updateStatus = async (status: ApplicationStatus) => {
     try {
       await mutateAsync({
@@ -149,6 +157,41 @@ const StatusPopup = ({
           </UnorderedList>
         </PopoverBody>
       </PopoverContent>
+
+      <Modal
+          isOpen={isAcceptOpen}
+          onClose={onCloseAccept}
+          size="xs"
+        >
+          <ModalOverlay bg="none" backdropFilter="auto" />
+          <ModalContent>
+            <ModalHeader fontSize="5xl"></ModalHeader>
+            <ModalCloseButton />
+            <ModalBody fontSize="3xl ">
+              <div className=" flex-col justify-center">
+                <div className="items-center">
+                  Confirm Acceptance?
+                  <button
+                    onClick={() => {
+                      onCloseAccept()
+                      setIsAccepted(true)
+                    }}
+                    className="mt-5 rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    onClick={onCloseAccept}
+                    className="ml-10 mt-5 rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </ModalBody>
+            <ModalFooter></ModalFooter>
+          </ModalContent>
+        </Modal>
     </Popover>
   )
 }
