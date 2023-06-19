@@ -87,7 +87,7 @@ const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
                 {data.name}
               </h1>
               <h1 className="mb-2 self-center text-center text-3xl font-medium">
-                {dayjs(data.startDate.toDate()).format('lll')}
+                {dayjs(data.startDate).format('lll')}
               </h1>
               <UserActionRequired
                 isAttendanceRequired={data.isAttendanceRequired}

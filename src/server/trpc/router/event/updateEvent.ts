@@ -25,10 +25,6 @@ export const updateEvent = protectedProcedure
             let qr_code: string | undefined
             const id = randomUUID()
 
-            if (input.isQrRequired) {
-            qr_code = await toDataURL(`${env.DOMAIN}/events/${id}`)
-            }
-
             const users = await Promise.all(
             input.attendees.map(async (attendee) => {
                 const data = await userCollection.getById(attendee)
@@ -42,8 +38,6 @@ export const updateEvent = protectedProcedure
             })
             )
 
-            const eventID = 
-
             await eventCollection.update(input.id, {
             attendees: 0,
             endDate: Timestamp.fromDate(input.endDate),
@@ -51,7 +45,6 @@ export const updateEvent = protectedProcedure
             invitedAttendees: users,
             name: input.name,
             startDate: Timestamp.fromDate(input.startDate),
-            qrCode: qr_code || '',
             })
         } catch (e) {
             await logCollection.add({

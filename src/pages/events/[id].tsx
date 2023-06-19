@@ -21,7 +21,6 @@ import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
-import { query } from 'firebase/firestore'
 
 const EventPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
@@ -75,6 +74,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
       if (invalidAttendees) {
         return false
       }
+
       await mutateAsync({
         id: eventData!.id!,
         name: formData.eventName,

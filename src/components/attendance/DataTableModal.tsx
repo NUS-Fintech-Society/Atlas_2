@@ -22,7 +22,6 @@ import dayjs from 'dayjs'
 import Image from 'next/image'
 import { type BodyProps } from '~/types/event/event.type'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 const DataTableModal = () => {
   const modal = useContext(ModalContext)
@@ -56,7 +55,6 @@ const DataTableModal = () => {
 
 const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   const modal = useContext(ModalContext)
-  const router = useRouter()
   const toast = useToast()
   if (!data) {
     return <div>No Event Found</div>
