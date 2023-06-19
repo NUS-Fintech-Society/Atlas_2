@@ -97,7 +97,9 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                         {item.department} - {item.name}
                         <Image
                           alt="logo"
-                          src="/images/Ellipse 1.svg"
+                          src={isRejected?
+                            "/images/red_dot.svg": 
+                            "/images/Ellipse 1.svg"}
                           height={35}
                           width={35}
                           className="md:ml-14 ml-2 flex  flex-col"
