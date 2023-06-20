@@ -46,7 +46,12 @@ const StatusPopup = ({
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleStatus.useMutation()
   const [currentStatus, setCurrentStatus] = useState(status);
-  isAcceptOpen, 
+  const [isAcceptOpen, setIsAcceptOpen] = useState(false)
+  const onOpenAccept = () => setIsAcceptOpen(true)
+  const onCloseAccept = (inputStatus: ApplicationStatus) => {
+    setIsAcceptOpen(false)
+    updateStatus(inputStatus as ApplicationStatus)
+  }
   const updateStatus = async (status: ApplicationStatus) => {
     try {
       await mutateAsync({
@@ -94,8 +99,11 @@ const StatusPopup = ({
                 bg="None"
                 _hover={{ background: 'None' }}
                 marginLeft="2"
-                onClick={() =>
+                onClick={() => {
+                  setIsAcceptOpen(true)
+                  setCurrentStatus(ApplicationStatus.ACCEPTED as ApplicationStatus)
                   updateStatus(ApplicationStatus.ACCEPTED as ApplicationStatus)
+                }
                 }
               />
               <Text>Accepted</Text>
@@ -107,8 +115,11 @@ const StatusPopup = ({
                 bg="None"
                 _hover={{ background: 'None' }}
                 marginLeft="2"
-                onClick={() =>
+                onClick={() => {
+                  setIsAcceptOpen(true)
+                  setCurrentStatus(ApplicationStatus.OFFERED as ApplicationStatus)
                   updateStatus(ApplicationStatus.OFFERED as ApplicationStatus)
+                }
                 }
               />
               <Text>Offered</Text>
@@ -120,8 +131,11 @@ const StatusPopup = ({
                 bg="None"
                 _hover={{ background: 'None' }}
                 marginLeft="2"
-                onClick={() =>
+                onClick={() => {
+                  setIsAcceptOpen(true)
+                  setCurrentStatus(ApplicationStatus.PENDING as ApplicationStatus)
                   updateStatus(ApplicationStatus.PENDING as ApplicationStatus)
+                }
                 }
               />
               <Text>Pending Review</Text>
@@ -133,10 +147,13 @@ const StatusPopup = ({
                 bg="None"
                 _hover={{ background: 'None' }}
                 marginLeft="2"
-                onClick={() =>
+                onClick={() => {
+                  setIsAcceptOpen(true)
+                  setCurrentStatus(ApplicationStatus.INTERVIEWED as ApplicationStatus)
                   updateStatus(
                     ApplicationStatus.INTERVIEWED as ApplicationStatus
                   )
+                  }
                 }
               />
               <Text>Interviewed</Text>
@@ -160,7 +177,7 @@ const StatusPopup = ({
 
       <Modal
           isOpen={isAcceptOpen}
-          onClose={onCloseAccept}
+          onClose={() => setIsAcceptOpen(false)}
           size="xs"
         >
           <ModalOverlay bg="none" backdropFilter="auto" />
@@ -174,7 +191,7 @@ const StatusPopup = ({
                   <button
                     onClick={() => {
                       onCloseAccept()
-                      setIsAccepted(true)
+                    
                     }}
                     className="mt-5 rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
                   >
