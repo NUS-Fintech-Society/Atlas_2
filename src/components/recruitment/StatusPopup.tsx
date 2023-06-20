@@ -23,7 +23,8 @@ import { BsCircleFill } from 'react-icons/bs'
 import { trpc } from '~/utils/trpc'
 import Router from 'next/router'
 import { useState } from 'react'
-
+import type { Applicant } from '~/server/db/models/Applicant'
+import type { AppliedRole } from '~/server/db/models/AppliedRole'
 
 
 const statusFillMap = {
@@ -35,12 +36,12 @@ const statusFillMap = {
 }
 
 const StatusPopup = ({
-  status,
-  appliedRoleId,
+  applicant,
+  appliedRole,
   refetch,
 }: {
-  appliedRoleId: string
-  status: ApplicationStatus
+  applicant: Applicant
+  appliedRole: AppliedRole
   refetch: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
@@ -56,7 +57,11 @@ const StatusPopup = ({
     try {
       await mutateAsync({
         status: status,
-        appliedRoleId: appliedRoleId,
+        appliedRoleId: appliedRole.id,
+        name: applicant.name,
+        email: applicant.email,
+        appliedRole: appliedRole.role,
+        appliedDepartment: appliedRole.department,
       })
       await refetch()
       setCurrentStatus(status)
@@ -83,7 +88,9 @@ const StatusPopup = ({
       <PopoverTrigger>
         <IconButton
           aria-label="status"
-          icon={<BsCircleFill fill={statusFillMap[currentStatus]} />}
+
+          icon={<BsCircleFill fill={statusFillMap[appliedRole.status]} />}
+
           bg="None"
           _hover={{ background: 'None' }}
         ></IconButton>

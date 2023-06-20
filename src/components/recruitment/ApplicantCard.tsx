@@ -58,18 +58,26 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
     >
       <CardHeader paddingBottom="0" zIndex={1}>
         <Heading size="md" textAlign="center" textColor="white">
-          
-            {isFlagged ? 
-            <button className='absolute left-2'
-            onClick={() => {updateFlag(false), setIsFlagged(false)}}>
+          {isFlagged ? (
+            <button
+              className="absolute left-2"
+              onClick={() => {
+                updateFlag(false), setIsFlagged(false)
+              }}
+            >
               <ViewIcon></ViewIcon>
-              </button>
-            :  <button className='absolute left-2'
-            onClick={() => {updateFlag(true), setIsFlagged(true)}}>
+            </button>
+          ) : (
+            <button
+              className="absolute left-2"
+              onClick={() => {
+                updateFlag(true), setIsFlagged(true)
+              }}
+            >
               <ViewOffIcon></ViewOffIcon>
-              </button>
-            }
-         
+            </button>
+          )}
+
           {applicant.name}
         </Heading>
       </CardHeader>
@@ -100,6 +108,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
           <Text>Role Applied:</Text>
           <UnorderedList styleType="none">
             <AppliedRoleListItem
+              applicant={applicant}
               appliedRole={appliedRole}
               key={appliedRole.id}
               refetch={refetch}
