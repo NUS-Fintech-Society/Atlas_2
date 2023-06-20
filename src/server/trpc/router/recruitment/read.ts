@@ -16,16 +16,13 @@ import { protectedProcedure } from '~/server/trpc/trpc'
  * point in time, from the perspective of a director.
  * */
 export const getAllApplicantsTopRoleByDept = protectedProcedure
-//.input(z.object({
-//   filter: z.string(),
-//   search: z.string()
-// }))
-.query(
-  async ({ ctx }) => {
+  //.input(z.object({
+  //   filter: z.string(),
+  //   search: z.string()
+  // }))
+  .query(async ({ ctx }) => {
     try {
-      const filtersForUsers = [
-        where('role', '==', 'Applicant'),
-      ]
+      const filtersForUsers = [where('role', '==', 'Applicant')]
       // if (input.search && input.search.length) {
       //   filtersForUsers.push(where('name', '==', input.search))
       // }
@@ -51,6 +48,7 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
           if (appliedRoles.length == 1) {
             applicantsWithRoles.push({
               id: applicant?.id,
+              email: applicant?.email,
               name: applicant?.name,
               appliedRoles: appliedRoles,
             })
@@ -64,8 +62,7 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
         message: 'Error retrieving applicants: ' + error,
       })
     }
-  }
-)
+  })
 
 export const getApplicant = protectedProcedure
   .input(z.string())

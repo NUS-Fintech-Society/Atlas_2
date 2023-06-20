@@ -26,7 +26,7 @@ async function checkIfUserExist(id: string) {
  * @param email The email of the user to be sent
  * @param password The password of the user
  */
-async function sendEmail(email: string, password: string) {
+async function sendNewUserEmail(email: string, password: string) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -115,8 +115,13 @@ function buildUserObject(
  */
 async function sendMultipleEmails(emails: string[], password: string) {
   await Promise.all(
-    emails.map(async (email) => await sendEmail(email, password))
+    emails.map(async (email) => await sendNewUserEmail(email, password))
   )
 }
 
-export { checkIfUserExist, sendEmail, sendMultipleEmails, buildUserObject }
+export {
+  checkIfUserExist,
+  sendNewUserEmail,
+  sendMultipleEmails,
+  buildUserObject,
+}

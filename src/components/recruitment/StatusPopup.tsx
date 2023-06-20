@@ -14,6 +14,8 @@ import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import type { QueryObserverResult } from '@tanstack/react-query'
 import { BsCircleFill } from 'react-icons/bs'
 import { trpc } from '~/utils/trpc'
+import type { Applicant } from '~/server/db/models/Applicant'
+import type { AppliedRole } from '~/server/db/models/AppliedRole'
 
 const statusFillMap = {
   [ApplicationStatus.ACCEPTED]: '#46FFDE',
@@ -24,12 +26,12 @@ const statusFillMap = {
 }
 
 const StatusPopup = ({
-  status,
-  appliedRoleId,
+  applicant,
+  appliedRole,
   refetch,
 }: {
-  appliedRoleId: string
-  status: ApplicationStatus
+  applicant: Applicant
+  appliedRole: AppliedRole
   refetch: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
@@ -38,7 +40,11 @@ const StatusPopup = ({
     try {
       await mutateAsync({
         status: status,
-        appliedRoleId: appliedRoleId,
+        appliedRoleId: appliedRole.id,
+        name: applicant.name,
+        email: applicant.email,
+        appliedRole: appliedRole.role,
+        appliedDepartment: appliedRole.department,
       })
       await refetch()
       toast({
@@ -62,7 +68,7 @@ const StatusPopup = ({
       <PopoverTrigger>
         <IconButton
           aria-label="status"
-          icon={<BsCircleFill fill={statusFillMap[status]} />}
+          icon={<BsCircleFill fill={statusFillMap[appliedRole.status]} />}
           bg="None"
           _hover={{ background: 'None' }}
         ></IconButton>
