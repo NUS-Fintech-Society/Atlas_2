@@ -160,11 +160,8 @@ const SearchBar = () => {
   console.log(filterArray)
   const [showDropdown, setShowDropdown] = useState(false)
   console.log(filteredRoles)
-
   const [selectedFilter, setSelectedFilter] = useState('')
   const [showOptions, setShowOptions] = useState(false)
-  console.log('searchbar: ', search)
-
   const handleFilterChange = (filter: string) => {
     setSelectedFilter(filter)
     setShowDropdown(false)
@@ -374,12 +371,13 @@ const SearchBar = () => {
         )}
         </div> */}
 
-      <div className="absolute top-0 left-0  mx-6 mt-10 flex flex-wrap">
+      <div className="absolute top-0 left-0 max-w-[250px] mt-10 flex flex-wrap">
         {filterArray.map((value) => {
           return (
-            <div 
-            key={value}
-            className="w-30 flex flex-col rounded-full border border-gray-200 bg-white text-center shadow-md">
+            <div
+              key={value}
+              className="mx-1 my-1 px-2 flex flex-col  rounded-full border border-gray-200 bg-white text-center shadow-md"
+            >
               {value === 'true' ? 'seen' : value === 'false' ? 'unseen' : value}
             </div>
           )

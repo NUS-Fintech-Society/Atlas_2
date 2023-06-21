@@ -30,11 +30,19 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleFlag.useMutation()
   const updateFlag = async (flag: boolean) => {
     try {
+      const firstToast = toast({
+        duration: null,
+        status: 'loading',
+        title: 'Updating',
+        description: 'Waiting to update...',
+      })
       await mutateAsync({
         flag: flag,
         appliedRoleId: appliedRoleId,
       })
       await refetch()
+      setIsFlagged(flag)
+      toast.close(firstToast)
       toast({
         duration: 2000,
         status: 'success',
@@ -62,7 +70,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
             <button
               className="absolute left-2"
               onClick={() => {
-                updateFlag(false), setIsFlagged(false)
+                updateFlag(false)
               }}
             >
               <ViewIcon></ViewIcon>
@@ -71,7 +79,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
             <button
               className="absolute left-2"
               onClick={() => {
-                updateFlag(true), setIsFlagged(true)
+                updateFlag(true)
               }}
             >
               <ViewOffIcon></ViewOffIcon>
