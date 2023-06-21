@@ -1,9 +1,8 @@
-import { useContext, useEffect} from 'react'
+import { useContext, useEffect } from 'react'
 import { searchContext } from '~/context/recruitment/SearchProvider'
 import { trpc } from '~/utils/trpc'
 import ApplicantCard from './ApplicantCard'
 import InfoPopup from '~/components/recruitment/InfoPopup'
-
 
 const ApplicantGrid = () => {
   const { filter, search } = useContext(searchContext)
@@ -19,30 +18,6 @@ const ApplicantGrid = () => {
 
   const filterArray = filter.split(',')
   const removedFirst = filterArray.shift()
-  console.log(filterArray)
-
-  // const filteredData =
-  //       filter === ''
-  //         ? (search ==='' ? data :
-  //         data?.filter((applicant) => {
-  //           return applicant.name.toLowerCase().includes(search.toLowerCase())
-  //         }))
-  //         :
-  //         (search === '' ?
-  //         data?.filter((applicant) => {
-  //             return (applicant.appliedRoles.some((role) => (role.role.toLowerCase() === filter.toLowerCase())) ||
-  //             applicant.appliedRoles.some((role) =>role.status.toLowerCase() === filter.toLowerCase()) ||
-  //             applicant.appliedRoles.some((role) => role.flag.toString() === filter))
-  //           }) :
-  //           data?.filter((applicant) => {
-  //             return (applicant.appliedRoles.some((role) => (role.role.toLowerCase() === filter.toLowerCase())) ||
-  //             applicant.appliedRoles.some((role) =>role.status.toLowerCase() === filter.toLowerCase()) ||
-  //             applicant.appliedRoles.some((role) => role.flag.toString() === filter))
-  //           }).filter((remaining) => {
-  //             return remaining.name.toLowerCase().includes(search.toLowerCase())
-  //           })
-
-  //         )
 
   const filteredData =
     filterArray.length === 0

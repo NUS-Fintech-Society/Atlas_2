@@ -43,24 +43,21 @@ const StatusPopup = ({
 }) => {
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleStatus.useMutation()
-  const [currentStatus, setCurrentStatus] = useState(appliedRole.status);
+  const [currentStatus, setCurrentStatus] = useState(appliedRole.status)
   const [statusInModal, setStatusInModal] = useState(appliedRole.status)
   const [isAcceptOpen, setIsAcceptOpen] = useState(false)
-  // const onOpenAccept = () => setIsAcceptOpen(true)
   const onCloseAccept = (inputStatus: ApplicationStatus) => {
     setIsAcceptOpen(false)
     updateStatus(inputStatus as ApplicationStatus)
   }
   const updateStatus = async (status: ApplicationStatus) => {
     try {
-    
       const firstToast = toast({
         duration: null,
         status: 'loading',
         title: 'Updating',
-        description: 'Waiting to update...'
-     
-      });
+        description: 'Waiting to update...',
+      })
       await mutateAsync({
         status: status,
         appliedRoleId: appliedRole.id,
@@ -70,7 +67,7 @@ const StatusPopup = ({
         appliedDepartment: appliedRole.department,
       })
       await refetch()
-      setCurrentStatus(status);
+      setCurrentStatus(status)
       toast.close(firstToast)
       toast({
         duration: 2000,
@@ -78,8 +75,6 @@ const StatusPopup = ({
         title: 'Success',
         description: 'Application status updated successfully!',
       })
-     
-
     } catch (e) {
       toast({
         description: (e as Error).message,
@@ -113,10 +108,10 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setStatusInModal(ApplicationStatus.ACCEPTED as ApplicationStatus)
-               
-                }
-                }
+                  setStatusInModal(
+                    ApplicationStatus.ACCEPTED as ApplicationStatus
+                  )
+                }}
               />
               <Text>Accepted</Text>
             </ListItem>
@@ -129,10 +124,10 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setStatusInModal(ApplicationStatus.OFFERED as ApplicationStatus)
-                 
-                }
-                }
+                  setStatusInModal(
+                    ApplicationStatus.OFFERED as ApplicationStatus
+                  )
+                }}
               />
               <Text>Offered</Text>
             </ListItem>
@@ -145,10 +140,10 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setStatusInModal(ApplicationStatus.PENDING as ApplicationStatus)
-                 
-                }
-                }
+                  setStatusInModal(
+                    ApplicationStatus.PENDING as ApplicationStatus
+                  )
+                }}
               />
               <Text>Pending Review</Text>
             </ListItem>
@@ -161,10 +156,10 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setStatusInModal(ApplicationStatus.INTERVIEWED as ApplicationStatus)
-                 
-                  }
-                }
+                  setStatusInModal(
+                    ApplicationStatus.INTERVIEWED as ApplicationStatus
+                  )
+                }}
               />
               <Text>Interviewed</Text>
             </ListItem>
@@ -177,10 +172,10 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setStatusInModal(ApplicationStatus.REJECTED as ApplicationStatus)
-            
-                }
-                }
+                  setStatusInModal(
+                    ApplicationStatus.REJECTED as ApplicationStatus
+                  )
+                }}
               />
               <Text>Rejected</Text>
             </ListItem>
@@ -189,40 +184,40 @@ const StatusPopup = ({
       </PopoverContent>
 
       <Modal
-          isOpen={isAcceptOpen}
-          onClose={() => setIsAcceptOpen(false)}
-          size="xs"
-        >
-          <ModalOverlay bg="none" backdropFilter="auto" />
-          <ModalContent>
-            <ModalHeader fontSize="5xl"></ModalHeader>
-            <ModalCloseButton />
-            <ModalBody fontSize="2xl ">
-              <div className=" flex-col justify-center">
-                <div className="items-center">
-                  Confirm Status Update?
-                  <button
-                    onClick={() => {
-                      onCloseAccept(statusInModal)
-                    }}
-                    className="mt-5 rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
-                  >
-                    Confirm
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsAcceptOpen(false)
-                    }}
-                    className="ml-10 mt-5 rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
-                  >
-                    Cancel
-                  </button>
-                </div>
+        isOpen={isAcceptOpen}
+        onClose={() => setIsAcceptOpen(false)}
+        size="xs"
+      >
+        <ModalOverlay bg="none" backdropFilter="auto" />
+        <ModalContent>
+          <ModalHeader fontSize="5xl"></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody fontSize="2xl ">
+            <div className=" flex-col justify-center">
+              <div className="items-center">
+                Confirm Status Update?
+                <button
+                  onClick={() => {
+                    onCloseAccept(statusInModal)
+                  }}
+                  className="mt-5 rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
+                >
+                  Confirm
+                </button>
+                <button
+                  onClick={() => {
+                    setIsAcceptOpen(false)
+                  }}
+                  className="ml-10 mt-5 rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
+                >
+                  Cancel
+                </button>
               </div>
-            </ModalBody>
-            <ModalFooter></ModalFooter>
-          </ModalContent>
-        </Modal>
+            </div>
+          </ModalBody>
+          <ModalFooter></ModalFooter>
+        </ModalContent>
+      </Modal>
     </Popover>
   )
 }
