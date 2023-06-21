@@ -185,19 +185,6 @@ const SearchBar = () => {
               {role.role}
             </button>
           ))}
-
-          {/* <button 
-          onClick={() => {setShowOptions(false), setShowDropdown(true), setFilter('designer')}}
-          className="px-3 py-2 cursor-pointer">Designer</button>
-          <button 
-           onClick={() => {setShowOptions(false), setShowDropdown(true), setFilter('designer manager')}}
-          className="px-3 py-2 cursor-pointer">Designer Manager</button>
-          <button 
-           onClick={() => {setShowOptions(false), setShowDropdown(true), setFilter('technical lead')}}
-          className="px-3 py-2 cursor-pointer">Technical Lead</button>
-          <button 
-           onClick={() => {setShowOptions(false), setShowDropdown(true), setFilter('software engineer')}}
-          className="px-3 py-2 cursor-pointer">Software Engineer</button> */}
         </ul>
       )
     }
@@ -360,18 +347,7 @@ const SearchBar = () => {
           </div>
         )}
       </button>
-      {/* <div className='grid grid-cols-2 flex flex-col absolute top-0 gap-x-1 gap-y-1 left-0 mt-10'>
-      {filterArray.map((value) => {
-        return (
-         <div className='w-30  rounded-full flex flex-col text-center border border-gray-200 bg-white shadow-md '>
-          {value === 'true' ? 'seen' : value === 'false' ? 'unseen' : value}
-         </div>
-        )
-      }
-        )}
-        </div> */}
-
-      <div className="absolute top-0 left-0 max-w-[250px] mt-10 flex flex-wrap">
+      <div className="absolute top-6 md:top-0 left-0 max-w-[250px] mt-10 flex flex-wrap">
         {filterArray.map((value) => {
           return (
             <div
