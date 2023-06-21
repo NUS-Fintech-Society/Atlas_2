@@ -46,15 +46,24 @@ const StatusPopup = ({
 }) => {
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleStatus.useMutation()
-  const [currentStatus, setCurrentStatus] = useState(status);
+  const [currentStatus, setCurrentStatus] = useState(appliedRole.status);
+  const [statusInModal, setStatusInModal] = useState(appliedRole.status)
   const [isAcceptOpen, setIsAcceptOpen] = useState(false)
-  const onOpenAccept = () => setIsAcceptOpen(true)
+  // const onOpenAccept = () => setIsAcceptOpen(true)
   const onCloseAccept = (inputStatus: ApplicationStatus) => {
     setIsAcceptOpen(false)
     updateStatus(inputStatus as ApplicationStatus)
   }
   const updateStatus = async (status: ApplicationStatus) => {
     try {
+    
+      const firstToast = toast({
+        duration: null,
+        status: 'loading',
+        title: 'Updating',
+        description: 'Waiting to update...'
+     
+      });
       await mutateAsync({
         status: status,
         appliedRoleId: appliedRole.id,
@@ -64,7 +73,8 @@ const StatusPopup = ({
         appliedDepartment: appliedRole.department,
       })
       await refetch()
-      setCurrentStatus(status)
+      setCurrentStatus(status);
+      toast.close(firstToast)
       toast({
         duration: 2000,
         status: 'success',
@@ -89,7 +99,7 @@ const StatusPopup = ({
         <IconButton
           aria-label="status"
 
-          icon={<BsCircleFill fill={statusFillMap[appliedRole.status]} />}
+          icon={<BsCircleFill fill={statusFillMap[currentStatus]} />}
 
           bg="None"
           _hover={{ background: 'None' }}
@@ -108,8 +118,8 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setCurrentStatus(ApplicationStatus.ACCEPTED as ApplicationStatus)
-                  updateStatus(ApplicationStatus.ACCEPTED as ApplicationStatus)
+                  setStatusInModal(ApplicationStatus.ACCEPTED as ApplicationStatus)
+               
                 }
                 }
               />
@@ -124,8 +134,8 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setCurrentStatus(ApplicationStatus.OFFERED as ApplicationStatus)
-                  updateStatus(ApplicationStatus.OFFERED as ApplicationStatus)
+                  setStatusInModal(ApplicationStatus.OFFERED as ApplicationStatus)
+                 
                 }
                 }
               />
@@ -140,8 +150,8 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setCurrentStatus(ApplicationStatus.PENDING as ApplicationStatus)
-                  updateStatus(ApplicationStatus.PENDING as ApplicationStatus)
+                  setStatusInModal(ApplicationStatus.PENDING as ApplicationStatus)
+                 
                 }
                 }
               />
@@ -156,10 +166,8 @@ const StatusPopup = ({
                 marginLeft="2"
                 onClick={() => {
                   setIsAcceptOpen(true)
-                  setCurrentStatus(ApplicationStatus.INTERVIEWED as ApplicationStatus)
-                  updateStatus(
-                    ApplicationStatus.INTERVIEWED as ApplicationStatus
-                  )
+                  setStatusInModal(ApplicationStatus.INTERVIEWED as ApplicationStatus)
+                 
                   }
                 }
               />
@@ -172,8 +180,11 @@ const StatusPopup = ({
                 bg="None"
                 _hover={{ background: 'None' }}
                 marginLeft="2"
-                onClick={() =>
-                  updateStatus(ApplicationStatus.REJECTED as ApplicationStatus)
+                onClick={() => {
+                  setIsAcceptOpen(true)
+                  setStatusInModal(ApplicationStatus.REJECTED as ApplicationStatus)
+            
+                }
                 }
               />
               <Text>Rejected</Text>
@@ -191,21 +202,22 @@ const StatusPopup = ({
           <ModalContent>
             <ModalHeader fontSize="5xl"></ModalHeader>
             <ModalCloseButton />
-            <ModalBody fontSize="3xl ">
+            <ModalBody fontSize="2xl ">
               <div className=" flex-col justify-center">
                 <div className="items-center">
-                  Confirm Acceptance?
+                  Confirm Status Update?
                   <button
                     onClick={() => {
-                      onCloseAccept()
-                    
+                      onCloseAccept(statusInModal)
                     }}
                     className="mt-5 rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
                   >
                     Confirm
                   </button>
                   <button
-                    onClick={onCloseAccept}
+                    onClick={() => {
+                      setIsAcceptOpen(false)
+                    }}
                     className="ml-10 mt-5 rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
                   >
                     Cancel
