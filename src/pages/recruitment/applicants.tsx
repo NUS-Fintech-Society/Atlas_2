@@ -22,7 +22,7 @@ const ApplicantsPage: React.FC<BaseProps> = ({
           content="The applicants page for Atlas recruitment"
         />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar image={session.user?.image as string} isAdmin={session.isAdmin} />
       <Box position="relative" mt="10" mb="10">
         <Text className="text-center text-4xl font-bold">Applicants</Text>
         <SearchProvider>
