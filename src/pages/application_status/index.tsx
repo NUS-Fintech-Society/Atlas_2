@@ -13,9 +13,9 @@ import {
 import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { BaseProps } from '~/utils/withAuth'
-
 import React from 'react'
 import Head from 'next/head'
+
 
 
 enum PageState {
@@ -116,6 +116,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                         <div></div>
                       ) : (
 
+
                         <div className="md:ml-14 ml-3 flex ">
                           <button
                             onClick={onOpenAccept}
@@ -202,36 +203,10 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                       </Modal>
                     </div>
 
-                    /* <div>
-      <h3 className="text-2xl inline  justify-center md:text-5xl">
-        {item.name}
-      
-      <Image
-        alt="logo"
-        src="/images/Ellipse 1.svg"
-        height={35}
-        width={35}
-        className="ml-14"
-      />
-   </h3>
-   <span className="inline-flex items-baseline">
-        <button
-          className="bg-green-500 inline hover:bg-green-600 text-white text-2xl py-2 px-4 font-bold rounded"
-        
-        >
-          Accept
-        </button>
-        <button
-          className="ml-2 bg-red-500 inline hover:bg-red-600 text-white text-2xl py-2 px-4 font-bold rounded"
-        >
-          Reject
-        </button>
-        </span>
-        </div> */
+                  
                   )}
 
                   {item.status == 'offered' && (
-
                     <h3 className="flex justify-center text-2xl md:text-4xl">
                         {item.department} - {item.name}
                       <Image
@@ -262,7 +237,6 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   {item.status == 'interviewed' && (
                     <h3 className="flex justify-center text-2xl md:text-4xl">
                        {item.department} - {item.name}
-
                       <Image
                         alt="logo"
                         src="/images/pink_dot.svg"
