@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Head from 'next/head'
+
 import {
   Button,
   Modal,
@@ -13,6 +13,10 @@ import {
 import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { BaseProps } from '~/utils/withAuth'
+
+import React from 'react'
+import Head from 'next/head'
+
 
 enum PageState {
   LOGIN,
@@ -93,6 +97,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                 <div className="flex-grow">
                   {item.status == 'accepted' && (
                     <div className="flex justify-center">
+
                       <span className="mt-3  flex  text-2xl md:text-4xl">
                         {item.department} - {item.name}
                         <Image
@@ -106,9 +111,11 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                         />
                       </span>
 
+
                       {isAccepted || isRejected ? (
                         <div></div>
                       ) : (
+
                         <div className="md:ml-14 ml-3 flex ">
                           <button
                             onClick={onOpenAccept}
@@ -123,6 +130,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                             Reject
                           </button>
                        </div>
+
                       )}
                       <Modal
                         isOpen={isAcceptOpen}
@@ -223,6 +231,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
 
                   {item.status == 'offered' && (
+
                     <h3 className="flex justify-center text-2xl md:text-4xl">
                         {item.department} - {item.name}
                       <Image
@@ -239,6 +248,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   {item.status == 'pending_review' && (
                     <h3 className="justify-centertext-2xl flex md:text-4xl">
                         {item.department} - {item.name}
+
                       <Image
                         alt="logo"
                         src="/images/yellow_dot.svg"
@@ -252,6 +262,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   {item.status == 'interviewed' && (
                     <h3 className="flex justify-center text-2xl md:text-4xl">
                        {item.department} - {item.name}
+
                       <Image
                         alt="logo"
                         src="/images/pink_dot.svg"

@@ -15,6 +15,7 @@ export const authOptions: NextAuthOptions = {
       if (session && session.user && token) {
         session.user.id = token.sub || ''
         session.user.image = token.picture
+        session.user.department = token.department as string
       }
 
       if (token) {
@@ -26,6 +27,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.isAdmin = (user as User).isAdmin as boolean
+        token.department = (user as User).department as string
         token.picture = user.image
       }
       return token
@@ -69,6 +71,7 @@ export const authOptions: NextAuthOptions = {
           // The user object is passed to the session callback in session.data.user
           return {
             id: user.id as string,
+            department: user.department as string,
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,

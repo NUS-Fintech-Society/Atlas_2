@@ -25,6 +25,49 @@ const ProfileInfo = (props: ProfilePageType) => {
                 {props.batch}
               </Td>
             </Tr>
+<<<<<<< HEAD
+=======
+            <Tr>
+              <Td textColor="#002D70" className="font-medium">
+                YEAR
+              </Td>
+              <Td textColor="#002D70" className="font-light">
+                {props.year}
+              </Td>
+            </Tr>
+            <Tr>
+              <Td textColor="#002D70" className="font-medium">
+                FACULTY
+              </Td>
+              <Td textColor="#002D70" className="font-light">
+                {props.faculty}
+              </Td>
+            </Tr>
+            <Tr>
+              <Td textColor="#002D70" className="font-medium">
+                MAJOR
+              </Td>
+              <Td textColor="#002D70" className="font-light">
+                {props.major}
+              </Td>
+            </Tr>
+            {/* <Tr>
+              <Td textColor="#002D70" className="font-medium">
+                PROJECTS
+              </Td>
+              {props.projects.map((project: Project) => {
+                return (
+                  <Td
+                    key={project.project_id}
+                    textColor="#002D70"
+                    className="font-light"
+                  >
+                    {project.name}
+                  </Td>
+                )
+              })}
+            </Tr> */}
+>>>>>>> director-page
           </Tbody>
         </Table>
       </TableContainer>
