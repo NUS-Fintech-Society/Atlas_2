@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -43,7 +42,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
       id: 1,
       department: 'Software Engineering',
       name: 'Software Engineer',
-      status: 'accepted',
+      status: 'offered',
     },
     {
       id: 2,
@@ -71,7 +70,8 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
         isAdmin={session.isAdmin}
       />
       <main>
-        <div className="relative h-screen w-screen bg-[url('/images/applicants_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
+      <div className="relative bg-scroll w-screen h-screen overflow-x-auto bg-cover bg-no-repeat bg-center bg-fixed bg-[url('/images/applicants_background.svg')]">
+       {/* <div className="relative  bg-scroll h-screen bg-fixed overflow-x bg-[url('/images/applicants_background.svg')] bg-cover  bg-center bg-no-repeat"> */}
           {/* Nav element containing the logo */}
 
           <nav className="flex items-center justify-center  px-2 py-2 ">
@@ -85,32 +85,32 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
 
           {/* Login */}
           <div className="flex flex-col justify-center gap-8 font-[Inter]">
-            <h1 className="mt-4 flex justify-center text-4xl font-bold md:text-8xl">
+            <h1 className="mt-4 flex justify-center text-4xl font-bold lg:text-8xl">
               Hi User,
             </h1>
-            <h2 className="mt-3 flex justify-center text-2xl font-bold md:text-6xl">
+            <h2 className="mt-3 flex justify-center text-2xl font-bold lg:text-6xl">
               your current statuses are:
             </h2>
 
             {roles.map((item) => (
               <div key={item.id} className="mt-3 flex items-center ">
                 <div className="flex-grow">
-                  {item.status == 'accepted' && (
+                  {item.status == 'offered' && (
                     <div className="flex justify-center">
 
-                      <span className="mt-3  flex  text-2xl md:text-4xl">
+                      <span className="mt-3  flex  text-xl lg:text-4xl">
                         {item.department} - {item.name}
                         <Image
                           alt="logo"
                           src={isRejected?
-                            "/images/red_dot.svg": 
-                            "/images/Ellipse 1.svg"}
+                            "/images/red_dot.svg": isAccepted ? 
+                            "images/Ellipse 1.svg" :
+                            "/images/blue_dot.svg"}
                           height={35}
                           width={35}
                           className="md:ml-14 ml-2 flex  flex-col"
                         />
                       </span>
-
 
                       {isAccepted || isRejected ? (
                         <div></div>
@@ -206,12 +206,12 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   
                   )}
 
-                  {item.status == 'offered' && (
-                    <h3 className="flex justify-center text-2xl md:text-4xl">
+                  {item.status == 'accepted' && (
+                    <h3 className="flex justify-center text-xl lg:text-4xl">
                         {item.department} - {item.name}
                       <Image
                         alt="logo"
-                        src="/images/blue_dot.svg"
+                        src="/images/Ellipse 1.svg"
                         height={35}
                         width={35}
                         className="ml-14 flex flex-col"
@@ -221,7 +221,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
 
                   {item.status == 'pending_review' && (
-                    <h3 className="justify-centertext-2xl flex md:text-4xl">
+                    <h3 className="justify-centertext-2xl text-xl flex lg:text-4xl">
                         {item.department} - {item.name}
 
                       <Image
@@ -235,7 +235,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                     </h3>
                   )}
                   {item.status == 'interviewed' && (
-                    <h3 className="flex justify-center text-2xl md:text-4xl">
+                    <h3 className="flex justify-center text-xl lg:text-4xl">
                        {item.department} - {item.name}
                       <Image
                         alt="logo"
@@ -248,7 +248,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                     </h3>
                   )}
                   {item.status == 'rejected' && (
-                    <h3 className="flex justify-center text-2xl md:text-4xl">
+                    <h3 className="flex justify-center text-xl lg:text-4xl">
                      {item.department} - {item.name}
                       <Image
                         alt="logo"

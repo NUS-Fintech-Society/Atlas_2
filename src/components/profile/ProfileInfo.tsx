@@ -28,7 +28,6 @@ const ProfileInfo = (props: ProfilePageType) => {
                 {props.batch}
               </Td>
             </Tr>
-<<<<<<< HEAD
             <Tr>
               <Td textColor="#002D70" className="font-medium">
                 YEAR
@@ -53,25 +52,6 @@ const ProfileInfo = (props: ProfilePageType) => {
                 {props.major}
               </Td>
             </Tr>
-            {/* <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                PROJECTS
-              </Td>
-              {props.projects.map((project: Project) => {
-                return (
-                  <Td
-                    key={project.project_id}
-                    textColor="#002D70"
-                    className="font-light"
-                  >
-                    {project.name}
-                  </Td>
-                )
-              })}
-            </Tr> */}
-
-=======
->>>>>>> da34b1a33480b5420c75624f09140754a8bd35a7
           </Tbody>
         </Table>
       </TableContainer>
