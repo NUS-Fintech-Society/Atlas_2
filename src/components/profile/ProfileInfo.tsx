@@ -6,7 +6,7 @@ type ProfilePageType = {
   year: string | null
   faculty: string | null
   major: string | null
-  // projects: Projects[]
+
 }
 
 const ProfileInfo = (props: ProfilePageType) => {
