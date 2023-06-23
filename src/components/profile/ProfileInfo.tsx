@@ -25,8 +25,6 @@ const ProfileInfo = (props: ProfilePageType) => {
                 {props.batch}
               </Td>
             </Tr>
-<<<<<<< HEAD
-=======
             <Tr>
               <Td textColor="#002D70" className="font-medium">
                 YEAR
@@ -67,7 +65,7 @@ const ProfileInfo = (props: ProfilePageType) => {
                 )
               })}
             </Tr> */}
->>>>>>> director-page
+
           </Tbody>
         </Table>
       </TableContainer>
