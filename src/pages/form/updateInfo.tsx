@@ -102,7 +102,7 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
           content="Onboarding member particulars for Atlas"
         />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar image={session.user?.image as string} isAdmin={session.isAdmin} />
 
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>

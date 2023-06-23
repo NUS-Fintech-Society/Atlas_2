@@ -11,7 +11,7 @@ const RecruitmentPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The recruitment page for Atlas" />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar image={session.user?.image as string} isAdmin={session.isAdmin} />
       <Text className="text-center text-4xl font-bold">Recruitment</Text>
     </>
   )

@@ -34,7 +34,6 @@ export const createSingleUser = protectedProcedure
           email,
           isAdmin,
           name,
-          id,
           hashedPassword,
           role,
         },
