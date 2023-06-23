@@ -23,6 +23,7 @@ import { BsCircleFill } from 'react-icons/bs'
 import { trpc } from '~/utils/trpc'
 import type { Applicant } from '~/server/db/models/Applicant'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
+import { useState } from 'react'
 
 const statusFillMap = {
   [ApplicationStatus.ACCEPTED]: '#46FFDE',

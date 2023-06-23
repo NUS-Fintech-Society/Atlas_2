@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Head from 'next/head'
 import {
   Button,
   Modal,
@@ -65,7 +64,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
         <meta name="description" content="The login page for Atlas" />
       </Head>
       <TopNavbar
-        // image={session.user?.image as string}
+        image={session.user?.image as string}
         isAdmin={session.isAdmin}
       />
       <main>
