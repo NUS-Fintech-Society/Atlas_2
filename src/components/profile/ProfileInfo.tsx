@@ -1,7 +1,11 @@
 import { Box, Table, TableContainer, Tbody, Td, Tr } from '@chakra-ui/react'
 
 type ProfilePageType = {
-  batch: string | undefined
+  gender: string | null
+  batch: string | null
+  year: string | null
+  faculty: string | null
+  major: string | null
 
   // projects: Projects[]
 }
