@@ -97,32 +97,34 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                         {item.department} - {item.name}
                         <Image
                           alt="logo"
-                          src={isRejected?
-                            "/images/red_dot.svg": 
-                            "/images/Ellipse 1.svg"}
+                          src={
+                            isRejected
+                              ? '/images/red_dot.svg'
+                              : '/images/Ellipse 1.svg'
+                          }
                           height={35}
                           width={35}
-                          className="md:ml-14 ml-2 flex  flex-col"
+                          className="ml-2 flex flex-col  md:ml-14"
                         />
                       </span>
 
                       {isAccepted || isRejected ? (
                         <div></div>
                       ) : (
-                        <div className="md:ml-14 ml-3 flex ">
+                        <div className="ml-3 flex md:ml-14 ">
                           <button
                             onClick={onOpenAccept}
-                            className=" md:ml-5  rounded bg-green-500 md:py-2 md:px-4 md:text-2xl font-bold text-white hover:bg-green-600"
+                            className=" rounded  bg-green-500 font-bold text-white hover:bg-green-600 md:ml-5 md:py-2 md:px-4 md:text-2xl"
                           >
                             Accept
                           </button>
                           <button
                             onClick={onOpenReject}
-                            className="md:ml-5 ml-3 rounded bg-red-500 md:py-2 md:px-4  md:text-2xl font-bold text-white hover:bg-red-600"
+                            className="ml-3 rounded bg-red-500 font-bold text-white hover:bg-red-600  md:ml-5 md:py-2 md:px-4 md:text-2xl"
                           >
                             Reject
                           </button>
-                       </div>
+                        </div>
                       )}
                       <Modal
                         isOpen={isAcceptOpen}
@@ -224,7 +226,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
 
                   {item.status == 'offered' && (
                     <h3 className="flex justify-center text-2xl md:text-4xl">
-                        {item.department} - {item.name}
+                      {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/blue_dot.svg"
@@ -238,7 +240,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
 
                   {item.status == 'pending_review' && (
                     <h3 className="justify-centertext-2xl flex md:text-4xl">
-                        {item.department} - {item.name}
+                      {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/yellow_dot.svg"
@@ -251,7 +253,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
                   {item.status == 'interviewed' && (
                     <h3 className="flex justify-center text-2xl md:text-4xl">
-                       {item.department} - {item.name}
+                      {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/pink_dot.svg"
@@ -264,7 +266,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
                   {item.status == 'rejected' && (
                     <h3 className="flex justify-center text-2xl md:text-4xl">
-                     {item.department} - {item.name}
+                      {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/red_dot.svg"

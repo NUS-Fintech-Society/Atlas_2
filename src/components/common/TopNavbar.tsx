@@ -32,18 +32,20 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
               <Dropdown.Item>User</Dropdown.Item>
             </Link>
           )}
-          {isAdmin && (<Link href="/events" className="md:hidden">
-            <Dropdown.Item>Events</Dropdown.Item>
-          </Link>)
-          }
-         <Link href="/profile">
+          {isAdmin && (
+            <Link href="/events" className="md:hidden">
+              <Dropdown.Item>Events</Dropdown.Item>
+            </Link>
+          )}
+          <Link href="/profile">
             <Dropdown.Item>Profile</Dropdown.Item>
           </Link>
-        
-          {isAdmin && <Link href="/calendar">
-            <Dropdown.Item>Calendar</Dropdown.Item>
-          </Link>
-          }
+
+          {isAdmin && (
+            <Link href="/calendar">
+              <Dropdown.Item>Calendar</Dropdown.Item>
+            </Link>
+          )}
           <Dropdown.Item>
             <div onClick={logout}>Sign Out</div>
           </Dropdown.Item>
@@ -59,27 +61,32 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
             Users
           </Navbar.Link>
         )}
-        {isAdmin && (<Navbar.Link href="/events" className="ml-4 text-white">
-          Events
-        </Navbar.Link>)
-        }
-        {isAdmin && (<Navbar.Link href="/calendar" className="ml-4 text-white">
-          Recruitment
-        </Navbar.Link>)
-        }
-        {!isAdmin && <Navbar.Link href="/application_status" className="ml-4 text-white">
-          Status
-        </Navbar.Link>
-        }
+        {isAdmin && (
+          <Navbar.Link href="/events" className="ml-4 text-white">
+            Events
+          </Navbar.Link>
+        )}
+        {isAdmin && (
+          <Navbar.Link href="/calendar" className="ml-4 text-white">
+            Recruitment
+          </Navbar.Link>
+        )}
+        {!isAdmin && (
+          <Navbar.Link href="/application_status" className="ml-4 text-white">
+            Status
+          </Navbar.Link>
+        )}
 
-        {!isAdmin && <Navbar.Link href="/tasks" className="ml-4 text-white">
-          Tasks
-        </Navbar.Link>
-        }
-        {!isAdmin && <Navbar.Link  className="ml-4 text-white">
-          Update Information
-        </Navbar.Link>
-        }
+        {!isAdmin && (
+          <Navbar.Link href="/tasks" className="ml-4 text-white">
+            Tasks
+          </Navbar.Link>
+        )}
+        {!isAdmin && (
+          <Navbar.Link className="ml-4 text-white">
+            Update Information
+          </Navbar.Link>
+        )}
       </Navbar.Collapse>
     </Navbar>
   )

@@ -9,7 +9,7 @@ export type EventInfos = {
 }
 
 export interface BodyProps {
-  attendees: number,
+  attendees: number
   endDate: Date
   id?: string
   invitedAttendees: {

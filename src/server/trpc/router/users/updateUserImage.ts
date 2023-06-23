@@ -14,4 +14,3 @@ export const updateUserImage = protectedProcedure
       image: input.image,
     })
   })
-

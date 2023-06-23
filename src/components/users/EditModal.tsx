@@ -106,7 +106,7 @@ const EditModal = () => {
               <Select
                 marginBottom={5}
                 isRequired
-                {...register("role")}
+                {...register('role')}
                 onChange={(e) => {
                   if (!e.target.value) return
                   const element = roles.filter(
