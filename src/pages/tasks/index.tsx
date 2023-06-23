@@ -62,7 +62,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
         isAdmin={session.isAdmin}
       />
       <main>
-        <div className="relative h-screen w-screen  bg-[url('/images/tasks_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
+        <div className="relative h-screen w-screen overflow-x-auto bg-[url('/images/tasks_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
           {/* Nav element containing the logo */}
 
           {/* Login */}
