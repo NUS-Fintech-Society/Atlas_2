@@ -23,7 +23,6 @@ const ProfileGrid = ({ studentId }: { studentId: string }) => {
           dept={data.department}
           role={data.role}
           studentId={studentId}
-          session={session}
         />
       </div>
       <div className="h-full w-3/4 max-w-xs justify-center md:max-w-xl">
