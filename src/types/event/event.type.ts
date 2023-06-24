@@ -9,11 +9,11 @@ export type EventInfos = {
 }
 
 export interface BodyProps {
-  attendees: number,
+  attendees: number
   endDate: Date
   id?: string
   invitedAttendees: {
-    attended: boolean
+    attended: boolean | undefined
     department: string
     name: string
     id: string

@@ -1,7 +1,8 @@
 import type { Timestamp } from 'firebase/firestore'
 
 type User = {
-  attended: boolean
+  attended?: boolean
+  completed?: boolean //For Tasks
   department: string
   id: string
   name: string
@@ -18,3 +19,5 @@ export type Event = {
   isQrRequired: boolean
   startDate: Timestamp
 }
+
+export default User

@@ -62,13 +62,11 @@ export const authOptions: NextAuthOptions = {
             throw Error('Invalid email or password')
           }
 
-
           const user = users[0] as User
           const isSuccess = await compare(password, user.hashedPassword)
           if (!isSuccess) {
             throw Error('Incorrect password')
           }
-
 
           // The user object is passed to the session callback in session.data.user
           return {

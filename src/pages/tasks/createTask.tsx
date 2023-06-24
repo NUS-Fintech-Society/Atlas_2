@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { DataTable } from '~/components/events/DataTable'
 import { trpc } from '~/utils/trpc'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -22,15 +21,16 @@ import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
 
-const EventPage: React.FC<BaseProps> = ({ session }) => {
+const TaskPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
   const toast = useToast()
-  const [attendees, setAttendees] = useState<string[]>([])
-  const [submitBefore, setSubmitBefore] = useState(false) // hacky use for attendees validation
-  const [isQrRequired, setIsQrRequired] = useState(false)
+  const [submitBefore, setSubmitBefore] = useState(false) // hacky use for assignees validation
+
+  const { data } = trpc.recruitment.getAllTasks.useQuery()
 
   const FormSchema = z.object({
-    eventName: z.string().min(1, { message: 'Invalid name' }),
+    taskName: z.string().min(1, { message: 'Invalid name' }),
+    description: z.string().min(1, { message: 'Invalid description' }),
     dept: z
       .array(
         z.string({
@@ -41,17 +41,15 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
       .nonempty({
         message: 'At least one department must be chosen',
       }),
-    startDate: z.preprocess((arg) => {
-      if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
-    }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
-    endDate: z.preprocess((arg) => {
+
+    due: z.preprocess((arg) => {
       if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
     }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
   })
 
   type FormSchemaType = z.infer<typeof FormSchema>
 
-  // useForm for state management except attendees which belongs in DataTable (child)
+  // useForm for state management except assignees which belongs in DataTable (child)
   const {
     register,
     handleSubmit,
@@ -60,30 +58,22 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
     resolver: zodResolver(FormSchema),
   })
 
-  const { data } = trpc.attendance.getAllAttendanceButSelf.useQuery()
   const { mutateAsync, isLoading: isSubmitting } =
-    trpc.attendance.createEvent.useMutation()
+    trpc.recruitment.createTask.useMutation()
 
-  const invalidAttendees = attendees.length === 0
   const formSubmit = async (formData: FormSchemaType) => {
     try {
-      // Hacky soluton since attendees not linked to React-hook-form
-      if (invalidAttendees) {
-        return false
-      }
       await mutateAsync({
-        name: formData.eventName,
-        startDate: new Date(formData.startDate),
-        endDate: new Date(formData.endDate),
+        taskName: formData.taskName,
+        due: formData.due,
         departments: formData.dept,
-        attendees: attendees,
-        isQrRequired,
+        description: formData.description,
       })
       toast({
         duration: 3000,
         status: 'success',
         title: 'Success',
-        description: 'A new event has been successfully created',
+        description: 'A new task has been successfully created',
       })
     } catch (e) {
       toast({
@@ -94,16 +84,16 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
       })
     }
   }
-  const redirectHome = () => router.push('/events')
+  const redirectHome = () => router.push('/tasks')
 
   if (!data) return <LoadingScreen />
 
   return (
     <>
       <Head>
-        <title>Atlas | Create Event</title>
+        <title>Atlas | Create Task</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="The create event page for Atlas" />
+        <meta name="description" content="The create task page for Atlas" />
       </Head>
       <TopNavbar
         isAdmin={session.isAdmin}
@@ -112,19 +102,35 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">
-            Create New Event
+            Create New Task
           </h1>
           <VStack align="left" spacing="6">
             <div>
-              <FormLabel>Event Name</FormLabel>
+              <FormLabel>Task Name</FormLabel>
               <Input
                 type="text"
                 disabled={isSubmitting}
-                {...register('eventName', { required: true })}
+                {...register('taskName', { required: true })}
               />
-              {errors.eventName && (
+              {errors.taskName && (
                 <Text color="tomato" className="pt-2">
-                  {errors.eventName.message}
+                  {errors.taskName.message}
+                </Text>
+              )}
+            </div>
+          </VStack>
+
+          <VStack align="left" spacing="6">
+            <div>
+              <FormLabel>Task Description</FormLabel>
+              <Input
+                type="text"
+                disabled={isSubmitting}
+                {...register('description', { required: true })}
+              />
+              {errors.taskName && (
+                <Text color="tomato" className="pt-2">
+                  {errors.taskName.message}
                 </Text>
               )}
             </div>
@@ -133,72 +139,43 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
                 <FormLabel>Department</FormLabel>
                 <CheckboxGroup>
                   <Stack spacing={[1, 5]} direction={['row', 'column']}>
-                    <Checkbox value="Machine Learning" {...register('dept')}>
+                    <Checkbox value="ml" {...register('dept')}>
                       Machine Learning
                     </Checkbox>
-                    <Checkbox
-                      value="Software Development"
-                      {...register('dept')}
-                    >
+                    <Checkbox value="sd" {...register('dept')}>
                       Software Development
                     </Checkbox>
-                    <Checkbox value="Blockchain" {...register('dept')}>
+                    <Checkbox value="bc" {...register('dept')}>
                       Blockchain
                     </Checkbox>
-                    <Checkbox value="Internal Affairs" {...register('dept')}>
-                      Internal Affairs
+                    <Checkbox value="ir" {...register('dept')}>
+                      Internal Relations
                     </Checkbox>
-                    <Checkbox value="External Relations" {...register('dept')}>
-                      External Relations
+                    <Checkbox value="ea" {...register('dept')}>
+                      External Affairs
                     </Checkbox>
                   </Stack>
                 </CheckboxGroup>
               </div>
             </VStack>
             <div>
-              <FormLabel>Start Date</FormLabel>
+              <FormLabel>Due Date</FormLabel>
               <Input
                 placeholder="Select Date and Time"
                 size="md"
                 type="datetime-local"
                 disabled={isSubmitting}
-                {...register('startDate', { required: true })}
+                {...register('due', { required: true })}
               />
-              {errors.startDate && (
+              {errors.due && (
                 <Text color="tomato" className="pt-2">
-                  {errors.startDate.message}
+                  {errors.due.message}
                 </Text>
               )}
             </div>
-            <div>
-              <FormLabel>End Date</FormLabel>
-              <Input
-                placeholder="Select Date and Time"
-                size="md"
-                type="datetime-local"
-                disabled={isSubmitting}
-                {...register('endDate', { required: true })}
-              />
-              {errors.endDate && (
-                <Text color="tomato" className="pt-2">
-                  {errors.endDate.message}
-                </Text>
-              )}
-            </div>
-            <div className="flex items-center">
-              <FormLabel>QR Code required</FormLabel>
-              <Checkbox
-                disabled={isSubmitting}
-                onChange={(e) => {
-                  e.preventDefault()
-                  setIsQrRequired(!isQrRequired)
-                }}
-              ></Checkbox>
-            </div>
-            <DataTable data={data} setAttendees={setAttendees} />
-            {submitBefore && invalidAttendees && (
-              <Text color="tomato">At least one attendee is required</Text>
-            )}
+
+            {/* <DataTable data={data} setAssignees={setAssignees} /> */}
+            {submitBefore}
             <div className="flex justify-between">
               <Button
                 bgColor="#FF9900"
@@ -216,7 +193,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
                 disabled={isSubmitting}
                 onClick={() => setSubmitBefore(true)}
               >
-                Create Event
+                Create Task
               </Button>
             </div>
           </VStack>
@@ -226,4 +203,4 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(EventPage)
+export default withAuth(TaskPage)
