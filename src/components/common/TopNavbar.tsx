@@ -91,12 +91,6 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
             Recruitment
           </Navbar.Link>
         )}
-
-        {!isAdmin && (
-          <Navbar.Link href="/tasks" className="ml-4 text-white">
-            Tasks
-          </Navbar.Link>
-        )}
         {!isAdmin && (
           <Navbar.Link className="ml-4 text-white">
             Update Information
