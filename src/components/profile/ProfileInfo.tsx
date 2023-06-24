@@ -6,7 +6,7 @@ type ProfilePageType = {
   year: string | null
   faculty: string | null
   major: string | null
-  // projects: Projects[]
+
 }
 
 const ProfileInfo = (props: ProfilePageType) => {
@@ -20,14 +20,6 @@ const ProfileInfo = (props: ProfilePageType) => {
       <TableContainer>
         <Table variant="unstyled" size="sm">
           <Tbody>
-            <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                GENDER
-              </Td>
-              <Td textColor="#002D70" className="font-light">
-                {props.gender}
-              </Td>
-            </Tr>
             <Tr>
               <Td textColor="#002D70" className="font-medium">
                 BATCH
@@ -60,22 +52,6 @@ const ProfileInfo = (props: ProfilePageType) => {
                 {props.major}
               </Td>
             </Tr>
-            {/* <Tr>
-              <Td textColor="#002D70" className="font-medium">
-                PROJECTS
-              </Td>
-              {props.projects.map((project: Projects) => {
-                return (
-                  <Td
-                    key={project.project_id}
-                    textColor="#002D70"
-                    className="font-light"
-                  >
-                    {project.name}
-                  </Td>
-                )
-              })}
-            </Tr> */}
           </Tbody>
         </Table>
       </TableContainer>

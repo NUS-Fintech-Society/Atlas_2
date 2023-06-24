@@ -26,7 +26,7 @@ async function checkIfUserExist(id: string) {
  * @param email The email of the user to be sent
  * @param password The password of the user
  */
-async function sendEmail(email: string, password: string) {
+async function sendNewUserEmail(email: string, password: string) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -66,18 +66,14 @@ async function sendEmail(email: string, password: string) {
 function buildUserObject(
   input: {
     date_of_birth: string
-    diet: string
-    department: string
+    departmentId: string
     discord: string
     faculty: string
     gender: string
-    linkedin: string
     major: string
     name: string
     nus_email: string
     personal_email: string
-    phone: string
-    race: string
     role: string
     student_id: string
     telegram: string
@@ -88,24 +84,20 @@ function buildUserObject(
   return input.map((user) => {
     return {
       batch: 'AY22/23',
-      department: user.department,
+      departmentId: user.departmentId,
       date_of_birth: dayjs().toDate(),
-      diet: user.diet,
       discord: user.discord,
       faculty: user.faculty,
       gender: user.gender,
       hashedPassword,
       image: null,
       level: 'member',
-      linkedin: user.linkedin,
       major: user.major,
       id: user.student_id,
       isAdmin: false,
       name: user.name,
       email: user.nus_email,
       personal_email: user.personal_email,
-      phone: user.phone,
-      race: user.race,
       role: user.role,
       telegram: user.telegram,
       total_events: 0,
@@ -123,8 +115,13 @@ function buildUserObject(
  */
 async function sendMultipleEmails(emails: string[], password: string) {
   await Promise.all(
-    emails.map(async (email) => await sendEmail(email, password))
+    emails.map(async (email) => await sendNewUserEmail(email, password))
   )
 }
 
-export { checkIfUserExist, sendEmail, sendMultipleEmails, buildUserObject }
+export {
+  checkIfUserExist,
+  sendNewUserEmail,
+  sendMultipleEmails,
+  buildUserObject,
+}

@@ -32,6 +32,10 @@ function classNames(...classes: any[]) {
 }
 
 export default function SideCalendar({ meetings }: Meetings) {
+
+  
+
+  
   const today = startOfToday()
   const [selectedDay, setSelectedDay] = useState(today)
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))

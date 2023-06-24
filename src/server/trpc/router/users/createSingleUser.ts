@@ -1,7 +1,7 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
 import { hash } from 'bcryptjs'
-import { checkIfUserExist, sendEmail } from '../member/helper'
+import { checkIfUserExist, sendNewUserEmail } from '../member/helper'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
 import { Timestamp } from 'firebase/firestore'
@@ -29,18 +29,18 @@ export const createSingleUser = protectedProcedure
 
       await userCollection.set(
         {
+          id,
           department,
           email,
           isAdmin,
           name,
-          id,
           hashedPassword,
           role,
         },
         id
       )
 
-      await sendEmail(email, hashedPassword)
+      await sendNewUserEmail(email, hashedPassword)
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),

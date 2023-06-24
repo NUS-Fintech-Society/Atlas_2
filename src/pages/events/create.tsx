@@ -105,7 +105,10 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create event page for Atlas" />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">
