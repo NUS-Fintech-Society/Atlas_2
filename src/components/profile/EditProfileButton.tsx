@@ -6,7 +6,6 @@ const EditProfileBtn = ({
   onEdit,
   edit,
 }: {
-  studentId: string | null
   onEdit: () => void
   edit: boolean
 }) => {

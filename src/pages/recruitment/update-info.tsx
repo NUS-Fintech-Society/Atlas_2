@@ -7,8 +7,7 @@ import {
   Select,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import withAuth, { BaseProps } from '~/utils/withAuth'
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState, type ChangeEvent } from 'react'
 import Head from 'next/head'
 import Container from '~/components/auth/Container'
 import TopNavbar from '~/components/common/TopNavbar'
@@ -17,12 +16,12 @@ import { trpc } from '~/utils/trpc'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import withApplicantAuth, { type BaseProps } from '~/utils/withApplicantAuth'
 
 const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
   const toast = useToast()
   const [selectedShirtSize, setShirtSize] = useState<string>()
-  const [submitBefore, setSubmitBefore] = useState(false)
 
   const studentId = session?.user?.id as string
 
@@ -49,11 +48,7 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
 
   type FormSchemaType = z.infer<typeof FormSchema>
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormSchemaType>({
+  const { register, handleSubmit } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   })
 
@@ -61,15 +56,17 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
     trpc.user.updateUserInfo.useMutation()
 
   const formSubmit = async (formData: FormSchemaType) => {
+    const { telegram, shirtSize, linkedin, discord, dietary } = formData
+
     try {
       await mutateAsync({
         //toDO: add json attributes
-        studentId: studentId,
-        telegram: formData.telegram,
-        shirtSize: formData.shirtSize,
-        linkedin: formData.linkedin,
-        discord: formData.discord,
-        dietary: formData.dietary,
+        studentId,
+        telegram,
+        shirtSize,
+        linkedin,
+        discord,
+        dietary,
       })
       toast({
         duration: 3000,
@@ -102,7 +99,10 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
           content="Onboarding member particulars for Atlas"
         />
       </Head>
-      <TopNavbar image={session.user?.image as string} isAdmin={session.isAdmin} />
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
 
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
@@ -197,7 +197,6 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
                 className="text-white"
                 type="submit"
                 disabled={isSubmitting}
-                onClick={() => setSubmitBefore(true)}
               >
                 Update
               </Button>
@@ -209,4 +208,4 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(UpdateInfoPage)
+export default withApplicantAuth(UpdateInfoPage)

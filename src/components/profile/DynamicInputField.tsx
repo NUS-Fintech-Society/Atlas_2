@@ -1,4 +1,5 @@
 import { Input, Text } from '@chakra-ui/react'
+import type { UseFormRegister } from 'react-hook-form'
 
 const DynamicInputField = ({
   edit,
@@ -9,7 +10,7 @@ const DynamicInputField = ({
 }: {
   edit: boolean
   isSubmitting: boolean
-  register: any
+  register: UseFormRegister<any>
   field: string
   fieldValue: string | null
 }) => {

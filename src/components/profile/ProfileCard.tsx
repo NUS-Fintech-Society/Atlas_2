@@ -1,6 +1,5 @@
 import { trpc } from '../../utils/trpc'
 import { Box, Button, Image, Text } from '@chakra-ui/react'
-import type { Session } from 'next-auth'
 import { useRouter } from 'next/router'
 import UploadImageBtn from './UploadImageButton'
 
@@ -11,16 +10,14 @@ const ProfileCard = ({
   dept,
   role,
   studentId,
-  session,
 }: {
   name: string | null
   dept: string | null
   role: string | null
   studentId: string
-  session: Session
 }) => {
   const router = useRouter()
-  const redirectToResetPassword = () => router.push('/auth/forgetpassword')
+  const redirectToResetPassword = () => router.push('/profile/reset-password')
 
   const {
     isLoading,
@@ -29,7 +26,7 @@ const ProfileCard = ({
   } = trpc.user.getUserImage.useQuery(studentId)
 
   return (
-    <Box className="mb-10 flex flex-col items-center">
+    <Box className="my-5 flex flex-col items-center">
       <Box className="relative">
         <Image
           alt="profile-pic"
@@ -39,17 +36,16 @@ const ProfileCard = ({
           borderRadius="full"
           boxSize="170px"
         />
-        {session?.user?.id === studentId ?? (
-          <Box className="absolute bottom-0 right-0">
-            <UploadImageBtn refetchImage={refetchImage} studentId={studentId} />
-          </Box>
-        )}
+
+        <Box className="absolute bottom-0 right-0">
+          <UploadImageBtn refetchImage={refetchImage} studentId={studentId} />
+        </Box>
       </Box>
       <Box className="flex flex-col items-center py-2">
-        <Text textColor="##FFFFFF" className="text-2xl font-medium">
+        <Text textColor="#FFFFFF" className="text-2xl font-medium">
           {name}
         </Text>
-        <Text textColor="##FFFFFF">{dept}</Text>
+        <Text textColor="#FFFFFF">{dept}</Text>
         <Text textColor="#FFFFFF">{role}</Text>
       </Box>
       <Button
