@@ -22,8 +22,12 @@ const withAuth = (WrappedComponent: any, isAdminRightsNeeded?: boolean) => {
     const router = useRouter()
 
     useEffect(() => {
-      if (isAdminRightsNeeded && session && !session.isAdmin) {
-        router.push('/')
+      if (session) {
+        if (session.isApplicant) {
+          router.push('/form/update-info')
+        } else if (isAdminRightsNeeded && !session.isAdmin) {
+          router.push('/')
+        }
       }
     }, [router, status, session])
 

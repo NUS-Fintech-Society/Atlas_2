@@ -29,7 +29,7 @@ const UserTable = ({ session }: { session: Session }) => {
           colorScheme="black"
           onClick={(e) => {
             e.preventDefault()
-            setSelected(data.id)
+            setSelected(data.id as string)
             onOpen()
           }}
         >
@@ -37,7 +37,7 @@ const UserTable = ({ session }: { session: Session }) => {
         </Button>
       </td>
       <td>{data.name}</td>
-      <td>{data.roles}</td>
+      <td>{data.role}</td>
       <td>{data.department}</td>
     </tr>
   ))

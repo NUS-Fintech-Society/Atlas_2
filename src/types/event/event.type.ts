@@ -1,5 +1,3 @@
-import { Attendance } from '@prisma/client'
-
 export type EventInfos = {
   number: string
   name: string
@@ -11,21 +9,18 @@ export type EventInfos = {
 }
 
 export interface BodyProps {
-  _count: {
-    Attendance: number
-    attendees: number
-  }
-  attended: Set<string>
-  name: string
-  id: string
-  attendees: {
-    name: string | null
-    department: string | null
-    id: string
-    roles: string | null
-  }[]
+  attendees: number
   endDate: Date
-  hasStarted: boolean
-  qr_code: string | null
+  id?: string
+  invitedAttendees: {
+    attended: boolean | undefined
+    department: string
+    name: string
+    id: string
+    role: string
+  }[]
+  name: string
+  showup: number
+  qr_code: string | undefined
   startDate: Date
 }

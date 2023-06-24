@@ -5,7 +5,6 @@ export type AddUsersType = {
   diet: string
   faculty: string
   gender: string
-  hobbies: string
   linkedin: string
   major: string
   name: string
@@ -13,14 +12,29 @@ export type AddUsersType = {
   personal_email: string
   phone: string
   race: string
-  roles: string
-  shirt: string
+  role: string
   student_id: string
   telegram: string
   year: string
 }
 
-export type CSVType = {
+export type AddApplicantsType = {
+  student_id: string
+  nus_email: string
+  name: string
+  department: string
+  role: string
+}
+
+export type AddAppliedRolesType = {
+  applicantId: string
+  firstRole: string
+  firstDepartment: string
+  secondRole: string
+  secondDepartment: string
+}
+
+export type AddUsersCSVType = {
   'Full Name': string
   'Date of Birth': string
   'Gender ': string
@@ -40,4 +54,14 @@ export type CSVType = {
   'Dietary Restrictions (eg. Allergic to seafood)': string
   'Shirt size': string
   'Hobbies ': string
+}
+
+export type AddApplicantsCSVType = {
+  'Full Name': string
+  'NUS email (xxx@u.nus.edu)': string
+  'Student ID (AXXXXXXXX)': string
+  'First Choice Role': string
+  'First Choice Department': string
+  'Second Choice Role': string
+  'Second Choice Department': string
 }

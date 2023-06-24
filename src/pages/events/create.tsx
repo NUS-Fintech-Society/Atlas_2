@@ -60,9 +60,9 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
     resolver: zodResolver(FormSchema),
   })
 
-  const { data } = trpc.event.getAllUsers.useQuery()
+  const { data } = trpc.attendance.getAllAttendanceButSelf.useQuery()
   const { mutateAsync, isLoading: isSubmitting } =
-    trpc.event.createEvent.useMutation()
+    trpc.attendance.createEvent.useMutation()
 
   const invalidAttendees = attendees.length === 0
   const formSubmit = async (formData: FormSchemaType) => {
@@ -105,7 +105,10 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create event page for Atlas" />
       </Head>
-      <TopNavbar isAdmin={session.isAdmin} />
+      <TopNavbar
+        isAdmin={session.isAdmin}
+        image={session.user?.image as string}
+      />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">
@@ -130,20 +133,23 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
                 <FormLabel>Department</FormLabel>
                 <CheckboxGroup>
                   <Stack spacing={[1, 5]} direction={['row', 'column']}>
-                    <Checkbox value="ml" {...register('dept')}>
+                    <Checkbox value="Machine Learning" {...register('dept')}>
                       Machine Learning
                     </Checkbox>
-                    <Checkbox value="sd" {...register('dept')}>
+                    <Checkbox
+                      value="Software Development"
+                      {...register('dept')}
+                    >
                       Software Development
                     </Checkbox>
-                    <Checkbox value="bc" {...register('dept')}>
+                    <Checkbox value="Blockchain" {...register('dept')}>
                       Blockchain
                     </Checkbox>
-                    <Checkbox value="ir" {...register('dept')}>
-                      Internal Relations
+                    <Checkbox value="Internal Affairs" {...register('dept')}>
+                      Internal Affairs
                     </Checkbox>
-                    <Checkbox value="ea" {...register('dept')}>
-                      External Affairs
+                    <Checkbox value="External Relations" {...register('dept')}>
+                      External Relations
                     </Checkbox>
                   </Stack>
                 </CheckboxGroup>
@@ -220,4 +226,4 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(EventPage, true)
+export default withAuth(EventPage)

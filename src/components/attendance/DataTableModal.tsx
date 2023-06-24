@@ -12,7 +12,7 @@ import {
   Tr,
 } from '@chakra-ui/react'
 import { useContext } from 'react'
-import { EventModalContext } from '~/context/events/EventModalContext'
+import { ModalContext } from '~/context/ModalContext'
 import { trpc } from '~/utils/trpc'
 import LoadingScreen from '../common/LoadingScreen'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
@@ -21,8 +21,8 @@ import Image from 'next/image'
 import { type BodyProps } from '~/types/event/event.type'
 
 const DataTableModal = () => {
-  const modal = useContext(EventModalContext)
-  const { data, isLoading } = trpc.event.getEventInfo.useQuery(modal.id)
+  const modal = useContext(ModalContext)
+  const { data, isLoading } = trpc.attendance.getEventInfo.useQuery(modal.id)
 
   if (!modal.id) {
     return null
@@ -63,18 +63,13 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
     <>
       {data.qr_code && (
         <div className="flex flex-row items-center justify-center">
-          <Image
-            alt="event-qr"
-            height={200}
-            src={data.qr_code}
-            width={200}
-          />
+          <Image alt="event-qr" height={200} src={data.qr_code} width={200} />
         </div>
       )}
       <p>Department: </p>
       <p>Start Date: {startDate}</p>
       <p>End Date: {endDate}</p>
-      <p>Attendance: {`${data._count.Attendance}/${data._count.attendees}`}</p>
+      <p>Attendance: {`${data.showup}/${data.invitedAttendees.length}`}</p>
       <p>Required Attendees:</p>
       <Table>
         <Thead>
@@ -85,14 +80,14 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
           <Th color="white">Attendance</Th>
         </Thead>
         <Tbody>
-          {data.attendees.map((attendee, index) => {
+          {data.invitedAttendees.map((attendee, index) => {
             return (
               <Tr key={index}>
                 <Td>{index + 1}</Td>
                 <Td>{attendee.name}</Td>
                 <Td>{attendee.department}</Td>
-                <Td>{attendee.roles}</Td>
-                <Td>{data.attended.has(attendee.id) ? 'Yes' : 'No'}</Td>
+                <Td>{attendee.role}</Td>
+                <Td>{attendee.attended ? 'Yes' : 'No'}</Td>
               </Tr>
             )
           })}

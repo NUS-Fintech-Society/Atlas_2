@@ -1,30 +1,8 @@
 import { TRPCError } from '@trpc/server'
-import { hash } from 'bcryptjs'
 import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
-import type { User } from '@prisma/client'
-import { type PrismaClient } from '@prisma/client'
 import dayjs from 'dayjs'
-import type SMTPTransport from 'nodemailer/lib/smtp-transport'
-
-/**
- * Validates whether the user has the necessary permissions
- *
- * @param id The student id of the user
- * @throws {TRPCError} if the user does not have permission
- */
-async function checkUserPermission(id: string, prisma: PrismaClient) {
-  const personMakingRequest = await prisma.user.findUnique({
-    where: { id },
-  })
-
-  if (!personMakingRequest || !personMakingRequest.isAdmin) {
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'User is not authorized to create a new account',
-    })
-  }
-}
+import userCollection from '~/server/db/collections/UserCollection'
 
 /**
  * Validates whether the user already exists in the database
@@ -32,47 +10,14 @@ async function checkUserPermission(id: string, prisma: PrismaClient) {
  * @param email The email of the user
  * @throws {TRPCError} if the user already exists
  */
-async function checkIfUserExist(email: string, prisma: PrismaClient) {
-  const foundUser = await prisma.user.findUnique({ where: { email } })
-  if (foundUser) {
+async function checkIfUserExist(id: string) {
+  const results = await userCollection.findById(id)
+  if (results) {
     throw new TRPCError({
       code: 'CONFLICT',
-      message: 'User already exists',
+      message: 'The user already exists',
     })
   }
-}
-
-/**
- * CREATE a new user into the database
- *
- * @param email The email of the user
- * @param id The student id of the user
- * @param isAdmin Whether the user has admin rights
- * @param level The role of the user
- * @param password The password of the user
- */
-async function createNewUser(
-  email: string,
-  id: string,
-  isAdmin: boolean,
-  level: string,
-  password: string,
-  prisma: PrismaClient
-) {
-  const hashedPassword = await hash(password, 10)
-
-  await prisma.user.create({
-    data: {
-      batch: 'AY2022/2023',
-      name: '',
-      roles: '',
-      email,
-      id,
-      hashedPassword,
-      isAdmin,
-      level,
-    },
-  })
 }
 
 /**
@@ -81,7 +26,7 @@ async function createNewUser(
  * @param email The email of the user to be sent
  * @param password The password of the user
  */
-async function sendEmail(email: string, password: string) {
+async function sendNewUserEmail(email: string, password: string) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -121,21 +66,15 @@ async function sendEmail(email: string, password: string) {
 function buildUserObject(
   input: {
     date_of_birth: string
-    diet: string
-    department: string
+    departmentId: string
     discord: string
     faculty: string
     gender: string
-    hobbies: string
-    linkedin: string
     major: string
     name: string
     nus_email: string
     personal_email: string
-    phone: string
-    race: string
-    roles: string
-    shirt: string
+    role: string
     student_id: string
     telegram: string
     year: string
@@ -144,29 +83,22 @@ function buildUserObject(
 ) {
   return input.map((user) => {
     return {
-      attendance: 0,
       batch: 'AY22/23',
-      department: user.department,
+      departmentId: user.departmentId,
       date_of_birth: dayjs().toDate(),
-      diet: user.diet,
       discord: user.discord,
       faculty: user.faculty,
       gender: user.gender,
       hashedPassword,
-      hobbies: user.hobbies,
       image: null,
       level: 'member',
-      linkedin: user.linkedin,
       major: user.major,
       id: user.student_id,
       isAdmin: false,
       name: user.name,
       email: user.nus_email,
       personal_email: user.personal_email,
-      phone: user.phone,
-      race: user.race,
-      roles: user.roles,
-      shirt: user.shirt,
+      role: user.role,
       telegram: user.telegram,
       total_events: 0,
       wallet: null,
@@ -181,32 +113,15 @@ function buildUserObject(
  * @param users The array of users object
  * @param password The hashed password
  */
-async function sendMultipleEmails(users: User[], password: string) {
-  const promises: Promise<SMTPTransport.SentMessageInfo>[] = []
-  users.forEach((user) => {
-    const promise = sendEmail(user.email, password)
-    promises.push(promise)
-  })
-  await Promise.all(promises)
-}
-
-/**
- * Creates many users in the database
- *
- * @param users The array of users object
- */
-async function createManyUsers(users: User[], prisma: PrismaClient) {
-  await prisma.user.createMany({
-    data: users,
-  })
+async function sendMultipleEmails(emails: string[], password: string) {
+  await Promise.all(
+    emails.map(async (email) => await sendNewUserEmail(email, password))
+  )
 }
 
 export {
-  createManyUsers,
-  checkUserPermission,
   checkIfUserExist,
-  createNewUser,
-  sendEmail,
+  sendNewUserEmail,
   sendMultipleEmails,
   buildUserObject,
 }

@@ -2,7 +2,7 @@ import { useToast, Stack, Button } from '@chakra-ui/react'
 import { parse, type ParseResult } from 'papaparse'
 import { trpc } from '~/utils/trpc'
 import DataTable from '~/components/users/DataTable'
-import type { AddUsersType, CSVType } from '~/types/admin.type'
+import type { AddUsersType, AddUsersCSVType } from '~/types/admin.type'
 import { useRouter } from 'next/router'
 import { useState, useCallback } from 'react'
 
@@ -11,13 +11,13 @@ const CreateMultipleUsers = () => {
   const toast = useToast()
   const [users, setUsers] = useState<AddUsersType[]>([])
 
-  const { isLoading, mutateAsync } = trpc.member.addMultipleUsers.useMutation()
+  const { isLoading, mutateAsync } = trpc.user.createManyUsers.useMutation()
 
   const handleFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length && e.target.files[0]) {
       parse(e.target.files[0], {
         header: true,
-        complete: (results: ParseResult<CSVType>) => {
+        complete: (results: ParseResult<AddUsersCSVType>) => {
           const items = results.data.map((item) => {
             return {
               date_of_birth: item['Date of Birth'] || '',
@@ -30,7 +30,6 @@ const CreateMultipleUsers = () => {
                 ],
               faculty: item['Faculty'] || '',
               gender: item['Gender '] || 'Male',
-              hobbies: item['Hobbies '] || '',
               linkedin:
                 item['LinkedIn profile LINK (eg. www.linkedin.com/in/XXX)'],
               major: item['Major and Specialization (if any)'] || '',
@@ -39,8 +38,7 @@ const CreateMultipleUsers = () => {
               personal_email: item['Gmail'],
               phone: item['Phone Number'],
               race: item['Race '] || '',
-              roles: item['Appointed Role '] || '',
-              shirt: item['Shirt size'] || '',
+              role: item['Appointed Role '] || '',
               student_id: item['Student ID (AXXXXXXXX)'] || '',
               telegram: item['Telegram Handle(@xxx)'] || '',
               year: item['Year of Study'] || '',

@@ -12,10 +12,11 @@ import LoadingScreen from '../common/LoadingScreen'
 import Link from 'next/link'
 import { Button, useDisclosure } from '@chakra-ui/react'
 import EditModal from './EditModal'
+import { ModalContext } from '~/context/ModalContext'
 
 type User = {
   name: string | null
-  roles: string | null
+  role: string | null
   department: string | null
   email: string
   id: string
@@ -27,6 +28,7 @@ const useColumns = () => {
     onOpen: editOnOpen,
     onClose: editOnClose,
   } = useDisclosure()
+  const [id, setId] = useState('')
 
   return useMemo<ColumnDef<User>[]>(
     () => [
@@ -58,7 +60,7 @@ const useColumns = () => {
             footer: (props) => props.column.id,
           },
           {
-            accessorKey: 'roles',
+            accessorKey: 'role',
             cell: (info) => info.getValue(),
             header: 'Role',
             footer: (props) => props.column.id,
@@ -69,12 +71,23 @@ const useColumns = () => {
             cell: (info) => {
               return (
                 <>
-                  <Button onClick={editOnOpen}>Edit</Button>
-                  <EditModal
-                    editIsOpen={editIsOpen}
-                    editOnClose={editOnClose}
-                    data={info.row.original}
-                  />
+                  <Button
+                    onClick={() => {
+                      setId(info.row.original.id)
+                      editOnOpen()
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <ModalContext.Provider
+                    value={{
+                      id,
+                      isOpen: editIsOpen,
+                      onClose: editOnClose,
+                    }}
+                  >
+                    <EditModal />
+                  </ModalContext.Provider>
                 </>
               )
             },
@@ -83,7 +96,7 @@ const useColumns = () => {
         ],
       },
     ],
-    [editIsOpen, editOnClose, editOnOpen]
+    [editIsOpen, editOnClose, editOnOpen, id]
   )
 }
 
