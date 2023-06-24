@@ -48,6 +48,11 @@ export abstract class BaseCollection<T> {
     return { ...result.data(), id: result.id as string } as T
   }
 
+  generateRandomId() {
+    const docRef = doc(collection(db, this.collectionName))
+    return docRef.id
+  }
+
   async getById(id: string) {
     const docRef = doc(db, this.collectionName, id)
     const result = await getDoc(docRef)

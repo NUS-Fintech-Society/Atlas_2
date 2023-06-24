@@ -5,6 +5,7 @@ import {
   getApplicant,
   getAppliedRole,
 } from './read'
+import { createManyAppliedRoles } from './create'
 
 export const recruitmentRouter = router({
   updateAppliedRoleStatus,
@@ -13,4 +14,5 @@ export const recruitmentRouter = router({
   getAllApplicantsTopRoleByDept,
   getApplicant,
   getAppliedRole,
+  createManyAppliedRoles,
 })
