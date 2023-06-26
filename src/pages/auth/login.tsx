@@ -7,6 +7,8 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import Head from 'next/head'
 import { useToast } from '@chakra-ui/react'
 import Image from 'next/image'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
 enum PageState {
   LOGIN,
@@ -47,6 +49,7 @@ const LoginPage = () => {
       setLoginLoading(false)
       return
     }
+    router.push("/")
   }
 
   const resetPassword = async () => {
@@ -72,8 +75,6 @@ const LoginPage = () => {
 
   if (status === 'loading') {
     return <LoadingScreen />
-  } else if (status === 'authenticated') {
-    router.push('/')
   }
 
   return (
@@ -145,3 +146,20 @@ const LoginPage = () => {
 }
 
 export default LoginPage
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}
