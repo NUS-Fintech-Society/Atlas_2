@@ -16,6 +16,7 @@ const ProfilePage: React.FC<BaseProps> = ({ session }) => {
       <TopNavbar
         isAdmin={session.isAdmin}
         image={session.user?.image as string}
+        isApplicant={session.isApplicant}
       />
       <Text className="m-8 text-center text-3xl font-semibold underline underline-offset-8">
         Profile

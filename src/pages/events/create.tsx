@@ -107,6 +107,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
       </Head>
       <TopNavbar
         isAdmin={session.isAdmin}
+        isApplicant={session.isApplicant}
         image={session.user?.image as string}
       />
       <Container>

@@ -14,7 +14,6 @@ import {
   Center,
   Button,
 } from '@chakra-ui/react'
-import { AddIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
@@ -53,6 +52,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
       </Head>
       <TopNavbar
         image={session.user?.image as string}
+        isApplicant={session.isApplicant}
         isAdmin={session.isAdmin}
       />
       <main>

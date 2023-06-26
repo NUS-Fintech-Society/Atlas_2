@@ -12,12 +12,11 @@ const ApplicantGrid = () => {
   useEffect(() => {
     console.log(filter)
     refetchAllApplicantsTopRoleByDept()
-  }, [filter])
+  }, [filter, refetchAllApplicantsTopRoleByDept])
 
   if (!data) return <></>
 
   const filterArray = filter.split(',')
-  const removedFirst = filterArray.shift()
 
   const filteredData =
     filterArray.length === 0
@@ -67,11 +66,11 @@ const ApplicantGrid = () => {
   return (
     <>
       <div>
-        <div className=" mb-2 mb-2 mt-16 ml-20 font-bold md:mt-1 lg:mt-1 lg:text-xl">
+        <div className=" mb-2 mt-16 ml-20 font-bold md:mt-1 lg:mt-1 lg:text-xl">
           Number of Applicants: {totalNumber}
         </div>
         <div className="my-10  mx-20 mb-10 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-3 ">
-          {filteredData?.map((applicant, index) => {
+          {filteredData?.map((applicant) => {
             return <ApplicantCard applicant={applicant} key={applicant.id} />
           })}
         </div>

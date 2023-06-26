@@ -1,7 +1,6 @@
-import { filter } from '@chakra-ui/react'
 import { TRPCError } from '@trpc/server'
 import { limit, orderBy, where } from 'firebase/firestore'
-import { object, z } from 'zod'
+import { z } from 'zod'
 import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
 import userCollection from '~/server/db/collections/UserCollection'
 import type { Applicant } from '~/server/db/models/Applicant'

@@ -18,6 +18,7 @@ const UserForm: React.FC<BaseProps> = ({ session }) => {
       </Head>
       <TopNavbar
         isAdmin={session.isAdmin}
+        isApplicant={session.isApplicant}
         image={session.user?.image as string}
       />
       <div className="m-auto w-[90%]">

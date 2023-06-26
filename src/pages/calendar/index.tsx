@@ -48,6 +48,7 @@ const CalendarPage: React.FC<BaseProps> = ({ session }) => {
       <TopNavbar
         isAdmin={session.isAdmin}
         image={session.user?.image as string}
+        isApplicant={session.isApplicant}
       />
       <div className="grid-container grid grid-cols-5">
         <SideCalendar meetings={meetings} />

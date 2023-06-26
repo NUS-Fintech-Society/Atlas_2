@@ -102,6 +102,7 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
       <TopNavbar
         isAdmin={session.isAdmin}
         image={session.user?.image as string}
+        isApplicant={session.isApplicant}
       />
 
       <Container>

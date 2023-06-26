@@ -83,6 +83,7 @@ const HomePage: React.FC<BaseProps> = ({ session }) => {
       <TopNavbar
         isAdmin={session.isAdmin}
         image={session.user?.image as string}
+        isApplicant={session.isApplicant}
       />
       <div className="flex flex-col bg-[#B1A6DB] p-16">
         <h1 className="text-left text-[50px] font-bold leading-none md:text-[88px]">
