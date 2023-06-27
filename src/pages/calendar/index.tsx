@@ -1,6 +1,5 @@
 import Head from 'next/head'
-import TopNavbar from '~/components/common/TopNavbar'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
 import SideCalendar from '~/components/calendar/SideCalendar'
 import MainCalendar from '~/components/calendar/MainCalendar'
 
@@ -37,7 +36,7 @@ const meetings = [
   },
 ]
 
-const CalendarPage: React.FC<BaseProps> = ({ session }) => {
+const CalendarPage = () => {
   return (
     <>
       <Head>
@@ -45,11 +44,6 @@ const CalendarPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The calendar page for Atlas" />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-        isApplicant={session.isApplicant}
-      />
       <div className="grid-container grid grid-cols-5">
         <SideCalendar meetings={meetings} />
         <MainCalendar />

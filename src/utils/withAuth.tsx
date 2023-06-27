@@ -1,9 +1,8 @@
 /* eslint-disable */
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
 import LoadingScreen from '~/components/common/LoadingScreen'
-import { useRouter } from 'next/router'
 import { type Session } from 'next-auth'
+import TopNavbar from '~/components/common/TopNavbar'
 
 /**
  * withAuth is a wrapper that forces the user to log in before
@@ -19,23 +18,21 @@ import { type Session } from 'next-auth'
 const withAuth = (WrappedComponent: any, isAdminRightsNeeded?: boolean) => {
   const Wrapper = (props: any) => {
     const { data: session, status } = useSession({ required: true })
-    const router = useRouter()
-
-    useEffect(() => {
-      if (session) {
-        if (session.isApplicant) {
-          router.push('/recruitment/update-info')
-        } else if (isAdminRightsNeeded && !session.isAdmin) {
-          router.push('/')
-        }
-      }
-    }, [router, status, session])
 
     if (status === 'loading') {
       return <LoadingScreen />
     }
 
-    return <WrappedComponent {...props} session={session} />
+    return (
+      <>
+        <TopNavbar
+          isAdmin={session.isAdmin}
+          isApplicant={session.isApplicant}
+          image={session.user?.image as string}
+        />
+        <WrappedComponent {...props} session={session} />
+      </>
+    )
   }
   return Wrapper
 }

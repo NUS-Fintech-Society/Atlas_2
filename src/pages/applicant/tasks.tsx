@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import { trpc } from '~/utils/trpc'
 import {
@@ -18,6 +18,8 @@ import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
 import { type TaskInfos } from '~/types/task/task.type'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
 const Tasks: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
@@ -182,3 +184,30 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
 }
 
 export default withAuth(Tasks, false)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (!session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { session },
+  }
+}

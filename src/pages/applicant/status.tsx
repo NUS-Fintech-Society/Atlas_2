@@ -11,16 +11,11 @@ import {
 } from '@chakra-ui/react'
 import Image from 'next/image'
 import TopNavbar from '~/components/common/TopNavbar'
-import withAuth, { BaseProps } from '~/utils/withAuth'
+import withAuth, { type BaseProps } from '~/utils/withAuth'
 import React from 'react'
 import Head from 'next/head'
-
-
-
-enum PageState {
-  LOGIN,
-  FORGET_PASSWORD,
-}
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
 const Application_Status: React.FC<BaseProps> = ({ session }) => {
   //this part needs backend to update the status
@@ -71,8 +66,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
         isApplicant={session.isApplicant}
       />
       <main>
-      <div className="relative w-screen h-screen overflow-x-auto bg-cover bg-no-repeat bg-center bg-fixed bg-[url('/images/applicants_background.svg')]">
-       {/* <div className="relative  bg-scroll h-screen bg-fixed overflow-x bg-[url('/images/applicants_background.svg')] bg-cover  bg-center bg-no-repeat"> */}
+        <div className="relative h-screen w-screen overflow-x-auto bg-[url('/images/applicants_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
           {/* Nav element containing the logo */}
 
           <nav className="flex items-center justify-center  px-2 py-2 ">
@@ -98,41 +92,40 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                 <div className="flex-grow">
                   {item.status == 'offered' && (
                     <div className="flex justify-center">
-
                       <span className="mt-3  flex  text-xl lg:text-4xl">
                         {item.department} - {item.name}
                         <Image
                           alt="logo"
-                          src={isRejected?
-                            "/images/red_dot.svg": isAccepted ? 
-                            "images/Ellipse 1.svg" :
-                            "/images/blue_dot.svg"}
+                          src={
+                            isRejected
+                              ? '/images/red_dot.svg'
+                              : isAccepted
+                              ? 'images/Ellipse 1.svg'
+                              : '/images/blue_dot.svg'
+                          }
                           height={35}
                           width={35}
-                          className="md:ml-14 ml-2 flex  flex-col"
+                          className="ml-2 flex flex-col  md:ml-14"
                         />
                       </span>
 
                       {isAccepted || isRejected ? (
                         <div></div>
                       ) : (
-
-
-                        <div className="md:ml-14 ml-3 flex ">
+                        <div className="ml-3 flex md:ml-14 ">
                           <button
                             onClick={onOpenAccept}
-                            className=" md:ml-5  rounded bg-green-500 md:py-2 md:px-4 md:text-2xl font-bold text-white hover:bg-green-600"
+                            className=" rounded  bg-green-500 font-bold text-white hover:bg-green-600 md:ml-5 md:py-2 md:px-4 md:text-2xl"
                           >
                             Accept
                           </button>
                           <button
                             onClick={onOpenReject}
-                            className="md:ml-5 ml-3 rounded bg-red-500 md:py-2 md:px-4  md:text-2xl font-bold text-white hover:bg-red-600"
+                            className="ml-3 rounded bg-red-500 font-bold text-white hover:bg-red-600  md:ml-5 md:py-2 md:px-4 md:text-2xl"
                           >
                             Reject
                           </button>
-                       </div>
-
+                        </div>
                       )}
                       <Modal
                         isOpen={isAcceptOpen}
@@ -203,13 +196,11 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                         </ModalContent>
                       </Modal>
                     </div>
-
-                  
                   )}
 
                   {item.status == 'accepted' && (
                     <h3 className="flex justify-center text-xl lg:text-4xl">
-                        {item.department} - {item.name}
+                      {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/Ellipse 1.svg"
@@ -222,9 +213,8 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
 
                   {item.status == 'pending_review' && (
-                    <h3 className="justify-centertext-2xl text-xl flex lg:text-4xl">
-                        {item.department} - {item.name}
-
+                    <h3 className="justify-centertext-2xl flex text-xl lg:text-4xl">
+                      {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/yellow_dot.svg"
@@ -237,7 +227,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
                   {item.status == 'interviewed' && (
                     <h3 className="flex justify-center text-xl lg:text-4xl">
-                       {item.department} - {item.name}
+                      {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/pink_dot.svg"
@@ -250,7 +240,7 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
                   )}
                   {item.status == 'rejected' && (
                     <h3 className="flex justify-center text-xl lg:text-4xl">
-                     {item.department} - {item.name}
+                      {item.department} - {item.name}
                       <Image
                         alt="logo"
                         src="/images/red_dot.svg"
@@ -362,3 +352,30 @@ const Application_Status: React.FC<BaseProps> = ({ session }) => {
 }
 
 export default withAuth(Application_Status, false)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (!session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { session },
+  }
+}
