@@ -36,7 +36,6 @@ const UploadImageBtn = ({
             `${studentId}/image/profile_pic`
           )
           await mutateAsync({
-            studentId,
             image,
           })
           await refetchImage()

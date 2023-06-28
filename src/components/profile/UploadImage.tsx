@@ -10,7 +10,7 @@ const UploadImage = ({ studentId }: { studentId: string }) => {
     data,
     isLoading,
     refetch: refetchImage,
-  } = trpc.user.getUserImage.useQuery(studentId)
+  } = trpc.user.getUserImage.useQuery()
 
   if (isLoading) {
     return <LoadingScreen />
