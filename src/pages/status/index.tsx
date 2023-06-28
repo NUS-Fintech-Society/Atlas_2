@@ -1,12 +1,8 @@
-import Image from 'next/image'
-import { Box, Center, Text, VStack } from '@chakra-ui/react'
-import TopNavbar from '~/components/common/TopNavbar'
-import ApplicationStatusListItem from '~/components/recruitment/applicant/AppliedRoleListItem'
+import { Center, Text, VStack } from '@chakra-ui/react'
 import withApplicantAuth from '~/utils/withApplicantAuth'
 import type { BaseProps } from '~/utils/withApplicantAuth'
 import React from 'react'
 import Head from 'next/head'
-import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import InfoPopup from '~/components/recruitment/InfoPopup'
 import AppliedRolesList from '~/components/recruitment/applicant/AppliedRolesList'
 
@@ -18,10 +14,6 @@ const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The status page for applicants" />
       </Head>
-      <TopNavbar
-        image={session.user?.image as string}
-        isAdmin={session.isAdmin}
-      />
       <main>
         {/* Background image layout */}
         <div className="h-screen w-screen overflow-x-auto bg-[url('/images/applicants_background.svg')] bg-cover bg-fixed bg-scroll bg-center bg-no-repeat">

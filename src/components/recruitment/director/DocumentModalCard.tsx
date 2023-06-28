@@ -1,4 +1,4 @@
-import { Card, CardBody, IconButton, Text } from '@chakra-ui/react'
+import { CardBody, IconButton, Text } from '@chakra-ui/react'
 
 const DocumentModalCard = ({ file }: { file: string }) => {
   const openDocumentInNewTab = () => {

@@ -7,13 +7,7 @@ import {
 } from 'react'
 import { trpc } from '../../utils/trpc'
 import LoadingScreen from '~/components/common/LoadingScreen'
-import {
-  BsDiscord,
-  BsEnvelopeFill,
-  BsTelegram,
-  BsTrash,
-  BsUpload,
-} from 'react-icons/bs'
+import { BsTrash, BsUpload } from 'react-icons/bs'
 import { IconContext } from 'react-icons'
 import {
   Box,
@@ -124,7 +118,7 @@ const ProfilePicture = ({
         />
         {session.user?.id === studentId ? (
           <Box className="flex justify-end">
-            <UploadImageBtn setImage={setImage} studentId={studentId} />
+            <UploadImageBtn setImage={setImage} />
             <DeleteImageBtn setImage={setImage} studentId={studentId} />
           </Box>
         ) : null}
@@ -136,10 +130,8 @@ const ProfilePicture = ({
 // https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications
 const UploadImageBtn = ({
   setImage,
-  studentId,
 }: {
   setImage: Dispatch<SetStateAction<string>>
-  studentId: string
 }) => {
   const toast = useToast()
   // trigger a click event on the file input element when button is clicked
@@ -240,47 +232,6 @@ const DeleteImageBtn = ({
   )
 }
 
-const ProfileInfo = (props: ProfilePageType) => {
-  return (
-    <Box>
-      <p className="mb-4 pl-4 text-3xl font-bold">{props.name}</p>
-      <TableContainer>
-        <Table variant="unstyled" size={'sm'}>
-          <Tbody>
-            <Tr>
-              <Td>ROLE</Td>
-              <Td>{props.role}</Td>
-            </Tr>
-            <Tr>
-              <Td>GENDER</Td>
-              <Td>{props.gender}</Td>
-            </Tr>
-            <Tr>
-              <Td>BATCH</Td>
-              <Td>{props.batch}</Td>
-            </Tr>
-            <Tr>
-              <Td>YEAR</Td>
-              <Td>{props.year}</Td>
-            </Tr>
-            <Tr>
-              <Td>FACULTY</Td>
-              <Td>{props.faculty}</Td>
-            </Tr>
-            <Tr>
-              <Td>MAJOR</Td>
-              <Td>{props.major}</Td>
-            </Tr>
-            <Tr>
-              <Td>DEPARTMENT</Td>
-              <Td>{props.department}</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </Box>
-  )
-}
 const ProfileInfoModal = ({
   session,
   studentId,

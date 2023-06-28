@@ -32,7 +32,7 @@ const DocumentModal = ({
       setFileList(fileList)
     }
     getFilesList()
-  }, [])
+  }, [docsFilePath])
 
   return (
     <Box className="absolute left-5 top-10">

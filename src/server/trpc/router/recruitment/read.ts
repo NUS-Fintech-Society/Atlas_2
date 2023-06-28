@@ -99,11 +99,10 @@ export const getAppliedRoleByRoleId = protectedProcedure
 
 export const getAppliedRolesByApplicant = protectedProcedure
   .input(z.string())
-  .query(async ({ input }) => {
+  .query(async ({ ctx }) => {
     try {
       return await appliedRoleCollection.queries([
-        where('applicantId', '==', input),
-        orderBy('rank'),
+        where('applicantId', '==', ctx.session.user.id),
       ])
     } catch (error) {
       throw new TRPCError({
