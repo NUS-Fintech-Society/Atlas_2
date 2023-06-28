@@ -104,7 +104,7 @@ const ProfilePicture = ({
 }) => {
   const [image, setImage] = useState(defaultImage)
 
-  trpc.user.getUserImage.useQuery(studentId, {
+  trpc.user.getUserImage.useQuery(undefined, {
     refetchOnWindowFocus: false,
     onSuccess(data) {
       if (!data) return
@@ -156,7 +156,7 @@ const UploadImageBtn = ({
         try {
           const imageDataURI = reader.result as string
           const image = imageDataURI as string
-          await mutateAsync({ studentId, image })
+          await mutateAsync({ image })
           toast({
             duration: 3000,
             description: 'Image successfully uploaded.',

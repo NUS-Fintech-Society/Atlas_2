@@ -23,7 +23,7 @@ const ProfileCard = ({
     isLoading,
     data,
     refetch: refetchImage,
-  } = trpc.user.getUserImage.useQuery(studentId)
+  } = trpc.user.getUserImage.useQuery()
 
   return (
     <Box className="my-5 flex flex-col items-center">
