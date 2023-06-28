@@ -35,15 +35,15 @@ const admin = [
 
 const applicants = [
   {
-    href: '/applicant/status',
+    href: '/status',
     title: 'Status',
   },
   {
-    href: '/applicant/tasks',
+    href: '/tasks',
     title: 'Tasks',
   },
   {
-    href: '/applicant/update-info',
+    href: '/update-info',
     title: 'Update information',
   },
 ]
