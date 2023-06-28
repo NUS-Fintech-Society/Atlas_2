@@ -9,7 +9,8 @@ import {
 import { BsCircleFill } from 'react-icons/bs'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
-import { AcceptRoleModal, RejectRoleModal } from './AcceptRejectRoleModal'
+import AcceptRejectRoleModal from './AcceptRejectRoleModal'
+import type { QueryObserverResult } from '@tanstack/react-query'
 
 const statusFillMap = {
   [ApplicationStatus.ACCEPTED]: '#46FFDE',
@@ -19,7 +20,13 @@ const statusFillMap = {
   [ApplicationStatus.REJECTED]: '#FF0000',
 }
 
-const AppliedRoleListItem = ({ appliedRole }: { appliedRole: AppliedRole }) => {
+const AppliedRoleListItem = ({
+  appliedRole,
+  refetch,
+}: {
+  appliedRole: AppliedRole
+  refetch: () => Promise<QueryObserverResult>
+}) => {
   return (
     <Card key={appliedRole.id} bgColor="transparent">
       <CardBody>
@@ -28,8 +35,18 @@ const AppliedRoleListItem = ({ appliedRole }: { appliedRole: AppliedRole }) => {
             <Text className="text-2xl">{appliedRole.role}</Text>
             {appliedRole.status === ApplicationStatus.OFFERED ? (
               <Stack direction={['column', 'row']}>
-                <AcceptRoleModal />
-                <RejectRoleModal />
+                <AcceptRejectRoleModal
+                  appliedRoleId={appliedRole.id}
+                  decision="accept"
+                  buttonColor="green"
+                  refetch={refetch}
+                />
+                <AcceptRejectRoleModal
+                  appliedRoleId={appliedRole.id}
+                  decision="reject"
+                  buttonColor="red"
+                  refetch={refetch}
+                />
               </Stack>
             ) : (
               <></>

@@ -8,7 +8,13 @@ const AppliedRolesList = ({ applicantId }: { applicantId: string }) => {
   return (
     <div className="mx-20 grid grid-cols-1 gap-y-5 ">
       {roles?.map((role) => {
-        return <AppliedRoleListItem appliedRole={role} key={role.id} />
+        return (
+          <AppliedRoleListItem
+            appliedRole={role}
+            key={role.id}
+            refetch={refetch}
+          />
+        )
       })}
     </div>
   )

@@ -11,27 +11,6 @@ import InfoPopup from '~/components/recruitment/InfoPopup'
 import AppliedRolesList from '~/components/recruitment/applicant/AppliedRolesList'
 
 const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
-  // const roles = [
-  //   {
-  //     id: '1',
-  //     applicantId: 'A1',
-  //     department: 'Software Development',
-  //     role: 'Software Engineer',
-  //     rank: 1,
-  //     status: ApplicationStatus.OFFERED,
-  //     flag: false,
-  //   },
-  //   {
-  //     id: '2',
-  //     applicantId: 'A2',
-  //     department: 'Machine Learning',
-  //     role: 'A',
-  //     rank: 2,
-  //     status: ApplicationStatus.OFFERED,
-  //     flag: false,
-  //   },
-  // ]
-
   return (
     <>
       <Head>

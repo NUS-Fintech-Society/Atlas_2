@@ -1,6 +1,7 @@
 import { router } from '~/server/trpc/trpc'
 import {
   updateAppliedRoleStatus,
+  updateAppliedRoleStatusWithEmail,
   updateInterviewNotes,
   updateAppliedRoleFlag,
 } from './update'
@@ -17,6 +18,7 @@ import { createTask } from './createTask'
 
 export const recruitmentRouter = router({
   updateAppliedRoleStatus,
+  updateAppliedRoleStatusWithEmail,
   updateInterviewNotes,
   updateAppliedRoleFlag,
   getAllApplicantsTopRoleByDept,
