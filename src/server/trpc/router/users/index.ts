@@ -26,5 +26,5 @@ export const userRouter = router({
   updateUserContacts,
   updateUserImage,
   updateUserProfile,
-  updateUserInfo
+  updateUserInfo,
 })
