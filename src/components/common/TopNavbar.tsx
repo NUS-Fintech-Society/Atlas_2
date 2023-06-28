@@ -67,20 +67,26 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
             Users
           </Navbar.Link>
         )}
-        {isAdmin && (<Navbar.Link href="/events" className="ml-4 text-white">
-          Events
-        </Navbar.Link>)
-        }
-        {isAdmin && (<Navbar.Link href="/calendar" className="ml-4 text-white">
-        </Navbar.Link>)}
+        {isAdmin && (
+          <Navbar.Link href="/events" className="ml-4 text-white">
+            Events
+          </Navbar.Link>
+        )}
+        {isAdmin && (
+          <Navbar.Link
+            href="/calendar"
+            className="ml-4 text-white"
+          ></Navbar.Link>
+        )}
         <Navbar.Link href="/recruitment" className="ml-4 text-white">
           Recruitment
         </Navbar.Link>
-        
-        {!isAdmin && <Navbar.Link href="/application_status" className="ml-4 text-white">
-          Status
-        </Navbar.Link>
-        }
+
+        {!isAdmin && (
+          <Navbar.Link href="/status" className="ml-4 text-white">
+            Status
+          </Navbar.Link>
+        )}
         {isAdmin && (
           <Navbar.Link href="/tasks" className="ml-4 text-white">
             Tasks

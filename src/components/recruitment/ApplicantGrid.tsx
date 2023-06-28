@@ -1,4 +1,3 @@
-
 import { useContext, useEffect } from 'react'
 import { searchContext } from '~/context/recruitment/SearchProvider'
 import { trpc } from '~/utils/trpc'
@@ -6,7 +5,6 @@ import ApplicantCard from './ApplicantCard'
 import InfoPopup from '~/components/recruitment/InfoPopup'
 
 const ApplicantGrid = () => {
-
   const { filter, search } = useContext(searchContext)
   const { data, refetch: refetchAllApplicantsTopRoleByDept } =
     trpc.recruitment.getAllApplicantsTopRoleByDept.useQuery()
@@ -69,7 +67,7 @@ const ApplicantGrid = () => {
   return (
     <>
       <div>
-        <div className=" mb-2 mt-16 mb-2 ml-20 font-bold md:mt-1 lg:mt-1 lg:text-xl">
+        <div className=" mb-2 mb-2 mt-16 ml-20 font-bold md:mt-1 lg:mt-1 lg:text-xl">
           Number of Applicants: {totalNumber}
         </div>
         <div className="my-10  mx-20 mb-10 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-3 ">
@@ -79,8 +77,14 @@ const ApplicantGrid = () => {
         </div>
       </div>
 
-
-      {filteredData.length > 0 && <InfoPopup />}
+      {filteredData.length > 0 && (
+        <InfoPopup
+          iconBgColor="#02005A"
+          iconColor="white"
+          className="bottom-25 absolute right-20"
+          popoverPlacement="left"
+        />
+      )}
     </>
   )
 }

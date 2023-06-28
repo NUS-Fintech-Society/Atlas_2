@@ -1,7 +1,7 @@
 export type AppliedRole = {
   applicantId: string
   id: string
-  rank: 1 | 2 | 3
+  rank: Rank
   department: string
   interviewNotes?: string
   role: string
@@ -15,4 +15,9 @@ export enum ApplicationStatus {
   PENDING = 'pending',
   INTERVIEWED = 'interviewed',
   REJECTED = 'rejected',
+}
+
+export enum Rank {
+  FIRST = 1,
+  SECOND = 2,
 }

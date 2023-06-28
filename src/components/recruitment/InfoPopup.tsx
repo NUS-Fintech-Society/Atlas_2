@@ -11,21 +11,32 @@ import {
   Text,
   UnorderedList,
 } from '@chakra-ui/react'
+import type { PlacementWithLogical } from '@chakra-ui/react'
 import { BsCircleFill } from 'react-icons/bs'
 
-const InfoPopup = () => {
+const InfoPopup = ({
+  iconBgColor,
+  iconColor,
+  className,
+  popoverPlacement,
+}: {
+  iconBgColor: string
+  iconColor: string
+  className: string
+  popoverPlacement: PlacementWithLogical | undefined
+}) => {
   return (
-    <Box className="bottom-25 absolute right-20">
-      <Popover placement="left" trigger="hover">
+    <Box className={className}>
+      <Popover placement={popoverPlacement} trigger="hover">
         <PopoverTrigger>
           <IconButton
             aria-label="Info popup for applicant detail"
             icon={<QuestionIcon />}
             borderRadius="full"
-            bg="None"
-            _hover={{ background: 'None' }}
+            bg={iconColor}
+            color={iconBgColor}
+            _hover={{ background: { iconColor } }}
             fontSize="50px"
-            stroke="#02005A"
           />
         </PopoverTrigger>
         <PopoverContent rootProps={{ style: { right: 0 } }}>
