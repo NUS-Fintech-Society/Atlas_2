@@ -2,6 +2,8 @@ import Head from 'next/head'
 import withAuth from '~/utils/withAuth'
 import SideCalendar from '~/components/calendar/SideCalendar'
 import MainCalendar from '~/components/calendar/MainCalendar'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
 const meetings = [
   {
@@ -53,3 +55,30 @@ const CalendarPage = () => {
 }
 
 export default withAuth(CalendarPage, false)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/application-status',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}
