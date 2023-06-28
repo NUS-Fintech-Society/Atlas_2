@@ -73,7 +73,7 @@ const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
             <InfoPopup
               iconBgColor="#FFEBC5"
               iconColor="black"
-              className="absolute bottom-20 right-10"
+              className="absolute right-20 bottom-40"
               popoverPlacement="left"
             />
           </Center>

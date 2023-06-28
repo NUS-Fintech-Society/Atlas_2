@@ -39,52 +39,27 @@ const InfoPopup = ({
             fontSize="50px"
           />
         </PopoverTrigger>
-        <PopoverContent rootProps={{ style: { right: 0 } }}>
+        <PopoverContent rootProps={{ style: { right: 0 } }} width="200px">
           <PopoverBody>
             <UnorderedList styleType="none" spacing="2">
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#46FFDE"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#46FFDE" />
                 <Text>Accepted</Text>
               </ListItem>
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#0038FF"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#0038FF" />
                 <Text>Offered</Text>
               </ListItem>
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#FFBD3C"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#FFBD3C" />
                 <Text>Pending Review</Text>
               </ListItem>
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#FF0099"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#FF0099" />
                 <Text>Interviewed</Text>
               </ListItem>
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#FF0000"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#FF0000" />
                 <Text>Rejected</Text>
               </ListItem>
             </UnorderedList>
