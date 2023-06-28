@@ -17,8 +17,8 @@ const withApplicantAuth = (WrappedComponent: any) => {
     const router = useRouter()
 
     useEffect(() => {
-        // If the user is logged in and no longer an applicant, we can just push him to the home page.
-        if (session && !session.isApplicant) {
+      // If the user is logged in and no longer an applicant, we can just push him to the home page.
+      if (session && !session.isApplicant) {
         router.push('/')
       }
     }, [router, status, session])

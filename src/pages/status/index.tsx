@@ -1,35 +1,36 @@
 import Image from 'next/image'
 import { Box, Center, Text, VStack } from '@chakra-ui/react'
 import TopNavbar from '~/components/common/TopNavbar'
-import ApplicationStatusListItem from '~/components/recruitment/ApplicantStatusListItem'
-import withAuth from '~/utils/withAuth'
-import type { BaseProps } from '~/utils/withAuth'
+import ApplicationStatusListItem from '~/components/recruitment/applicant/AppliedRoleListItem'
+import withApplicantAuth from '~/utils/withApplicantAuth'
+import type { BaseProps } from '~/utils/withApplicantAuth'
 import React from 'react'
 import Head from 'next/head'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import InfoPopup from '~/components/recruitment/InfoPopup'
+import AppliedRolesList from '~/components/recruitment/applicant/AppliedRolesList'
 
 const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
-  const roles = [
-    {
-      id: '1',
-      applicantId: 'A1',
-      department: 'Software Development',
-      role: 'Software Engineer',
-      rank: 1,
-      status: ApplicationStatus.OFFERED,
-      flag: false,
-    },
-    {
-      id: '2',
-      applicantId: 'A2',
-      department: 'Machine Learning',
-      role: 'A',
-      rank: 2,
-      status: ApplicationStatus.OFFERED,
-      flag: false,
-    },
-  ]
+  // const roles = [
+  //   {
+  //     id: '1',
+  //     applicantId: 'A1',
+  //     department: 'Software Development',
+  //     role: 'Software Engineer',
+  //     rank: 1,
+  //     status: ApplicationStatus.OFFERED,
+  //     flag: false,
+  //   },
+  //   {
+  //     id: '2',
+  //     applicantId: 'A2',
+  //     department: 'Machine Learning',
+  //     role: 'A',
+  //     rank: 2,
+  //     status: ApplicationStatus.OFFERED,
+  //     flag: false,
+  //   },
+  // ]
 
   return (
     <>
@@ -57,18 +58,7 @@ const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
                   your current statuses are:
                 </Text>
               </VStack>
-
-              {/* Applied Roles Status (Can improve list item component naming) */}
-              <div className="mx-20 grid grid-cols-1 gap-y-5">
-                {roles.map((role) => {
-                  return (
-                    <ApplicationStatusListItem
-                      appliedRole={role}
-                      key={role.id}
-                    />
-                  )
-                })}
-              </div>
+              <AppliedRolesList applicantId={session.user?.id as string} />
             </div>
             <InfoPopup
               iconBgColor="#FFEBC5"
@@ -83,4 +73,4 @@ const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(ApplicationStatusPage, false)
+export default withApplicantAuth(ApplicationStatusPage)

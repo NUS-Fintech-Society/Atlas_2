@@ -85,7 +85,7 @@ export const getApplicant = protectedProcedure
     }
   })
 
-export const getAppliedRole = protectedProcedure
+export const getAppliedRoleByRoleId = protectedProcedure
   .input(z.string())
   .query(async ({ input }) => {
     try {
@@ -94,6 +94,21 @@ export const getAppliedRole = protectedProcedure
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Error retrieving applied role: ' + error,
+      })
+    }
+  })
+
+export const getAppliedRolesByApplicant = protectedProcedure
+  .input(z.string())
+  .query(async ({ input }) => {
+    try {
+      return await appliedRoleCollection.queries([
+        where('applicantId', '==', input),
+      ])
+    } catch (error) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Error retrieving applied roles for applicants: ' + error,
       })
     }
   })

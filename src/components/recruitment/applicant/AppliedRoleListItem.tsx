@@ -19,11 +19,7 @@ const statusFillMap = {
   [ApplicationStatus.REJECTED]: '#FF0000',
 }
 
-const ApplicationStatusListItem = ({
-  appliedRole,
-}: {
-  appliedRole: AppliedRole
-}) => {
+const AppliedRoleListItem = ({ appliedRole }: { appliedRole: AppliedRole }) => {
   return (
     <Card key={appliedRole.id} bgColor="transparent">
       <CardBody>
@@ -55,4 +51,4 @@ const ApplicationStatusListItem = ({
   )
 }
 
-export default ApplicationStatusListItem
+export default AppliedRoleListItem

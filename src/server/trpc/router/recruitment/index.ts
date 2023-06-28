@@ -7,7 +7,8 @@ import {
 import {
   getAllApplicantsTopRoleByDept,
   getApplicant,
-  getAppliedRole,
+  getAppliedRoleByRoleId,
+  getAppliedRolesByApplicant,
 } from './read'
 import { createManyAppliedRoles } from './create'
 import { getAllTasks } from './getAllTasks'
@@ -20,9 +21,10 @@ export const recruitmentRouter = router({
   updateAppliedRoleFlag,
   getAllApplicantsTopRoleByDept,
   getApplicant,
-  getAppliedRole,
+  getAppliedRoleByRoleId,
   createManyAppliedRoles,
   getAllTasks,
   createTask,
   getAllTasksOfUser,
+  getAppliedRolesByApplicant,
 })

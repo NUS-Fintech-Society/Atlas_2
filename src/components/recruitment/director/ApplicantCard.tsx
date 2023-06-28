@@ -3,7 +3,6 @@ import {
   CardBody,
   CardHeader,
   Heading,
-  Icon,
   Image,
   Stack,
   Text,
@@ -11,21 +10,22 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { Avatar } from 'flowbite-react'
-import AppliedRoleListItem from './AppliedRoleListItem'
+import AppliedRoleListItem from './ApplicantRoleListItem'
 import DocumentModal from './DocumentModal'
 import type { Applicant } from '~/server/db/models/Applicant'
 import NoteModal from './NoteModal'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import { trpc } from '~/utils/trpc'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import { useState } from 'react'
 
 const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
   const appliedRole = applicant.appliedRoles[0] as AppliedRole
   const [isFlagged, setIsFlagged] = useState(appliedRole.flag)
   const appliedRoleId = appliedRole.id
-  const { refetch } = trpc.recruitment.getAppliedRole.useQuery(appliedRole.id)
+  const { refetch } = trpc.recruitment.getAppliedRoleByRoleId.useQuery(
+    appliedRole.id
+  )
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleFlag.useMutation()
   const updateFlag = async (flag: boolean) => {
