@@ -72,7 +72,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   } else if (session.isApplicant) {
     return {
       redirect: {
-        destination: '/application-status',
+        destination: '/status',
         permanent: false,
       },
     }

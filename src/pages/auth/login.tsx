@@ -49,7 +49,7 @@ const LoginPage = () => {
       setLoginLoading(false)
       return
     }
-    router.push("/")
+    router.push('/')
   }
 
   const resetPassword = async () => {
@@ -151,9 +151,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
 
   if (session) {
+    if (session.isApplicant) {
+      return {
+        redirect: {
+          destination: '/status',
+          permanent: false,
+        },
+      }
+    }
+
     return {
       redirect: {
-        destination: '/',
+        destination: '/calendar',
         permanent: false,
       },
     }

@@ -241,14 +241,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   } else if (session.isApplicant) {
     return {
       redirect: {
-        destination: '/application-status',
+        destination: '/status',
         permanent: false,
       },
     }
   } else if (!session.isAdmin) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/calendar',
         permanent: false,
       },
     }

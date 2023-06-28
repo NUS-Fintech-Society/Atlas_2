@@ -20,6 +20,8 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
 import withAuth from '~/utils/withAuth'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
 const EventPage = () => {
   const router = useRouter()
@@ -223,4 +225,28 @@ const EventPage = () => {
   )
 }
 
-export default withAuth(EventPage)
+export default withAuth(EventPage, false)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}
