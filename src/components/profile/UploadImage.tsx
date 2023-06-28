@@ -23,7 +23,7 @@ const UploadImage = ({ studentId }: { studentId: string }) => {
         <Box className="relative">
           <Image
             alt="profile-pic"
-            src={isLoading || !data ? DEFAULT_IMAGE : data}
+            src={!data ? DEFAULT_IMAGE : data}
             fallbackSrc={DEFAULT_IMAGE}
             objectFit="cover"
             borderRadius="full"
