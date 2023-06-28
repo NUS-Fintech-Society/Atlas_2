@@ -10,6 +10,26 @@ export const updateAppliedRoleStatus = protectedProcedure
     z.object({
       appliedRoleId: z.string(),
       status: z.nativeEnum(ApplicationStatus),
+    })
+  )
+  .mutation(async ({ input }) => {
+    try {
+      await appliedRoleCollection.update(input.appliedRoleId, {
+        status: input.status,
+      })
+    } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
+      })
+    }
+  })
+
+export const updateAppliedRoleStatusWithEmail = protectedProcedure
+  .input(
+    z.object({
+      appliedRoleId: z.string(),
+      status: z.nativeEnum(ApplicationStatus),
       name: z.string(),
       email: z.string(),
       appliedRole: z.string(),

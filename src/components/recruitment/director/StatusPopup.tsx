@@ -43,7 +43,8 @@ const StatusPopup = ({
   refetch: () => Promise<QueryObserverResult>
 }) => {
   const toast = useToast()
-  const { mutateAsync } = trpc.recruitment.updateAppliedRoleStatus.useMutation()
+  const { mutateAsync } =
+    trpc.recruitment.updateAppliedRoleStatusWithEmail.useMutation()
   const [currentStatus, setCurrentStatus] = useState(appliedRole.status)
   const [statusInModal, setStatusInModal] = useState(appliedRole.status)
   const [isAcceptOpen, setIsAcceptOpen] = useState(false)

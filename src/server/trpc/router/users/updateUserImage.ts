@@ -6,12 +6,10 @@ export const updateUserImage = protectedProcedure
   .input(
     z.object({
       image: z.string(),
-      studentId: z.string(),
     })
   )
-  .mutation(async ({ input }) => {
-    await userCollection.update(input.studentId, {
+  .mutation(async ({ input, ctx }) => {
+    await userCollection.update(ctx.session.user.id, {
       image: input.image,
     })
   })
-

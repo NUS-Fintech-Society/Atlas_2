@@ -11,69 +11,55 @@ import {
   Text,
   UnorderedList,
 } from '@chakra-ui/react'
+import type { PlacementWithLogical } from '@chakra-ui/react'
 import { BsCircleFill } from 'react-icons/bs'
 
-const InfoPopup = () => {
+const InfoPopup = ({
+  iconBgColor,
+  iconColor,
+  className,
+  popoverPlacement,
+}: {
+  iconBgColor: string
+  iconColor: string
+  className: string
+  popoverPlacement: PlacementWithLogical | undefined
+}) => {
   return (
-    <Box className="bottom-25 absolute right-20">
-      <Popover placement="left" trigger="hover">
+    <Box className={className}>
+      <Popover placement={popoverPlacement} trigger="hover">
         <PopoverTrigger>
           <IconButton
             aria-label="Info popup for applicant detail"
             icon={<QuestionIcon />}
             borderRadius="full"
-            bg="None"
-            _hover={{ background: 'None' }}
+            bg={iconColor}
+            color={iconBgColor}
+            _hover={{ background: { iconColor } }}
             fontSize="50px"
-            stroke="#02005A"
           />
         </PopoverTrigger>
-        <PopoverContent rootProps={{ style: { right: 0 } }}>
+        <PopoverContent rootProps={{ style: { right: 0 } }} width="200px">
           <PopoverBody>
             <UnorderedList styleType="none" spacing="2">
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#46FFDE"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#46FFDE" />
                 <Text>Accepted</Text>
               </ListItem>
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#0038FF"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#0038FF" />
                 <Text>Offered</Text>
               </ListItem>
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#FFBD3C"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#FFBD3C" />
                 <Text>Pending Review</Text>
               </ListItem>
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#FF0099"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#FF0099" />
                 <Text>Interviewed</Text>
               </ListItem>
               <ListItem className="flex items-center">
-                <Icon
-                  as={BsCircleFill}
-                  marginLeft="2"
-                  marginRight="2"
-                  fill="#FF0000"
-                />
+                <Icon as={BsCircleFill} marginRight="2" fill="#FF0000" />
                 <Text>Rejected</Text>
               </ListItem>
             </UnorderedList>

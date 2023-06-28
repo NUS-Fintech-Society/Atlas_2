@@ -4,7 +4,7 @@ import type { Applicant } from '~/server/db/models/Applicant'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import StatusPopup from './StatusPopup'
 
-const AppliedRoleListItem = ({
+const ApplicantRoleListItem = ({
   applicant,
   appliedRole,
   refetch,
@@ -27,4 +27,4 @@ const AppliedRoleListItem = ({
   )
 }
 
-export default AppliedRoleListItem
+export default ApplicantRoleListItem

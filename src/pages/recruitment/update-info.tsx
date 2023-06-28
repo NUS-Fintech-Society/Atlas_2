@@ -111,10 +111,7 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
           </h1>
 
           <div className="justify-center">
-            <UploadImage
-              session={session}
-              studentId={session?.user?.id as string}
-            />
+            <UploadImage studentId={session?.user?.id as string} />
           </div>
 
           <VStack align="left">
