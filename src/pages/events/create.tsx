@@ -62,7 +62,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
 
   const { data } = trpc.attendance.getAllAttendanceButSelf.useQuery()
   const { mutateAsync, isLoading: isSubmitting } =
-    trpc.attendance.createEvent.useMutation()
+    trpc.event.createEvent.useMutation()
 
   const invalidAttendees = attendees.length === 0
   const formSubmit = async (formData: FormSchemaType) => {
