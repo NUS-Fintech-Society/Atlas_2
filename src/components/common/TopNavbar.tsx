@@ -5,10 +5,88 @@ import { useCallback } from 'react'
 
 interface TopNavbarProps {
   isAdmin: boolean
+  isApplicant: boolean
   image: string
 }
 
-const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
+// Admin Users: Users, Events, Calendar, Recruitment
+const admin = [
+  {
+    href: '/users',
+    title: 'Users',
+  },
+  {
+    href: '/events',
+    title: 'Events',
+  },
+  {
+    href: '/calendar',
+    title: 'Calendar',
+  },
+  {
+    href: '/recruitment',
+    title: 'Recruitment',
+  },
+]
+
+const applicants = [
+  {
+    href: '/status',
+    title: 'Status',
+  },
+  {
+    href: '/tasks',
+    title: 'Tasks',
+  },
+  {
+    href: '/update-info',
+    title: 'Update information',
+  },
+]
+
+const members = [
+  {
+    href: '/calendar',
+    title: 'Calendar',
+  },
+]
+
+const NavbarItems = (
+  isAdmin: boolean,
+  isApplicant: boolean,
+  isNavbarItem: boolean
+) => {
+  let configuration: { href: string; title: string }[]
+  if (isAdmin) {
+    configuration = admin
+  } else if (isApplicant) {
+    configuration = applicants
+  } else {
+    configuration = members
+  }
+
+  return configuration.map((config, index) => {
+    if (isNavbarItem) {
+      return (
+        <Navbar.Link key={index} href={config.href} className="ml-4 text-white">
+          {config.title}
+        </Navbar.Link>
+      )
+    }
+
+    return (
+      <Link key={index} href={config.href} className="md:hidden">
+        <Dropdown.Item>{config.title}</Dropdown.Item>
+      </Link>
+    )
+  })
+}
+
+const TopNavbar: React.FC<TopNavbarProps> = ({
+  isAdmin,
+  isApplicant,
+  image,
+}) => {
   const logout = useCallback(async () => {
     await signOut()
   }, [])
@@ -24,34 +102,10 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
           inline={true}
           label={<Avatar alt="User-settings" img={image} rounded={true} />}
         >
-          <Link href="/" className="md:hidden">
-            <Dropdown.Item>Home</Dropdown.Item>
-          </Link>
-          {isAdmin && (
-            <Link href="/users" className="md:hidden">
-              <Dropdown.Item>User</Dropdown.Item>
-            </Link>
-          )}
-          {isAdmin && (
-            <Link href="/events" className="md:hidden">
-              <Dropdown.Item>Events</Dropdown.Item>
-            </Link>
-          )}
-
-          {isAdmin && (
-            <Link href="/tasks" className="md:hidden">
-              <Dropdown.Item>Tasks</Dropdown.Item>
-            </Link>
-          )}
+          {NavbarItems(isAdmin, isApplicant, false)}
           <Link href="/profile">
             <Dropdown.Item>Profile</Dropdown.Item>
           </Link>
-
-          {isAdmin && (
-            <Link href="/calendar">
-              <Dropdown.Item>Calendar</Dropdown.Item>
-            </Link>
-          )}
           <Dropdown.Item>
             <div onClick={logout}>Sign Out</div>
           </Dropdown.Item>
@@ -59,49 +113,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({ isAdmin, image }) => {
       </div>
 
       <Navbar.Collapse className="mr-auto">
-        <Navbar.Link href="/" className="ml-4 text-white">
-          Home
-        </Navbar.Link>
-        {isAdmin && (
-          <Navbar.Link href="/users" className="ml-4 text-white">
-            Users
-          </Navbar.Link>
-        )}
-        {isAdmin && (
-          <Navbar.Link href="/events" className="ml-4 text-white">
-            Events
-          </Navbar.Link>
-        )}
-        {isAdmin && (
-          <Navbar.Link
-            href="/calendar"
-            className="ml-4 text-white"
-          ></Navbar.Link>
-        )}
-        <Navbar.Link href="/recruitment" className="ml-4 text-white">
-          Recruitment
-        </Navbar.Link>
-
-        {!isAdmin && (
-          <Navbar.Link href="/status" className="ml-4 text-white">
-            Status
-          </Navbar.Link>
-        )}
-        {isAdmin && (
-          <Navbar.Link href="/tasks" className="ml-4 text-white">
-            Tasks
-          </Navbar.Link>
-        )}
-        {isAdmin && (
-          <Navbar.Link href="/calendar" className="ml-4 text-white">
-            Recruitment
-          </Navbar.Link>
-        )}
-        {!isAdmin && (
-          <Navbar.Link className="ml-4 text-white">
-            Update Information
-          </Navbar.Link>
-        )}
+        {NavbarItems(isAdmin, isApplicant, true)}
       </Navbar.Collapse>
     </Navbar>
   )

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import { trpc } from '~/utils/trpc'
 import {
@@ -14,11 +14,12 @@ import {
   Center,
   Button,
 } from '@chakra-ui/react'
-import { AddIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
 import { type TaskInfos } from '~/types/task/task.type'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
 const Tasks: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
@@ -53,6 +54,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
       </Head>
       <TopNavbar
         image={session.user?.image as string}
+        isApplicant={session.isApplicant}
         isAdmin={session.isAdmin}
       />
       <main>
@@ -70,7 +72,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                   bgColor="#97AEFF"
                   width={215}
                   className="mb-10 text-black"
-                  onClick={() => router.push('/tasks/createTask')}
+                  onClick={() => router.push('/tasks/create-task')}
                 >
                   Create Task
                 </Button>
@@ -147,7 +149,6 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                             </Text>
                           </td>
                           <td>
-                            {' '}
                             <h1 className="text-white md:text-xl">
                               {new Date(item.due).toLocaleDateString()}
                             </h1>
@@ -181,4 +182,37 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(Tasks, false)
+export default withAuth(Tasks, true)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+  return {
+    props: {},
+  }
+}

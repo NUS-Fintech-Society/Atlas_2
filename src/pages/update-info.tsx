@@ -10,13 +10,14 @@ import { useRouter } from 'next/router'
 import React, { useState, type ChangeEvent } from 'react'
 import Head from 'next/head'
 import Container from '~/components/auth/Container'
-import TopNavbar from '~/components/common/TopNavbar'
 import UploadImage from '~/components/profile/UploadImage'
 import { trpc } from '~/utils/trpc'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import withApplicantAuth, { type BaseProps } from '~/utils/withApplicantAuth'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
 const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
@@ -99,10 +100,6 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
           content="Onboarding member particulars for Atlas"
         />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-      />
 
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
@@ -206,3 +203,30 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
 }
 
 export default withApplicantAuth(UpdateInfoPage)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (!session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

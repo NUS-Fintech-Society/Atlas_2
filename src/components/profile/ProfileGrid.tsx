@@ -16,7 +16,7 @@ const ProfileGrid = ({ studentId }: { studentId: string }) => {
   }
 
   return (
-    <div className="flex flex-col items-center md:items-start md:flex-row md:justify-evenly">
+    <div className="flex flex-col items-center md:flex-row md:items-start md:justify-evenly">
       <div className="mb-5 w-3/4 max-w-xs rounded-3xl bg-[#01003D]">
         <ProfileCard
           name={data.name}

@@ -1,10 +1,11 @@
 import { Box } from '@chakra-ui/react'
 import Head from 'next/head'
-import TopNavbar from '~/components/common/TopNavbar'
 import CreateMultipleApplicants from '~/components/recruitment/director/CreateMultipleApplicants'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
 
-const ApplicantsForm: React.FC<BaseProps> = ({ session }) => {
+const ApplicantsForm = () => {
   return (
     <>
       <Head>
@@ -12,10 +13,6 @@ const ApplicantsForm: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create user page for Atlas" />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-      />
       <Box className="m-10">
         <h1 className="mb-5 text-center font-[Inter] text-4xl font-semibold">
           Create New Applicants
@@ -27,3 +24,34 @@ const ApplicantsForm: React.FC<BaseProps> = ({ session }) => {
 }
 
 export default withAuth(ApplicantsForm, true)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

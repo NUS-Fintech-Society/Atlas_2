@@ -14,15 +14,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { DataTable } from '~/components/events/DataTable'
 import { trpc } from '~/utils/trpc'
 import React, { useState } from 'react'
-import { useForm, useFormState } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import Head from 'next/head'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
-import TopNavbar from '~/components/common/TopNavbar'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
-const EventPage: React.FC<BaseProps> = ({ session }) => {
+const EventPage = () => {
   const router = useRouter()
   const toast = useToast()
   const [attendees, setAttendees] = useState<string[]>([])
@@ -76,7 +77,7 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
       }
 
       await mutateAsync({
-        id: eventData!.id!,
+        id: eventData?.id as string,
         name: formData.eventName,
         startDate: new Date(formData.startDate),
         endDate: new Date(formData.endDate),
@@ -103,8 +104,6 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
 
   if (!attendeesData) return <LoadingScreen />
 
-  // console.log(register)
-
   return (
     <>
       <Head>
@@ -112,10 +111,6 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The update event page for Atlas" />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-      />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">Update Event</h1>
@@ -228,4 +223,35 @@ const EventPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(EventPage)
+export default withAuth(EventPage, false)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

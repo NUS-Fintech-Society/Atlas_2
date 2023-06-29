@@ -1,5 +1,4 @@
 import { Button } from '~/components/utilities'
-import { type BaseProps } from '~/utils/withAuth'
 import { trpc } from '~/utils/trpc'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
@@ -10,7 +9,8 @@ import withAuth from '~/utils/withAuth'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import LoadingScreen from '~/components/common/LoadingScreen'
-import TopNavbar from '~/components/common/TopNavbar'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
 
 interface UserActionRequiredProp {
   hasUserMarkedAttendance: boolean
@@ -50,7 +50,7 @@ const UserActionRequired: React.FC<UserActionRequiredProp> = ({
   )
 }
 
-const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
+const ConfirmAttendance = () => {
   const route = useRouter()
   const eventId = route.query.id as string
   const { data, isLoading, refetch } =
@@ -106,4 +106,27 @@ const ConfirmAttendance: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(ConfirmAttendance)
+export default withAuth(ConfirmAttendance, false)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+      },
+    }
+  } else if (session && session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

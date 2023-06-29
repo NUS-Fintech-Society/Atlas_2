@@ -1,22 +1,22 @@
 export const roles = [
   {
-    department: 'Software Engineering',
+    department: 'Software Development',
     role: 'Software Engineer',
   },
   {
-    department: 'Software Engineering',
+    department: 'Software Development',
     role: 'Technical Lead',
   },
   {
-    department: 'Software Engineering',
+    department: 'Software Development',
     role: 'UI/UX Designer',
   },
   {
-    department: 'Software Engineering',
+    department: 'Software Development',
     role: 'Head of Design',
   },
   {
-    department: 'Software Engineering',
+    department: 'Software Development',
     role: 'Co-Director',
   },
   {

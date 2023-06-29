@@ -1,6 +1,5 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { TRPCError } from '@trpc/server'
-import { z } from 'zod'
 import userCollection from '~/server/db/collections/UserCollection'
 
 export const getAllTasksOfUser = protectedProcedure.query(async ({ ctx }) => {

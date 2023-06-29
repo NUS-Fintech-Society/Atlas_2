@@ -1,9 +1,10 @@
 import Head from 'next/head'
 import DataTable from '~/components/users/Table'
-import TopNavbar from '~/components/common/TopNavbar'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
-const AdminUserPage: React.FC<BaseProps> = ({ session }) => {
+const AdminUserPage = () => {
   return (
     <>
       <Head>
@@ -11,14 +12,43 @@ const AdminUserPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-      />
-
       <DataTable />
     </>
   )
 }
 
 export default withAuth(AdminUserPage, true)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

@@ -1,4 +1,3 @@
-import { filter } from '@chakra-ui/react'
 import { createContext, useState } from 'react'
 
 type SearchContextType = {

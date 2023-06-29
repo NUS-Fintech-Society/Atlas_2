@@ -6,17 +6,20 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { createColumnHelper } from '@tanstack/react-table'
 import { AddIcon } from '@chakra-ui/icons'
-import TopNavbar from '~/components/common/TopNavbar'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
 import { type EventInfos } from '~/types/event/event.type'
+import { getSession } from 'next-auth/react'
+import { type GetServerSidePropsContext } from 'next'
 
-const AttendancePage: React.FC<BaseProps> = ({ session }) => {
+const AttendancePage = () => {
   const router = useRouter()
   const isSmallScreen = useBreakpointValue({ base: true, md: false })
   const [eventInfoData, setEventInfoData] = useState<EventInfos[]>([])
 
   trpc.attendance.getAllAttendance.useQuery(undefined, {
-    onSuccess: (data: EventInfos[]) => setEventInfoData(data),
+    onSuccess: (data: EventInfos[]) => {
+      setEventInfoData(data)
+    },
   })
 
   const columnHelper = createColumnHelper<EventInfos>()
@@ -80,10 +83,6 @@ const AttendancePage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The attendance page for Atlas" />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-      />
       <div className="px-2 sm:px-6 sm:pt-5 md:px-20 md:pt-5 lg:px-28 lg:pt-5">
         <h1 className="mb-10 text-center text-2xl font-bold">Attendance</h1>
         <VStack align="left" className="mb-10">
@@ -115,4 +114,38 @@ const AttendancePage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(AttendancePage)
+export default withAuth(AttendancePage, true)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

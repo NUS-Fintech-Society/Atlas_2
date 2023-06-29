@@ -5,10 +5,11 @@ const CreateMultipleUsers = dynamic(
 )
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import Head from 'next/head'
-import TopNavbar from '~/components/common/TopNavbar'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
 
-const UserForm: React.FC<BaseProps> = ({ session }) => {
+const UserForm = () => {
   return (
     <>
       <Head>
@@ -16,10 +17,6 @@ const UserForm: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create user page for Atlas" />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-      />
       <div className="m-auto w-[90%]">
         {/* Heading */}
         <h1 className="mb-5 font-[Inter] text-4xl font-semibold">
@@ -47,3 +44,37 @@ const UserForm: React.FC<BaseProps> = ({ session }) => {
 }
 
 export default withAuth(UserForm, true)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { session },
+  }
+}

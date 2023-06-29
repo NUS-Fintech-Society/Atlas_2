@@ -20,6 +20,8 @@ import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
 
 const TaskPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
@@ -98,6 +100,7 @@ const TaskPage: React.FC<BaseProps> = ({ session }) => {
       <TopNavbar
         isAdmin={session.isAdmin}
         image={session.user?.image as string}
+        isApplicant={session.isApplicant}
       />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
@@ -203,4 +206,38 @@ const TaskPage: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(TaskPage)
+export default withAuth(TaskPage, true)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  // If not logged in, redirect to the login page.
+  // If he is an applicant, redirect him to the applicant page.
+  // If he does not have admin access, redirect to the home page.
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

@@ -1,4 +1,3 @@
-import { AppliedRole } from '~/server/db/models/AppliedRole'
 import { trpc } from '~/utils/trpc'
 import AppliedRoleListItem from './AppliedRoleListItem'
 

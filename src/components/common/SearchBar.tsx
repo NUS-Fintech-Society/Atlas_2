@@ -4,160 +4,16 @@ import { SearchIcon } from '@chakra-ui/icons'
 import { searchContext } from '~/context/recruitment/SearchProvider'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { useSession } from 'next-auth/react'
+import { roles } from '~/constant/roles'
 
 const SearchBar = () => {
-  const roles = [
-    {
-      department: 'Software Development',
-      role: 'Software Engineer',
-    },
-    {
-      department: 'Software Development',
-      role: 'Technical Lead',
-    },
-    {
-      department: 'Software Development',
-      role: 'UI/UX Designer',
-    },
-    {
-      department: 'Software Development',
-      role: 'Head of Design',
-    },
-    {
-      department: 'Software Development',
-      role: 'Co-Director',
-    },
-    {
-      department: 'Blockchain',
-      role: 'Co-Director',
-    },
-    {
-      department: 'Blockchain',
-      role: 'Core Developer',
-    },
-    {
-      department: 'Blockchain',
-      role: 'Community Manager',
-    },
-    {
-      department: 'Blockchain',
-      role: 'Developer',
-    },
-    {
-      department: 'Blockchain',
-      role: 'Lead Developer',
-    },
-    {
-      department: 'Blockchain',
-      role: 'Research Analyst',
-    },
-    {
-      department: 'Blockchain',
-      role: 'Research Community Developer',
-    },
-    {
-      department: 'Machine Learning',
-      role: 'Quant Tech Analyst',
-    },
-    ,
-    {
-      department: 'Machine Learning',
-      role: 'Quant Tech Lead',
-    },
-    {
-      department: 'Machine Learning',
-      role: 'Quant wing head',
-    },
-    {
-      department: 'Machine Learning',
-      role: 'Project Tech Analyst',
-    },
-    {
-      department: 'Machine Learning',
-      role: 'Project Tech Lead',
-    },
-    {
-      department: 'Machine Learning',
-      role: 'Tech Analyst/Trainee',
-    },
-    {
-      department: 'Machine Learning',
-      role: 'Training Head',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Co-Director',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Community Development Executive',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Community Development Lead',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Finance Executive',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Finance Lead',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Project Manager Executive',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Product Manager',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Talent Management Executive',
-    },
-    {
-      department: 'Internal Affairs',
-      role: 'Talent Management Lead',
-    },
-    {
-      department: 'External Relations',
-      role: 'Partnerships Executive',
-    },
-    {
-      department: 'External Relations',
-      role: 'Director',
-    },
-    {
-      department: 'External Relations',
-      role: 'Marketing Executive',
-    },
-    {
-      department: 'External Relations',
-      role: 'Marketing Lead',
-    },
-    {
-      department: 'External Relations',
-      role: 'Partnerships Lead',
-    },
-    {
-      department: 'External Relations',
-      role: 'Finance Executive',
-    },
-    {
-      department: 'External Relations',
-      role: 'Finance Lead',
-    },
-  ] as { department: string; role: string }[]
   const ctx = useSession()
   const department = ctx.data?.user?.department
   const filteredRoles = roles.filter(
     (combination) => combination.department === department
   )
-  const { search, filter, setFilter, setSearch } = useContext(searchContext)
+  const { filter, setFilter, setSearch } = useContext(searchContext)
   const filterArray = filter.split(',')
-  const firstElement = filterArray.shift()
-  console.log(filterArray)
   const [showDropdown, setShowDropdown] = useState(false)
   console.log(filteredRoles)
   const [selectedFilter, setSelectedFilter] = useState('')
@@ -347,12 +203,12 @@ const SearchBar = () => {
           </div>
         )}
       </button>
-      <div className="absolute top-6 md:top-0 left-0 max-w-[250px] mt-10 flex flex-wrap">
+      <div className="absolute top-6 left-0 mt-10 flex max-w-[250px] flex-wrap md:top-0">
         {filterArray.map((value) => {
           return (
             <div
               key={value}
-              className="mx-1 my-1 px-2 flex flex-col  rounded-full border border-gray-200 bg-white text-center shadow-md"
+              className="mx-1 my-1 flex flex-col rounded-full  border border-gray-200 bg-white px-2 text-center shadow-md"
             >
               {value === 'true' ? 'seen' : value === 'false' ? 'unseen' : value}
             </div>

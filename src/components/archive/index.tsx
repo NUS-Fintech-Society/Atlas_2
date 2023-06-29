@@ -1,10 +1,9 @@
 import Head from 'next/head'
-import TopNavbar from '~/components/common/TopNavbar'
 import React, { useState } from 'react'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
 import { Box, Circle, Grid, GridItem, Heading, Input } from '@chakra-ui/react'
 
-const HomePage: React.FC<BaseProps> = ({ session }) => {
+const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const data = [
     {
@@ -80,10 +79,6 @@ const HomePage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The home page for Atlas" />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-      />
       <div className="flex flex-col bg-[#B1A6DB] p-16">
         <h1 className="text-left text-[50px] font-bold leading-none md:text-[88px]">
           Our
