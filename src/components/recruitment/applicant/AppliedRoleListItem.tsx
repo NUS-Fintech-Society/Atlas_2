@@ -32,7 +32,9 @@ const AppliedRoleListItem = ({
       <CardBody>
         <Stack>
           <HStack className="flex justify-between">
-            <Text className="text-2xl">{appliedRole.role}</Text>
+            <Text className="text-2xl">
+              {appliedRole.rank}. {appliedRole.role}
+            </Text>
             {appliedRole.status === ApplicationStatus.OFFERED ? (
               <Stack direction={['column', 'row']}>
                 <AcceptRejectRoleModal
