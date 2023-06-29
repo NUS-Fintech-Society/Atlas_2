@@ -190,32 +190,29 @@ const StatusPopup = ({
         onClose={() => setIsAcceptOpen(false)}
         size="xs"
       >
-        <ModalOverlay bg="none" backdropFilter="auto" />
-        <ModalContent>
-          <ModalHeader fontSize="5xl"></ModalHeader>
+        <ModalOverlay backdropFilter="auto" backdropBlur="1.5px" />
+        <ModalContent className="font-[Inter]">
+          <ModalHeader fontSize="xl">
+            <Text textAlign="center">Confirm Status Update?</Text>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody fontSize="2xl ">
-            <div className=" flex-col justify-center">
-              <div className="items-center">
-                Confirm Status Update?
-                <button
-                  onClick={() => {
-                    onCloseAccept(statusInModal)
-                  }}
-                  className="mt-5 rounded bg-green-500 py-2 px-4 text-2xl font-bold text-white hover:bg-green-600"
-                >
-                  Confirm
-                </button>
-                <button
-                  onClick={() => {
-                    setIsAcceptOpen(false)
-                  }}
-                  className="ml-10 mt-5 rounded bg-red-500 py-2 px-4 text-2xl font-bold text-white hover:bg-red-600"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+          <ModalBody className="mx-8 flex justify-between font-[Inter]">
+            <button
+              onClick={() => {
+                onCloseAccept(statusInModal)
+              }}
+              className="text-l w-sm mt-5 rounded bg-green-500 py-2 px-4 font-bold text-white hover:bg-green-600"
+            >
+              Confirm
+            </button>
+            <button
+              onClick={() => {
+                setIsAcceptOpen(false)
+              }}
+              className="text-l w-sm ml-10 mt-5 rounded bg-red-500 py-2 px-4 font-bold text-white hover:bg-red-600"
+            >
+              Cancel
+            </button>
           </ModalBody>
           <ModalFooter></ModalFooter>
         </ModalContent>
