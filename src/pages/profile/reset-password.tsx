@@ -7,6 +7,9 @@ import Head from 'next/head'
 import { useToast } from '@chakra-ui/react'
 import { trpc } from '~/utils/trpc'
 import Link from 'next/link'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
+import withAuth from '~/utils/withAuth'
 
 const ChangePasswordPage = () => {
   const toast = useToast()
@@ -124,4 +127,21 @@ const ChangePasswordPage = () => {
   )
 }
 
-export default ChangePasswordPage
+export default withAuth(ChangePasswordPage)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

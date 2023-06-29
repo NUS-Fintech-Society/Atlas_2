@@ -4,6 +4,8 @@ import SearchBar from '~/components/common/SearchBar'
 import withAuth from '~/utils/withAuth'
 import ApplicantGrid from '~/components/recruitment/director/ApplicantGrid'
 import SearchProvider from '~/context/recruitment/SearchProvider'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
 
 const ApplicantsPage = () => {
   return (
@@ -28,3 +30,34 @@ const ApplicantsPage = () => {
 }
 
 export default withAuth(ApplicantsPage, true)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

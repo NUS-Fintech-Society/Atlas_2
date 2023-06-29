@@ -5,6 +5,8 @@ import React from 'react'
 import Head from 'next/head'
 import InfoPopup from '~/components/recruitment/InfoPopup'
 import AppliedRolesList from '~/components/recruitment/applicant/AppliedRolesList'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
 
 const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
   return (
@@ -45,3 +47,27 @@ const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
 }
 
 export default withApplicantAuth(ApplicationStatusPage)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (!session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

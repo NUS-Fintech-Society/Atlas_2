@@ -3,6 +3,8 @@ import Head from 'next/head'
 import React from 'react'
 import ProfileGrid from '~/components/profile/ProfileGrid'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
 
 const ProfilePage: React.FC<BaseProps> = ({ session }) => {
   return (
@@ -22,3 +24,19 @@ const ProfilePage: React.FC<BaseProps> = ({ session }) => {
 
 export default withAuth(ProfilePage, false)
 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}

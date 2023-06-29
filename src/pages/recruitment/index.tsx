@@ -2,6 +2,8 @@ import Head from 'next/head'
 import withAuth from '~/utils/withAuth'
 import { Box, Button, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { getSession } from 'next-auth/react'
+import type { GetServerSidePropsContext } from 'next'
 
 const RecruitmentPage = () => {
   const router = useRouter()
@@ -40,3 +42,34 @@ const RecruitmentPage = () => {
 }
 
 export default withAuth(RecruitmentPage, true)
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
+}
