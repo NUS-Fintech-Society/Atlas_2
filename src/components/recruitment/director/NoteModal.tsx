@@ -74,7 +74,7 @@ const NoteModal = ({
   }
 
   return (
-    <Box className="absolute right-5 top-10">
+    <Box>
       <IconButton
         aria-label="Interview notes"
         icon={<BsFileEarmark />}

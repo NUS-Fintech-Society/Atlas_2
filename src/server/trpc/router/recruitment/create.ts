@@ -35,6 +35,7 @@ export const createManyAppliedRoles = protectedProcedure
           role: appliedRole.firstRole,
           department: appliedRole.firstDepartment,
           status: ApplicationStatus.PENDING,
+          flag: false,
         } as AppliedRole
         batches[batchIndex]?.set(
           doc(db, 'applied_roles', appliedRoleCollection.generateRandomId()),
@@ -56,6 +57,7 @@ export const createManyAppliedRoles = protectedProcedure
           role: appliedRole.secondRole,
           department: appliedRole.secondDepartment,
           status: ApplicationStatus.PENDING,
+          flag: false,
         } as AppliedRole
         batches[batchIndex]?.set(
           doc(db, 'applied_roles', appliedRoleCollection.generateRandomId()),

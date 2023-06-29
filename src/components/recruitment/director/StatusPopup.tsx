@@ -95,6 +95,8 @@ const StatusPopup = ({
           icon={<BsCircleFill fill={statusFillMap[currentStatus]} />}
           bg="None"
           _hover={{ background: 'None' }}
+          p={0}
+          m={0}
         ></IconButton>
       </PopoverTrigger>
       <PopoverContent>

@@ -1,28 +1,37 @@
-import { ListItem, Text } from '@chakra-ui/react'
-import type { QueryObserverResult } from '@tanstack/react-query'
+import { Box, HStack, ListItem, Text } from '@chakra-ui/react'
 import type { Applicant } from '~/server/db/models/Applicant'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
+import { trpc } from '~/utils/trpc'
+import NoteModal from './NoteModal'
 import StatusPopup from './StatusPopup'
 
 const ApplicantRoleListItem = ({
   applicant,
   appliedRole,
-  refetch,
 }: {
   applicant: Applicant
   appliedRole: AppliedRole
-  refetch: () => Promise<QueryObserverResult>
 }) => {
+  const { refetch } = trpc.recruitment.getAppliedRoleByRoleId.useQuery(
+    appliedRole.id
+  )
   return (
     <ListItem className="flex items-center justify-between">
       <Text fontWeight="medium">
         {appliedRole.rank}. {appliedRole.role}
       </Text>
-      <StatusPopup
-        applicant={applicant}
-        appliedRole={appliedRole}
-        refetch={refetch}
-      />
+      <Box display="flex" justifyContent="center" m={0} p={0}>
+        <StatusPopup
+          applicant={applicant}
+          appliedRole={appliedRole}
+          refetch={refetch}
+        />
+        <NoteModal
+          appliedRoleId={appliedRole.id}
+          interviewNotes={appliedRole.interviewNotes}
+          refetch={refetch}
+        />
+      </Box>
     </ListItem>
   )
 }
