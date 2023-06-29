@@ -12,11 +12,6 @@ import { IconContext } from 'react-icons'
 import {
   Box,
   Button,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Tr,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -65,29 +60,6 @@ const ProfilePage = ({
     </div>
   )
 }
-
-// const ProfileContactInfo = (props: { email: string }) => {
-//   return (
-//     <Box className="flex flex-col gap-1">
-//       <Box className="flex items-center gap-1">
-//         <BsTelegram className="fill-[#0088cc]" />
-//         <p>{props.telegram}</p>
-//       </Box>
-//       <Box className="flex items-center gap-1">
-//         <BsDiscord className="fill-[#5865F2]" />
-//         <p>{props.discord}</p>
-//       </Box>
-//       <Box className="flex items-center gap-1">
-//         <BsEnvelopeFill />
-//         <p>{props.personal_email}</p>
-//       </Box>
-//       <Box className="flex items-center gap-1">
-//         <BsEnvelopeFill className="fill-blue-300" />
-//         <p>{props.email}</p>
-//       </Box>
-//     </Box>
-//   )
-// }
 
 const ProfilePicture = ({
   studentId,
@@ -281,17 +253,6 @@ const PersonalInformationModal = ({
       </ModalContent>
     </Modal>
   )
-}
-
-type ProfilePageType = {
-  name: string | null
-  role: string | null
-  gender: string | null
-  batch: string | null
-  year: string | null
-  faculty: string | null
-  major: string | null
-  department: string | null
 }
 
 export default ProfileInfoModal

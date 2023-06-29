@@ -155,7 +155,7 @@ export function DataTable({ data, setAttendees }: DataTableProps) {
   }, [rowSelection, table, setAttendees])
 
   return (
-    <div >
+    <div>
       <div className="flex items-center justify-between py-4 ">
         <p className="text-2xl">Attendees</p>
         <div className="flex gap-4 ">
