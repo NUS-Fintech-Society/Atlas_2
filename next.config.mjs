@@ -14,6 +14,13 @@ const withBundleAnalyzer = bundleAnalyzer({
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+  async redirects() {
+    return [{
+      source: "/",
+      destination: "/auth/login",
+      permanent: false
+    }]
+  },
   swcMinify: true,
   i18n: {
     locales: ['en'],

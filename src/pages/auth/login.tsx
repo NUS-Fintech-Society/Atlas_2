@@ -158,6 +158,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           permanent: false,
         },
       }
+    } else if (session.isAdmin) {
+      return {
+        redirect: {
+          destination: '/users',
+          permanent: false,
+        },
+      }
     }
 
     return {
