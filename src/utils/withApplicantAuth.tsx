@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import { useRouter } from 'next/router'
 import { type Session } from 'next-auth'
+import TopNavbar from '~/components/common/TopNavbar'
 
 /**
  * withApplicantAuth is a wrapper method that ensures that the applicants
@@ -27,7 +28,16 @@ const withApplicantAuth = (WrappedComponent: any) => {
       return <LoadingScreen />
     }
 
-    return <WrappedComponent {...props} session={session} />
+    return (
+      <>
+        <TopNavbar
+          isAdmin={session.isAdmin}
+          isApplicant={session.isApplicant}
+          image={session.user?.image as string}
+        />
+        <WrappedComponent {...props} session={session} />
+      </>
+    )
   }
   return Wrapper
 }
