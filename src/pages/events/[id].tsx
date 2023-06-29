@@ -104,8 +104,6 @@ const EventPage = () => {
 
   if (!attendeesData) return <LoadingScreen />
 
-  // console.log(register)
-
   return (
     <>
       <Head>
@@ -241,6 +239,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       redirect: {
         destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
+    return {
+      redirect: {
+        destination: '/calendar',
         permanent: false,
       },
     }

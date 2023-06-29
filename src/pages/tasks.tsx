@@ -201,7 +201,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   } else if (!session.isApplicant) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/calendar',
         permanent: false,
       },
     }

@@ -21,3 +21,4 @@ const ProfilePage: React.FC<BaseProps> = ({ session }) => {
 }
 
 export default withAuth(ProfilePage, false)
+

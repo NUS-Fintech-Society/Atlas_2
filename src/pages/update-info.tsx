@@ -10,7 +10,6 @@ import { useRouter } from 'next/router'
 import React, { useState, type ChangeEvent } from 'react'
 import Head from 'next/head'
 import Container from '~/components/auth/Container'
-import TopNavbar from '~/components/common/TopNavbar'
 import UploadImage from '~/components/profile/UploadImage'
 import { trpc } from '~/utils/trpc'
 import { useForm } from 'react-hook-form'
@@ -101,11 +100,6 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
           content="Onboarding member particulars for Atlas"
         />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-        isApplicant={session.isApplicant}
-      />
 
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>

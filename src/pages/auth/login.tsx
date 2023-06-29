@@ -31,7 +31,7 @@ const LoginPage = () => {
     )
   }, [])
 
-  const signin = async () => {
+  const signin = useCallback(async () => {
     setLoginLoading(true)
     const res = await signIn('credentials', {
       email,
@@ -49,10 +49,10 @@ const LoginPage = () => {
       setLoginLoading(false)
       return
     }
-    router.push('/')
-  }
+    router.push('/calendar')
+  }, [email, password, router, toast])
 
-  const resetPassword = async () => {
+  const resetPassword = useCallback(async () => {
     try {
       await mutateAsync(email)
     } catch (e) {
@@ -71,7 +71,7 @@ const LoginPage = () => {
       status: 'success',
       duration: 3000,
     })
-  }
+  }, [toast, email, mutateAsync])
 
   if (status === 'loading') {
     return <LoadingScreen />
