@@ -12,10 +12,6 @@ interface TopNavbarProps {
 // Admin Users: Users, Events, Calendar, Recruitment
 const admin = [
   {
-    href: '/',
-    title: 'Home',
-  },
-  {
     href: '/users',
     title: 'Users',
   },
@@ -49,10 +45,6 @@ const applicants = [
 ]
 
 const members = [
-  {
-    href: '/',
-    title: 'Home',
-  },
   {
     href: '/calendar',
     title: 'Calendar',
