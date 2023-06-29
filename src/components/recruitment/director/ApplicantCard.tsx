@@ -20,12 +20,12 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useState } from 'react'
 
 const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
-  const appliedRole = applicant.appliedRoles[0] as AppliedRole
-  const [isFlagged, setIsFlagged] = useState(appliedRole.flag)
-  const appliedRoleId = appliedRole.id
-  const { refetch } = trpc.recruitment.getAppliedRoleByRoleId.useQuery(
-    appliedRole.id
-  )
+  const appliedRoles = applicant.appliedRoles
+  //const [isFlagged, setIsFlagged] = useState(appliedRole.flag)
+  // const appliedRoleId = appliedRole.id
+  // const { refetch } = trpc.recruitment.getAppliedRoleByRoleId.useQuery(
+  //   appliedRole.id
+  // )
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleFlag.useMutation()
   const updateFlag = async (flag: boolean) => {
@@ -36,12 +36,12 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
         title: 'Updating',
         description: 'Waiting to update...',
       })
-      await mutateAsync({
-        flag: flag,
-        appliedRoleId: appliedRoleId,
-      })
-      await refetch()
-      setIsFlagged(flag)
+      // await mutateAsync({
+      //   flag: flag,
+      //   appliedRoleId: appliedRoleId,
+      // })
+      // await refetch()
+      // setIsFlagged(flag)
       toast.close(firstToast)
       toast({
         duration: 2000,
@@ -63,10 +63,11 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
       maxWidth="xs"
       borderRadius="20"
       boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+      minHeight="310px"
     >
       <CardHeader paddingBottom="0" zIndex={1}>
         <Heading size="md" textAlign="center" textColor="white">
-          {isFlagged ? (
+          {/* {isFlagged ? (
             <button
               className="absolute left-2"
               onClick={() => {
@@ -84,7 +85,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
             >
               <ViewOffIcon></ViewOffIcon>
             </button>
-          )}
+          )} */}
 
           {applicant.name}
         </Heading>
@@ -96,7 +97,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
         borderTopRightRadius="20"
         boxSize="500px"
         position="absolute"
-        height="85px"
+        height="95px"
       />
       <CardBody className="relative" pt="10px">
         <Stack>
@@ -105,22 +106,20 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
             applicantId={applicant.id}
             applicantName={applicant.name}
           />
-          <NoteModal
-            appliedRoleId={appliedRole.id}
-            interviewNotes={appliedRole.interviewNotes}
-            refetch={refetch}
-          />
           <Text className="text-center">
-            {appliedRole.department.toUpperCase()}
+            {appliedRoles[0]?.department.toUpperCase()}
           </Text>
           <Text>Role Applied:</Text>
           <UnorderedList styleType="none">
-            <AppliedRoleListItem
-              applicant={applicant}
-              appliedRole={appliedRole}
-              key={appliedRole.id}
-              refetch={refetch}
-            />
+            {appliedRoles?.map((appliedRole) => {
+              return (
+                <AppliedRoleListItem
+                  applicant={applicant}
+                  appliedRole={appliedRole}
+                  key={appliedRole.id}
+                />
+              )
+            })}
           </UnorderedList>
         </Stack>
       </CardBody>

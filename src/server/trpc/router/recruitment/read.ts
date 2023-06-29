@@ -34,24 +34,43 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
           const appliedRoles = await appliedRoleCollection.queries([
             where('applicantId', '==', applicant.id),
             where('department', '==', ctx.session.user.department),
-            where('status', 'in', [
-              ApplicationStatus.ACCEPTED,
-              ApplicationStatus.INTERVIEWED,
-              ApplicationStatus.OFFERED,
-              ApplicationStatus.PENDING,
-            ]),
             orderBy('rank'),
-            limit(1),
           ])
-          // only add applicants that still have roles
-          if (appliedRoles.length == 1) {
+          // Role 1 and 2 from same department
+          if (appliedRoles.length > 1) {
             applicantsWithRoles.push({
               id: applicant?.id,
               email: applicant?.email,
               name: applicant?.name,
               appliedRoles: appliedRoles,
             })
+            // Roles from different department
+          } else if (appliedRoles.length == 1) {
+            // if 1st choice, add in
+            if (appliedRoles[0]?.rank == 1) {
+              applicantsWithRoles.push({
+                id: applicant?.id,
+                email: applicant?.email,
+                name: applicant?.name,
+                appliedRoles: appliedRoles,
+              })
+              // if 2nd choice, add only if 1st role from other dept is rejected
+            } else {
+              const otherAppliedRoles = await appliedRoleCollection.queries([
+                where('applicantId', '==', applicant.id),
+                where('department', '!=', ctx.session.user.department),
+              ])
+              if (otherAppliedRoles[0]?.status === ApplicationStatus.REJECTED) {
+                applicantsWithRoles.push({
+                  id: applicant?.id,
+                  email: applicant?.email,
+                  name: applicant?.name,
+                  appliedRoles: appliedRoles,
+                })
+              }
+            }
           }
+          // No roles from this department, don't include
         }
       }
       return applicantsWithRoles
