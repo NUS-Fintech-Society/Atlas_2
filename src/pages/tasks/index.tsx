@@ -72,7 +72,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                   bgColor="#97AEFF"
                   width={215}
                   className="mb-10 text-black"
-                  onClick={() => router.push('/tasks/createTask')}
+                  onClick={() => router.push('/tasks/create-task')}
                 >
                   Create Task
                 </Button>
@@ -149,7 +149,6 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                             </Text>
                           </td>
                           <td>
-                            {' '}
                             <h1 className="text-white md:text-xl">
                               {new Date(item.due).toLocaleDateString()}
                             </h1>
@@ -183,7 +182,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(Tasks, false)
+export default withAuth(Tasks, true)
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
@@ -198,7 +197,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         permanent: false,
       },
     }
-  } else if (!session.isApplicant) {
+  } else if (session.isApplicant) {
+    return {
+      redirect: {
+        destination: '/status',
+        permanent: false,
+      },
+    }
+  } else if (!session.isAdmin) {
     return {
       redirect: {
         destination: '/calendar',
@@ -206,7 +212,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }
   }
-
   return {
     props: {},
   }
