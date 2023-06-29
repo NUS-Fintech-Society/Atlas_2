@@ -103,6 +103,7 @@ export const getAppliedRolesByApplicant = protectedProcedure
     try {
       return await appliedRoleCollection.queries([
         where('applicantId', '==', ctx.session.user.id),
+        orderBy('rank'),
       ])
     } catch (error) {
       throw new TRPCError({
