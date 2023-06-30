@@ -9,7 +9,7 @@ import { env } from '~/env/server.mjs'
  * @param appliedRole The applied role of the applicant
  * @param appliedDepartmnet The accompanying department for the applied role
  */
-export async function sendAcceptanceEmail(
+export async function sendOfferEmail(
   email: string,
   name: string,
   appliedRole: string,
@@ -26,12 +26,12 @@ export async function sendAcceptanceEmail(
   return transporter.sendMail({
     from: env.GMAIL,
     to: email,
-    subject: `Congratulations you've been accepted as ${appliedRole} in the ${appliedDepartment} department!`,
+    subject: `Congratulations you've been offered the role of ${appliedRole} in the ${appliedDepartment} department!`,
     html: `
     Dear ${name},
     <br />
     <p> Due to your outstanding performance in the interview, we
-    have accepted you for the role of ${appliedRole} in the 
+    have offered you the role of ${appliedRole} in the 
     ${appliedDepartment} department! If you would like
     to accept this role, please do so at the HRMS website.
     </p>
