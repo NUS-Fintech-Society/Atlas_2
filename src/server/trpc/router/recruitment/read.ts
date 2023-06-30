@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { limit, orderBy, where } from 'firebase/firestore'
+import { orderBy, where } from 'firebase/firestore'
 import { z } from 'zod'
 import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
 import userCollection from '~/server/db/collections/UserCollection'

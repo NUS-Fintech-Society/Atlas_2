@@ -11,57 +11,84 @@ import { useRouter } from 'next/router'
 import { useState, useCallback } from 'react'
 import { roles } from '~/constant/roles'
 
+// For Frontend Form Validation
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Alert } from 'flowbite-react'
+import { HiInformationCircle } from 'react-icons/hi'
+
+const FormSchema = z.object({
+  email: z.string().email(),
+  id: z.string().min(1),
+  isAdmin: z.boolean(),
+  name: z.string(),
+})
+
+type FormSchemaType = z.infer<typeof FormSchema>
+
 const SingleUserForm = () => {
   const router = useRouter()
   const { mutateAsync, isLoading } = trpc.user.createSingleUser.useMutation()
   const toast = useToast()
-  const [email, setEmail] = useState('')
-  const [name, setName] = useState('')
   const [department, setDepartment] = useState('')
-  const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
-  const [id, setId] = useState('')
-  const [isAdmin, setIsAdmin] = useState(false)
 
-  const handleSubmit = useCallback(async () => {
-    try {
-      await mutateAsync({
-        name,
-        department,
-        email,
-        password,
-        id,
-        isAdmin,
-        role,
-      })
-      toast({
-        title: 'Successfully updated!',
-        description: 'User successfully created',
-        status: 'success',
-        isClosable: true,
-        duration: 9000,
-      })
-    } catch (e) {
-      toast({
-        title: 'Oops, something went wrong!',
-        description: (e as Error).message,
-        status: 'error',
-        isClosable: true,
-        duration: 9000,
-      })
-    }
-  }, [department, email, id, isAdmin, mutateAsync, name, password, role, toast])
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+  })
+
+  const formSubmit = useCallback(
+    async (formData: FormSchemaType) => {
+      try {
+        await mutateAsync({
+          name: formData.name,
+          department,
+          email: formData.email,
+          id: formData.id,
+          isAdmin: formData.isAdmin,
+          role,
+        })
+        toast({
+          title: 'Successfully updated!',
+          description: 'User successfully created',
+          status: 'success',
+          isClosable: true,
+          duration: 9000,
+        })
+      } catch (e) {
+        toast({
+          title: 'Oops, something went wrong!',
+          description: (e as Error).message,
+          status: 'error',
+          isClosable: true,
+          duration: 9000,
+        })
+      }
+    },
+    [toast, department, role, mutateAsync]
+  )
 
   return (
-    <>
+    <form onSubmit={handleSubmit(formSubmit)}>
+      {(errors.email?.message || errors.id?.message) && (
+        <Alert color="failure" icon={HiInformationCircle}>
+          <span>
+            <p>{errors.email?.message || errors.id?.message}</p>
+          </span>
+        </Alert>
+      )}
+
       <Input
         id="name"
         isRequired
         marginY={5}
-        name="name"
-        onChange={(e) => setName(e.target.value)}
+        {...register('name')}
         placeholder="Name"
-        value={name}
         variant="outline"
       />
 
@@ -69,10 +96,8 @@ const SingleUserForm = () => {
         id="id"
         isRequired
         marginBottom={5}
-        name="id"
-        onChange={(e) => setId(e.target.value)}
+        {...register('id', { required: true })}
         placeholder="Matriculation Number"
-        value={id}
         variant="outline"
       />
 
@@ -81,25 +106,11 @@ const SingleUserForm = () => {
           id="email"
           isRequired
           marginBottom={5}
-          name="email"
-          onChange={(e) => setEmail(e.target.value)}
+          {...register('email', { required: true })}
           placeholder="Email"
-          value={email}
           variant="outline"
         />
       </InputGroup>
-
-      <Input
-        id="password"
-        marginBottom={5}
-        name="password"
-        type="password"
-        isRequired
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        value={password}
-        variant="outline"
-      />
 
       <Select
         marginBottom={5}
@@ -113,23 +124,16 @@ const SingleUserForm = () => {
         }}
         placeholder="Select role"
       >
-        {roles.map((role) => {
+        {roles.map((role, index) => {
           return (
-            <option key={role.role} value={role.role}>
+            <option key={index} value={role.role}>
               {role.role} ({role.department})
             </option>
           )
         })}
       </Select>
 
-      <Checkbox
-        onChange={(e) => {
-          e.preventDefault()
-          setIsAdmin(!isAdmin)
-        }}
-      >
-        Give admin rights?
-      </Checkbox>
+      <Checkbox {...register('isAdmin')}>Give admin rights?</Checkbox>
 
       <div className="mt-5 flex">
         <Button
@@ -144,12 +148,12 @@ const SingleUserForm = () => {
           bg="light.secondary.primary"
           className="text-white"
           isLoading={isLoading}
-          onClick={handleSubmit}
+          type="submit"
         >
           Create User
         </Button>
       </div>
-    </>
+    </form>
   )
 }
 

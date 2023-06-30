@@ -55,7 +55,7 @@ export const createManyUsers = protectedProcedure
       })
 
       await Promise.all(batches.map(async (batch) => await batch.commit()))
-      await sendMultipleEmails(emails, password)
+      await sendMultipleEmails(emails)
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),
