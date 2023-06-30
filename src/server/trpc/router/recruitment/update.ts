@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
-import { sendAcceptanceEmail, sendRejectionEmail } from './helper'
+import { sendOfferEmail, sendRejectionEmail } from './helper'
 
 export const updateAppliedRoleStatus = protectedProcedure
   .input(
@@ -41,9 +41,9 @@ export const updateAppliedRoleStatusWithEmail = protectedProcedure
       await appliedRoleCollection.update(input.appliedRoleId, {
         status: input.status,
       })
-      // send email to notify applicants that are accepted / rejected
-      if (input.status === ApplicationStatus.ACCEPTED) {
-        await sendAcceptanceEmail(
+      // send email to notify applicants that are offered / rejected
+      if (input.status === ApplicationStatus.OFFERED) {
+        await sendOfferEmail(
           input.email,
           input.name,
           input.appliedRole,
