@@ -191,6 +191,8 @@ const StatusPopup = ({
         isOpen={isAcceptOpen}
         onClose={() => setIsAcceptOpen(false)}
         size="xs"
+        isCentered
+        lockFocusAcrossFrames
       >
         <ModalOverlay backdropFilter="auto" backdropBlur="1.5px" />
         <ModalContent className="font-[Inter]">
