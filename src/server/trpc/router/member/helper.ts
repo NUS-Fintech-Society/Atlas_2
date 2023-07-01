@@ -26,7 +26,7 @@ async function checkIfUserExist(id: string) {
  * @param email The email of the user to be sent
  * @param password The password of the user
  */
-async function sendNewUserEmail(email: string, password: string) {
+async function sendNewUserEmail(email: string) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -40,18 +40,38 @@ async function sendNewUserEmail(email: string, password: string) {
     to: email,
     subject: 'New Account Creation',
     html: `
-    Hi User,
+    Dear User,
     <br />
-    <p> We welcome you to Fintech Society. We hope you enjoy your
-    time here. In order to get you onboard, please login with 
-    the following password and change it immediately. </p>
-    <br />
-    <a href="${env.NEXTAUTH_URL}">HRMS Website</a>
-    <br />
-    The password is <strong>${password}</strong>
-    <br />
-    Thank You. <br /> 
-    Fintech HR
+    <h1> Welcome to the NUS Fintech Society! </h1>
+    <p> Here are a few items to take note of as you get started on your journey with us. </p>
+
+    <h2>1. Collection of details (Compulsory)</h2>
+    <p> 
+      With effect from August 2023, we will be using the <a href="${env.NEXTAUTH_URL}">ATLAS HRMS</a> 
+      portal to disseminate events and tasks. Before proceeding, please log into your account and 
+      fill up the form. The password to the account will be your student matriculation number. 
+      You are <strong> strongly advised </strong> to change your password after your first login. 
+    </p>
+
+    <h2>2. Means of Communication</h2>
+    <p>
+      We have decided to introduce DISCORD for the upcoming AY!! This is with the aim of fostering a 
+      stronger community within our society by establishing avenues for members to better interact with 
+      each other. Through our Discord group, you will also receive information regarding internships, 
+      hackathons, workshops, giveaways, and a slew of other exciting opportunities! Do, also, look 
+      forward to connecting with your fellow society members on Discord and participating in virtual 
+      gatherings whether it is a training session or a time to just chill-out.
+    </p>
+    <p>
+    Below are the links to join the respective communication channels. For the Telegram Internal 
+    Chat (Private & Informal), you will only be added after submitting your details in the above google 
+    form. As for your department channels/groups, your respective director will contact you directly 
+    with the invitation links.
+    </p>
+
+    Warmest Regards, </br>
+    TEO James (Mr.) </br>
+    Co-Director (Internal Affairs) | NUS FinTech Society
     `,
   })
 }
@@ -113,10 +133,8 @@ function buildUserObject(
  * @param users The array of users object
  * @param password The hashed password
  */
-async function sendMultipleEmails(emails: string[], password: string) {
-  await Promise.all(
-    emails.map(async (email) => await sendNewUserEmail(email, password))
-  )
+async function sendMultipleEmails(emails: string[]) {
+  await Promise.all(emails.map(async (email) => await sendNewUserEmail(email)))
 }
 
 export {
