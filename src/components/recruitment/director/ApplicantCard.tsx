@@ -105,6 +105,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
           <DocumentModal
             applicantId={applicant.id}
             applicantName={applicant.name}
+            applicantResume={applicant.resume}
           />
           <Text className="text-center">
             {appliedRoles[0]?.department.toUpperCase()}

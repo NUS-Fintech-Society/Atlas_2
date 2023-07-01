@@ -1,6 +1,12 @@
 import { CardBody, IconButton, Text } from '@chakra-ui/react'
 
-const DocumentModalCard = ({ file }: { file: string }) => {
+const DocumentModalCard = ({
+  file,
+  documentName,
+}: {
+  file: string
+  documentName: string
+}) => {
   const openDocumentInNewTab = () => {
     window.open(file, '_blank', 'noreferrer')
   }
@@ -16,7 +22,7 @@ const DocumentModalCard = ({ file }: { file: string }) => {
       onClick={() => openDocumentInNewTab()}
     >
       <CardBody>
-        <Text textAlign="center">Document</Text>
+        <Text textAlign="center">{documentName}</Text>
       </CardBody>
     </IconButton>
   )

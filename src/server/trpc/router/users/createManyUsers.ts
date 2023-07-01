@@ -19,7 +19,11 @@ export const createManyUsers = protectedProcedure
         nus_email: z.string(),
         role: z.string(),
         student_id: z.string(),
-      })
+        resume: z
+          .string()
+          .optional()
+          .transform((e) => (e === '' ? undefined : e)),
+      }) // resume: to aid in applicants creation through csv upload
     )
   )
   .mutation(async ({ input }) => {
@@ -43,6 +47,7 @@ export const createManyUsers = protectedProcedure
           isAdmin: false,
           id: user.student_id,
           role: user.role,
+          resume: user.resume,
         } as User)
 
         counter += 1

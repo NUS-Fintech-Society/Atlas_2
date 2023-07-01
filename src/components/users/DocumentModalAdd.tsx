@@ -5,13 +5,13 @@ import { StorageService } from '~/utils/storage'
 import { uuidv4 } from '@firebase/util'
 import { Message } from '~/constant/messages'
 
-const DocumentModalAdd = ({ applicantId }: { applicantId: string }) => {
+const DocumentModalAdd = ({ studentId }: { studentId: string }) => {
   const toast = useToast()
   const [file, setFile] = useState<File>()
 
   const uploadFile = () => {
     if (file == null) return
-    const filePath = `${applicantId}/documents/${file.name + uuidv4()}`
+    const filePath = `${studentId}/documents/${file.name + uuidv4()}`
 
     StorageService.uploadFile(file, filePath)
       .then(() => {
