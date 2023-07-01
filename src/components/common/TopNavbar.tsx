@@ -27,6 +27,10 @@ const admin = [
     href: '/recruitment',
     title: 'Recruitment',
   },
+  {
+    href: '/tasks',
+    title: 'Tasks',
+  },
 ]
 
 const applicants = [
@@ -48,6 +52,10 @@ const members = [
   {
     href: '/calendar',
     title: 'Calendar',
+  },
+  {
+    href: '/tasks',
+    title: 'Tasks',
   },
 ]
 
