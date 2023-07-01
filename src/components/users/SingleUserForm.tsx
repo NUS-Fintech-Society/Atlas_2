@@ -116,17 +116,20 @@ const SingleUserForm = () => {
         marginBottom={5}
         isRequired
         onChange={(e) => {
-          setRole(e.target.value)
-          if (!e.target.value) return
-          const element = roles.filter((role) => role.role === e.target.value)
-          if (!element || !element.length || !element[0]) return
-          setDepartment(element[0].department)
+          // Potential bug in future if roles include ,
+          const roleDeptArr = e.target.value.split(',')
+          // If it is at "Select Role" (yet to select role)
+          if (roleDeptArr.length <= 1) return
+          const role = roleDeptArr[0] as string
+          const dept = roleDeptArr[1] as string
+          setRole(role)
+          setDepartment(dept)
         }}
         placeholder="Select role"
       >
         {roles.map((role, index) => {
           return (
-            <option key={index} value={role.role}>
+            <option key={index} value={`${role.role},${role.department}`}>
               {role.role} ({role.department})
             </option>
           )
