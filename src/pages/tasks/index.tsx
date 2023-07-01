@@ -52,11 +52,6 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The login page for Atlas" />
       </Head>
-      <TopNavbar
-        image={session.user?.image as string}
-        isApplicant={session.isApplicant}
-        isAdmin={session.isAdmin}
-      />
       <main>
         <div className="relative h-screen w-screen overflow-x-auto bg-[url('/images/tasks_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
           {/* Nav element containing the logo */}
@@ -182,32 +177,17 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
   )
 }
 
-export default withAuth(Tasks, true)
+export default withAuth(Tasks)
 
+// tasks
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
 
   // If not logged in, redirect to the login page.
-  // If he is an applicant, redirect him to the applicant page.
-  // If he does not have admin access, redirect to the home page.
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  } else if (session.isApplicant) {
-    return {
-      redirect: {
-        destination: '/status',
-        permanent: false,
-      },
-    }
-  } else if (!session.isAdmin) {
-    return {
-      redirect: {
-        destination: '/calendar',
         permanent: false,
       },
     }
