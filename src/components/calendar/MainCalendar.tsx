@@ -23,7 +23,7 @@ const MainCalendar = () => {
         allDaySlot={false}
         events={data || []}
         eventClick={(info) => {
-          alert('Event: ' + info.event.title)
+          alert('Event: ' + info.event.title + '\n' + info.event.start + ' to\n' +  info.event.end)
         }}
       />
     </StyleWrapper>
