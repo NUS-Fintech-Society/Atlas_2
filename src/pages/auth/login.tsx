@@ -9,6 +9,7 @@ import { useToast } from '@chakra-ui/react'
 import Image from 'next/image'
 import { getSession } from 'next-auth/react'
 import { type GetServerSidePropsContext } from 'next'
+import Router from 'next/router'
 
 enum PageState {
   LOGIN,
@@ -49,7 +50,9 @@ const LoginPage = () => {
       setLoginLoading(false)
       return
     }
-    router.push('/calendar')
+    router.push('/calendar').then(
+      () => router.reload())
+    
   }, [email, password, router, toast])
 
   const resetPassword = useCallback(async () => {
