@@ -10,56 +10,56 @@ const ApplicantGrid = () => {
     trpc.recruitment.getAllApplicantsTopRoleByDept.useQuery()
 
   useEffect(() => {
-    console.log(filter) //TODO: remove console log
     refetchAllApplicantsTopRoleByDept()
   }, [filter, refetchAllApplicantsTopRoleByDept])
 
   if (!data) return <></>
 
   const filterArray = filter.split(',')
-
-  const filteredData = data
-  // filterArray.length === 0
-  //   ? search === ''
-  //     ? data
-  //     : data?.filter((applicant) => {
-  //         return applicant.name.toLowerCase().includes(search.toLowerCase())
-  //       })
-  //   : search === ''
-  //   ? data?.filter((applicant) => {
-  //       return filterArray.every((filter) => {
-  //         return (
-  //           applicant.appliedRoles.some(
-  //             (role) => role?.role.toLowerCase() === filter.toLowerCase()
-  //           ) ||
-  //           applicant.appliedRoles.some(
-  //             (role) => role?.status.toLowerCase() === filter.toLowerCase()
-  //           ) ||
-  //           applicant.appliedRoles.some(
-  //             (role) => role?.flag.toString() === filter
-  //           )
-  //         )
-  //       })
-  //     })
-  //   : data
-  //       ?.filter((applicant) => {
-  //         return filterArray.every((filter) => {
-  //           return (
-  //             applicant.appliedRoles.some(
-  //               (role) => role?.role.toLowerCase() === filter.toLowerCase()
-  //             ) ||
-  //             applicant.appliedRoles.some(
-  //               (role) => role?.status.toLowerCase() === filter.toLowerCase()
-  //             ) ||
-  //             applicant.appliedRoles.some(
-  //               (role) => role?.flag.toString() === filter
-  //             )
-  //           )
-  //         })
-  //       })
-  //       .filter((remaining) => {
-  //         return remaining.name.toLowerCase().includes(search.toLowerCase())
-  //       })
+  //do not delete this line
+  const trimmedFirst = filterArray.shift()
+  const filteredData = 
+    filterArray.length === 0
+      ? search === ''
+        ? data
+        : data?.filter((applicant) => {
+            return applicant.name.toLowerCase().includes(search.toLowerCase())
+          })
+      : search === ''
+      ? data?.filter((applicant) => {
+          return filterArray.every((filter) => {
+            return (
+              applicant.appliedRoles.some(
+                (role) => role?.role.toLowerCase() === filter.toLowerCase()
+              ) ||
+              applicant.appliedRoles.some(
+                (role) => role?.status.toLowerCase() === filter.toLowerCase()
+              ) ||
+              applicant.appliedRoles.some(
+                (role) => role?.flag.toString() === filter
+              )
+            )
+          })
+        })
+      : data
+          ?.filter((applicant) => {
+            return filterArray.every((filter) => {
+              return (
+                applicant.appliedRoles.some(
+                  (role) => role?.role.toLowerCase() === filter.toLowerCase()
+                ) ||
+                applicant.appliedRoles.some(
+                  (role) => role?.status.toLowerCase() === filter.toLowerCase()
+                ) ||
+                applicant.appliedRoles.some(
+                  (role) => role?.flag.toString() === filter
+                )
+              )
+            })
+          })
+          .filter((remaining) => {
+            return remaining.name.toLowerCase().includes(search.toLowerCase())
+          })
 
   const totalNumber = filteredData.length
 
