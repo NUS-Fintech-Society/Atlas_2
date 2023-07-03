@@ -8,6 +8,7 @@ import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import { protectedProcedure } from '~/server/trpc/trpc'
 
 /**
+ * For display on director's page
  * We retrieve applicants based on the logged in Exco's department.
  * The applied role retrieved for the applicant corresponds to the
  * Exco's department and is the highest ranked role that has not been
@@ -43,6 +44,7 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
               email: applicant?.email,
               name: applicant?.name,
               appliedRoles: appliedRoles,
+              resume: applicant?.resume,
             })
             // Roles from different department
           } else if (appliedRoles.length == 1) {
@@ -53,6 +55,7 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
                 email: applicant?.email,
                 name: applicant?.name,
                 appliedRoles: appliedRoles,
+                resume: applicant?.resume,
               })
               // if 2nd choice, add only if 1st role from other dept is rejected
             } else {
@@ -66,6 +69,7 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
                   email: applicant?.email,
                   name: applicant?.name,
                   appliedRoles: appliedRoles,
+                  resume: applicant?.resume,
                 })
               }
             }

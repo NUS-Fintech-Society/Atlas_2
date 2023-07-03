@@ -5,5 +5,6 @@ export type Applicant = {
   id: string
   email: string
   name: string
+  resume?: string
   appliedRoles: AppliedRole[]
 }

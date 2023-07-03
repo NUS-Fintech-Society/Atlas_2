@@ -23,4 +23,5 @@ export type User = {
   dob?: string // Store in DD-MM format so that we can get their birthday easily.
   shirtSize?: string
   discord?: string
+  resume?: string // link to google drive due to google forms integration for recruitment
 }

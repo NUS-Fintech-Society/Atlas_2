@@ -24,6 +24,7 @@ export type AddApplicantsType = {
   name: string
   department: string
   role: string
+  resume: string // google drive link
 }
 
 export type AddAppliedRolesType = {
@@ -64,4 +65,5 @@ export type AddApplicantsCSVType = {
   'First Choice Department': string
   'Second Choice Role': string
   'Second Choice Department': string
+  Resume: string
 }
