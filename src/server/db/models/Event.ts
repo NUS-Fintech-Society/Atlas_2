@@ -16,6 +16,7 @@ export type Event = {
   id?: string
   invitedAttendees: User[]
   name: string
+  departments: string[]
   isQrRequired: boolean
   startDate: Timestamp
 }

@@ -38,6 +38,8 @@ export const updateEvent = protectedProcedure
         hasStarted: false,
         invitedAttendees: users,
         name: input.name,
+        departments: input.departments,
+        isQrRequired: input.isQrRequired,
         startDate: Timestamp.fromDate(input.startDate),
       })
     } catch (e) {

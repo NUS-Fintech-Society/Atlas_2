@@ -87,15 +87,17 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
       })
     }
   }
-
   return (
     <>
       {data.qr_code && (
-        <div className="flex flex-row items-center justify-center">
+        <div className="m-2 flex flex-row items-center justify-center">
           <Image alt="event-qr" height={200} src={data.qr_code} width={200} />
         </div>
       )}
-      <p>Department: </p>
+      <p>Departments:</p>
+      {data.departments.map((dept) => {
+        return <li key={dept}>{dept}</li>
+      })}
       <p>Start Date: {startDate}</p>
       <p>End Date: {endDate}</p>
       <p>Attendance: {`${data.showup}/${data.invitedAttendees.length}`}</p>

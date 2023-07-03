@@ -23,4 +23,5 @@ export interface BodyProps {
   showup: number
   qr_code: string | undefined
   startDate: Date
+  departments: string[]
 }
