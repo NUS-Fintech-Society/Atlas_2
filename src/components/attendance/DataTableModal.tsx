@@ -87,6 +87,13 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
       })
     }
   }
+  const deptsInStr = Array.from(
+    new Set(
+      data.invitedAttendees.map((attendee) => {
+        return attendee.department
+      })
+    )
+  ).join(', ')
 
   return (
     <>
@@ -95,7 +102,7 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
           <Image alt="event-qr" height={200} src={data.qr_code} width={200} />
         </div>
       )}
-      <p>Department: </p>
+      <p>Department: {deptsInStr}</p>
       <p>Start Date: {startDate}</p>
       <p>End Date: {endDate}</p>
       <p>Attendance: {`${data.showup}/${data.invitedAttendees.length}`}</p>
