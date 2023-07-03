@@ -15,6 +15,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { trpc } from '~/utils/trpc'
 import { useContext, useCallback, useState } from 'react'
 import { ModalContext } from '~/context/ModalContext'
@@ -24,6 +25,7 @@ import { roles } from '~/constant/roles'
 const EditModal = () => {
   const modal = useContext(ModalContext)
   const toast = useToast()
+  const router = useRouter()
   const [department, setDepartment] = useState('')
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
@@ -53,6 +55,7 @@ const EditModal = () => {
           title: 'Successfully updated',
           status: 'success',
         })
+        router.push('./')
       } catch (e) {
         toast({
           duration: 9000,
@@ -62,7 +65,7 @@ const EditModal = () => {
         })
       }
     },
-    [mutateAsync, toast, department, refetch]
+    [mutateAsync, toast, department, router, refetch]
   )
 
   if (!modal.id || isLoading) return null
@@ -78,13 +81,19 @@ const EditModal = () => {
             {/* for form in modal */}
 
             <FormControl isRequired>
-              <FormLabel fontWeight={'semibold'}>Metric No.</FormLabel>
+              <FormLabel fontWeight={'semibold'}>Matriculation No.</FormLabel>
               <Input
                 {...register('id')}
                 mb={'5'}
                 type="text"
+                readOnly
                 defaultValue={(data as User).id}
               />
+              <p style={{ fontSize: 'smaller' }}>
+                Please note that matric number is unique and will not be allowed
+                for any changes
+              </p>
+              <br />
 
               <FormLabel fontWeight={'semibold'}>Name</FormLabel>
               <Input
@@ -106,6 +115,7 @@ const EditModal = () => {
               <Select
                 marginBottom={5}
                 isRequired
+                defaultValue={(data as User).role}
                 {...register('role')}
                 onChange={(e) => {
                   if (!e.target.value) return

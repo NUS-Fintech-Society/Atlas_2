@@ -192,11 +192,11 @@ export default function DataTable() {
         Manage Users
       </h1>
 
-      <div className="mb-9 block h-14 w-14 rounded-[50%] bg-[#97AEFF]">
+      <div>
         <Link href="/users/create">
-          <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-[#231F20]">
-            +
-          </div>
+          <Button bgColor="#97AEFF" width={215} className="mb-10 text-black">
+            Create User(s)
+          </Button>
         </Link>
       </div>
 
