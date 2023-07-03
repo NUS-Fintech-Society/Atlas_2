@@ -38,6 +38,7 @@ export const createEvent = protectedProcedure
         invitedAttendees: users,
         name: input.name,
         startDate: Timestamp.fromDate(input.startDate),
+        departments: input.departments,
         isQrRequired: input.isQrRequired,
       })
     } catch (e) {

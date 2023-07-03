@@ -23,7 +23,7 @@ import withAuth from '~/utils/withAuth'
 import { getSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
 
-const EventPage = () => {
+const CreateEventPage = () => {
   const router = useRouter()
   const toast = useToast()
   const [attendees, setAttendees] = useState<string[]>([])
@@ -151,6 +151,11 @@ const EventPage = () => {
                   </Stack>
                 </CheckboxGroup>
               </div>
+              {errors.dept && (
+                <Text color="tomato" className="pt-2">
+                  {errors.dept.message}
+                </Text>
+              )}
             </VStack>
             <div>
               <FormLabel>Start Date</FormLabel>
@@ -223,7 +228,7 @@ const EventPage = () => {
   )
 }
 
-export default withAuth(EventPage, true)
+export default withAuth(CreateEventPage, true)
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)

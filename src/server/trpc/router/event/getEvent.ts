@@ -34,6 +34,7 @@ export const getEvent = protectedProcedure
         name: event.name,
         showup: event.attendees,
         qr_code,
+        departments: event.departments,
         startDate: event.startDate.toDate(),
       }
     } catch (e) {

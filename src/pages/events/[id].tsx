@@ -23,7 +23,7 @@ import withAuth from '~/utils/withAuth'
 import { getSession } from 'next-auth/react'
 import { type GetServerSidePropsContext } from 'next'
 
-const EventPage = () => {
+const EditEventPage = () => {
   const router = useRouter()
   const toast = useToast()
   const [attendees, setAttendees] = useState<string[]>([])
@@ -107,13 +107,13 @@ const EventPage = () => {
   return (
     <>
       <Head>
-        <title>Atlas | Update Event</title>
+        <title>Atlas | Edit Event</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="The update event page for Atlas" />
+        <meta name="description" content="The edit event page for Atlas" />
       </Head>
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
-          <h1 className="mb-10 text-center text-2xl font-bold">Update Event</h1>
+          <h1 className="mb-10 text-center text-2xl font-bold">Edit Event</h1>
           <VStack align="left" spacing="6">
             <div>
               <FormLabel>Event Name</FormLabel>
@@ -133,24 +133,32 @@ const EventPage = () => {
                 <FormLabel>Department</FormLabel>
                 <CheckboxGroup>
                   <Stack spacing={[1, 5]} direction={['row', 'column']}>
-                    <Checkbox value="ml" {...register('dept')}>
+                    <Checkbox value="Machine Learning" {...register('dept')}>
                       Machine Learning
                     </Checkbox>
-                    <Checkbox value="sd" {...register('dept')}>
+                    <Checkbox
+                      value="Software Development"
+                      {...register('dept')}
+                    >
                       Software Development
                     </Checkbox>
-                    <Checkbox value="bc" {...register('dept')}>
+                    <Checkbox value="Blockchain" {...register('dept')}>
                       Blockchain
                     </Checkbox>
-                    <Checkbox value="ir" {...register('dept')}>
-                      Internal Relations
+                    <Checkbox value="Internal Affairs" {...register('dept')}>
+                      Internal Affairs
                     </Checkbox>
-                    <Checkbox value="ea" {...register('dept')}>
-                      External Affairs
+                    <Checkbox value="External Relations" {...register('dept')}>
+                      External Relations
                     </Checkbox>
                   </Stack>
                 </CheckboxGroup>
               </div>
+              {errors.dept && (
+                <Text color="tomato" className="pt-2">
+                  {errors.dept.message}
+                </Text>
+              )}
             </VStack>
             <div>
               <FormLabel>Start Date</FormLabel>
@@ -213,7 +221,7 @@ const EventPage = () => {
                 disabled={isSubmitting}
                 onClick={() => setSubmitBefore(true)}
               >
-                Update Event
+                Edit Event
               </Button>
             </div>
           </VStack>
@@ -223,7 +231,7 @@ const EventPage = () => {
   )
 }
 
-export default withAuth(EventPage, false)
+export default withAuth(EditEventPage, false)
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
