@@ -20,6 +20,7 @@ export const getAllUsersForTable = protectedProcedure
           id: user.id as string,
           name: user.name,
           role: user.role,
+          isAdmin: user.isAdmin,
         }
       })
 
