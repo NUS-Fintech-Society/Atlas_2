@@ -1,10 +1,11 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { TRPCError } from '@trpc/server'
 import taskCollection from '~/server/db/collections/TaskCollection'
+import { orderBy } from 'firebase/firestore'
 
 export const getAllTasks = protectedProcedure.query(async () => {
   try {
-    const tasks = await taskCollection.queries([])
+    const tasks = await taskCollection.queries([orderBy('due')])
     return tasks.map((task) => {
       return {
         status: task.status,
