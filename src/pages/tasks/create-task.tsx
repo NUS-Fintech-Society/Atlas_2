@@ -18,12 +18,11 @@ import Head from 'next/head'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
-import TopNavbar from '~/components/common/TopNavbar'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
 import { getSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
 
-const TaskPage: React.FC<BaseProps> = ({ session }) => {
+const TaskPage = () => {
   const router = useRouter()
   const toast = useToast()
   const [submitBefore, setSubmitBefore] = useState(false) // hacky use for assignees validation
@@ -97,11 +96,6 @@ const TaskPage: React.FC<BaseProps> = ({ session }) => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="The create task page for Atlas" />
       </Head>
-      <TopNavbar
-        isAdmin={session.isAdmin}
-        image={session.user?.image as string}
-        isApplicant={session.isApplicant}
-      />
       <Container>
         <form onSubmit={handleSubmit(formSubmit)}>
           <h1 className="mb-10 text-center text-2xl font-bold">
