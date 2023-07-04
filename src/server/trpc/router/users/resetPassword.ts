@@ -5,6 +5,7 @@ import { transporter } from '../util/transporter'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
 import { Timestamp, where } from 'firebase/firestore'
+import { hash } from 'bcryptjs'
 
 export const resetPassword = publicProcedure
   .input(z.string())
@@ -17,6 +18,10 @@ export const resetPassword = publicProcedure
       // Do not tell the user if the account cannot be found for security reasons
       if (!foundUser.length) return
 
+      await userCollection.update(foundUser[0]?.id as string, {
+        hashedPassword: await hash(foundUser[0]?.id as string, 10),
+      })
+
       await transporter.sendMail({
         from: env.GMAIL,
         to: email,
@@ -24,9 +29,12 @@ export const resetPassword = publicProcedure
         html: `
             Hi ${foundUser[0]?.name || 'user'},
             <br />
-            <p>A request to reset your account's password has been made. 
-            If you did not make this request, please ignore the email.
-            Otherwise, click on the link below to reset the password.</p>
+            <p>
+              Your password has been reset to your matriculation number.
+              You are strongly advised to change your password after 
+              logging into your account. Please contact the developer team 
+              if you did not make this request.
+            </p>
             <br />
             Thank You. <br /> 
             Fintech HR
