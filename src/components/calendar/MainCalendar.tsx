@@ -3,18 +3,15 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { trpc } from '~/utils/trpc'
 
 export const StyleWrapper = styled.div``
 
 const MainCalendar = () => {
-  const [events, useEvents] = useState([
-    { title: 'event 1', start: '2023-05-01T15:30', end: '2023-05-01T16:30' },
-    { title: 'event 2', start: '2023-05-02T06:00', end: '2023-05-02T07:00' },
-  ])
+  const { data } = trpc.event.populateCalendar.useQuery()
 
   return (
-    <StyleWrapper className="col-span-4">
+    <StyleWrapper className="col-span-4 mx-auto">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -24,7 +21,7 @@ const MainCalendar = () => {
           end: 'title',
         }}
         allDaySlot={false}
-        events={events}
+        events={data || []}
         eventClick={(info) => {
           alert('Event: ' + info.event.title)
         }}
