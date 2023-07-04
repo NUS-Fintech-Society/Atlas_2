@@ -15,6 +15,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { trpc } from '~/utils/trpc'
 import { useContext, useCallback, useState } from 'react'
 import { ModalContext } from '~/context/ModalContext'
@@ -24,6 +25,7 @@ import { roles } from '~/constant/roles'
 const EditModal = () => {
   const modal = useContext(ModalContext)
   const toast = useToast()
+  const router = useRouter()
   const [department, setDepartment] = useState('')
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
@@ -36,14 +38,14 @@ const EditModal = () => {
     trpc.user.updateUserProfile.useMutation()
 
   const onSubmit = useCallback(
-    async (data: Partial<User>) => {
+    async (formData: Partial<User>) => {
       try {
         const projData = {
-          id: data.id as string,
-          name: data.name as string,
-          email: data.email as string,
+          id: data?.id as string,
+          name: formData.name as string,
+          email: formData.email as string,
           department,
-          role: data.role as string,
+          role: formData.role as string,
         }
         await mutateAsync(projData)
         await refetch()
@@ -53,6 +55,7 @@ const EditModal = () => {
           title: 'Successfully updated',
           status: 'success',
         })
+        router.push('./')
       } catch (e) {
         toast({
           duration: 9000,
@@ -62,7 +65,7 @@ const EditModal = () => {
         })
       }
     },
-    [mutateAsync, toast, department, refetch]
+    [mutateAsync, data?.id, toast, department, router, refetch]
   )
 
   if (!modal.id || isLoading) return null
@@ -76,16 +79,7 @@ const EditModal = () => {
           <ModalCloseButton />
           <ModalBody>
             {/* for form in modal */}
-
-            <FormControl isRequired>
-              <FormLabel fontWeight={'semibold'}>Metric No.</FormLabel>
-              <Input
-                {...register('id')}
-                mb={'5'}
-                type="text"
-                defaultValue={(data as User).id}
-              />
-
+            <FormControl>
               <FormLabel fontWeight={'semibold'}>Name</FormLabel>
               <Input
                 mb={'5'}
@@ -106,6 +100,7 @@ const EditModal = () => {
               <Select
                 marginBottom={5}
                 isRequired
+                defaultValue={(data as User).role}
                 {...register('role')}
                 onChange={(e) => {
                   if (!e.target.value) return

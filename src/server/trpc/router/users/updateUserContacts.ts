@@ -33,6 +33,7 @@ export const updateUserContacts = protectedProcedure
       dietary: input.dietary || '',
       discord: input.discord || '',
       email: input.email,
+      shirtSize: input.shirtSize || '',
       linkedin: input.linkedin || '',
       telegram: input.telegram || '',
     })
