@@ -15,6 +15,7 @@ import type {
   SortingState,
   ColumnFiltersState,
   Row,
+  RowSelectionState,
 } from '@tanstack/react-table'
 import {
   Button,
@@ -60,19 +61,51 @@ function IndeterminateCheckbox({
   )
 }
 
+/**
+ * Helper function to create the required row selection object in form of { '0': true, '1': true }
+ * where '0' indicates the index of the row which you want to mark as checked
+ * @param allAttendees
+ * @param existingAttendees
+ * @returns rowSelection
+ */
+const initRowSelection = (
+  allAttendees: Attendees[],
+  existingAttendees: Attendees[] | undefined
+) => {
+  if (!existingAttendees) {
+    return {}
+  }
+  const rowSelectionState: RowSelectionState = {}
+  // Find out the index of each attendee based on the id
+  existingAttendees.forEach((existingAttendee) => {
+    const existingAttendeeIndex = allAttendees.findIndex(
+      (attendee: Attendees) => attendee.id == existingAttendee.id
+    )
+    rowSelectionState[existingAttendeeIndex] = true
+  })
+  return rowSelectionState
+}
+
 export type DataTableProps = {
   data: Attendees[]
+  existingAttendees?: Attendees[]
   setAttendees: (attendees: string[]) => void
 }
 
 // ref https://github.com/chakra-ui/chakra-ui/discussions/4380
-export function DataTable({ data, setAttendees }: DataTableProps) {
-  const [rowSelection, setRowSelection] = useState({})
+export function DataTable({
+  data,
+  existingAttendees,
+  setAttendees,
+}: DataTableProps) {
+  // Create columns with associated data
+  const columnHelper = createColumnHelper<Attendees>()
+  const [rowSelection, setRowSelection] = useState(
+    initRowSelection(data, existingAttendees)
+  )
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-  // Create columns with associated data
-  const columnHelper = createColumnHelper<Attendees>()
   const columns = [
     columnHelper.display({
       id: 'select',
