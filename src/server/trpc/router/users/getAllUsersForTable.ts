@@ -11,6 +11,7 @@ export const getAllUsersForTable = protectedProcedure.query(async () => {
         id: user.id as string,
         name: user.name,
         role: user.role,
+        isAdmin: user.isAdmin
       }
     })
 

@@ -152,13 +152,7 @@ const TableBody = ({ table }: { table: ReactTable<User> }) => {
 export default function DataTable() {
   const columns = useColumns()
 
-  const { isLoading, data } = trpc.user.getAllUsersForTable.useQuery(
-    undefined,
-    {
-      keepPreviousData: true,
-      staleTime: 5000,
-    }
-  )
+  const { isLoading, data } = trpc.user.getAllUsersForTable.useQuery()
 
   const table = useReactTable<User>({
     columns,
@@ -169,14 +163,12 @@ export default function DataTable() {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <div className="mx-auto w-3/4">
-      <div className="my-9 block h-14 w-14 rounded-[50%] bg-[#97AEFF]">
-        <Link href="/users/create">
-          <Button bgColor="#97AEFF" width={215} className="mb-10 text-black">
-            Create User(s)
-          </Button>
-        </Link>
-      </div>
+    <div className="mx-auto w-3/4 my-10">
+      <Link href="/users/create">
+        <Button bgColor="#97AEFF" width={215} className="mb-10 text-black">
+          Create User(s)
+        </Button>
+      </Link>
 
       <table className="min-w-full font-[inter]">
         <TableHeader table={table} />
