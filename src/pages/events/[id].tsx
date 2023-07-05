@@ -49,7 +49,6 @@ const EditEventPage = () => {
       if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
     }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
   })
-
   type FormSchemaType = z.infer<typeof FormSchema>
 
   // useForm for state management except attendees which belongs in DataTable (child)
@@ -61,10 +60,24 @@ const EditEventPage = () => {
     resolver: zodResolver(FormSchema),
   })
 
-  const attendeesData =
+  // Data querying
+  const attendeesData: any =
     trpc.attendance.getAllAttendanceButSelf.useQuery()['data']
   const queryID = router.query.id?.toString?.() ?? ''
-  const eventData = trpc.event.getEvent.useQuery(queryID)['data']
+  const eventData: any = trpc.event.getEvent.useQuery(queryID)['data']
+
+  /**
+   * Helper fn to convert value from stored Date obejct to string "2023-06-30T00:30" required to display
+   * @param date
+   */
+  const dateConverter = (date: Date) => {
+    const year = date.getFullYear().toString().padStart(4, '0')
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const day = date.getDate().toString().padStart(2, '0')
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    return `${year}-${month}-${day}T${hours}:${minutes}`
+  }
 
   const { mutateAsync, isLoading: isSubmitting } =
     trpc.event.updateEvent.useMutation()
@@ -120,7 +133,10 @@ const EditEventPage = () => {
               <Input
                 type="text"
                 disabled={isSubmitting}
-                {...register('eventName', { required: true })}
+                defaultValue={eventData.name}
+                {...register('eventName', {
+                  required: true,
+                })}
               />
               {errors.eventName && (
                 <Text color="tomato" className="pt-2">
@@ -131,7 +147,7 @@ const EditEventPage = () => {
             <VStack align="left">
               <div className="flex">
                 <FormLabel>Department</FormLabel>
-                <CheckboxGroup>
+                <CheckboxGroup defaultValue={eventData.departments}>
                   <Stack spacing={[1, 5]} direction={['row', 'column']}>
                     <Checkbox value="Machine Learning" {...register('dept')}>
                       Machine Learning
@@ -167,7 +183,10 @@ const EditEventPage = () => {
                 size="md"
                 type="datetime-local"
                 disabled={isSubmitting}
-                {...register('startDate', { required: true })}
+                defaultValue={dateConverter(eventData.startDate)}
+                {...register('startDate', {
+                  required: true,
+                })}
               />
               {errors.startDate && (
                 <Text color="tomato" className="pt-2">
@@ -182,7 +201,10 @@ const EditEventPage = () => {
                 size="md"
                 type="datetime-local"
                 disabled={isSubmitting}
-                {...register('endDate', { required: true })}
+                defaultValue={dateConverter(eventData.endDate)}
+                {...register('endDate', {
+                  required: true,
+                })}
               />
               {errors.endDate && (
                 <Text color="tomato" className="pt-2">
@@ -194,13 +216,18 @@ const EditEventPage = () => {
               <FormLabel>QR Code required</FormLabel>
               <Checkbox
                 disabled={isSubmitting}
+                defaultChecked={eventData.qr_code ? true : false}
                 onChange={(e) => {
                   e.preventDefault()
                   setIsQrRequired(!isQrRequired)
                 }}
               ></Checkbox>
             </div>
-            <DataTable data={attendeesData} setAttendees={setAttendees} />
+            <DataTable
+              data={attendeesData}
+              existingAttendees={eventData.invitedAttendees}
+              setAttendees={setAttendees}
+            />
             {submitBefore && invalidAttendees && (
               <Text color="tomato">At least one attendee is required</Text>
             )}

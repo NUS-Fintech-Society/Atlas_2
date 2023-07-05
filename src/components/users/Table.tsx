@@ -4,7 +4,6 @@ import {
   useReactTable,
   getCoreRowModel,
   type ColumnDef,
-  type PaginationState,
   flexRender,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
@@ -152,91 +151,29 @@ const TableBody = ({ table }: { table: ReactTable<User> }) => {
 
 export default function DataTable() {
   const columns = useColumns()
-  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  })
-  const fetchDataOption = { pageIndex, pageSize }
-  const pagination = useMemo(
-    () => ({
-      pageIndex,
-      pageSize,
-    }),
-    [pageIndex, pageSize]
-  )
 
-  const { isLoading, data } = trpc.user.getAllUsersForTable.useQuery(
-    fetchDataOption,
-    {
-      keepPreviousData: true,
-      staleTime: 5000,
-    }
-  )
+  const { isLoading, data } = trpc.user.getAllUsersForTable.useQuery()
 
   const table = useReactTable<User>({
     columns,
-    data: data?.users || [],
-    debugTable: true,
+    data: data ?? [],
     getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
-    onPaginationChange: setPagination,
-    pageCount: data?.pageCount || -1,
-    state: { pagination },
   })
 
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <div className="mx-auto w-3/4">
-      <h1 className="mb-12 flex w-full justify-center text-4xl font-normal">
-        Manage Users
-      </h1>
-
-      <div>
-        <Link href="/users/create">
-          <Button bgColor="#97AEFF" width={215} className="mb-10 text-black">
-            Create User(s)
-          </Button>
-        </Link>
-      </div>
+    <div className="mx-auto my-10 w-3/4">
+      <Link href="/users/create">
+        <Button bgColor="#97AEFF" width={215} className="mb-10 text-black">
+          Create User(s)
+        </Button>
+      </Link>
 
       <table className="min-w-full font-[inter]">
         <TableHeader table={table} />
         <TableBody table={table} />
       </table>
-      <div className="mt-5 flex flex-row items-center justify-between">
-        <div className="flex items-center gap-2">
-          <button
-            className="rounded border p-1"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<<'}
-          </button>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            {'<'}
-          </button>
-
-          <button
-            className="rounded border p-1"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>'}
-          </button>
-          <button
-            className="rounded border p-1"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            {'>>'}
-          </button>
-        </div>
-      </div>
     </div>
   )
 }

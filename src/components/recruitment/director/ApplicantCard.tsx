@@ -21,11 +21,18 @@ import { useState } from 'react'
 
 const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
   const appliedRoles = applicant.appliedRoles
-  //const [isFlagged, setIsFlagged] = useState(appliedRole.flag)
-  // const appliedRoleId = appliedRole.id
-  // const { refetch } = trpc.recruitment.getAppliedRoleByRoleId.useQuery(
-  //   appliedRole.id
-  // )
+  const [isFlagged, setIsFlagged] = useState(
+    appliedRoles.length > 1
+      ? appliedRoles[0]?.flag && appliedRoles[1]?.flag
+        ? true
+        : false
+      : appliedRoles[0]?.flag
+  )
+  const appliedRoleId =
+    appliedRoles.length > 1
+      ? [appliedRoles[0]?.id, appliedRoles[1]?.id]
+      : [appliedRoles[0]?.id]
+
   const toast = useToast()
   const { mutateAsync } = trpc.recruitment.updateAppliedRoleFlag.useMutation()
   const updateFlag = async (flag: boolean) => {
@@ -36,12 +43,18 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
         title: 'Updating',
         description: 'Waiting to update...',
       })
-      // await mutateAsync({
-      //   flag: flag,
-      //   appliedRoleId: appliedRoleId,
-      // })
+      await mutateAsync({
+        flag: flag,
+        appliedRoleId: appliedRoleId[0] ? appliedRoleId[0] : '',
+      })
+      if (appliedRoleId.length > 1) {
+        await mutateAsync({
+          flag: flag,
+          appliedRoleId: appliedRoleId[1] ? appliedRoleId[1] : '',
+        })
+      }
       // await refetch()
-      // setIsFlagged(flag)
+      setIsFlagged(flag)
       toast.close(firstToast)
       toast({
         duration: 2000,
@@ -67,7 +80,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
     >
       <CardHeader paddingBottom="0" zIndex={1}>
         <Heading size="md" textAlign="center" textColor="white">
-          {/* {isFlagged ? (
+          {isFlagged ? (
             <button
               className="absolute left-2"
               onClick={() => {
@@ -85,7 +98,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
             >
               <ViewOffIcon></ViewOffIcon>
             </button>
-          )} */}
+          )}
 
           {applicant.name}
         </Heading>

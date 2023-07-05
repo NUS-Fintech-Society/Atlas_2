@@ -12,8 +12,10 @@ const SearchBar = () => {
   const filteredRoles = roles.filter(
     (combination) => combination.department === department
   )
-  const { filter, setFilter, setSearch } = useContext(searchContext)
+  const {filter, setFilter, setSearch } = useContext(searchContext)
   const filterArray = filter.split(',')
+  //do not remove this line
+  const firstElement = filterArray.shift()
   const [showDropdown, setShowDropdown] = useState(false)
   console.log(filteredRoles)
   const [selectedFilter, setSelectedFilter] = useState('')

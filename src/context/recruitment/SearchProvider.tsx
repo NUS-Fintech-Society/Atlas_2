@@ -22,11 +22,9 @@ const SearchProvider = (props: any) => {
   const [search, setSearch] = useState<string>('')
   const [filter, setFilter] = useState<string>('')
   return (
-    // <filterContext.Provider value={{ filter, setFilter }}>
     <searchContext.Provider value={{ search, filter, setFilter, setSearch }}>
       {props.children}
     </searchContext.Provider>
-    // </filterContext.Provider>
   )
 }
 

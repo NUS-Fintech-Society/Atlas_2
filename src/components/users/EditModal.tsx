@@ -38,14 +38,14 @@ const EditModal = () => {
     trpc.user.updateUserProfile.useMutation()
 
   const onSubmit = useCallback(
-    async (data: Partial<User>) => {
+    async (formData: Partial<User>) => {
       try {
         const projData = {
-          id: data.id as string,
-          name: data.name as string,
-          email: data.email as string,
+          id: data?.id as string,
+          name: formData.name as string,
+          email: formData.email as string,
           department,
-          role: data.role as string,
+          role: formData.role as string,
         }
         await mutateAsync(projData)
         await refetch()
@@ -65,7 +65,7 @@ const EditModal = () => {
         })
       }
     },
-    [mutateAsync, toast, department, router, refetch]
+    [mutateAsync, data?.id, toast, department, refetch]
   )
 
   if (!modal.id || isLoading) return null
@@ -79,22 +79,7 @@ const EditModal = () => {
           <ModalCloseButton />
           <ModalBody>
             {/* for form in modal */}
-
-            <FormControl isRequired>
-              <FormLabel fontWeight={'semibold'}>Matriculation No.</FormLabel>
-              <Input
-                {...register('id')}
-                mb={'5'}
-                type="text"
-                readOnly
-                defaultValue={(data as User).id}
-              />
-              <p style={{ fontSize: 'smaller' }}>
-                Please note that matric number is unique and will not be allowed
-                for any changes
-              </p>
-              <br />
-
+            <FormControl>
               <FormLabel fontWeight={'semibold'}>Name</FormLabel>
               <Input
                 mb={'5'}
