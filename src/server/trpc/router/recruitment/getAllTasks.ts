@@ -25,7 +25,8 @@ export const getAllTasks = protectedProcedure.query(async ({ ctx }) => {
         due: task.due.toDate(),
         taskName: task.taskName,
         description: task.description,
-        taskCreator: task.taskCreator,
+        taskCreatorId: task.taskCreatorId,
+        taskCreatorName: task.taskCreatorName,
       }
     })
   } catch (e) {

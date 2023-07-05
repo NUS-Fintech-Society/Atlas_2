@@ -88,7 +88,9 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
           {/* Login */}
           <div className="flex flex-col justify-center gap-8 font-[Inter]">
             <h1 className="mt-[3%] flex justify-center text-4xl font-bold text-white">
-              {session.isAdmin ? 'All Tasks (Admin View)' : 'Assigned Tasks'}
+              {session.isAdmin
+                ? 'All Tasks Assigned in Department (Admin View)'
+                : 'Assigned Tasks'}
             </h1>
 
             <div className="mx-auto  max-w-screen-lg md:max-w-screen-md">
@@ -182,7 +184,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                           </td>
                           <td>
                             <h1 className="text-white md:text-xl">
-                              {item.taskCreator}
+                              {item.taskCreatorName}
                             </h1>
                           </td>
                           <td>

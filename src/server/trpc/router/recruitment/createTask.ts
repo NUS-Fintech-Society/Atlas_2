@@ -4,7 +4,7 @@ import taskCollection from '~/server/db/collections/TaskCollection'
 import { Timestamp } from 'firebase/firestore'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
-import type Task from './Task'
+import type Task from '~/server/db/models/Task'
 
 export const createTask = protectedProcedure
   .input(
@@ -18,6 +18,8 @@ export const createTask = protectedProcedure
   .mutation(async ({ ctx, input }) => {
     try {
       const users = await userCollection.findByDepartment(input.departments)
+      const user = await userCollection.getById(ctx.session.user.id)
+      console.log("USER's name " + user.name)
 
       const taskID = 'TASK-' + taskCollection.generateRandomId()
 
@@ -29,7 +31,8 @@ export const createTask = protectedProcedure
         description: input.description,
         department: input.departments,
         assignedUsers: users,
-        taskCreator: ctx.session.user.id,
+        taskCreatorId: ctx.session.user.id,
+        taskCreatorName: user.name,
       }
 
       await taskCollection.set(pendingTask, taskID)
@@ -42,6 +45,8 @@ export const createTask = protectedProcedure
           taskName: input.taskName,
           description: input.description,
           department: input.departments,
+          taskCreatorId: ctx.session.user.id,
+          taskCreatorName: user.name,
         }
 
         let updatedPendingTasks: Task[] = []
