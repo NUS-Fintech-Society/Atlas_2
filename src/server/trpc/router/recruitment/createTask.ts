@@ -4,6 +4,7 @@ import taskCollection from '~/server/db/collections/TaskCollection'
 import { Timestamp } from 'firebase/firestore'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
+import type Task from './Task'
 
 export const createTask = protectedProcedure
   .input(
@@ -43,7 +44,7 @@ export const createTask = protectedProcedure
           department: input.departments,
         }
 
-        let updatedPendingTasks = []
+        let updatedPendingTasks: Task[] = []
 
         if (user.pendingTask) {
           updatedPendingTasks = [...user.pendingTask, newPendingTask]
