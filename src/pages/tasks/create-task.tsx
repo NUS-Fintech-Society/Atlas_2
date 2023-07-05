@@ -18,7 +18,7 @@ import Head from 'next/head'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
-import withAuth from '~/utils/withAuth'
+import withAuth, { type BaseProps } from '~/utils/withAuth'
 import { getSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
 
@@ -76,6 +76,7 @@ const TaskPage = () => {
         title: 'Success',
         description: 'A new task has been successfully created',
       })
+      router.push('./')
     } catch (e) {
       toast({
         description: (e as Error).message,
@@ -136,20 +137,23 @@ const TaskPage = () => {
                 <FormLabel>Department</FormLabel>
                 <CheckboxGroup>
                   <Stack spacing={[1, 5]} direction={['row', 'column']}>
-                    <Checkbox value="ml" {...register('dept')}>
+                    <Checkbox value="Machine Learning" {...register('dept')}>
                       Machine Learning
                     </Checkbox>
-                    <Checkbox value="sd" {...register('dept')}>
+                    <Checkbox
+                      value="Software Development"
+                      {...register('dept')}
+                    >
                       Software Development
                     </Checkbox>
-                    <Checkbox value="bc" {...register('dept')}>
+                    <Checkbox value="Blockchain" {...register('dept')}>
                       Blockchain
                     </Checkbox>
-                    <Checkbox value="ir" {...register('dept')}>
-                      Internal Relations
+                    <Checkbox value="Internal Affairs" {...register('dept')}>
+                      Internal Affairs
                     </Checkbox>
-                    <Checkbox value="ea" {...register('dept')}>
-                      External Affairs
+                    <Checkbox value="External Relations" {...register('dept')}>
+                      External Relations
                     </Checkbox>
                   </Stack>
                 </CheckboxGroup>

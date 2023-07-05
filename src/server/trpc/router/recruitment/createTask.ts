@@ -14,23 +14,28 @@ export const createTask = protectedProcedure
       description: z.string(),
     })
   )
-  .mutation(async ({ input }) => {
+  .mutation(async ({ ctx, input }) => {
     try {
       const users = await userCollection.findByDepartment(input.departments)
 
+      const taskID = 'TASK-' + taskCollection.generateRandomId()
+
       const pendingTask = {
+        id: taskID,
         status: 'Incomplete',
         due: Timestamp.fromDate(input.due),
         taskName: input.taskName,
         description: input.description,
         department: input.departments,
         assignedUsers: users,
+        taskCreator: ctx.session.user.id,
       }
 
-      await taskCollection.add(pendingTask)
+      await taskCollection.set(pendingTask, taskID)
 
       const updateUserPromises = users.map(async (user) => {
         const newPendingTask = {
+          id: taskID,
           status: 'Incomplete',
           due: Timestamp.fromDate(input.due),
           taskName: input.taskName,

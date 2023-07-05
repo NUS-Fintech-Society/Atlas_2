@@ -6,7 +6,7 @@ type User = {
   department: string
   id: string
   name: string
-  role: string
+  role?: string
 }
 
 export type Event = {
