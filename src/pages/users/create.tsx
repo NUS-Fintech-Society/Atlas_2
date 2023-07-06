@@ -19,7 +19,7 @@ const UserForm = () => {
       </Head>
       <div className="m-auto w-[90%]">
         {/* Heading */}
-        <h1 className="mb-5 font-[Inter] text-4xl font-semibold">
+        <h1 className="prose mb-5 mt-10 text-4xl font-semibold">
           Create User / Users
         </h1>
 

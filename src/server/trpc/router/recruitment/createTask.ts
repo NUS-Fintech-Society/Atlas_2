@@ -23,6 +23,42 @@ export const createTask = protectedProcedure
 
       const taskID = 'TASK-' + taskCollection.generateRandomId()
 
+      let numberOfAdmins = 0
+
+      const updateUserPromises = users.map(async (user) => {
+        if (user.isAdmin) {
+          numberOfAdmins++
+        } else {
+          //We do not assign pending task to admins
+          const newPendingTask = {
+            id: taskID,
+            status: 'Incomplete',
+            due: Timestamp.fromDate(input.due),
+            taskName: input.taskName,
+            description: input.description,
+            department: input.departments,
+            taskCreatorId: ctx.session.user.id,
+            taskCreatorName: user.name,
+          }
+
+          let updatedPendingTasks: Task[] = []
+
+          if (user.pendingTask) {
+            updatedPendingTasks = [...user.pendingTask, newPendingTask]
+          } else {
+            updatedPendingTasks = [newPendingTask]
+          }
+
+          return userCollection.update(user.id, {
+            pendingTask: updatedPendingTasks,
+          })
+        }
+      })
+      console.log('Number of users ' + users.length)
+      console.log('Number of admins in department ' + numberOfAdmins)
+      //We exclude the taskCreator and all admins in that department in the taskCount
+      const taskCompletionCount = users.length - numberOfAdmins
+
       const pendingTask = {
         id: taskID,
         status: 'Incomplete',
@@ -30,37 +66,13 @@ export const createTask = protectedProcedure
         taskName: input.taskName,
         description: input.description,
         department: input.departments,
-        assignedUsers: users,
+        // assignedUsers: users, (Hidden so that the collection does not store who was being assigned since data is not useful and optimised)
         taskCreatorId: ctx.session.user.id,
         taskCreatorName: user.name,
+        taskCompletion: taskCompletionCount, //Shows the number of users that has to complete the task
       }
 
       await taskCollection.set(pendingTask, taskID)
-
-      const updateUserPromises = users.map(async (user) => {
-        const newPendingTask = {
-          id: taskID,
-          status: 'Incomplete',
-          due: Timestamp.fromDate(input.due),
-          taskName: input.taskName,
-          description: input.description,
-          department: input.departments,
-          taskCreatorId: ctx.session.user.id,
-          taskCreatorName: user.name,
-        }
-
-        let updatedPendingTasks: Task[] = []
-
-        if (user.pendingTask) {
-          updatedPendingTasks = [...user.pendingTask, newPendingTask]
-        } else {
-          updatedPendingTasks = [newPendingTask]
-        }
-
-        return userCollection.update(user.id, {
-          pendingTask: updatedPendingTasks,
-        })
-      })
 
       await Promise.all(updateUserPromises)
     } catch (e) {

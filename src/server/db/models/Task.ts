@@ -11,6 +11,7 @@ export type Task = {
   assignedUsers?: User[]
   taskCreatorId: string
   taskCreatorName: string
+  taskCompletion?: number
 }
 
 export default Task

@@ -1,13 +1,10 @@
-import { where } from 'firebase/firestore'
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
 import userCollection from '~/server/db/collections/UserCollection'
-import { TRPCError } from '@trpc/server'
-import type { User } from '~/server/db/models/User'
 import logCollection from '~/server/db/collections/LogCollection'
+import taskCollection from '~/server/db/collections/TaskCollection'
 import { Timestamp } from 'firebase/firestore'
 import { error } from 'console'
-
 export const updateTaskOfUser = protectedProcedure
   .input(
     z.object({
@@ -18,8 +15,14 @@ export const updateTaskOfUser = protectedProcedure
   .mutation(async ({ input, ctx }) => {
     try {
       const user = await userCollection.findById(ctx.session.user.id)
+      const currentTask = await taskCollection.findById(input.taskID)
+      const taskCompletion = currentTask?.taskCompletion
 
-      if (user !== undefined) {
+      if (
+        user !== undefined &&
+        currentTask !== undefined &&
+        currentTask !== null
+      ) {
         if (user !== null && user.pendingTask !== undefined) {
           const task = user.pendingTask.find((task) => task.id === input.taskID)
           const taskIndex = user.pendingTask.findIndex(
@@ -39,6 +42,20 @@ export const updateTaskOfUser = protectedProcedure
             await userCollection.update(user.id, {
               pendingTask: updatedPendingTasks,
             })
+
+            if (taskCompletion !== undefined) {
+              await taskCollection.update(currentTask.id as string, {
+                taskCompletion: taskCompletion - 1,
+              })
+
+              const updatedCompletionCount = taskCompletion - 1
+
+              if (updatedCompletionCount == 0) {
+                await taskCollection.update(currentTask.id as string, {
+                  status: 'Done',
+                })
+              }
+            }
           } else {
             throw new Error('Task not found')
           }

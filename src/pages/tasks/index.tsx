@@ -14,13 +14,16 @@ import {
   Center,
   Button,
   useToast,
+  Progress,
 } from '@chakra-ui/react'
+
 import { useRouter } from 'next/router'
 import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
 import { type TaskInfos } from '~/types/task/task.type'
 import { getSession } from 'next-auth/react'
 import { type GetServerSidePropsContext } from 'next'
+import type Task from '~/server/db/models/Task'
 
 const Tasks: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
@@ -80,14 +83,14 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
       <Head>
         <title>Tasks</title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="The login page for Atlas" />
+        <meta name="description" content="The task page for Atlas" />
       </Head>
       <main>
         <div className="relative h-screen w-screen overflow-x-auto bg-[url('/images/tasks_background.svg')] bg-cover bg-fixed bg-center bg-no-repeat">
           {/* Nav element containing the logo */}
           {/* Login */}
-          <div className="flex flex-col justify-center gap-8 font-[Inter]">
-            <h1 className="mt-[3%] flex justify-center text-4xl font-bold text-white">
+          <div className="flex flex-col justify-center gap-8">
+            <h1 className="mt-[3%] flex justify-center text-4xl font-semibold text-white">
               {session.isAdmin
                 ? 'All Tasks Assigned in Department (Admin View)'
                 : 'Assigned Tasks'}
@@ -98,7 +101,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                 <Button
                   bgColor="#97AEFF"
                   width={215}
-                  className="mb-10 text-black"
+                  className="prose mb-10 font-normal text-black"
                   onClick={() => router.push('/tasks/create-task')}
                 >
                   Create Task
@@ -134,6 +137,14 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                       >
                         Do By
                       </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
+                        {session.isAdmin
+                          ? 'Yet to complete (Non-admins)'
+                          : null}
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -165,7 +176,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                               )}
                             </h1>
                           </td>
-                          <td>
+                          <td className="whitespace-nowrap px-6 py-4">
                             <Text
                               as="span"
                               cursor="pointer"
@@ -182,14 +193,45 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                               {item.taskName}
                             </Text>
                           </td>
-                          <td>
-                            <h1 className="text-white md:text-xl">
+                          <td className="whitespace-nowrap px-6 py-4">
+                            <Text
+                              as="span"
+                              cursor="pointer"
+                              _hover={{ textDecoration: 'underline' }}
+                              className="text-white md:text-xl"
+                              onClick={() => {
+                                setCurrentName(item.taskName)
+                                setCurrentDetails(item.description)
+                                setCurrentStatus(item.status)
+                                setTaskID(item.id)
+                                onOpen()
+                              }}
+                            >
                               {item.taskCreatorName}
-                            </h1>
+                            </Text>
                           </td>
-                          <td>
-                            <h1 className="text-white md:text-xl">
+                          <td className="whitespace-nowrap px-6 py-4">
+                            <Text
+                              as="span"
+                              cursor="pointer"
+                              _hover={{ textDecoration: 'underline' }}
+                              className="text-white md:text-xl"
+                              onClick={() => {
+                                setCurrentName(item.taskName)
+                                setCurrentDetails(item.description)
+                                setCurrentStatus(item.status)
+                                setTaskID(item.id)
+                                onOpen()
+                              }}
+                            >
                               {new Date(item.due).toLocaleDateString()}
+                            </Text>
+                          </td>
+
+                          {/* To track count of task completion */}
+                          <td className="whitespace-nowrap px-6 py-4">
+                            <h1 className="font-normal text-white md:text-xl">
+                              {session.isAdmin ? item.taskCompletion : null}
                             </h1>
                           </td>
                         </tr>
@@ -212,17 +254,19 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                       {' '}
                       Status: {currentStatus}
                     </ModalBody>
-                    <Button
-                      bgColor="#97AEFF"
-                      width={215}
-                      className="mb-3 mt-3 ml-5  text-black"
-                      onClick={() => {
-                        updateTask()
-                        onClose()
-                      }}
-                    >
-                      Mark Status as Done
-                    </Button>
+                    {!session.isAdmin && currentStatus === 'Incomplete' && (
+                      <Button
+                        bgColor="#97AEFF"
+                        width={215}
+                        className="mb-3 mt-3 ml-5  text-black"
+                        onClick={() => {
+                          updateTask()
+                          onClose()
+                        }}
+                      >
+                        Mark Status as Done
+                      </Button>
+                    )}
                     <ModalFooter></ModalFooter>
                   </ModalContent>
                 </Modal>

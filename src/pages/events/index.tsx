@@ -84,7 +84,7 @@ const AttendancePage = () => {
         <meta name="description" content="The attendance page for Atlas" />
       </Head>
       <div className="px-2 sm:px-6 sm:pt-5 md:px-20 md:pt-5 lg:px-28 lg:pt-5">
-        <h1 className="mb-10 text-center text-2xl font-bold">Attendance</h1>
+        <h1 className="prose mb-5 mt-10 text-4xl font-semibold">Attendance</h1>
         <VStack align="left" className="mb-10">
           {isSmallScreen ? (
             <Button
