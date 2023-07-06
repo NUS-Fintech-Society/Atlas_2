@@ -19,7 +19,6 @@ export const createTask = protectedProcedure
     try {
       const users = await userCollection.findByDepartment(input.departments)
       const user = await userCollection.getById(ctx.session.user.id)
-      console.log("USER's name " + user.name)
 
       const taskID = 'TASK-' + taskCollection.generateRandomId()
 
@@ -54,8 +53,7 @@ export const createTask = protectedProcedure
           })
         }
       })
-      console.log('Number of users ' + users.length)
-      console.log('Number of admins in department ' + numberOfAdmins)
+
       //We exclude the taskCreator and all admins in that department in the taskCount
       const taskCompletionCount = users.length - numberOfAdmins
 
