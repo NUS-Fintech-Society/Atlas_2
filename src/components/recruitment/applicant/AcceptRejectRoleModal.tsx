@@ -10,24 +10,36 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
+import { signOut } from 'next-auth/react'
 import type { QueryObserverResult } from '@tanstack/react-query'
+import { useRouter } from 'next/router'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
+import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import { trpc } from '~/utils/trpc'
 
-// Could encompass both accept and reject into a single modal in the future
+const delay = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 const AcceptRejectRoleModal = ({
-  appliedRoleId,
+  applicantId,
+  appliedRole,
   decision,
   buttonColor,
   refetch,
 }: {
-  appliedRoleId: string
+  applicantId: string
+  appliedRole: AppliedRole
   decision: string
   buttonColor: string
   refetch: () => Promise<QueryObserverResult>
 }) => {
+  const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { mutateAsync } = trpc.recruitment.updateAppliedRoleStatus.useMutation()
+  const { mutateAsync: mutateAppliedRoleAsync } =
+    trpc.recruitment.updateAppliedRoleStatus.useMutation()
+  const { mutateAsync: mutateApplicantToMemberAsync } =
+    trpc.recruitment.updateApplicantToMember.useMutation()
 
   const toast = useToast()
   const updateStatus = async () => {
@@ -42,9 +54,10 @@ const AcceptRejectRoleModal = ({
         title: 'Updating',
         description: 'Waiting to update...',
       })
-      await mutateAsync({
-        appliedRoleId,
-        status,
+      // Update the appliedRole
+      await mutateAppliedRoleAsync({
+        status: status,
+        appliedRoleId: appliedRole.id,
       })
       await refetch()
       toast.close(firstToast)
@@ -54,6 +67,24 @@ const AcceptRejectRoleModal = ({
         title: 'Success',
         description: 'Application status updated successfully!',
       })
+      await delay(1000)
+      // Applicant -> Member with accepted role + dept if applicant accepts
+      if (status === ApplicationStatus.ACCEPTED) {
+        await mutateApplicantToMemberAsync({
+          applicantId: applicantId,
+          role: appliedRole.role,
+          department: appliedRole.department,
+        })
+        toast({
+          duration: 2000,
+          status: 'success',
+          title: 'Re-login',
+          description: `You are now a member. We will require a re-login so you'll be logged out shortly`,
+        })
+        await delay(3000)
+        // need to force him to re-login in order for nextauth to update him from applicant to member
+        await signOut()
+      }
     } catch (e) {
       toast({
         description: (e as Error).message,

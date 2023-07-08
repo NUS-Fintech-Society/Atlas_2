@@ -21,9 +21,11 @@ const statusFillMap = {
 }
 
 const AppliedRoleListItem = ({
+  applicantId,
   appliedRole,
   refetch,
 }: {
+  applicantId: string
   appliedRole: AppliedRole
   refetch: () => Promise<QueryObserverResult>
 }) => {
@@ -38,13 +40,15 @@ const AppliedRoleListItem = ({
             {appliedRole.status === ApplicationStatus.OFFERED ? (
               <Stack direction={['column', 'row']}>
                 <AcceptRejectRoleModal
-                  appliedRoleId={appliedRole.id}
+                  applicantId={applicantId}
+                  appliedRole={appliedRole}
                   decision="accept"
                   buttonColor="green"
                   refetch={refetch}
                 />
                 <AcceptRejectRoleModal
-                  appliedRoleId={appliedRole.id}
+                  applicantId={applicantId}
+                  appliedRole={appliedRole}
                   decision="reject"
                   buttonColor="red"
                   refetch={refetch}
