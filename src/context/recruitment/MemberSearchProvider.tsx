@@ -1,13 +1,13 @@
 import { createContext, useState } from 'react'
 
-type SearchContextType = {
+type MemberSearchContextType = {
   search: string
   setSearch: (s: string) => void
   filter: string
   setFilter: (s: string) => void
 }
 
-export const searchContext = createContext<SearchContextType>({
+export const memberSearchContext = createContext<MemberSearchContextType>({
   search: '',
   setSearch: () => {
     return
@@ -18,14 +18,16 @@ export const searchContext = createContext<SearchContextType>({
   },
 })
 
-const SearchProvider = (props: any) => {
+const MemberSearchProvider = (props: any) => {
   const [search, setSearch] = useState<string>('')
   const [filter, setFilter] = useState<string>('')
   return (
-    <searchContext.Provider value={{ search, filter, setFilter, setSearch }}>
+    <memberSearchContext.Provider
+      value={{ search, filter, setFilter, setSearch }}
+    >
       {props.children}
-    </searchContext.Provider>
+    </memberSearchContext.Provider>
   )
 }
 
-export default SearchProvider
+export default MemberSearchProvider

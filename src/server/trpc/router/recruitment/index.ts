@@ -11,6 +11,7 @@ import {
   getApplicant,
   getAppliedRoleByRoleId,
   getAppliedRolesByApplicant,
+  getAllDeptMembers,
 } from './read'
 import { createManyAppliedRoles } from './create'
 import { getAllTasks } from './getAllTasks'
@@ -31,4 +32,5 @@ export const recruitmentRouter = router({
   createTask,
   getAllTasksOfUser,
   getAppliedRolesByApplicant,
+  getAllDeptMembers,
 })

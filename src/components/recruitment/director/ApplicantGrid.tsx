@@ -1,11 +1,11 @@
 import { useContext, useEffect } from 'react'
-import { searchContext } from '~/context/recruitment/SearchProvider'
+import { applicantSearchContext } from '~/context/recruitment/ApplicantSearchProvider'
 import { trpc } from '~/utils/trpc'
 import ApplicantCard from './ApplicantCard'
 import InfoPopup from '~/components/recruitment/InfoPopup'
 
 const ApplicantGrid = () => {
-  const { filter, search } = useContext(searchContext)
+  const { filter, search } = useContext(applicantSearchContext)
   const { data, refetch: refetchAllApplicantsTopRoleByDept } =
     trpc.recruitment.getAllApplicantsTopRoleByDept.useQuery()
 
@@ -18,7 +18,7 @@ const ApplicantGrid = () => {
   const filterArray = filter.split(',')
   //do not delete this line
   const trimmedFirst = filterArray.shift()
-  const filteredData = 
+  const filteredData =
     filterArray.length === 0
       ? search === ''
         ? data

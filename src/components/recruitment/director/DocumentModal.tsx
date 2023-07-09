@@ -15,17 +15,17 @@ import { StorageService } from '~/utils/storage'
 import DocumentModalCard from './DocumentModalCard'
 
 const DocumentModal = ({
-  applicantId,
-  applicantName,
-  applicantResume,
+  id,
+  name,
+  resume,
 }: {
-  applicantId: string
-  applicantName: string
-  applicantResume: string | undefined
+  id: string
+  name: string
+  resume: string | undefined
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [fileList, setFileList] = useState<string[]>([])
-  const docsFilePath = `${applicantId}/documents/`
+  const docsFilePath = `${id}/documents/`
 
   // // Hook to get the files associated with the applicant (FOR FUTURE FIRESTORE INTEGRATION)
   // useEffect(() => {
@@ -55,13 +55,13 @@ const DocumentModal = ({
           boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
         >
           <ModalHeader textAlign="center" fontSize="2xl">
-            {applicantName} Documents
+            {name} Documents
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody className="flex justify-center">
             <DocumentModalCard
-              file={applicantResume as string}
-              key={applicantResume}
+              file={resume as string}
+              key={resume}
               documentName="Resume"
             />
             {/* <div className="my-5 mx-10 grid grid-cols-1 place-items-center gap-y-10 lg:grid-cols-2 ">
