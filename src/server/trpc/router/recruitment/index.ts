@@ -4,7 +4,6 @@ import {
   updateAppliedRoleStatusWithEmail,
   updateInterviewNotes,
   updateAppliedRoleFlag,
-  updateApplicantToMember,
 } from './update'
 import {
   getAllApplicantsTopRoleByDept,
@@ -23,7 +22,6 @@ export const recruitmentRouter = router({
   updateAppliedRoleStatusWithEmail,
   updateInterviewNotes,
   updateAppliedRoleFlag,
-  updateApplicantToMember,
   getAllApplicantsTopRoleByDept,
   getApplicant,
   getAppliedRoleByRoleId,

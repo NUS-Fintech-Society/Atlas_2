@@ -11,7 +11,6 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import type { QueryObserverResult } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import { trpc } from '~/utils/trpc'
@@ -30,12 +29,9 @@ const AcceptRejectRoleModal = ({
   buttonColor: string
   refetch: () => Promise<QueryObserverResult>
 }) => {
-  const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { mutateAsync: mutateAppliedRoleAsync } =
     trpc.recruitment.updateAppliedRoleStatus.useMutation()
-  const { mutateAsync: mutateApplicantToMemberAsync } =
-    trpc.recruitment.updateApplicantToMember.useMutation()
 
   const toast = useToast()
   const updateStatus = async () => {
@@ -44,17 +40,21 @@ const AcceptRejectRoleModal = ({
         decision === 'accept'
           ? ApplicationStatus.ACCEPTED
           : ApplicationStatus.REJECTED
+
       const firstToast = toast({
         duration: null,
         status: 'loading',
         title: 'Updating',
         description: 'Waiting to update...',
       })
-      // Update the appliedRole
+  
+      // Update the appliedRole and the user information
       await mutateAppliedRoleAsync({
         status: status,
         appliedRoleId: appliedRole.id,
+        applicantId
       })
+
       await refetch()
       toast.close(firstToast)
       toast({
@@ -66,11 +66,6 @@ const AcceptRejectRoleModal = ({
       await delay(1000)
       // Applicant -> Member with accepted role + dept if applicant accepts
       if (status === ApplicationStatus.ACCEPTED) {
-        await mutateApplicantToMemberAsync({
-          applicantId: applicantId,
-          role: appliedRole.role,
-          department: appliedRole.department,
-        })
         toast({
           duration: 2000,
           status: 'success',
