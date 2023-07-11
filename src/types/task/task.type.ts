@@ -5,4 +5,7 @@ export type TaskInfos = {
   taskName: string
   description: string
   department: string[]
+  taskCreatorId: string
+  taskCreatorName: string
+  taskCompletion?: number
 }

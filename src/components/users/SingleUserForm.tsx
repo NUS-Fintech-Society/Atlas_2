@@ -140,16 +140,16 @@ const SingleUserForm = () => {
 
       <div className="mt-5 flex">
         <Button
-          bg="light.secondary.primary"
-          className="mr-5 text-white"
+          bgColor="#97AEFF"
+          className="mr-5 font-normal text-black"
           onClick={() => router.back()}
         >
           Return
         </Button>
 
         <Button
-          bg="light.secondary.primary"
-          className="text-white"
+          bg="#97AEFF"
+          className="text-black "
           isLoading={isLoading}
           type="submit"
         >

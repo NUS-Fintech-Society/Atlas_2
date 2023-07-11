@@ -15,6 +15,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { trpc } from '~/utils/trpc'
 import { useContext, useCallback, useState } from 'react'
 import { ModalContext } from '~/context/ModalContext'
@@ -24,6 +25,7 @@ import { roles } from '~/constant/roles'
 const EditModal = () => {
   const modal = useContext(ModalContext)
   const toast = useToast()
+  const router = useRouter()
   const [department, setDepartment] = useState('')
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
@@ -53,6 +55,7 @@ const EditModal = () => {
           title: 'Successfully updated',
           status: 'success',
         })
+        router.push('./')
       } catch (e) {
         toast({
           duration: 9000,

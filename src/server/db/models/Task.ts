@@ -9,6 +9,9 @@ export type Task = {
   description: string
   department: string[]
   assignedUsers?: User[]
+  taskCreatorId: string
+  taskCreatorName: string
+  taskCompletion?: number
 }
 
 export default Task

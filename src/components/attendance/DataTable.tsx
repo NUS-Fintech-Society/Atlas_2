@@ -47,8 +47,10 @@ const DataTable: React.FC<DataTableProps> = ({ data, columns }) => {
     <Box
       overflowY="auto"
       maxHeight="60vh"
-      borderTop="3px solid #002D70"
-      borderBottom="3px solid #002D70"
+      borderTop="1px solid #002D70"
+      borderBottom="1px solid #002D70"
+      borderLeft="1px solid #002D70"
+      borderRight="1px solid #002D70"
       sx={{
         '&::-webkit-scrollbar': {
           width: '15px',
@@ -69,19 +71,14 @@ const DataTable: React.FC<DataTableProps> = ({ data, columns }) => {
               <Th
                 color="white"
                 bgColor="#01003D"
-                fontSize={{ base: '10px', md: '16px', lg: '20px' }}
-                py={5}
-                px={{ base: '2px', md: '6px', lg: '10px' }}
-                textTransform="capitalize"
                 textAlign="center"
-                borderX="3px solid #002D70"
-                borderY="none"
-                fontWeight={600}
+                textTransform="none"
+                fontWeight={500}
                 position="sticky"
                 zIndex={1}
                 top={0}
               >
-                Number
+                No.
               </Th>
               {headerGroup.headers.map((header) => {
                 // see https://tanstack.com/table/v8/docs/api/core/column-def#meta to type this correctly
@@ -90,13 +87,11 @@ const DataTable: React.FC<DataTableProps> = ({ data, columns }) => {
                   <Th
                     color="white"
                     bgColor="#01003D"
-                    fontSize={{ base: '10px', md: '16px', lg: '20px' }}
-                    py={5}
-                    px={{ base: '2px', md: '6px', lg: '10px' }}
-                    textTransform="capitalize"
+                    fontFamily={'sans-serif'}
+                    textTransform="none"
+                    fontWeight={500}
+                    fontSize={15}
                     textAlign="center"
-                    borderX="3px solid #002D70"
-                    borderY="none"
                     position="sticky"
                     zIndex={1}
                     top={0}
@@ -146,29 +141,13 @@ const DataTable: React.FC<DataTableProps> = ({ data, columns }) => {
         <Tbody>
           {table.getRowModel().rows.map((row) => (
             <Tr key={row.id}>
-              <Td
-                py={5}
-                px={{ base: '2px', md: '6px', lg: '10px' }}
-                fontSize={{ base: '10px', md: '16px', lg: '20px' }}
-                textAlign="center"
-                borderX="3px solid #002D70"
-                borderY="none"
-                fontWeight={600}
-              >
-                {parseInt(row.id, 10) + 1}
-              </Td>
+              <Td textAlign="center">{parseInt(row.id, 10) + 1}</Td>
               {row.getVisibleCells().map((cell) => {
                 const meta: any = cell.column.columnDef.meta
                 return (
                   <Td
                     className="hover:cursor-pointer hover:underline hover:opacity-80"
-                    py={5}
-                    px={{ base: '2px', md: '6px', lg: '10px' }}
-                    fontSize={{ base: '10px', md: '16px', lg: '20px' }}
                     textAlign="center"
-                    borderX="3px solid #002D70"
-                    borderY="none"
-                    fontWeight={600}
                     key={cell.id}
                     isNumeric={meta?.isNumeric}
                     onClick={() => {

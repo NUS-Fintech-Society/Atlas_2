@@ -12,6 +12,7 @@ import { updateUserProfile } from './updateUserProfile'
 import { updateUserContacts } from './updateUserContacts'
 import { getAllUsers } from './getAllUsers'
 import { updateUserInfo } from './updateUserInfo'
+import { updateTaskOfUser } from './updateTaskOfUser'
 
 export const userRouter = router({
   changePassword,
@@ -27,4 +28,5 @@ export const userRouter = router({
   updateUserImage,
   updateUserProfile,
   updateUserInfo,
+  updateTaskOfUser,
 })

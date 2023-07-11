@@ -110,9 +110,13 @@ const TableHeader = ({ table }: { table: ReactTable<User> }) => {
   return (
     <thead>
       {table.getHeaderGroups().map((headerGroup) => (
-        <tr key={headerGroup.id} className="bg-[#01003D] text-xl text-white">
+        <tr key={headerGroup.id} className="prose bg-[#01003D] text-white">
           {headerGroup.headers.map((header) => (
-            <th key={header.id} colSpan={header.colSpan}>
+            <th
+              key={header.id}
+              colSpan={header.colSpan}
+              className="prose text-white"
+            >
               {header.isPlaceholder ? null : (
                 <div>
                   {flexRender(
@@ -163,14 +167,14 @@ export default function DataTable() {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <div className="mx-auto w-3/4 my-10">
+    <div className="mx-auto my-10 w-3/4">
       <Link href="/users/create">
         <Button bgColor="#97AEFF" width={215} className="mb-10 text-black">
           Create User(s)
         </Button>
       </Link>
 
-      <table className="min-w-full font-[inter]">
+      <table className="min-w-full">
         <TableHeader table={table} />
         <TableBody table={table} />
       </table>

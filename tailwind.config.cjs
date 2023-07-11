@@ -6,9 +6,24 @@ module.exports = {
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
-    extend: {},
+    extend: {
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            fontFamily: 'sans-serif',
+            fontWeight: theme('fontWeight.normal'),
+
+        },
+        },
+        colors: {
+          primary: '#FF0000',
+          secondary: '#00FF00',
+      },
+      }),
+    },
   },
   plugins: [
-    require('flowbite/plugin')
+    require('flowbite/plugin'),
+    require('@tailwindcss/typography'),
   ],
-}
+};
