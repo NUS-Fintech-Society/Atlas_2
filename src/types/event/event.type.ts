@@ -17,7 +17,7 @@ export interface BodyProps {
     department: string
     name: string
     id: string
-    role: string
+    role: string | undefined
   }[]
   name: string
   showup: number
