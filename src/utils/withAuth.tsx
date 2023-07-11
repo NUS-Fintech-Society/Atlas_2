@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import { type Session } from 'next-auth'
 import TopNavbar from '~/components/common/TopNavbar'
+import { trpc } from './trpc'
 
 /**
  * withAuth is a wrapper that forces the user to log in before
@@ -18,8 +19,9 @@ import TopNavbar from '~/components/common/TopNavbar'
 const withAuth = (WrappedComponent: any, isAdminRightsNeeded?: boolean) => {
   const Wrapper = (props: any) => {
     const { data: session, status } = useSession({ required: true })
+    const { data: image, status: imageStatus } = trpc.user.getUserImage.useQuery()
 
-    if (status === 'loading') {
+    if (status === 'loading' || imageStatus === "loading") {
       return <LoadingScreen />
     }
 
@@ -28,7 +30,7 @@ const withAuth = (WrappedComponent: any, isAdminRightsNeeded?: boolean) => {
         <TopNavbar
           isAdmin={session.isAdmin}
           isApplicant={session.isApplicant}
-          image={session.user?.image as string}
+          image={image as string}
         />
         <WrappedComponent {...props} session={session} />
       </>

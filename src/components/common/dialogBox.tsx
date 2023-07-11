@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import {
   Button,
-  useDisclosure,
   AlertDialog,
   AlertDialogOverlay,
   AlertDialogContent,
@@ -22,10 +21,8 @@ type AlertDialogProps = {
 const CustomDialog: React.FC<AlertDialogProps> = ({
   isOpen,
   onClose,
-  onOpen,
   header,
   body,
-  onClick,
 }) => {
   const cancelRef = useRef<HTMLButtonElement>(null)
 

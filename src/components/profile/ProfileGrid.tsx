@@ -1,6 +1,5 @@
 import { trpc } from '../../utils/trpc'
 import LoadingScreen from '../common/LoadingScreen'
-import DocumentModalAdd from '../users/DocumentModalAdd'
 import ProfileCard from './ProfileCard'
 import ProfileContactInfo from './ProfileContactInfo'
 

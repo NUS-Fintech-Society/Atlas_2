@@ -114,7 +114,6 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
         <Stack>
           <Avatar alt="User-settings" rounded={true} size="lg" />
           <DocumentModal
-            id={applicant.id}
             name={applicant.name}
             resume={applicant.resume}
           />

@@ -9,23 +9,17 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
 import { BsFolder2Open } from 'react-icons/bs'
-import { StorageService } from '~/utils/storage'
 import DocumentModalCard from './DocumentModalCard'
 
 const DocumentModal = ({
-  id,
   name,
   resume,
 }: {
-  id: string
   name: string
   resume: string | undefined
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [fileList, setFileList] = useState<string[]>([])
-  const docsFilePath = `${id}/documents/`
 
   // // Hook to get the files associated with the applicant (FOR FUTURE FIRESTORE INTEGRATION)
   // useEffect(() => {

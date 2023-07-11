@@ -5,6 +5,7 @@ import LoadingScreen from '~/components/common/LoadingScreen'
 import { useRouter } from 'next/router'
 import { type Session } from 'next-auth'
 import TopNavbar from '~/components/common/TopNavbar'
+import { trpc } from './trpc'
 
 /**
  * withApplicantAuth is a wrapper method that ensures that the applicants
@@ -15,6 +16,7 @@ import TopNavbar from '~/components/common/TopNavbar'
 const withApplicantAuth = (WrappedComponent: any) => {
   const Wrapper = (props: any) => {
     const { data: session, status } = useSession({ required: true })
+    const { data: image, status: imageStatus } = trpc.user.getUserImage.useQuery()
     const router = useRouter()
 
     useEffect(() => {
@@ -24,7 +26,7 @@ const withApplicantAuth = (WrappedComponent: any) => {
       }
     }, [router, status, session])
 
-    if (status === 'loading') {
+    if (status === 'loading' || imageStatus === "loading") {
       return <LoadingScreen />
     }
 
@@ -33,7 +35,7 @@ const withApplicantAuth = (WrappedComponent: any) => {
         <TopNavbar
           isAdmin={session.isAdmin}
           isApplicant={session.isApplicant}
-          image={session.user?.image as string}
+          image={image as string}
         />
         <WrappedComponent {...props} session={session} />
       </>
