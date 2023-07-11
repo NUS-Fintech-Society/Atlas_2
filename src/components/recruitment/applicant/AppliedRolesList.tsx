@@ -9,6 +9,7 @@ const AppliedRolesList = ({ applicantId }: { applicantId: string }) => {
       {roles?.map((role) => {
         return (
           <AppliedRoleListItem
+            applicantId={applicantId}
             appliedRole={role}
             key={role.id}
             refetch={refetch}

@@ -135,3 +135,16 @@ export const getAppliedRolesByApplicant = protectedProcedure
       })
     }
   })
+
+export const getAllDeptMembers = protectedProcedure.query(async ({ ctx }) => {
+  try {
+    return await userCollection.queries([
+      where('department', '==', ctx.session.user.department),
+    ])
+  } catch (error) {
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Error retrieving department members: ' + error,
+    })
+  }
+})

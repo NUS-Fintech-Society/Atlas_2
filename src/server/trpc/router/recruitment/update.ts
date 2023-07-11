@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server'
 import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import { sendOfferEmail, sendRejectionEmail } from './helper'
+import userCollection from '~/server/db/collections/UserCollection'
 
 export const updateAppliedRoleStatus = protectedProcedure
   .input(
@@ -96,6 +97,28 @@ export const updateAppliedRoleFlag = protectedProcedure
     try {
       return await appliedRoleCollection.update(input.appliedRoleId, {
         flag: input.flag,
+      })
+    } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
+      })
+    }
+  })
+
+export const updateApplicantToMember = protectedProcedure
+  .input(
+    z.object({
+      applicantId: z.string(),
+      role: z.string(),
+      department: z.string(),
+    })
+  )
+  .mutation(async ({ input }) => {
+    try {
+      return await userCollection.update(input.applicantId, {
+        role: input.role,
+        department: input.department,
       })
     } catch (e) {
       throw new TRPCError({

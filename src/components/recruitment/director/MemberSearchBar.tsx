@@ -1,23 +1,22 @@
 import React, { useContext, useState } from 'react'
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
-import { searchContext } from '~/context/recruitment/SearchProvider'
+import { memberSearchContext } from '~/context/recruitment/MemberSearchProvider'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { useSession } from 'next-auth/react'
 import { roles } from '~/constant/roles'
 
-const SearchBar = () => {
+const MemberSearchBar = () => {
   const ctx = useSession()
   const department = ctx.data?.user?.department
   const filteredRoles = roles.filter(
     (combination) => combination.department === department
   )
-  const {filter, setFilter, setSearch } = useContext(searchContext)
+  const { filter, setFilter, setSearch } = useContext(memberSearchContext)
   const filterArray = filter.split(',')
   //do not remove this line
   const firstElement = filterArray.shift()
   const [showDropdown, setShowDropdown] = useState(false)
-  console.log(filteredRoles)
   const [selectedFilter, setSelectedFilter] = useState('')
   const [showOptions, setShowOptions] = useState(false)
   const handleFilterChange = (filter: string) => {
@@ -34,9 +33,9 @@ const SearchBar = () => {
             <button
               key={role.role}
               onClick={() => {
-                setShowOptions(false),
-                  setShowDropdown(true),
-                  setFilter(filter.concat(',' + role.role))
+                setShowOptions(false)
+                setShowDropdown(true)
+                setFilter(filter.concat(',' + role.role))
               }}
               className="cursor-pointer px-3 py-2"
             >
@@ -46,90 +45,9 @@ const SearchBar = () => {
         </ul>
       )
     }
-    if (selectedFilter === 'Status') {
-      return (
-        <ul className="ml-2">
-          <button
-            onClick={() => {
-              setShowOptions(false),
-                setShowDropdown(true),
-                setFilter(filter.concat(',accepted'))
-            }}
-            className="cursor-pointer px-3 py-2"
-          >
-            Accepted
-          </button>
-          <button
-            onClick={() => {
-              setShowOptions(false),
-                setShowDropdown(true),
-                setFilter(filter.concat(',offered'))
-            }}
-            className="cursor-pointer px-3 py-2"
-          >
-            Offered
-          </button>
-          <button
-            onClick={() => {
-              setShowOptions(false),
-                setShowDropdown(true),
-                setFilter(filter.concat(',pending'))
-            }}
-            className="cursor-pointer px-3 py-2"
-          >
-            Pending Review
-          </button>
-          <button
-            onClick={() => {
-              setShowOptions(false),
-                setShowDropdown(true),
-                setFilter(filter.concat(',interviewed'))
-            }}
-            className="cursor-pointer px-3 py-2"
-          >
-            Interviewed
-          </button>
-          <button
-            onClick={() => {
-              setShowOptions(false),
-                setShowDropdown(true),
-                setFilter(filter.concat(',rejected'))
-            }}
-            className="cursor-pointer px-3 py-2"
-          >
-            Rejected
-          </button>
-        </ul>
-      )
-    }
-    if (selectedFilter === 'Flags') {
-      return (
-        <ul className="ml-2">
-          <button
-            onClick={() => {
-              setShowOptions(false),
-                setShowDropdown(true),
-                setFilter(filter.concat(',true'))
-            }}
-            className="cursor-pointer px-3 py-2"
-          >
-            Seen
-          </button>
-          <button
-            onClick={() => {
-              setShowOptions(false),
-                setShowDropdown(true),
-                setFilter(filter.concat(',false'))
-            }}
-            className="cursor-pointer px-3 py-2"
-          >
-            Unseen
-          </button>
-        </ul>
-      )
-    }
     return null
   }
+
   return (
     <InputGroup
       minWidth={'150px'}
@@ -160,7 +78,8 @@ const SearchBar = () => {
         className="relative ml-2 rounded-md bg-gray-200 px-3 py-2 text-gray-600"
         onMouseEnter={() => setShowOptions(true)}
         onMouseLeave={() => {
-          setShowOptions(false), setShowDropdown(true)
+          setShowOptions(false)
+          setShowDropdown(true)
         }}
       >
         <ChevronDownIcon />
@@ -177,23 +96,11 @@ const SearchBar = () => {
                 </button>
                 <button
                   type="button"
-                  className="cursor-pointer px-4 py-2"
-                  onClick={() => handleFilterChange('Status')}
-                >
-                  Status
-                </button>
-                <button
-                  type="button"
-                  className="cursor-pointer px-4 py-2"
-                  onClick={() => handleFilterChange('Flags')}
-                >
-                  Flags
-                </button>
-                <button
-                  type="button"
                   className="mb-2 cursor-pointer rounded bg-gray-200 px-4 py-2 font-bold"
                   onClick={() => {
-                    setShowOptions(false), setShowDropdown(true), setFilter('')
+                    setShowOptions(false)
+                    setShowDropdown(true)
+                    setFilter('')
                   }}
                 >
                   Clear
@@ -221,4 +128,4 @@ const SearchBar = () => {
   )
 }
 
-export default SearchBar
+export default MemberSearchBar

@@ -25,7 +25,7 @@ const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
               {/* Header */}
               <VStack rowGap={0} my={4}>
                 <Text className="mx-4 mt-2 text-center text-4xl font-bold">
-                  Hi User,
+                  Hi {session.user?.name},
                 </Text>
                 <Text className="mx-4 text-center text-2xl  font-bold ">
                   your current statuses are:

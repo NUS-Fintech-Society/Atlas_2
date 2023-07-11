@@ -17,10 +17,10 @@ const RecruitmentPage = () => {
       <Box className="m-10">
         <Text className="text-center text-4xl font-bold">Recruitment</Text>
         <div className="px-2 sm:px-6 sm:pt-5 md:px-20 md:pt-5 lg:px-28 lg:pt-5">
-          <div className="my-20 mx-20 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-2 ">
+          <div className="gap x-2 my-20 mx-20 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-3 ">
             <Button
               bgColor="#97AEFF"
-              width={215}
+              width={230}
               className="mb-10 text-black"
               onClick={() => router.push('/recruitment/create')}
             >
@@ -28,7 +28,15 @@ const RecruitmentPage = () => {
             </Button>
             <Button
               bgColor="#97AEFF"
-              width={215}
+              width={230}
+              className="mb-10 text-black"
+              onClick={() => router.push('/recruitment/members')}
+            >
+              View Department Members
+            </Button>
+            <Button
+              bgColor="#97AEFF"
+              width={230}
               className="mb-10 text-black"
               onClick={() => router.push('/recruitment/applicants')}
             >

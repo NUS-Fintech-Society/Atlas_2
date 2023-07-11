@@ -13,8 +13,6 @@ import { Avatar } from 'flowbite-react'
 import AppliedRoleListItem from './ApplicantRoleListItem'
 import DocumentModal from './DocumentModal'
 import type { Applicant } from '~/server/db/models/Applicant'
-import NoteModal from './NoteModal'
-import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import { trpc } from '~/utils/trpc'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useState } from 'react'
@@ -116,9 +114,9 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
         <Stack>
           <Avatar alt="User-settings" rounded={true} size="lg" />
           <DocumentModal
-            applicantId={applicant.id}
-            applicantName={applicant.name}
-            applicantResume={applicant.resume}
+            id={applicant.id}
+            name={applicant.name}
+            resume={applicant.resume}
           />
           <Text className="text-center">
             {appliedRoles[0]?.department.toUpperCase()}

@@ -4,12 +4,14 @@ import {
   updateAppliedRoleStatusWithEmail,
   updateInterviewNotes,
   updateAppliedRoleFlag,
+  updateApplicantToMember,
 } from './update'
 import {
   getAllApplicantsTopRoleByDept,
   getApplicant,
   getAppliedRoleByRoleId,
   getAppliedRolesByApplicant,
+  getAllDeptMembers,
 } from './read'
 import { createManyAppliedRoles } from './create'
 import { getAllTasks } from './getAllTasks'
@@ -21,6 +23,7 @@ export const recruitmentRouter = router({
   updateAppliedRoleStatusWithEmail,
   updateInterviewNotes,
   updateAppliedRoleFlag,
+  updateApplicantToMember,
   getAllApplicantsTopRoleByDept,
   getApplicant,
   getAppliedRoleByRoleId,
@@ -29,4 +32,5 @@ export const recruitmentRouter = router({
   createTask,
   getAllTasksOfUser,
   getAppliedRolesByApplicant,
+  getAllDeptMembers,
 })
