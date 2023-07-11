@@ -65,7 +65,7 @@ const EditModal = () => {
         })
       }
     },
-    [mutateAsync, data?.id, toast, department, refetch]
+    [mutateAsync, data?.id, toast, department, refetch, router]
   )
 
   if (!modal.id || isLoading) return null

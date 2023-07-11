@@ -14,16 +14,13 @@ import {
   Center,
   Button,
   useToast,
-  Progress,
 } from '@chakra-ui/react'
 
 import { useRouter } from 'next/router'
-import TopNavbar from '~/components/common/TopNavbar'
 import withAuth, { type BaseProps } from '~/utils/withAuth'
 import { type TaskInfos } from '~/types/task/task.type'
 import { getSession } from 'next-auth/react'
 import { type GetServerSidePropsContext } from 'next'
-import type Task from '~/server/db/models/Task'
 
 const Tasks: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()

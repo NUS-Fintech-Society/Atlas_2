@@ -18,7 +18,7 @@ import Head from 'next/head'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Container from '~/components/auth/Container'
 import { useRouter } from 'next/router'
-import withAuth, { type BaseProps } from '~/utils/withAuth'
+import withAuth from '~/utils/withAuth'
 import { getSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
 

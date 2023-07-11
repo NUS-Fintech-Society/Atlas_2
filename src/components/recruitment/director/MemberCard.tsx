@@ -37,7 +37,6 @@ const MemberCard = ({ member }: { member: User }) => {
         <Stack>
           <Avatar alt="User-settings" rounded={true} size="lg" />
           <DocumentModal
-            id={member.id}
             name={member.name}
             resume={member.resume}
           />

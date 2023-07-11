@@ -15,7 +15,6 @@ const MemberSearchBar = () => {
   const { filter, setFilter, setSearch } = useContext(memberSearchContext)
   const filterArray = filter.split(',')
   //do not remove this line
-  const firstElement = filterArray.shift()
   const [showDropdown, setShowDropdown] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState('')
   const [showOptions, setShowOptions] = useState(false)
