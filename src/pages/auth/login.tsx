@@ -49,9 +49,7 @@ const LoginPage = () => {
       setLoginLoading(false)
       return
     }
-    router.push('/calendar').then(
-      () => router.reload())
-    
+    router.push('/calendar').then(() => router.reload())
   }, [email, password, router, toast])
 
   const resetPassword = useCallback(async () => {
@@ -123,7 +121,7 @@ const LoginPage = () => {
 
             <p
               onClick={togglePageState}
-              className="mt-4 text-center text-xl font-medium text-white hover:cursor-pointer"
+              className="mt-4 text-center font-sans text-xl font-medium text-white hover:cursor-pointer"
             >
               {pageState === PageState.LOGIN
                 ? 'Forget your password?'
@@ -131,7 +129,7 @@ const LoginPage = () => {
             </p>
 
             <button
-              className="max-w-60 text-md mx-auto rounded-md bg-[#97AEFF] py-4 px-20 font-medium transition hover:bg-opacity-80"
+              className="max-w-60 text-md mx-auto rounded-md bg-[#97AEFF] py-4 px-20 font-sans text-xl font-bold transition hover:bg-opacity-80"
               onClick={pageState === PageState.LOGIN ? signin : resetPassword}
             >
               {isLoading || loginLoading
@@ -140,6 +138,12 @@ const LoginPage = () => {
                 ? 'SIGN IN'
                 : 'SEND RESET LINK'}
             </button>
+          </div>
+
+          <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+            <p className="mx-4 my-4 text-right font-sans text-2xl text-white">
+              ATLAS Human Resource Management System
+            </p>
           </div>
         </div>
       </main>

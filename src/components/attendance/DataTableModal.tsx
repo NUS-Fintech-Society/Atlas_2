@@ -39,7 +39,7 @@ const DataTableModal = () => {
       scrollBehavior="inside"
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent minW="1000px">
         <ModalHeader>
           {isLoading
             ? 'Please wait while we are fetching the event'
