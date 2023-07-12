@@ -46,7 +46,7 @@ export const createTask = protectedProcedure
               description: input.description,
               department: input.departments,
               taskCreatorId: ctx.session.user.id,
-              taskCreatorName: user.name,
+              taskCreatorName: taskCreator.name,
             }
 
             if (user.pendingTask) {

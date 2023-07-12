@@ -37,7 +37,6 @@ export const updateAppliedRoleStatus = protectedProcedure
             .get(input.applicantId)
         ])
 
-        console.log(40, input.appliedRoleId)
         /// Update the applied role with the status.
         appliedRoleCollection.withTransaction(transaction).update({
             status: input.status,
