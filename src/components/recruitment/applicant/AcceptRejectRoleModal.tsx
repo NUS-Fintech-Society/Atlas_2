@@ -15,6 +15,7 @@ import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import { trpc } from '~/utils/trpc'
 import { delay } from '~/utils/common'
+import { useRouter } from 'next/router'
 
 const AcceptRejectRoleModal = ({
   applicantId,
@@ -29,6 +30,7 @@ const AcceptRejectRoleModal = ({
   buttonColor: string
   refetch: () => Promise<QueryObserverResult>
 }) => {
+  const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { mutateAsync: mutateAppliedRoleAsync } =
     trpc.recruitment.updateAppliedRoleStatus.useMutation()
@@ -40,13 +42,6 @@ const AcceptRejectRoleModal = ({
         decision === 'accept'
           ? ApplicationStatus.ACCEPTED
           : ApplicationStatus.REJECTED
-
-      const firstToast = toast({
-        duration: null,
-        status: 'loading',
-        title: 'Updating',
-        description: 'Waiting to update...',
-      })
   
       // Update the appliedRole and the user information
       await mutateAppliedRoleAsync({
@@ -56,7 +51,6 @@ const AcceptRejectRoleModal = ({
       })
 
       await refetch()
-      toast.close(firstToast)
       toast({
         duration: 2000,
         status: 'success',

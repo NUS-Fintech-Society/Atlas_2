@@ -16,16 +16,9 @@ import { protectedProcedure } from '~/server/trpc/trpc'
  * point in time, from the perspective of a director.
  * */
 export const getAllApplicantsTopRoleByDept = protectedProcedure
-  //.input(z.object({
-  //   filter: z.string(),
-  //   search: z.string()
-  // }))
   .query(async ({ ctx }) => {
     try {
       const filtersForUsers = [where('role', '==', 'Applicant')]
-      // if (input.search && input.search.length) {
-      //   filtersForUsers.push(where('name', '==', input.search))
-      // }
       const applicants = await userCollection.queries(filtersForUsers)
       const applicantsWithRoles: Applicant[] = []
 
