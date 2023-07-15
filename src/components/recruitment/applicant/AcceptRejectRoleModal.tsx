@@ -10,16 +10,12 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import { signOut } from 'next-auth/react'
 import type { QueryObserverResult } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import { trpc } from '~/utils/trpc'
-
-const delay = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
+import { delay } from '~/utils/common'
 
 const AcceptRejectRoleModal = ({
   applicantId,
@@ -78,12 +74,11 @@ const AcceptRejectRoleModal = ({
         toast({
           duration: 2000,
           status: 'success',
-          title: 'Re-login',
-          description: `You are now a member. We will require a re-login so you'll be logged out shortly`,
+          title: 'Update Info',
+          description: `You are now a member! You'll be redirected shortly to update your information`,
         })
         await delay(3000)
-        // need to force him to re-login in order for nextauth to update him from applicant to member
-        await signOut()
+        router.push('/update-info')
       }
     } catch (e) {
       toast({
