@@ -5,11 +5,72 @@ import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import { sendOfferEmail, sendRejectionEmail } from './helper'
 import userCollection from '~/server/db/collections/UserCollection'
-import taskCollection from '~/server/db/collections/TaskCollection'
-import { Timestamp, runTransaction, where } from 'firebase/firestore'
+import { runTransaction } from 'firebase/firestore'
 import { db } from '~/server/db/firebase'
-import type { User } from '~/server/db/models/User'
-import type Task from '~/server/db/models/Task'
+
+/**
+ * Update the applicant's role in the user collection.
+ * Update the status in the applied_roles collection.
+ * If the new status is accepted or rejected, we send an email.
+ *
+ * @param applicantId
+ * @param status
+ * @param appliedRoleId
+ * @returns
+ */
+function updateStatusAndRole(
+  applicantId: string,
+  status: ApplicationStatus,
+  appliedRoleId: string
+) {
+  return runTransaction(db, async (transaction) => {
+    const [appliedRole, applicant] = await Promise.all([
+      appliedRoleCollection
+        .withTransaction(transaction)
+        .get(appliedRoleId),
+      userCollection
+        .withTransaction(transaction)
+        .get(applicantId)
+    ])
+
+    if (applicant.department !== "Unassigned" || applicant.role !== "Applicant") {
+      throw Error("The applicant has already accepted a role.")
+    }
+
+    appliedRoleCollection
+      .withTransaction(transaction)
+      .update({ status }, appliedRoleId)
+
+    if (status === ApplicationStatus.ACCEPTED) {
+      const isAdmin =
+        appliedRole.role === 'Co-Director' ||
+        appliedRole.role === 'Director' ||
+        appliedRole.department === 'Internal Affairs'
+
+      userCollection
+        .withTransaction(transaction)
+        .update({
+          isAdmin,
+          role: appliedRole.role,
+          department: appliedRole.department,
+        }, applicantId)
+
+      await sendOfferEmail(
+        applicant.email, 
+        applicant.name, 
+        appliedRole.role, 
+        appliedRole.department
+      )
+    } else if (status === ApplicationStatus.REJECTED) {
+      await sendRejectionEmail(
+        applicant.email,
+        applicant.name,
+        appliedRole.role,
+        appliedRole.department
+      )
+    }
+  })
+}
 
 export const updateAppliedRoleStatus = protectedProcedure
   .input(
@@ -19,119 +80,11 @@ export const updateAppliedRoleStatus = protectedProcedure
       status: z.nativeEnum(ApplicationStatus),
     })
   )
-  .mutation(async ({ input, ctx }) => {
-    try {  
-      /// If the user is an admin, he cannot accept the offer for the applicant.
-      if (ctx.session.user.id !== input.applicantId) {
-        throw Error('An admin user should not be able to accept the offer for the applicant.')
-      }
-
-      await runTransaction(db, async (transaction) => {
-        /// Get the details for the applied role. We check whether the signed in user
-        const [role, applicant] = await Promise.all([
-          appliedRoleCollection
-            .withTransaction(transaction)
-            .get(input.appliedRoleId),
-          userCollection
-            .withTransaction(transaction)
-            .get(input.applicantId)
-        ])
-
-        /// Update the applied role with the status.
-        appliedRoleCollection.withTransaction(transaction).update({
-            status: input.status,
-          }, input.appliedRoleId)
-
-        /// If the user accepts his status, we give him the department and role.
-        if (input.status === ApplicationStatus.ACCEPTED) {
-          const isAdmin =
-            role.role === 'Co-Director' ||
-            role.role === 'Director' ||
-            role.department === 'Internal Affairs'
-
-          const payload: Partial<User> = {
-            isAdmin,
-            role: role.role,
-            department: role.department,
-          }
-
-          /// If the user is not admin, we have to give him all the non-expired task and
-          /// update the task collection accordingly.
-          if (!isAdmin) {
-            const pendingTask = await taskCollection.queries([
-              where("department", "array-contains", role.department),
-              where("due", ">", Timestamp.fromDate(new Date()))
-            ])
-
-            payload.pendingTask = pendingTask
-
-            pendingTask.forEach((task) => {
-              const taskPayload: Partial<Task> = {}
-
-              if (task.taskCompletion !== undefined) {
-                taskPayload.taskCompletion = task.taskCompletion + 1
-                taskPayload.status = taskPayload.status === "done" ? null : "done"
-              }
-
-              const assignedUser = {
-                completed: false,
-                department: role.department,
-                id: applicant.id,
-                name: applicant.name,
-                role: role.role
-              }
-
-              taskPayload.assignedUsers = task.assignedUsers 
-                ? [...task.assignedUsers, assignedUser] 
-                : [assignedUser]
-
-              taskCollection.withTransaction(transaction).update(taskPayload, task.id as string)
-            })
-          }
-
-          userCollection.withTransaction(transaction).update(payload, role.applicantId)
-        }
-      })
-    } catch (e) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: (e as Error).message,
-      })
-    }
-  })
-
-export const updateAppliedRoleStatusWithEmail = protectedProcedure
-  .input(
-    z.object({
-      appliedRoleId: z.string(),
-      status: z.nativeEnum(ApplicationStatus),
-      name: z.string(),
-      email: z.string(),
-      appliedRole: z.string(),
-      appliedDepartment: z.string(),
-    })
-  )
   .mutation(async ({ input }) => {
     try {
-      await appliedRoleCollection.update(input.appliedRoleId, {
-        status: input.status,
-      })
-      // send email to notify applicants that are offered / rejected
-      if (input.status === ApplicationStatus.OFFERED) {
-        await sendOfferEmail(
-          input.email,
-          input.name,
-          input.appliedRole,
-          input.appliedDepartment
-        )
-      } else if (input.status === ApplicationStatus.REJECTED) {
-        await sendRejectionEmail(
-          input.email,
-          input.name,
-          input.appliedRole,
-          input.appliedDepartment
-        )
-      }
+      const { applicantId, appliedRoleId, status } = input
+
+      await updateStatusAndRole(applicantId, status, appliedRoleId)
     } catch (e) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
