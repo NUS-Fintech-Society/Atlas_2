@@ -17,7 +17,7 @@ const ProfileGrid = ({ studentId }: { studentId: string }) => {
 
   return (
     <div className="flex flex-col items-center md:flex-row md:items-start md:justify-evenly">
-      <div className="mb-5 w-3/4 max-w-xs rounded-3xl bg-[#01003D]">
+      <div className="mb-5 w-3/4 max-w-lg rounded-3xl bg-[#01003D]">
         <ProfileCard
           name={data.name}
           dept={data.department}
@@ -25,7 +25,7 @@ const ProfileGrid = ({ studentId }: { studentId: string }) => {
           studentId={studentId}
         />
       </div>
-      <div className="h-full w-3/4 max-w-xs justify-center md:max-w-xl">
+      <div className="h-full w-3/4 max-w-lg justify-center md:max-w-xl">
         <ProfileContactInfo user={data} refetch={refetch} />
         {/* FOR FUTURE INTEGRATION FOR UPLOAD DOCUMENTS TO FIRESTORE */}
         {/* <DocumentModalAdd studentId={studentId} /> */}

@@ -141,7 +141,10 @@ const TableBody = ({ table }: { table: ReactTable<User> }) => {
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => {
               return (
-                <td key={cell.id} className="border-x border-[#01003D]">
+                <td
+                  key={cell.id}
+                  className="border-x border-[#01003D] py-2 px-2"
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               )
@@ -168,6 +171,7 @@ export default function DataTable() {
     <LoadingScreen />
   ) : (
     <div className="mx-auto my-10 w-3/4">
+      <h1 className="prose mb-5 py-3 text-4xl font-semibold">Manage Users</h1>
       <Link href="/users/create">
         <Button bgColor="#97AEFF" width={215} className="mb-10 text-black">
           Create User(s)

@@ -5,7 +5,7 @@ import { AuthInput } from '~/components/utilities'
 import { trpc } from '~/utils/trpc'
 import LoadingScreen from '~/components/common/LoadingScreen'
 import Head from 'next/head'
-import { useToast } from '@chakra-ui/react'
+import { useToast, Box } from '@chakra-ui/react'
 import Image from 'next/image'
 import { getSession } from 'next-auth/react'
 import { type GetServerSidePropsContext } from 'next'
@@ -102,10 +102,11 @@ const LoginPage = () => {
           </nav>
 
           {/* Login */}
-          <div className="flex flex-col justify-center gap-8 font-[Ubuntu]">
-            <h1 className="my-5 text-center text-5xl font-bold text-white">
+          <div className="flex flex-col justify-center gap-8">
+            <h1 className="my-5 text-center font-sans text-5xl font-bold text-white">
               {pageState === PageState.LOGIN ? 'Login' : 'Reset Password'}
             </h1>
+
             <AuthInput
               type="email"
               name="Email"
@@ -144,12 +145,12 @@ const LoginPage = () => {
                 : 'SEND RESET LINK'}
             </button>
           </div>
+        </div>
 
-          <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-            <p className="mx-4 my-4 text-right font-sans text-2xl text-white">
-              ATLAS Human Resource Management System
-            </p>
-          </div>
+        <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+          <p className="mx-4 my-4 text-right font-sans text-2xl text-white">
+            ATLAS Human Resource Management System
+          </p>
         </div>
       </main>
     </>

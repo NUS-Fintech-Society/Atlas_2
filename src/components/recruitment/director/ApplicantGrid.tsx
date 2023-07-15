@@ -80,7 +80,7 @@ const ApplicantGrid = () => {
         <InfoPopup
           iconBgColor="#02005A"
           iconColor="white"
-          className="bottom-25 absolute right-20"
+          className="bottom-50 absolute right-10"
           popoverPlacement="left"
         />
       )}

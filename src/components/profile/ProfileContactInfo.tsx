@@ -92,11 +92,11 @@ const ProfileContactInfo = (props: {
       <form onSubmit={handleSubmit(formSubmit)}>
         <Box
           backgroundColor="#F7FCFF"
-          borderRadius="55px"
-          boxShadow="0px 3px 3px rgba(0, 0, 0, 0.2)"
+          borderRadius="24px"
+          boxShadow="0px 1px 1px rgba(0, 0, 0, 0.2)"
           className="flex flex-col gap-3 py-6 px-10"
         >
-          <Box className="flex items-center gap-1">
+          <Box className="flex items-center gap-3">
             <BsEnvelopeFill size="20px" className="fill-[#97AEFF]" />
             <DynamicInputField
               edit={edit}
@@ -107,7 +107,7 @@ const ProfileContactInfo = (props: {
             />
           </Box>
 
-          <Box className="flex items-center gap-1">
+          <Box className="flex items-center gap-3">
             <MdFastfood size="20px" className="fill-[#97AEFF]" />
             <DynamicInputField
               edit={edit}
@@ -118,7 +118,7 @@ const ProfileContactInfo = (props: {
             />
           </Box>
 
-          <Box className="flex items-center gap-1">
+          <Box className="flex items-center gap-3">
             <BsTelegram size="20px" className="fill-[#97AEFF]" />
             <DynamicInputField
               edit={edit}
@@ -129,7 +129,7 @@ const ProfileContactInfo = (props: {
             />
           </Box>
 
-          <Box className="flex items-center gap-1">
+          <Box className="flex items-center gap-3">
             <BsDiscord size="20px" className="fill-[#97AEFF]" />
             <DynamicInputField
               edit={edit}
@@ -140,7 +140,7 @@ const ProfileContactInfo = (props: {
             />
           </Box>
 
-          <Box className="flex items-center gap-1">
+          <Box className="flex items-center gap-3">
             <BsLinkedin size="20px" className="fill-[#97AEFF]" />
             <DynamicInputField
               edit={edit}
@@ -151,7 +151,7 @@ const ProfileContactInfo = (props: {
             />
           </Box>
 
-          <Box className="flex items-center gap-1">
+          <Box className="flex items-center gap-3">
             <FaTshirt size="20px" className="fill-[#97AEFF]" />
             <DynamicInputField
               edit={edit}

@@ -112,34 +112,34 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                     <tr>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        className="text-bold px-6 py-3 text-left text-lg tracking-wider text-white"
                       >
                         Status
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        className="text-bold px-6 py-3 text-left text-lg tracking-wider text-white"
                       >
                         Task
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        className="text-bold px-6 py-3 text-left text-lg tracking-wider text-white"
                       >
                         Task Creator
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        className="text-bold px-6 py-3 text-left text-lg tracking-wider text-white"
                       >
                         Do By
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        className="text-bold min-w-full px-6 py-3 text-left text-lg tracking-wider text-white"
                       >
                         {session.isAdmin
-                          ? 'Yet to complete (Non-admins)'
+                          ? 'Not completed \n[Exclude Admins]'
                           : null}
                       </th>
                     </tr>
@@ -152,7 +152,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                             <h1 className="  text-white">
                               {item.status == 'Incomplete' && (
                                 <button className="text-md  mx-auto w-24 flex-col items-center  rounded-full bg-[#C51F29] bg-opacity-100  py-1 px-5 font-medium transition md:w-[150px]">
-                                  <div className="font-[Inter] text-xs text-white md:text-xl">
+                                  <div className="font-sans text-xs text-white md:text-xl">
                                     {item.status}
                                   </div>
                                 </button>
@@ -166,7 +166,7 @@ const Tasks: React.FC<BaseProps> = ({ session }) => {
                               )} */}
                               {item.status == 'Done' && (
                                 <button className="max-w-20 text-md mx-auto w-24 flex-col items-center  rounded-full bg-[#00C09D] bg-opacity-100  py-1 px-5 font-medium transition md:w-[150px]">
-                                  <div className="font-[Inter] text-xs text-white md:text-xl">
+                                  <div className="font-sans text-xs text-white md:text-xl">
                                     {item.status}
                                   </div>
                                 </button>

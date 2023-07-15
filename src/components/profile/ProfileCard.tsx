@@ -26,7 +26,7 @@ const ProfileCard = ({
   } = trpc.user.getUserImage.useQuery()
 
   return (
-    <Box className="my-5 flex flex-col items-center">
+    <Box className="my-10 flex flex-col items-center">
       <Box className="relative">
         <Image
           alt="profile-pic"
@@ -34,7 +34,7 @@ const ProfileCard = ({
           fallbackSrc={DEFAULT_IMAGE}
           objectFit="cover"
           borderRadius="full"
-          boxSize="170px"
+          boxSize="200px"
         />
 
         <Box className="absolute bottom-0 right-0">
