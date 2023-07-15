@@ -42,10 +42,6 @@ const applicants = [
     href: '/tasks',
     title: 'Tasks',
   },
-  {
-    href: '/update-info',
-    title: 'Update information',
-  },
 ]
 
 const members = [

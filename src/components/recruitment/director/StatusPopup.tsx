@@ -105,22 +105,6 @@ const StatusPopup = ({
           <UnorderedList styleType="none">
             <ListItem className="flex items-center">
               <IconButton
-                aria-label="accepted status"
-                icon={<BsCircleFill fill="#46FFDE" />}
-                bg="None"
-                _hover={{ background: 'None' }}
-                marginLeft="2"
-                onClick={() => {
-                  setIsAcceptOpen(true)
-                  setStatusInModal(
-                    ApplicationStatus.ACCEPTED as ApplicationStatus
-                  )
-                }}
-              />
-              <Text>Accepted</Text>
-            </ListItem>
-            <ListItem className="flex items-center">
-              <IconButton
                 aria-label="offered status"
                 icon={<BsCircleFill fill="#0038FF" />}
                 bg="None"
