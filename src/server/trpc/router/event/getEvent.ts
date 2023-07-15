@@ -15,9 +15,13 @@ export const getEvent = protectedProcedure
         (attendee) => attendee.attended
       )
 
+      //THIS QR CODE LEADS TO THE EVENT REGISTRATION
       let qr_code = undefined
       if (event.isQrRequired) {
-        qr_code = await toDataURL(`${env.DOMAIN}/events/${event.id as string}`)
+        qr_code = await toDataURL(
+          `${env.DOMAIN}/events/attendance/${event.id as string}`
+        )
+        console.log(qr_code)
       }
 
       return {

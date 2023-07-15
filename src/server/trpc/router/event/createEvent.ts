@@ -18,6 +18,8 @@ export const createEvent = protectedProcedure
   )
   .mutation(async ({ input }) => {
     try {
+      const eventID = 'EVENT-' + eventCollection.generateRandomId()
+
       const users = await Promise.all(
         input.attendees.map(async (attendee) => {
           const data = await userCollection.getById(attendee)
@@ -31,16 +33,19 @@ export const createEvent = protectedProcedure
         })
       )
 
-      await eventCollection.add({
-        attendees: 0,
-        endDate: Timestamp.fromDate(input.endDate),
-        hasStarted: false,
-        invitedAttendees: users,
-        name: input.name,
-        startDate: Timestamp.fromDate(input.startDate),
-        departments: input.departments,
-        isQrRequired: input.isQrRequired,
-      })
+      await eventCollection.set(
+        {
+          attendees: 0,
+          endDate: Timestamp.fromDate(input.endDate),
+          hasStarted: false,
+          invitedAttendees: users,
+          name: input.name,
+          startDate: Timestamp.fromDate(input.startDate),
+          departments: input.departments,
+          isQrRequired: input.isQrRequired,
+        },
+        eventID
+      )
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),

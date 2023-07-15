@@ -110,11 +110,12 @@ export default withAuth(ConfirmAttendance, false)
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
+  const { id } = context.query
 
   if (!session) {
     return {
       redirect: {
-        destination: '/auth/login',
+        destination: `/auth/login?id=${id}`,
       },
     }
   } else if (session && session.isApplicant) {
@@ -127,6 +128,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   return {
-    props: {},
+    props: {
+      eventId: id,
+    },
   }
 }

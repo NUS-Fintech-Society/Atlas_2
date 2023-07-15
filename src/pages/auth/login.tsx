@@ -24,6 +24,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [pageState, setPageState] = useState(PageState.LOGIN)
+  const eventId = router.query.id as string
 
   const togglePageState = useCallback(() => {
     setPageState((current) =>
@@ -49,8 +50,12 @@ const LoginPage = () => {
       setLoginLoading(false)
       return
     }
-    router.push('/calendar').then(() => router.reload())
-  }, [email, password, router, toast])
+    if (eventId) {
+      router.push(`/events/attendance/${eventId}`)
+    } else {
+      router.push('/calendar').then(() => router.reload())
+    }
+  }, [email, password, router, toast, eventId])
 
   const resetPassword = useCallback(async () => {
     try {
@@ -155,6 +160,7 @@ export default LoginPage
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
+  const { id } = context.query
 
   if (session) {
     if (session.isApplicant) {
