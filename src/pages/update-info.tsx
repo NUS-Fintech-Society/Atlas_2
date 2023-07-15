@@ -18,6 +18,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import withApplicantAuth, { type BaseProps } from '~/utils/withApplicantAuth'
 import { getSession } from 'next-auth/react'
 import { type GetServerSidePropsContext } from 'next'
+import { delay } from '~/utils/common'
+import { signOut } from 'next-auth/react'
 
 const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
   const router = useRouter()
@@ -75,8 +77,15 @@ const UpdateInfoPage: React.FC<BaseProps> = ({ session }) => {
         title: 'Success',
         description: 'User profile has been successfully updated',
       })
-
-      redirectHome()
+      toast({
+        duration: 2000,
+        status: 'success',
+        title: 'Re-login',
+        description: `We will require a re-login so you'll be logged out shortly`,
+      })
+      await delay(3000)
+      // need to force him to re-login in order for nextauth to update him from applicant to member
+      await signOut()
     } catch (e) {
       toast({
         description: (e as Error).message,

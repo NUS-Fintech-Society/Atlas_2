@@ -98,7 +98,7 @@ export abstract class BaseCollection<T> {
       },
       get: async (id: string) => {
         const result = await transaction.get(doc(db, this.collectionName, id))
-        return { ...result.data, id: result.id } as T
+        return { ...result.data(), id: result.id } as T
       },
       update: (payload: Partial<T>, id: string) => {
         transaction.update(
