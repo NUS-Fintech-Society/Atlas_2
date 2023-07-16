@@ -1,3 +1,4 @@
+import { Text } from '@chakra-ui/react'
 import { useContext } from 'react'
 import { memberSearchContext } from '~/context/recruitment/MemberSearchProvider'
 import { trpc } from '~/utils/trpc'
@@ -40,9 +41,11 @@ const MemberGrid = () => {
   return (
     <>
       <div>
-        <div className=" mb-2 mt-16 ml-20 font-bold md:mt-1 lg:mt-1 lg:text-xl">
-          Number of Members: {totalNumber}
-        </div>
+        <Text className="mt-20 text-center text-xl font-bold lg:ml-20 lg:mt-1 lg:text-left">
+          {totalNumber == 1
+            ? `${totalNumber} Member`
+            : `${totalNumber} Members`}
+        </Text>
         <div className="my-10  mx-20 mb-10 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-3 ">
           {filteredData?.map((member) => {
             return <MemberCard member={member} key={member.id} />
