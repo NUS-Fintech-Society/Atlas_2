@@ -8,7 +8,8 @@ import { type WriteBatch, doc, writeBatch } from 'firebase/firestore'
 import { db } from '~/server/db/firebase'
 import type { User } from '~/server/db/models/User'
 import logCollection from '~/server/db/collections/LogCollection'
-import { Timestamp } from 'firebase/firestore'
+import { Timestamp, runTransaction } from 'firebase/firestore'
+import userCollection from '~/server/db/collections/UserCollection'
 
 export const createManyUsers = protectedProcedure
   .input(
@@ -28,39 +29,27 @@ export const createManyUsers = protectedProcedure
   )
   .mutation(async ({ input }) => {
     try {
-      const password = randomBytes(10).toString('hex')
-      const hashedPassword = await hash(password, 10)
-      const emails: string[] = []
+      /// Filter out all the empty rows.
+      input = input.filter(user => user.student_id)
 
-      // Add user logic. Note that each firebase batch only allow up to 500 writes so we need an array for more than 500 users.
-      let batchIndex = 0
-      let counter = 0
-      const batches: WriteBatch[] = [writeBatch(db)]
-      input.forEach((user) => {
-        emails.push(user.nus_email)
+      return await runTransaction(db, async (transaction) => {
+        await Promise.all(input.map(async (user) => {
+          const hashedPassword = await hash(user.student_id, 10)
 
-        batches[batchIndex]?.set(doc(db, 'users', user.student_id), {
-          department: user.department,
-          email: user.nus_email,
-          hashedPassword,
-          name: user.name,
-          isAdmin: false,
-          id: user.student_id,
-          role: user.role,
-          resume: user.resume,
-        } as User)
+          userCollection.withTransaction(transaction).set({
+            department: user.department,
+            email: user.nus_email,
+            hashedPassword,
+            name: user.name,
+            isAdmin: false,
+            id: user.student_id,
+            role: user.role,
+            resume: user.resume || "",
+          }, user.student_id)
+        }))
 
-        counter += 1
-
-        if (counter === 499) {
-          batches.push(writeBatch(db))
-          batchIndex += 1
-          counter = 0
-        }
+        await sendMultipleEmails(input.map(user => user.nus_email))
       })
-
-      await Promise.all(batches.map(async (batch) => await batch.commit()))
-      await sendMultipleEmails(emails)
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),
