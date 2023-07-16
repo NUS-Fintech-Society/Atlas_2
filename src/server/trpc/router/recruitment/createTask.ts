@@ -23,6 +23,7 @@ export const createTask = protectedProcedure
         /// Get the users in the department and the information about the user who is creating the task.
         const [usersInDepartments, taskCreator] = await Promise.all([
           userCollection.findByDepartment(input.departments),
+          userCollection.getById(ctx.session.user.id),
         ])
 
         /// Check whether the person creating the task has the permissions.
