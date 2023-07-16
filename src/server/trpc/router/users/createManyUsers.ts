@@ -1,12 +1,14 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
 import { hash } from 'bcryptjs'
-
+import { randomUUID } from 'crypto'
 import { sendMultipleEmails } from '../member/helper'
 import { db } from '~/server/db/firebase'
 import logCollection from '~/server/db/collections/LogCollection'
 import { Timestamp, runTransaction } from 'firebase/firestore'
 import userCollection from '~/server/db/collections/UserCollection'
+
+import { adminAuth } from '~/server/db/admin_firebase'
 
 export const createManyUsers = protectedProcedure
   .input(
@@ -34,24 +36,37 @@ export const createManyUsers = protectedProcedure
         input = input.filter(user => user.student_id && !userIds.has(user.student_id) && !userEmails.has(user.nus_email))
 
         /// Step 2: Save the data for all the valid users.
-        await Promise.all(input.map(async (user) => {
-          const hashedPassword = await hash(user.student_id, 10)
+        const emailData = await Promise.all(input.map(async (user) => {
+          const password = randomUUID().substring(0, 10)
+          const hashedPassword = await hash(password, 10)
+
+          await adminAuth.createUser({
+            email: user.nus_email,
+            displayName: user.name,
+            uid: user.student_id,
+            password: hashedPassword
+          })
 
           userCollection
             .withTransaction(transaction)
             .set({
               department: user.department,
               email: user.nus_email,
-              hashedPassword,
               name: user.name,
               isAdmin: false,
               id: user.student_id,
               role: user.role,
               resume: user.resume || "",
             }, user.student_id)
+
+          return {
+            email: user.nus_email,
+            password
+          }
         }))
 
-        await sendMultipleEmails(input.map(user => user.nus_email))
+        await sendMultipleEmails(emailData)
+        
       })
     } catch (e) {
       await logCollection.add({

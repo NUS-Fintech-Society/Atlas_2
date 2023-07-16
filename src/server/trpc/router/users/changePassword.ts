@@ -20,18 +20,18 @@ export const changePassword = protectedProcedure
       const foundUser = await userCollection.getById(id)
 
       // Verify if the current password is correct
-      const success = await compare(oldPassword, foundUser.hashedPassword)
-      if (!success) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'Incorrect password',
-        })
-      }
+      // const success = await compare(oldPassword, foundUser.hashedPassword)
+      // if (!success) {
+      //   throw new TRPCError({
+      //     code: 'UNAUTHORIZED',
+      //     message: 'Incorrect password',
+      //   })
+      // }
 
       const newPassword = await hash(password, 10)
-      await userCollection.update(id, {
-        hashedPassword: newPassword,
-      })
+      // await userCollection.update(id, {
+      //   hashedPassword: newPassword,
+      // })
     } catch (e) {
       // Throw an error if there is an issue with updating of password
       throw new TRPCError({

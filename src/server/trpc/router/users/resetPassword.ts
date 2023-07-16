@@ -18,9 +18,9 @@ export const resetPassword = publicProcedure
       // Do not tell the user if the account cannot be found for security reasons
       if (!foundUser.length) return
 
-      await userCollection.update(foundUser[0]?.id as string, {
-        hashedPassword: await hash(foundUser[0]?.id as string, 10),
-      })
+      // await userCollection.update(foundUser[0]?.id as string, {
+      //   hashedPassword: await hash(foundUser[0]?.id as string, 10),
+      // })
 
       await transporter.sendMail({
         from: env.GMAIL,

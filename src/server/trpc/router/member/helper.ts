@@ -26,7 +26,7 @@ async function checkIfUserExist(id: string) {
  * @param email The email of the user to be sent
  * @param password The password of the user
  */
-async function sendNewUserEmail(email: string) {
+async function sendNewUserEmail(email: string, password?: string) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -49,7 +49,7 @@ async function sendNewUserEmail(email: string) {
     <p> 
       With effect from August 2023, we will be using the <a href="${env.NEXTAUTH_URL}">ATLAS HRMS</a> 
       portal to disseminate events and tasks. Before proceeding, please log into your account and 
-      fill up the form. The password to the account will be your student matriculation number. 
+      fill up the form. The password to the account will be ${password}. 
       You are <strong> strongly advised </strong> to change your password after your first login. 
     </p>
 
@@ -133,8 +133,8 @@ function buildUserObject(
  * @param users The array of users object
  * @param password The hashed password
  */
-async function sendMultipleEmails(emails: string[]) {
-  await Promise.all(emails.map(async (email) => await sendNewUserEmail(email)))
+async function sendMultipleEmails(emailData: { email: string, password: string }[]) {
+  await Promise.all(emailData.map(async (emailData) => await sendNewUserEmail(emailData.email, emailData.password)))
 }
 
 export {
