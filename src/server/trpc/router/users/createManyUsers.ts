@@ -1,12 +1,9 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
-import { randomBytes } from 'crypto'
 import { hash } from 'bcryptjs'
 
 import { sendMultipleEmails } from '../member/helper'
-import { type WriteBatch, doc, writeBatch } from 'firebase/firestore'
 import { db } from '~/server/db/firebase'
-import type { User } from '~/server/db/models/User'
 import logCollection from '~/server/db/collections/LogCollection'
 import { Timestamp, runTransaction } from 'firebase/firestore'
 import userCollection from '~/server/db/collections/UserCollection'
@@ -29,23 +26,29 @@ export const createManyUsers = protectedProcedure
   )
   .mutation(async ({ input }) => {
     try {
-      /// Filter out all the empty rows.
-      input = input.filter(user => user.student_id)
-
       return await runTransaction(db, async (transaction) => {
+        /// Step 1: Clean the data by filtering until we have the valid users.
+        const users = await userCollection.queries()        
+        const userIds = new Set(users.map(user => user.id))
+        const userEmails = new Set(users.map(user => user.email))
+        input = input.filter(user => user.student_id && !userIds.has(user.student_id) && !userEmails.has(user.nus_email))
+
+        /// Step 2: Save the data for all the valid users.
         await Promise.all(input.map(async (user) => {
           const hashedPassword = await hash(user.student_id, 10)
 
-          userCollection.withTransaction(transaction).set({
-            department: user.department,
-            email: user.nus_email,
-            hashedPassword,
-            name: user.name,
-            isAdmin: false,
-            id: user.student_id,
-            role: user.role,
-            resume: user.resume || "",
-          }, user.student_id)
+          userCollection
+            .withTransaction(transaction)
+            .set({
+              department: user.department,
+              email: user.nus_email,
+              hashedPassword,
+              name: user.name,
+              isAdmin: false,
+              id: user.student_id,
+              role: user.role,
+              resume: user.resume || "",
+            }, user.student_id)
         }))
 
         await sendMultipleEmails(input.map(user => user.nus_email))
