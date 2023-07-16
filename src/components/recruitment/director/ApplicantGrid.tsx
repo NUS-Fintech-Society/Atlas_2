@@ -66,10 +66,12 @@ const ApplicantGrid = () => {
   return (
     <>
       <div>
-        <div className=" mb-2 mt-16 ml-20 font-bold md:mt-1 lg:mt-1 lg:text-xl">
-          Number of Applicants: {totalNumber}
+        <div className="mt-20 text-center text-xl font-bold lg:mt-1 lg:ml-20 lg:text-left ">
+          {totalNumber == 1
+            ? `${totalNumber} Applicant`
+            : `${totalNumber} Applicants`}
         </div>
-        <div className="my-10  mx-20 mb-10 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-3 ">
+        <div className="mx-20 mt-5 mb-10 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-3 ">
           {filteredData?.map((applicant) => {
             return <ApplicantCard applicant={applicant} key={applicant.id} />
           })}
