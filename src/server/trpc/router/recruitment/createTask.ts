@@ -20,16 +20,14 @@ export const createTask = protectedProcedure
   .mutation(async ({ ctx, input }) => {
     try {
       await runTransaction(db, async (transaction) => {
-        
         /// Get the users in the department and the information about the user who is creating the task.
         const [usersInDepartments, taskCreator] = await Promise.all([
           userCollection.findByDepartment(input.departments),
-          userCollection.getById(ctx.session.user.id)
         ])
 
         /// Check whether the person creating the task has the permissions.
         if (!taskCreator.isAdmin) {
-          throw Error("The user does not have the permission to create task.")
+          throw Error('The user does not have the permission to create task.')
         }
 
         const taskID = 'TASK-' + taskCollection.generateRandomId()
@@ -55,14 +53,19 @@ export const createTask = protectedProcedure
               user.pendingTask = [newPendingTask]
             }
 
-            userCollection.withTransaction(transaction).update({
-              pendingTask: user.pendingTask
-            }, user.id)
+            userCollection.withTransaction(transaction).update(
+              {
+                pendingTask: user.pendingTask,
+              },
+              user.id
+            )
           }
         })
 
         /// Add the pending task into the taskCollection
-        const numberOfAdmins = usersInDepartments.filter(user => user.isAdmin).length
+        const numberOfAdmins = usersInDepartments.filter(
+          (user) => user.isAdmin
+        ).length
 
         const taskCompletionCount = usersInDepartments.length - numberOfAdmins
 
@@ -89,8 +92,8 @@ export const createTask = protectedProcedure
       })
 
       throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: (e as Error).message
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
       })
     }
   })
