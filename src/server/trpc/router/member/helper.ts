@@ -1,24 +1,6 @@
-import { TRPCError } from '@trpc/server'
-import nodemailer from 'nodemailer'
+import { transporter } from '../util/transporter'
 import { env } from '~/env/server.mjs'
 import dayjs from 'dayjs'
-import userCollection from '~/server/db/collections/UserCollection'
-
-/**
- * Validates whether the user already exists in the database
- *
- * @param email The email of the user
- * @throws {TRPCError} if the user already exists
- */
-async function checkIfUserExist(id: string) {
-  const results = await userCollection.findById(id)
-  if (results) {
-    throw new TRPCError({
-      code: 'CONFLICT',
-      message: 'The user already exists',
-    })
-  }
-}
 
 /**
  * Sends an email to the user after the account has been generated.
@@ -26,15 +8,7 @@ async function checkIfUserExist(id: string) {
  * @param email The email of the user to be sent
  * @param password The password of the user
  */
-async function sendNewUserEmail(email: string, password?: string) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: env.GMAIL,
-      pass: env.GMAIL_PASSWORD,
-    },
-  })
-
+async function sendNewUserEmail(email: string, password: string) {
   return transporter.sendMail({
     from: env.GMAIL,
     to: email,
@@ -138,7 +112,6 @@ async function sendMultipleEmails(emailData: { email: string, password: string }
 }
 
 export {
-  checkIfUserExist,
   sendNewUserEmail,
   sendMultipleEmails,
   buildUserObject,
