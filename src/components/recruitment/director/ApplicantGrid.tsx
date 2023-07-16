@@ -69,10 +69,7 @@ const ApplicantGrid = () => {
     <>
       <div>
         <div className="flex justify-center lg:justify-start">
-          <Stack
-            className="mt-20 font-bold lg:mt-1 lg:ml-20"
-            direction={['row', 'column']}
-          >
+          <Stack className="mt-20 font-bold lg:mt-1 lg:ml-20">
             <CreateApplicantsModal />
             <Text className="text-center text-xl lg:text-left">
               {totalNumber == 1
