@@ -17,7 +17,6 @@ const ApplicantSearchBar = () => {
   //do not remove this line
   const firstElement = filterArray.shift()
   const [showDropdown, setShowDropdown] = useState(false)
-  console.log(filteredRoles)
   const [selectedFilter, setSelectedFilter] = useState('')
   const [showOptions, setShowOptions] = useState(false)
   const handleFilterChange = (filter: string) => {
@@ -49,16 +48,6 @@ const ApplicantSearchBar = () => {
     if (selectedFilter === 'Status') {
       return (
         <ul className="ml-2">
-          <button
-            onClick={() => {
-              setShowOptions(false),
-                setShowDropdown(true),
-                setFilter(filter.concat(',accepted'))
-            }}
-            className="cursor-pointer px-3 py-2"
-          >
-            Accepted
-          </button>
           <button
             onClick={() => {
               setShowOptions(false),

@@ -3,6 +3,8 @@ import { applicantSearchContext } from '~/context/recruitment/ApplicantSearchPro
 import { trpc } from '~/utils/trpc'
 import ApplicantCard from './ApplicantCard'
 import InfoPopup from '~/components/recruitment/InfoPopup'
+import { Stack, Text } from '@chakra-ui/react'
+import CreateApplicantsModal from './CreateApplicantsModal'
 
 const ApplicantGrid = () => {
   const { filter, search } = useContext(applicantSearchContext)
@@ -66,10 +68,17 @@ const ApplicantGrid = () => {
   return (
     <>
       <div>
-        <div className=" mb-2 mt-16 ml-20 font-bold md:mt-1 lg:mt-1 lg:text-xl">
-          Number of Applicants: {totalNumber}
+        <div className="flex justify-center lg:justify-start">
+          <Stack className="mt-20 font-bold lg:mt-1 lg:ml-20">
+            <CreateApplicantsModal />
+            <Text className="text-center text-xl lg:text-left">
+              {totalNumber == 1
+                ? `${totalNumber} Applicant`
+                : `${totalNumber} Applicants`}
+            </Text>
+          </Stack>
         </div>
-        <div className="my-10  mx-20 mb-10 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-3 ">
+        <div className="mx-20 mt-5 mb-10 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-3 ">
           {filteredData?.map((applicant) => {
             return <ApplicantCard applicant={applicant} key={applicant.id} />
           })}

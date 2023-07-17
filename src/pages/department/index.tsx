@@ -3,15 +3,15 @@ import Head from 'next/head'
 import withAuth from '~/utils/withAuth'
 import { getSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
-import MemberGrid from '~/components/recruitment/director/MemberGrid'
-import MemberSearchProvider from '~/context/recruitment/MemberSearchProvider'
-import MemberSearchBar from '~/components/recruitment/director/MemberSearchBar'
+import MemberGrid from '~/components/department/MemberGrid'
+import MemberSearchProvider from '~/context/department/MemberSearchProvider'
+import MemberSearchBar from '~/components/department/MemberSearchBar'
 
 const MembersPage = () => {
   return (
     <>
       <Head>
-        <title>Atlas | Members </title>
+        <title>Atlas | Department </title>
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="description"

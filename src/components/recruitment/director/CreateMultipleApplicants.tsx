@@ -70,7 +70,7 @@ const CreateMultipleApplicants = () => {
         title: 'Something went wrong',
         description: (e as Error).message,
         status: 'error',
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       })
     }
@@ -80,14 +80,7 @@ const CreateMultipleApplicants = () => {
     <div className="flex flex-col">
       <Stack direction={['column']} rowGap={4}>
         <input accept=".csv" onChange={handleFile} type="file" />
-        <div className="flex flex-row">
-          <Button
-            bg="light.secondary.primary"
-            className="mr-5 text-white"
-            onClick={() => router.back()}
-          >
-            Return
-          </Button>
+        <div className="flex justify-end">
           <Button
             bg="light.secondary.primary"
             className="text-white"
@@ -95,7 +88,7 @@ const CreateMultipleApplicants = () => {
             isLoading={isLoadingAppliedRoles}
             onClick={clickHandler}
           >
-            Submit File
+            Submit
           </Button>
         </div>
       </Stack>
