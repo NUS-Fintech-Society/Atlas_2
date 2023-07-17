@@ -15,11 +15,9 @@ const CreateMultipleApplicants = () => {
   const [users, setUsers] = useState<AddApplicantsType[]>([])
   const [appliedRoles, setAppliedRoles] = useState<AddAppliedRolesType[]>([])
 
-  const { isLoading: isLoadingUsers, mutateAsync: mutateAsyncUsers } =
-    trpc.user.createManyUsers.useMutation()
   const {
     isLoading: isLoadingAppliedRoles,
-    mutateAsync: mutateAsyncAppliedRoles,
+  mutateAsync: mutateAsyncAppliedRoles,
   } = trpc.recruitment.createManyAppliedRoles.useMutation()
 
   const handleFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +36,7 @@ const CreateMultipleApplicants = () => {
               resume: item['Resume'],
             }
           })
+          console.log(39, usersFromData)
           setUsers(usersFromData)
 
           const appliedRolesFromData = results.data.map((item) => {
@@ -58,8 +57,7 @@ const CreateMultipleApplicants = () => {
   const clickHandler = useCallback(async () => {
     try {
       if (!users.length) return
-      await mutateAsyncUsers(users)
-      await mutateAsyncAppliedRoles(appliedRoles)
+      await mutateAsyncAppliedRoles({ applicants: appliedRoles, users })
       toast({
         title: 'Successfully Added!',
         description: 'You have successfully added all the applicants',
@@ -76,7 +74,7 @@ const CreateMultipleApplicants = () => {
         isClosable: true,
       })
     }
-  }, [mutateAsyncUsers, mutateAsyncAppliedRoles, toast, users, appliedRoles])
+  }, [mutateAsyncAppliedRoles, toast, users, appliedRoles])
 
   return (
     <div className="flex flex-col">
@@ -94,7 +92,7 @@ const CreateMultipleApplicants = () => {
             bg="light.secondary.primary"
             className="text-white"
             disabled={!users.length}
-            isLoading={isLoadingUsers && isLoadingAppliedRoles}
+            isLoading={isLoadingAppliedRoles}
             onClick={clickHandler}
           >
             Submit File
