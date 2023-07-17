@@ -53,6 +53,7 @@ const SingleUserForm = () => {
           id: formData.id,
           isAdmin: formData.isAdmin,
           role,
+          nus_email: formData.email,
           personal_email: formData.personal_email
         })
         toast({

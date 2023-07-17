@@ -17,6 +17,7 @@ export const createSingleUser = protectedProcedure
       name: z.string(),
       role: z.string(),
       isAdmin: z.boolean(),
+      nus_email: z.string(),
       personal_email: z.string()
     })
   )
