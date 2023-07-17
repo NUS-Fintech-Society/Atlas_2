@@ -2,6 +2,7 @@ import { trpc } from '../../utils/trpc'
 import { Box, Button, Image, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import UploadImageBtn from './UploadImageButton'
+import { useCallback } from 'react'
 
 const DEFAULT_IMAGE = '/fintech_logo.png'
 
@@ -17,7 +18,12 @@ const ProfileCard = ({
   studentId: string
 }) => {
   const router = useRouter()
-  const redirectToResetPassword = () => router.push('/profile/reset-password')
+  const { mutateAsync } = trpc.user.changePassword.useMutation()
+
+  const resetPassword = useCallback(async () => {
+    const link = await mutateAsync()
+    router.push(link)
+  }, [router, mutateAsync])
 
   const {
     isLoading,
@@ -55,7 +61,7 @@ const ProfileCard = ({
         textColor="#FFFFFF"
         variant="ghost"
         _hover={{ bg: '#97AEFF' }}
-        onClick={redirectToResetPassword}
+        onClick={resetPassword}
       >
         Reset Password
       </Button>

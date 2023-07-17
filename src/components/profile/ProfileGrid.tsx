@@ -27,8 +27,6 @@ const ProfileGrid = ({ studentId }: { studentId: string }) => {
       </div>
       <div className="h-full w-3/4 max-w-lg justify-center md:max-w-xl">
         <ProfileContactInfo user={data} refetch={refetch} />
-        {/* FOR FUTURE INTEGRATION FOR UPLOAD DOCUMENTS TO FIRESTORE */}
-        {/* <DocumentModalAdd studentId={studentId} /> */}
       </div>
     </div>
   )

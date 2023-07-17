@@ -1,24 +1,6 @@
-import { TRPCError } from '@trpc/server'
-import nodemailer from 'nodemailer'
+import { transporter } from '../util/transporter'
 import { env } from '~/env/server.mjs'
 import dayjs from 'dayjs'
-import userCollection from '~/server/db/collections/UserCollection'
-
-/**
- * Validates whether the user already exists in the database
- *
- * @param email The email of the user
- * @throws {TRPCError} if the user already exists
- */
-async function checkIfUserExist(id: string) {
-  const results = await userCollection.findById(id)
-  if (results) {
-    throw new TRPCError({
-      code: 'CONFLICT',
-      message: 'The user already exists',
-    })
-  }
-}
 
 /**
  * Sends an email to the user after the account has been generated.
@@ -26,15 +8,7 @@ async function checkIfUserExist(id: string) {
  * @param email The email of the user to be sent
  * @param password The password of the user
  */
-async function sendNewUserEmail(email: string) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: env.GMAIL,
-      pass: env.GMAIL_PASSWORD,
-    },
-  })
-
+async function sendNewUserEmail(email: string, password: string) {
   return transporter.sendMail({
     from: env.GMAIL,
     to: email,
@@ -49,7 +23,7 @@ async function sendNewUserEmail(email: string) {
     <p> 
       With effect from August 2023, we will be using the <a href="${env.NEXTAUTH_URL}">ATLAS HRMS</a> 
       portal to disseminate events and tasks. Before proceeding, please log into your account and 
-      fill up the form. The password to the account will be your student matriculation number. 
+      fill up the form. The password to the account will be ${password}. 
       You are <strong> strongly advised </strong> to change your password after your first login. 
     </p>
 
@@ -133,12 +107,11 @@ function buildUserObject(
  * @param users The array of users object
  * @param password The hashed password
  */
-async function sendMultipleEmails(emails: string[]) {
-  await Promise.all(emails.map(async (email) => await sendNewUserEmail(email)))
+async function sendMultipleEmails(emailData: { email: string, password: string }[]) {
+  await Promise.all(emailData.map(async (emailData) => await sendNewUserEmail(emailData.email, emailData.password)))
 }
 
 export {
-  checkIfUserExist,
   sendNewUserEmail,
   sendMultipleEmails,
   buildUserObject,

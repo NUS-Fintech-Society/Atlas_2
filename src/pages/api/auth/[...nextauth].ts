@@ -1,12 +1,12 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { compare } from 'bcryptjs'
+import { auth } from '~/server/db/firebase'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 import { env } from '../../../env/server.mjs'
 import type { User } from '~/server/db/models/User'
 
 import userCollection from '~/server/db/collections/UserCollection'
-import { where } from 'firebase/firestore'
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -53,27 +53,17 @@ export const authOptions: NextAuthOptions = {
             throw new Error('No email or password provided')
           }
 
-          // Step 3: Get the user by the email
-          const users = await userCollection.queries([
-            where('email', '==', email),
-          ])
+          const authenticatedUser = await signInWithEmailAndPassword(auth, email, password)
 
-          if (users.length === 0) {
-            throw Error('Invalid email or password')
-          }
+          const uid = authenticatedUser.user.uid
 
-          const user = users[0] as User
-          const isSuccess = await compare(password, user.hashedPassword)
-          if (!isSuccess) {
-            throw Error('Invalid email or password')
-          }
+          const user = await userCollection.getById(uid)
 
-          // The user object is passed to the session callback in session.data.user
           return {
-            id: user.id as string,
+            id: uid,
             department: user.department as string,
-            name: user.name,
-            email: user.email,
+            name: authenticatedUser.user.displayName,
+            email: authenticatedUser.user.email,
             isApplicant: user.role === 'Applicant',
             isAdmin: user.isAdmin,
             image: user.image || '',

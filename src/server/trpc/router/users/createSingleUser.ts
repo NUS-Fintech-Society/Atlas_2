@@ -1,11 +1,12 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
-import { hash } from 'bcryptjs'
-import { checkIfUserExist, sendNewUserEmail } from '../member/helper'
+import { sendNewUserEmail } from '../member/helper'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
-import { Timestamp, where } from 'firebase/firestore'
+import { Timestamp } from 'firebase/firestore'
 import { TRPCError } from '@trpc/server'
+import { randomUUID } from 'crypto'
+import { adminAuth } from '~/server/db/admin_firebase'
 
 export const createSingleUser = protectedProcedure
   .input(
@@ -16,39 +17,34 @@ export const createSingleUser = protectedProcedure
       name: z.string(),
       role: z.string(),
       isAdmin: z.boolean(),
+      nus_email: z.string(),
+      personal_email: z.string()
     })
   )
   .mutation(async ({ input }) => {
     try {
-      const { email, id, isAdmin, role, department, name } = input
+      const { email, id, isAdmin, role, department, name, personal_email } = input
 
-      const [hashedPassword, isValidEmail] = await Promise.all([
-        hash(id, 10),
-        userCollection
-          .queries([where('email', '==', email)])
-          .then((users) => users.length === 0),
-        checkIfUserExist(id),
-      ])
+      const password = randomUUID().substring(0, 10)
 
-      // The email should be unique.
-      if (!isValidEmail) {
-        throw new Error('The email is already in used.')
-      }
+      await adminAuth.createUser({
+        displayName: name,
+        email: personal_email,
+        password,
+        uid: id,
+      })
 
-      await userCollection.set(
-        {
+      await userCollection.set({
           id,
           department,
           email,
           isAdmin,
           name,
-          hashedPassword,
           role,
-        },
-        id
-      )
+          personal_email
+      }, id)
 
-      await sendNewUserEmail(email)
+      await sendNewUserEmail(email, password)
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),
