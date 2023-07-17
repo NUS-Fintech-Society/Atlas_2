@@ -1,6 +1,5 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
-import { hash } from 'bcryptjs'
 import { randomUUID } from 'crypto'
 import { sendMultipleEmails } from '../member/helper'
 import { db } from '~/server/db/firebase'

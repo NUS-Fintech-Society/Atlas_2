@@ -1,6 +1,5 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
-import { hash } from 'bcryptjs'
 import { sendNewUserEmail } from '../member/helper'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'

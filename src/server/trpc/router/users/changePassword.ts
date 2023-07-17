@@ -1,7 +1,6 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
-import { compare, hash } from 'bcryptjs'
 import userCollection from '~/server/db/collections/UserCollection'
 
 export const changePassword = protectedProcedure
@@ -28,7 +27,6 @@ export const changePassword = protectedProcedure
       //   })
       // }
 
-      const newPassword = await hash(password, 10)
       // await userCollection.update(id, {
       //   hashedPassword: newPassword,
       // })
