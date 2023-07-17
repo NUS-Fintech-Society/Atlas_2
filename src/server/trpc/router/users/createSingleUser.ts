@@ -18,18 +18,19 @@ export const createSingleUser = protectedProcedure
       name: z.string(),
       role: z.string(),
       isAdmin: z.boolean(),
+      personal_email: z.string()
     })
   )
   .mutation(async ({ input }) => {
     try {
-      const { email, id, isAdmin, role, department, name } = input
+      const { email, id, isAdmin, role, department, name, personal_email } = input
 
       const password = randomUUID().substring(0, 10)
-      const hashedPassword = await hash(password, 10)
+
       await adminAuth.createUser({
         displayName: name,
-        email,
-        password: hashedPassword,
+        email: personal_email,
+        password,
         uid: id,
       })
 
@@ -40,6 +41,7 @@ export const createSingleUser = protectedProcedure
           isAdmin,
           name,
           role,
+          personal_email
       }, id)
 
       await sendNewUserEmail(email, password)

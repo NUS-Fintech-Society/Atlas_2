@@ -19,6 +19,7 @@ export const createManyUsers = protectedProcedure
         nus_email: z.string(),
         role: z.string(),
         student_id: z.string(),
+        personal_email: z.string(),
         resume: z
           .string()
           .optional()
@@ -33,18 +34,17 @@ export const createManyUsers = protectedProcedure
         const users = await userCollection.queries()        
         const userIds = new Set(users.map(user => user.id))
         const userEmails = new Set(users.map(user => user.email))
-        input = input.filter(user => user.student_id && !userIds.has(user.student_id) && !userEmails.has(user.nus_email))
+        input = input.filter(user => user.student_id && !userIds.has(user.student_id) && !userEmails.has(user.personal_email))
 
         /// Step 2: Save the data for all the valid users.
         const emailData = await Promise.all(input.map(async (user) => {
           const password = randomUUID().substring(0, 10)
-          const hashedPassword = await hash(password, 10)
 
           await adminAuth.createUser({
-            email: user.nus_email,
+            email: user.personal_email,
             displayName: user.name,
             uid: user.student_id,
-            password: hashedPassword
+            password
           })
 
           userCollection
@@ -57,6 +57,7 @@ export const createManyUsers = protectedProcedure
               id: user.student_id,
               role: user.role,
               resume: user.resume || "",
+              personal_email: user.personal_email
             }, user.student_id)
 
           return {

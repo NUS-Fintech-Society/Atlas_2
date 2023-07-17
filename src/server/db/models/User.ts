@@ -8,6 +8,7 @@ export type User = {
   name: string
   role: string
   pendingTask?: Task[]
+  personal_email: string
 
   // Optional field: User can upload their image later.
   image?: string

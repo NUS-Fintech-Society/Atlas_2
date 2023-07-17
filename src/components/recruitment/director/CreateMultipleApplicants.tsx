@@ -34,6 +34,7 @@ const CreateMultipleApplicants = () => {
               nus_email: item['NUS email (xxx@u.nus.edu)'],
               role: 'Applicant',
               student_id: item['Student ID (AXXXXXXXX)'] || '',
+              personal_email: item['Gmail'],
               resume: item['Resume'],
             }
           })

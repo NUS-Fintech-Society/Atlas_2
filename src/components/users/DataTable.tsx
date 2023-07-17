@@ -34,9 +34,6 @@ const columns: ColumnDef<AddUsersType>[] = [
       columnHelper.accessor('personal_email', {
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('telegram', {
-        cell: (info) => info.getValue(),
-      }),
     ],
   }),
 ]

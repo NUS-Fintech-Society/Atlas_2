@@ -2,6 +2,8 @@ import { Navbar, Dropdown, Avatar } from 'flowbite-react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 import { useCallback } from 'react'
+import { auth } from "~/server/db/firebase"
+import { signOut as firebaseSignout } from "firebase/auth"
 
 interface TopNavbarProps {
   isAdmin: boolean
@@ -93,6 +95,7 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
 }) => {
   const logout = useCallback(async () => {
     await signOut()
+    await firebaseSignout(auth)
   }, [])
 
   return (

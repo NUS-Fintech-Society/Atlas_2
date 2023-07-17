@@ -1,24 +1,15 @@
 export type AddUsersType = {
-  date_of_birth: string
   department: string
-  discord: string
-  diet: string
-  faculty: string
-  gender: string
-  linkedin: string
-  major: string
   name: string
   nus_email: string
   personal_email: string
-  phone: string
-  race: string
   role: string
   student_id: string
-  telegram: string
   year: string
 }
 
 export type AddApplicantsType = {
+  personal_email: string
   student_id: string
   nus_email: string
   name: string
@@ -64,6 +55,7 @@ export type AddApplicantsCSVType = {
   'First Choice Role': string
   'First Choice Department': string
   'Second Choice Role': string
+  'Gmail': string
   'Second Choice Department': string
   Resume: string
 }
