@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
-import { memberSearchContext } from '~/context/recruitment/MemberSearchProvider'
+import { memberSearchContext } from '~/context/department/MemberSearchProvider'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import { useSession } from 'next-auth/react'
 import { roles } from '~/constant/roles'
@@ -15,6 +15,7 @@ const MemberSearchBar = () => {
   const { filter, setFilter, setSearch } = useContext(memberSearchContext)
   const filterArray = filter.split(',')
   //do not remove this line
+  const firstElement = filterArray.shift()
   const [showDropdown, setShowDropdown] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState('')
   const [showOptions, setShowOptions] = useState(false)
@@ -113,6 +114,7 @@ const MemberSearchBar = () => {
       </button>
       <div className="absolute top-6 left-0 mt-10 flex max-w-[250px] flex-wrap md:top-0">
         {filterArray.map((value) => {
+          console.log(filterArray)
           return (
             <div
               key={value}

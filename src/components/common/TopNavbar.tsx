@@ -30,6 +30,10 @@ const admin = [
     title: 'Recruitment',
   },
   {
+    href: '/department',
+    title: 'Department',
+  },
+  {
     href: '/tasks',
     title: 'Tasks',
   },

@@ -1,47 +1,35 @@
+import { Box, Text } from '@chakra-ui/react'
 import Head from 'next/head'
+import ApplicantSearchBar from '~/components/recruitment/director/ApplicantSearchBar'
 import withAuth from '~/utils/withAuth'
-import { Box, Button, Text } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
+import ApplicantGrid from '~/components/recruitment/director/ApplicantGrid'
+import ApplicantSearchProvider from '~/context/recruitment/ApplicantSearchProvider'
 import { getSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
 
-const RecruitmentPage = () => {
-  const router = useRouter()
+const ApplicantsPage = () => {
   return (
     <>
       <Head>
-        <title>Atlas | Recruitment</title>
+        <title>Atlas | Recruitment </title>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="The recruitment page for Atlas" />
+        <meta
+          name="description"
+          content="The applicants for Atlas recruitment"
+        />
       </Head>
-      <Box className="m-10">
-        <Text className="text-center text-4xl font-bold">Recruitment</Text>
-        <div className="px-2 sm:px-6 sm:pt-5 md:px-20 md:pt-5 lg:px-28 lg:pt-5">
-          <div className="gap x-2 my-20 mx-20 grid grid-cols-1 place-items-center gap-y-10 lg:my-10 lg:grid-cols-2 ">
-            <Button
-              bgColor="#97AEFF"
-              width={230}
-              className="mb-10 text-black"
-              onClick={() => router.push('/recruitment/members')}
-            >
-              View Department Members
-            </Button>
-            <Button
-              bgColor="#97AEFF"
-              width={230}
-              className="mb-10 text-black"
-              onClick={() => router.push('/recruitment/applicants')}
-            >
-              Manage Applicants
-            </Button>
-          </div>
-        </div>
+      <Box position="relative" mt="10" mb="10">
+        <Text className="text-center text-4xl font-bold">Applicants</Text>
+        <ApplicantSearchProvider>
+          <ApplicantSearchBar />
+          <ApplicantGrid />
+        </ApplicantSearchProvider>
       </Box>
     </>
   )
 }
 
-export default withAuth(RecruitmentPage, true)
+export default withAuth(ApplicantsPage, true)
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)

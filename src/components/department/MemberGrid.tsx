@@ -1,6 +1,6 @@
 import { Text } from '@chakra-ui/react'
 import { useContext } from 'react'
-import { memberSearchContext } from '~/context/recruitment/MemberSearchProvider'
+import { memberSearchContext } from '~/context/department/MemberSearchProvider'
 import { trpc } from '~/utils/trpc'
 import MemberCard from './MemberCard'
 

@@ -71,13 +71,13 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
   }
   return (
     <Card
-      maxWidth="xs"
+      maxWidth="280px"
       borderRadius="20"
       boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
       minHeight="310px"
     >
       <CardHeader paddingBottom="0" zIndex={1}>
-        <Heading size="md" textAlign="center" textColor="white">
+        <Heading size="md" textAlign="center" textColor="white" px="2">
           {isFlagged ? (
             <button
               className="absolute left-2"
@@ -113,10 +113,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
       <CardBody className="relative" pt="10px">
         <Stack>
           <Avatar alt="User-settings" rounded={true} size="lg" />
-          <DocumentModal
-            name={applicant.name}
-            resume={applicant.resume}
-          />
+          <DocumentModal name={applicant.name} resume={applicant.resume} />
           <Text className="text-center">
             {appliedRoles[0]?.department.toUpperCase()}
           </Text>
