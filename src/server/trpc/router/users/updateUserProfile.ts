@@ -8,6 +8,7 @@ export const updateUserProfile = protectedProcedure
     z.object({
       id: z.string(),
       name: z.string(),
+      email: z.string(),
       role: z.string(),
       department: z.string(),
     })
@@ -21,6 +22,7 @@ export const updateUserProfile = protectedProcedure
       }
 
       await userCollection.update(input.id, {
+        email: input.email,
         department: input.department,
         name: input.name,
         role: input.role,

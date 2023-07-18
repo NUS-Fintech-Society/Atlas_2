@@ -17,7 +17,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { trpc } from '~/utils/trpc'
-import { useContext, useCallback, useState } from 'react'
+import { useContext, useCallback } from 'react'
 import { ModalContext } from '~/context/ModalContext'
 import type { User } from '~/server/db/models/User'
 import { roles } from '~/constant/roles'
@@ -26,36 +26,43 @@ const EditModal = () => {
   const modal = useContext(ModalContext)
   const toast = useToast()
   const router = useRouter()
-  const [department, setDepartment] = useState('')
+
   const { register, handleSubmit } = useForm({
     mode: 'onSubmit',
   })
 
-  const { data, isLoading, refetch } = trpc.user.getUserProfile.useQuery(
+  const { data, isLoading } = trpc.user.getUserProfile.useQuery(
     modal.id
   )
   const { mutateAsync, isLoading: loading } =
     trpc.user.updateUserProfile.useMutation()
+  const { refetch } = trpc.user.getAllUsersForTable.useQuery()
 
   const onSubmit = useCallback(
     async (formData: Partial<User>) => {
       try {
-        const projData = {
+        const filteredRole = roles.find(role => role.role === formData.role)
+
+        const department = filteredRole ? filteredRole.department : data?.department
+
+        await mutateAsync({
           id: data?.id as string,
           name: formData.name as string,
           email: formData.email as string,
-          department,
+          department: department as string,
           role: formData.role as string,
-        }
-        await mutateAsync(projData)
+        })
+
         await refetch()
+
         toast({
-          duration: 9000,
+          duration: 3000,
           description: 'User has been successfully updated',
           title: 'Successfully updated',
           status: 'success',
         })
-        router.push('./')
+
+        modal.onClose()
       } catch (e) {
         toast({
           duration: 9000,
@@ -65,7 +72,7 @@ const EditModal = () => {
         })
       }
     },
-    [mutateAsync, data?.id, toast, department, refetch, router]
+    [mutateAsync, data?.id, toast, data?.department, router, refetch]
   )
 
   if (!modal.id || isLoading) return null
@@ -88,7 +95,7 @@ const EditModal = () => {
                 defaultValue={(data as User).name}
               />
 
-              <FormLabel fontWeight={'semibold'}>Email address</FormLabel>
+              <FormLabel fontWeight={'semibold'}>NUS Email</FormLabel>
               <Input
                 mb={'5'}
                 {...register('email')}
@@ -102,14 +109,6 @@ const EditModal = () => {
                 isRequired
                 defaultValue={(data as User).role}
                 {...register('role')}
-                onChange={(e) => {
-                  if (!e.target.value) return
-                  const element = roles.filter(
-                    (role) => role.role === e.target.value
-                  )
-                  if (!element || !element.length || !element[0]) return
-                  setDepartment(element[0].department)
-                }}
                 placeholder="Select role"
               >
                 {roles.map((role, index) => {
