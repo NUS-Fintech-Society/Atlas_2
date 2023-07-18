@@ -71,7 +71,7 @@ const ApplicantCard = ({ applicant }: { applicant: Applicant }) => {
   }
   return (
     <Card
-      maxWidth="280px"
+      width="280px"
       borderRadius="20"
       boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
       minHeight="310px"
