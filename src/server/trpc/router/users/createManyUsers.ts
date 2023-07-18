@@ -58,7 +58,7 @@ export async function addUsers(
       )
 
       return {
-        email: user.nus_email,
+        email: user.personal_email,
         password,
       }
     })
