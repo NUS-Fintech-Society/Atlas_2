@@ -41,9 +41,9 @@ const EditModal = () => {
   const onSubmit = useCallback(
     async (formData: Partial<User>) => {
       try {
-        const filteredRoles = roles.filter(role => role.role === formData.role)
+        const filteredRole = roles.find(role => role.role === formData.role)
 
-        const department = filteredRoles.length === 1 ? filteredRoles[0]?.department : data?.department
+        const department = filteredRole ? filteredRole.department : data?.department
 
         await mutateAsync({
           id: data?.id as string,
