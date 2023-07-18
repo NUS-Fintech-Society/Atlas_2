@@ -14,7 +14,7 @@ import type { User } from '~/server/db/models/User'
 const MemberCard = ({ member }: { member: User }) => {
   return (
     <Card
-      maxWidth="250px"
+      width="280px"
       borderRadius="20"
       boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
       minHeight="250px"
