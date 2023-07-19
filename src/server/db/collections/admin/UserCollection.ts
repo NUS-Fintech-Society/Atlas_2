@@ -1,5 +1,5 @@
-import type { User } from '../models/User'
-import { BaseCollection } from './AdminBaseCollection'
+import type { User } from '../../models/User'
+import { BaseCollection } from './BaseCollection'
 
 class UserCollection extends BaseCollection<User> {
   protected override collectionName = 'users'
