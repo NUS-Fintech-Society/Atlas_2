@@ -6,9 +6,13 @@ import { where } from 'firebase/firestore'
 export const getAllAttendanceButSelf = protectedProcedure.query(
   async ({ ctx }) => {
     try {
-      const users = await userCollection.queries([
+      const initialUsers = await userCollection.queries([
         where('id', '!=', ctx.session.user.id),
       ])
+
+      const users = initialUsers.filter((user) => {
+        return user.role !== 'Applicant' && user.department !== 'Unassigned'
+      })
 
       return users.map((user) => {
         return {

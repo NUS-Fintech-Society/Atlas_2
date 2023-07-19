@@ -12,7 +12,7 @@ export const updateUserContacts = protectedProcedure
       discord: z.string(),
       email: z.string(),
       linkedin: z.string(),
-      shirtSize: z.string(),
+      shirtSize: z.string().toUpperCase(),
       telegram: z.string(),
     })
   )

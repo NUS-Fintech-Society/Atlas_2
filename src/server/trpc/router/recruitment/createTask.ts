@@ -72,7 +72,7 @@ export const createTask = protectedProcedure
 
         const pendingTask = {
           id: taskID,
-          status: 'Incomplete',
+          status: taskCompletionCount > 0 ? 'Incomplete' : 'Done',
           due: Timestamp.fromDate(input.due),
           taskName: input.taskName,
           description: input.description,

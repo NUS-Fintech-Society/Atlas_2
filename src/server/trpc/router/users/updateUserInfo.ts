@@ -7,7 +7,7 @@ export const updateUserInfo = protectedProcedure
     z.object({
       studentId: z.string(),
       telegram: z.string(),
-      shirtSize: z.string(),
+      shirtSize: z.string().toUpperCase(),
       linkedin: z.string(),
       discord: z.string(),
       dietary: z.string(),
