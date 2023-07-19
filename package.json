@@ -10,7 +10,7 @@
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
-    "test": "yarn firebase emulators:exec --only firestore 'jest'"
+    "test": "yarn firebase emulators:exec --only firestore 'jest --detectOpenHandles --coverage'"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",

@@ -3,10 +3,9 @@ import { z } from 'zod'
 import { randomUUID } from 'crypto'
 import { sendMultipleEmails } from '../member/helper'
 import { db } from '~/server/db/admin_firebase'
-import logCollection from '~/server/db/collections/LogCollection'
-import { Timestamp } from 'firebase/firestore'
 import { adminAuth } from '~/server/db/admin_firebase'
 import { userCollection } from '~/server/db/collections/admin/UserCollection'
+import { TRPCError } from '@trpc/server'
 
 export async function addUsers(
   input: {
@@ -88,11 +87,9 @@ export const createManyUsers = protectedProcedure
     try {
       return await db.runTransaction((transaction) => addUsers(input, transaction))
     } catch (e) {
-      await logCollection.add({
-        createdAt: Timestamp.fromDate(new Date()),
-        level: 'WARNING',
-        description: (e as Error).message,
-        title: 'Error while uploading multiple users',
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: (e as Error).message
       })
     }
   })
