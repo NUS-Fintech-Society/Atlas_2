@@ -2,7 +2,7 @@ import { adminAuth } from '~/server/db/admin_firebase'
 import { userCollection } from '~/server/db/collections/admin/UserCollection'
 import { CreateManyUserController } from '~/server/trpc/router/controllers/users/create_many_user_controller'
 import { sendMultipleEmails } from '~/server/trpc/router/member/helper'
-import { dropCollection } from '../../../util/dropCollection'
+import { dropCollection } from '../../../../util/dropCollection'
 
 describe('create_many_user_controller.ts', () => {
   const controller = new CreateManyUserController()
@@ -11,6 +11,8 @@ describe('create_many_user_controller.ts', () => {
     await dropCollection('users')
     jest.clearAllMocks()
   })
+
+  test.todo("If the person calling the method does not have the permission, throw an error.")
 
   test('it should save the user.', async () => {
     const NAME = 'Michael'

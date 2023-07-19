@@ -1,11 +1,8 @@
 import { Timestamp } from 'firebase/firestore'
 import { z } from 'zod'
-import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import logCollection from '~/server/db/collections/LogCollection'
 import { protectedProcedure } from '../../trpc'
-import { appliedRoleCollection } from '~/server/db/collections/admin/AppliedRoleCollection'
-import { addUsers } from '../users/createManyUsers'
-import { db } from '~/server/db/admin_firebase'
+import { CreateManyAppliedRoleController } from '../controllers/recruitment/create_many_applied_roles_controller'
 
 export const createManyAppliedRoles = protectedProcedure
   .input(
@@ -35,40 +32,10 @@ export const createManyAppliedRoles = protectedProcedure
       ),
     })
   )
-  .mutation(async ({ input }) => {
+  .mutation(async ({ input: { users, applicants } }) => {
     try {
-      return await db.runTransaction(async (transaction) => {
-        // Filter away the empty rows
-        input.users = input.users.filter((user) => user.student_id)
-
-        const usersCreated = await addUsers(input.users, transaction)
-
-        input.applicants = input.applicants.filter((applicant) =>
-          usersCreated.includes(applicant.applicantId)
-        )
-
-        input.applicants.forEach((appliedRole) => {
-          /// Upload first choice
-          appliedRoleCollection.withTransaction(transaction).set({
-            applicantId: appliedRole.applicantId,
-            rank: 1,
-            role: appliedRole.firstRole,
-            department: appliedRole.firstDepartment,
-            status: ApplicationStatus.PENDING,
-            flag: false,
-          })
-
-          /// Upload second choice
-          appliedRoleCollection.withTransaction(transaction).set({
-            applicantId: appliedRole.applicantId,
-            rank: 2,
-            role: appliedRole.secondRole,
-            department: appliedRole.secondDepartment,
-            status: ApplicationStatus.PENDING,
-            flag: false,
-          })
-        })
-      })
+      const contoller = new CreateManyAppliedRoleController()
+      return await contoller.execute(applicants, users)
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),
