@@ -16,6 +16,7 @@ import type { AppliedRole } from '~/server/db/models/AppliedRole'
 import { trpc } from '~/utils/trpc'
 import { delay } from '~/utils/common'
 import { useRouter } from 'next/router'
+import { Actor } from '~/constant/actor'
 
 const AcceptRejectRoleModal = ({
   applicantId,
@@ -42,12 +43,13 @@ const AcceptRejectRoleModal = ({
         decision === 'accept'
           ? ApplicationStatus.ACCEPTED
           : ApplicationStatus.REJECTED
-  
+
       // Update the appliedRole and the user information
       await mutateAppliedRoleAsync({
         status: status,
         appliedRoleId: appliedRole.id,
-        applicantId
+        applicantId,
+        actor: Actor.APPLICANT,
       })
 
       await refetch()

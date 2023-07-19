@@ -24,6 +24,7 @@ import { trpc } from '~/utils/trpc'
 import { useState } from 'react'
 import type { Applicant } from '~/server/db/models/Applicant'
 import type { AppliedRole } from '~/server/db/models/AppliedRole'
+import { Actor } from '~/constant/actor'
 
 const statusFillMap = {
   [ApplicationStatus.ACCEPTED]: '#46FFDE',
@@ -62,7 +63,8 @@ const StatusPopup = ({
       await mutateAsync({
         status: status,
         appliedRoleId: appliedRole.id,
-        applicantId: applicant.id
+        applicantId: applicant.id,
+        actor: Actor.DIRECTOR,
       })
       await refetch()
       setCurrentStatus(status)

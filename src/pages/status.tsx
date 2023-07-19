@@ -7,6 +7,7 @@ import InfoPopup from '~/components/recruitment/InfoPopup'
 import AppliedRolesList from '~/components/recruitment/applicant/AppliedRolesList'
 import { getSession } from 'next-auth/react'
 import type { GetServerSidePropsContext } from 'next'
+import { Actor } from '~/constant/actor'
 
 const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
   return (
@@ -38,6 +39,7 @@ const ApplicationStatusPage: React.FC<BaseProps> = ({ session }) => {
               iconColor="black"
               className="absolute right-20 bottom-40"
               popoverPlacement="left"
+              view={Actor.APPLICANT}
             />
           </Center>
         </div>

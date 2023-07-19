@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer'
 import { env } from '~/env/server.mjs'
 
 /**
- * Sends an email to the applicant after getting accepted
+ * Sends an email to the applicant after getting offer from director
  *
  * @param email The email of the applicant to be sent
  * @param name The name of the applicant
@@ -44,7 +44,7 @@ export async function sendOfferEmail(
 }
 
 /**
- * Sends an email to the applicant after getting rejected
+ * Sends an email to the applicant after getting rejected by director
  *
  * @param email The email of the applicant to be sent
  * @param name The name of the applicant
@@ -79,6 +79,47 @@ export async function sendRejectionEmail(
     our needs and requirements more closely at this time. 
     Thank you again for your interest and please do not 
     hesitate to re-apply again in the future!
+    </p>
+    <a href="${env.NEXTAUTH_URL}">HRMS Website</a>
+    <br />
+    Thank You. <br /> 
+    Fintech HR
+    `,
+  })
+}
+
+/**
+ * Sends an email to the applicant after applicant accepts the role
+ *
+ * @param email The email of the applicant to be sent
+ * @param name The name of the applicant
+ * @param appliedRole The applied role of the applicant
+ * @param appliedDepartmnet The accompanying department for the applied role
+ */
+export async function sendAcceptanceEmail(
+  email: string,
+  name: string,
+  appliedRole: string,
+  appliedDepartment: string
+) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: env.GMAIL,
+      pass: env.GMAIL_PASSWORD,
+    },
+  })
+
+  return transporter.sendMail({
+    from: env.GMAIL,
+    to: email,
+    subject: `You're now a member of Fintech Society!`,
+    html: `
+    Dear ${name},
+    <br />
+    <p> Thank you for accepting the role of ${appliedRole} in the ${appliedDepartment} 
+    department. You are now an official member of the society! We hope that you would
+    enjoy your experience here.
     </p>
     <a href="${env.NEXTAUTH_URL}">HRMS Website</a>
     <br />
