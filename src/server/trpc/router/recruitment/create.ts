@@ -1,11 +1,11 @@
-import { runTransaction, Timestamp } from 'firebase/firestore'
+import { Timestamp } from 'firebase/firestore'
 import { z } from 'zod'
-import { db } from '~/server/db/firebase'
 import { ApplicationStatus } from '~/server/db/models/AppliedRole'
 import logCollection from '~/server/db/collections/LogCollection'
 import { protectedProcedure } from '../../trpc'
-import appliedRoleCollection from '~/server/db/collections/AppliedRoleCollection'
+import { appliedRoleCollection } from '~/server/db/collections/admin/AppliedRoleCollection'
 import { addUsers } from '../users/createManyUsers'
+import { db } from '~/server/db/admin_firebase'
 
 export const createManyAppliedRoles = protectedProcedure
   .input(
@@ -37,34 +37,36 @@ export const createManyAppliedRoles = protectedProcedure
   )
   .mutation(async ({ input }) => {
     try {
-      return await runTransaction(db, async (transaction) => {
-        input.users = input.users.filter(user => user.student_id)
+      return await db.runTransaction(async (transaction) => {
+        // Filter away the empty rows
+        input.users = input.users.filter((user) => user.student_id)
 
-        await addUsers(input.users, transaction)
+        const usersCreated = await addUsers(input.users, transaction)
+
+        input.applicants = input.applicants.filter((applicant) =>
+          usersCreated.includes(applicant.applicantId)
+        )
+
         input.applicants.forEach((appliedRole) => {
           /// Upload first choice
-          const id_one = appliedRoleCollection.generateRandomId()
           appliedRoleCollection.withTransaction(transaction).set({
             applicantId: appliedRole.applicantId,
-            id: id_one,
             rank: 1,
             role: appliedRole.firstRole,
             department: appliedRole.firstDepartment,
             status: ApplicationStatus.PENDING,
             flag: false,
-          }, id_one)
+          })
 
           /// Upload second choice
-          const id_two = appliedRoleCollection.generateRandomId()
           appliedRoleCollection.withTransaction(transaction).set({
             applicantId: appliedRole.applicantId,
             rank: 2,
-            id: id_two,
             role: appliedRole.secondRole,
             department: appliedRole.secondDepartment,
             status: ApplicationStatus.PENDING,
             flag: false,
-          }, id_two)
+          })
         })
       })
     } catch (e) {

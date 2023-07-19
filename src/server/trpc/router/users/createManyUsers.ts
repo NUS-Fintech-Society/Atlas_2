@@ -2,11 +2,11 @@ import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
 import { randomUUID } from 'crypto'
 import { sendMultipleEmails } from '../member/helper'
-import { db } from '~/server/db/firebase'
+import { db } from '~/server/db/admin_firebase'
 import logCollection from '~/server/db/collections/LogCollection'
-import { Timestamp, type Transaction, runTransaction } from 'firebase/firestore'
-import userCollection from '~/server/db/collections/UserCollection'
+import { Timestamp } from 'firebase/firestore'
 import { adminAuth } from '~/server/db/admin_firebase'
+import { userCollection } from '~/server/db/collections/admin/UserCollection'
 
 export async function addUsers(
   input: {
@@ -18,12 +18,12 @@ export async function addUsers(
     student_id: string
     resume?: string | undefined
   }[],
-  transaction: Transaction
+  transaction: FirebaseFirestore.Transaction
 ) {
   /// Step 1: Clean the data by filtering until we have the valid users.
-  const users = await userCollection.queries()
+  const users = await userCollection.getAll()
   const userIds = new Set(users.map((user) => user.id))
-  const userEmails = new Set(users.map((user) => user.email))
+  const userEmails = new Set(users.map((user) => user.personal_email))
   input = input.filter(
     (user) =>
       user.student_id &&
@@ -43,21 +43,19 @@ export async function addUsers(
         password,
       })
 
-      userCollection.withTransaction(transaction).set(
-        {
-          department: user.department,
-          email: user.nus_email,
-          name: user.name,
-          isAdmin: false,
-          id: user.student_id,
-          role: user.role,
-          resume: user.resume || '',
-          personal_email: user.personal_email,
-        },
-        user.student_id
-      )
+      userCollection.withTransaction(transaction).set({
+        department: user.department,
+        email: user.nus_email,
+        name: user.name,
+        isAdmin: false,
+        id: user.student_id,
+        role: user.role,
+        resume: user.resume || '',
+        personal_email: user.personal_email,
+      }, user.student_id)
 
       return {
+        id: user.student_id,
         email: user.personal_email,
         password,
       }
@@ -65,6 +63,8 @@ export async function addUsers(
   )
 
   await sendMultipleEmails(emailData)
+
+  return emailData.map(data => data.id)
 }
 
 export const createManyUsers = protectedProcedure
@@ -86,7 +86,7 @@ export const createManyUsers = protectedProcedure
   )
   .mutation(async ({ input }) => {
     try {
-      return await runTransaction(db, (transaction) => addUsers(input, transaction))
+      return await db.runTransaction((transaction) => addUsers(input, transaction))
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),
