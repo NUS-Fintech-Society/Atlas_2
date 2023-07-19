@@ -25,6 +25,11 @@ export class CreateManyAppliedRoleController {
     return await db.runTransaction(async (transaction) => {
       // Filter away the empty rows
       users = users.filter((user) => user.student_id)
+      
+      // Give all the users an unassigned department and applicant role
+      users = users.map((user) => {
+        return { ...user, department: 'Unassigned', role: 'Applicant' }
+      })
 
       const controller = new CreateManyUserController()
 
