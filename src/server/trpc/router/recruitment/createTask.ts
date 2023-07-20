@@ -58,7 +58,7 @@ export const createTask = protectedProcedure
               {
                 pendingTask: user.pendingTask,
               },
-              user.id as string
+              user.id
             )
           }
         })

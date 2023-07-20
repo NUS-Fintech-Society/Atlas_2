@@ -62,7 +62,7 @@ const StatusPopup = ({
       })
       await mutateAsync({
         status: status,
-        appliedRoleId: appliedRole.id as string,
+        appliedRoleId: appliedRole.id,
         applicantId: applicant.id,
         actor: Actor.DIRECTOR,
       })

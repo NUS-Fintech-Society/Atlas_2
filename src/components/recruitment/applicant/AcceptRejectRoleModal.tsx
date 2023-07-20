@@ -47,7 +47,7 @@ const AcceptRejectRoleModal = ({
       // Update the appliedRole and the user information
       await mutateAppliedRoleAsync({
         status: status,
-        appliedRoleId: appliedRole.id as string,
+        appliedRoleId: appliedRole.id,
         applicantId,
         actor: Actor.APPLICANT,
       })
