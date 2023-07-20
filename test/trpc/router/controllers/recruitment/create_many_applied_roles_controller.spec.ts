@@ -15,9 +15,9 @@ describe('create_many_applied_roles_controller', () => {
 
   const applicant_one = {
     name: NAME,
-    department: '',
+    department: 'Unassigned',
     personal_email: PERSONAL_EMAIL,
-    role: '',
+    role: 'Applicant',
   }
 
   afterEach(async () => {
