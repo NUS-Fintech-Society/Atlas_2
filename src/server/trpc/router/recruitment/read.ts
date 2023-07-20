@@ -33,7 +33,7 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
           // Role 1 and 2 from same department
           if (appliedRoles.length > 1) {
             applicantsWithRoles.push({
-              id: applicant?.id as string,
+              id: applicant?.id,
               email: applicant?.email,
               name: applicant?.name,
               appliedRoles: appliedRoles,
@@ -44,7 +44,7 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
             // if 1st choice, add in
             if (appliedRoles[0]?.rank == 1) {
               applicantsWithRoles.push({
-                id: applicant?.id as string,
+                id: applicant?.id,
                 email: applicant?.email,
                 name: applicant?.name,
                 appliedRoles: appliedRoles,
@@ -58,7 +58,7 @@ export const getAllApplicantsTopRoleByDept = protectedProcedure
               ])
               if (otherAppliedRoles[0]?.status === ApplicationStatus.REJECTED) {
                 applicantsWithRoles.push({
-                  id: applicant?.id as string,
+                  id: applicant?.id,
                   email: applicant?.email,
                   name: applicant?.name,
                   appliedRoles: appliedRoles,

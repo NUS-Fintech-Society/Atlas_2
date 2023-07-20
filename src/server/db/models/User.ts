@@ -4,7 +4,7 @@ export type User = {
   department: string
   email: string
   isAdmin: boolean
-  id?: string
+  id: string
   name: string
   role: string
   pendingTask?: Task[]

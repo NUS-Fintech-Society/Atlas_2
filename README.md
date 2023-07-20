@@ -1,51 +1,28 @@
-# Project ATLAS HRMS
+# Create T3 App
 
-This is the repository for the HRMS used by ATLAS which is used by the whole NUS Fintech Society.
+This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-## Tech Stack
+## What's next? How do I make an app with this?
 
-1. Cloud Firestore
-2. Firebase Authentication
-3. Tailwind
-4. TRPC
-5. Chakra UI
-6. NextJS
+We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 
-## Getting Started
+If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
 
-1. Ensure that you have the updated `.env` file and that you are added to the Firebase Project. Contact the Tech Lead to do so.
-2. Install the necessary dependencies using the following command. Please do not use npm.
+- [Next.js](https://nextjs.org)
+- [NextAuth.js](https://next-auth.js.org)
+- [Prisma](https://prisma.io)
+- [Tailwind CSS](https://tailwindcss.com)
+- [tRPC](https://trpc.io)
 
-```bash
-yarn install
-```
+## Learn More
 
-## How can I contribute
+To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
 
-### Backend
+- [Documentation](https://create.t3.gg/)
+- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-1. We will be following structure. Under `/src/server/trpc/router/controllers` under the corresponding feature directory, create the corresponding controller with the neccessary methods. We are using OOP for abstraction and encapsulation.
+You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-2. Write unit tests for the following code under `/test/trpc/router/controllers`.
+## How do I deploy this?
 
-3. Execute the following command to ensure that the unit test works.
-
-```bash
-yarn test
-```
-
-You need to have Java 11 to open the emulator.
-
-### Prior to Pull Request
-
-1.Make sure your code can build by running
-
-```bash
-yarn build
-```
-
-2. Ensure that all unit tests passes.
-
-```bash
-yarn test
-```
+Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
