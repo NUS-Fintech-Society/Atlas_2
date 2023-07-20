@@ -1,6 +1,6 @@
 export type AppliedRole = {
   applicantId: string
-  id: string
+  id?: string
   rank: Rank
   department: string
   interviewNotes?: string
