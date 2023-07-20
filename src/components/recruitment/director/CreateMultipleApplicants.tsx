@@ -6,11 +6,9 @@ import type {
   AddAppliedRolesType,
   AddApplicantsCSVType,
 } from '~/types/admin.type'
-import { useRouter } from 'next/router'
 import { useState, useCallback } from 'react'
 
 const CreateMultipleApplicants = () => {
-  const router = useRouter()
   const toast = useToast()
   const [users, setUsers] = useState<AddApplicantsType[]>([])
   const [appliedRoles, setAppliedRoles] = useState<AddAppliedRolesType[]>([])

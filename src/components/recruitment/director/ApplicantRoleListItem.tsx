@@ -13,7 +13,7 @@ const ApplicantRoleListItem = ({
   appliedRole: AppliedRole
 }) => {
   const { refetch } = trpc.recruitment.getAppliedRoleByRoleId.useQuery(
-    appliedRole.id
+    appliedRole.id as string
   )
   return (
     <ListItem className="flex items-center justify-between">
@@ -27,7 +27,7 @@ const ApplicantRoleListItem = ({
           refetch={refetch}
         />
         <NoteModal
-          appliedRoleId={appliedRole.id}
+          appliedRoleId={appliedRole.id as string}
           interviewNotes={appliedRole.interviewNotes}
           refetch={refetch}
         />
