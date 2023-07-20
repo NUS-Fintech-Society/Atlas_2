@@ -13,17 +13,20 @@ import {
 } from '@chakra-ui/react'
 import type { PlacementWithLogical } from '@chakra-ui/react'
 import { BsCircleFill } from 'react-icons/bs'
+import { Actor } from '~/constant/actor'
 
 const InfoPopup = ({
   iconBgColor,
   iconColor,
   className,
   popoverPlacement,
+  view,
 }: {
   iconBgColor: string
   iconColor: string
   className: string
   popoverPlacement: PlacementWithLogical | undefined
+  view: Actor
 }) => {
   return (
     <Box className={className}>
@@ -42,10 +45,12 @@ const InfoPopup = ({
         <PopoverContent rootProps={{ style: { right: 0 } }} width="200px">
           <PopoverBody>
             <UnorderedList styleType="none" spacing="2">
-              <ListItem className="flex items-center">
-                <Icon as={BsCircleFill} marginRight="2" fill="#46FFDE" />
-                <Text>Accepted</Text>
-              </ListItem>
+              {view === Actor.APPLICANT && (
+                <ListItem className="flex items-center">
+                  <Icon as={BsCircleFill} marginRight="2" fill="#46FFDE" />
+                  <Text>Accepted</Text>
+                </ListItem>
+              )}
               <ListItem className="flex items-center">
                 <Icon as={BsCircleFill} marginRight="2" fill="#0038FF" />
                 <Text>Offered</Text>

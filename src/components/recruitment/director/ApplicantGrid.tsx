@@ -5,6 +5,7 @@ import ApplicantCard from './ApplicantCard'
 import InfoPopup from '~/components/recruitment/InfoPopup'
 import { Stack, Text } from '@chakra-ui/react'
 import CreateApplicantsModal from './CreateApplicantsModal'
+import { Actor } from '~/constant/actor'
 
 const ApplicantGrid = () => {
   const { filter, search } = useContext(applicantSearchContext)
@@ -91,6 +92,7 @@ const ApplicantGrid = () => {
           iconColor="white"
           className="bottom-50 absolute right-10"
           popoverPlacement="left"
+          view={Actor.DIRECTOR}
         />
       )}
     </>
