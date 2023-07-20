@@ -36,7 +36,6 @@ const CreateMultipleApplicants = () => {
               resume: item['Resume'],
             }
           })
-          console.log(39, usersFromData)
           setUsers(usersFromData)
 
           const appliedRolesFromData = results.data.map((item) => {
