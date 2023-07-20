@@ -41,7 +41,7 @@ export const updateTaskOfUser = protectedProcedure
               /// If he has the current task in the pending task, we update it with the status of the input.
               userCollection.withTransaction(transaction).update({
                 pendingTask: updatedPendingTasks
-              }, user.id)
+              }, user.id as string)
 
               /// We update the number of people who have completed the task by decrementing it by 1
               /// if there is a need to update it. We can also update the status once it is set to 0.
