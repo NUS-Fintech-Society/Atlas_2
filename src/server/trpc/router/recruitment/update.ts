@@ -84,6 +84,13 @@ function updateStatusAndRole(
             appliedRole.role,
             appliedRole.department
           )
+        } else if (status === ApplicationStatus.REJECTED) {
+          await sendRejectionEmail(
+            applicant.personal_email,
+            applicant.name,
+            appliedRole.role,
+            appliedRole.department
+          )
         }
         break
       default:

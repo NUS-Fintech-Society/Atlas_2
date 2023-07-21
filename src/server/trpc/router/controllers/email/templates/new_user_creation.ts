@@ -1,8 +1,8 @@
-import { sendEmail } from "../email";
-import { env } from "~/env/server.mjs";
+import { sendEmail } from '../email'
+import { env } from '~/env/server.mjs'
 
 function buildBody(password: string) {
-    return `
+  return `
     Dear User,
     <h2> Welcome to the NUS Fintech Society! </h2>
     <p> Here are a few items to take note of as you get started on your journey with us. </p>
@@ -40,16 +40,11 @@ function buildBody(password: string) {
     <p>Telegram Department Channel (Private & Informal): Once you have completed your submission of details you will be added to the telegram group.</p>
 
     <br />
-    <strong style="color:#0d5295">Warmest Regards</strong>
-    <strong style="color:#0d5295">TAY Han (Mr.) & Ian (Mr.)</strong>
-    <p style="color:#0d5295">Co-Director (Internal Affairs) | NUS FinTech Society</p>
+    <strong style="color:#0d5295">Warmest Regards\n</strong>
+    <p style="color:#0d5295">NUS FinTech Society</p>
     `
 }
 
 export async function sendNewMemberEmail(recipient: string, password: string) {
-    await sendEmail(
-        recipient,
-        "Welcome to Fintech Society!",
-        buildBody(password)
-    )
+  await sendEmail(recipient, 'Welcome to Fintech Society!', buildBody(password))
 }

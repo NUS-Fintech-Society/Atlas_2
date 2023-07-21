@@ -1,8 +1,8 @@
-import { env } from "~/env/server.mjs";
-import { sendEmail } from "../email";
+import { env } from '~/env/server.mjs'
+import { sendEmail } from '../email'
 
 function buildBody(email: string, password: string) {
-    return `
+  return `
     Dear User, <br />
 
     <h2> Thank you for applying to NUS Fintech Society! </h2>
@@ -32,16 +32,11 @@ function buildBody(email: string, password: string) {
     </p>
 
     <br />
-    <strong style="color:#0d5295">Warmest Regards</strong>
-    <strong style="color:#0d5295">TAY Han (Mr.) & Ian (Mr.)</strong>
-    <p style="color:#0d5295">Co-Director (Internal Affairs) | NUS FinTech Society</p>
+    <strong style="color:#0d5295">Warmest Regards\n</strong>
+    <p style="color:#0d5295">NUS FinTech Society</p>
     `
 }
 
 export async function sendNewApplicantEmail(email: string, password: string) {
-    await sendEmail(
-        email, 
-        "New Account Created!",
-        buildBody(email, password)
-    )
+  await sendEmail(email, 'New Account Created!', buildBody(email, password))
 }

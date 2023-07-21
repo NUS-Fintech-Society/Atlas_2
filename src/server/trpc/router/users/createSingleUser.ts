@@ -18,12 +18,13 @@ export const createSingleUser = protectedProcedure
       role: z.string(),
       isAdmin: z.boolean(),
       nus_email: z.string(),
-      personal_email: z.string()
+      personal_email: z.string(),
     })
   )
   .mutation(async ({ input }) => {
     try {
-      const { email, id, isAdmin, role, department, name, personal_email } = input
+      const { email, id, isAdmin, role, department, name, personal_email } =
+        input
 
       const password = randomUUID().substring(0, 10)
 
@@ -34,17 +35,20 @@ export const createSingleUser = protectedProcedure
         uid: id,
       })
 
-      await userCollection.set({
+      await userCollection.set(
+        {
           id,
           department,
           email,
           isAdmin,
           name,
           role,
-          personal_email
-      }, id)
+          personal_email,
+        },
+        id
+      )
 
-      await sendNewMemberEmail(email, password)
+      await sendNewMemberEmail(personal_email, password)
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),
