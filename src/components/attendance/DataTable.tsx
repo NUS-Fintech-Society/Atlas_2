@@ -151,7 +151,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, columns }) => {
                     key={cell.id}
                     isNumeric={meta?.isNumeric}
                     onClick={() => {
-                      setId(cell.row.original.id)
+                      setId(cell.row.original.id as string)
                       onOpen()
                     }}
                   >

@@ -27,8 +27,8 @@ export const getEventForUser = protectedProcedure
 
       return {
         ...event,
-        startDate: event.startDate.toDate(),
-        endDate: event.endDate.toDate(),
+        startDate: (event.startDate as Timestamp).toDate(),
+        endDate: (event.endDate as Timestamp).toDate(),
         isAttendanceRequired,
         hasUserMarkedAttendance,
       }

@@ -47,24 +47,23 @@ const AttendancePage = () => {
     }),
     columnHelper.accessor(
       (row) => ({
-        total_attendees: row.total_attendees,
-        total_users: row.total_users,
+        attendees: row.attendees,
       }),
       {
         cell: (info) => {
           return (
             <div>
               <p className="mb-2">
-                {info.getValue().total_attendees.toString()}/
-                {info.getValue().total_users.toString()}
+                {info.getValue().attendees.filter(attendee => attendee.attended).length}/
+                {info.getValue().attendees.length}
               </p>
               <Progress
                 rounded="md"
                 background="#4365DD"
                 colorScheme="progress"
                 value={
-                  (Number(info.getValue().total_attendees.toString()) /
-                    Number(info.getValue().total_users.toString())) *
+                  (Number(info.getValue().attendees.filter(attendee => attendee.attended).length) /
+                    Number(info.getValue().attendees.length)) *
                   100
                 }
               ></Progress>

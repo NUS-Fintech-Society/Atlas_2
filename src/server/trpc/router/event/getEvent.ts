@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server'
 import eventCollection from '~/server/db/collections/EventCollection'
 import { toDataURL } from 'qrcode'
 import { env } from '~/env/server.mjs'
+import type { Timestamp } from 'firebase/firestore'
 
 export const getEvent = protectedProcedure
   .input(z.string())
@@ -21,12 +22,11 @@ export const getEvent = protectedProcedure
         qr_code = await toDataURL(
           `${env.DOMAIN}/events/attendance/${event.id as string}`
         )
-        console.log(qr_code)
       }
 
       return {
         attendees: attendees.length,
-        endDate: event.endDate.toDate(),
+        endDate: (event.endDate as Timestamp).toDate(),
         id: event.id,
         invitedAttendees: event.invitedAttendees.map((attendee) => ({
           attended: attendee.attended,
@@ -39,7 +39,7 @@ export const getEvent = protectedProcedure
         showup: event.attendees,
         qr_code,
         departments: event.departments,
-        startDate: event.startDate.toDate(),
+        startDate: (event.startDate as Timestamp).toDate(),
       }
     } catch (e) {
       throw new TRPCError({

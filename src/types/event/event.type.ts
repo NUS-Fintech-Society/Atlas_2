@@ -1,11 +1,11 @@
+import type User from "~/server/db/models/Event"
+
 export type EventInfos = {
-  number: string
+  endDate: Date
+  id: string | undefined
   name: string
-  id: string
-  total_users: string
-  total_attendees: string
-  startDate: string
-  endDate: string
+  startDate: Date
+  attendees: User[]
 }
 
 export interface BodyProps {

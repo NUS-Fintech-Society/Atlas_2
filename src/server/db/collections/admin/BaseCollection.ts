@@ -59,6 +59,14 @@ export abstract class BaseCollection<T extends FirebaseFirestore.DocumentData> {
     })
   }
 
+  async find(id: string) {
+    const result = await this.collection.doc(id).get()
+
+    if (!result.exists) return undefined
+
+    return { ...(result.data() as T), id }
+  }
+
   withTransaction(transaction: FirebaseFirestore.Transaction) {
     return {
       get: (id: string) => transaction.get(this.collection.doc(id)),
