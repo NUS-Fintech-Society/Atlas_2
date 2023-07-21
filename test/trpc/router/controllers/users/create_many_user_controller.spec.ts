@@ -5,16 +5,17 @@ import { sendMultipleEmails } from '~/server/trpc/router/member/helper'
 import { dropCollection } from '../../../../util/dropCollection'
 
 describe('create_many_user_controller.ts', () => {
-  const controller = new CreateManyUserController()
-
   afterEach(async () => {
     await dropCollection('users')
     jest.clearAllMocks()
   })
 
-  test.todo("If the person calling the method does not have the permission, throw an error.")
+  test.todo(
+    'If the person calling the method does not have the permission, throw an error.'
+  )
 
   test('it should save the user.', async () => {
+    const controller = new CreateManyUserController()
     const NAME = 'Michael'
     const STUDENT_ID = 'A1234567N'
     const EMAIL = 'abc@gmail.com'
@@ -26,13 +27,16 @@ describe('create_many_user_controller.ts', () => {
       role: 'Software Engineer',
     }
 
-    await controller.execute([
-      {
-        ...applicant,
-        student_id: STUDENT_ID,
-        nus_email: 'michaelyeo@u.nus.edu',
-      },
-    ])
+    await controller.execute(
+      [
+        {
+          ...applicant,
+          student_id: STUDENT_ID,
+          nus_email: 'michaelyeo@u.nus.edu',
+        },
+      ],
+      'woowenjun99@gmail.com'
+    )
 
     expect(adminAuth.createUser).toBeCalledTimes(1)
 

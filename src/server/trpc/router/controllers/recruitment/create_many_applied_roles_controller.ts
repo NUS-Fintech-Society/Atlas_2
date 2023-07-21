@@ -20,7 +20,8 @@ export class CreateManyAppliedRoleController {
       student_id: string
       personal_email: string
       resume?: string | undefined
-    }[]
+    }[],
+    recipient: string
   ) {
     return await db.runTransaction(async (transaction) => {
       // Filter away the empty rows
@@ -28,14 +29,13 @@ export class CreateManyAppliedRoleController {
       
       const controller = new CreateManyUserController()
 
-      const usersCreated = await controller.execute(users, transaction)
+      const usersCreated = await controller.execute(users, recipient)
 
       applicants = applicants.filter((applicant) =>
         usersCreated.includes(applicant.applicantId)
       )
 
       applicants.forEach((appliedRole) => {
-        /// Upload first choice
         appliedRoleCollection.withTransaction(transaction).set({
           applicantId: appliedRole.applicantId,
           rank: 1,

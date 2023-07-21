@@ -18,7 +18,7 @@ const CreateMultipleUsers = () => {
       parse(e.target.files[0], {
         header: true,
         complete: (results: ParseResult<AddUsersCSVType>) => {
-          const items = results.data.map((item) => {
+          const items = results.data.filter(d => d['Student ID (AXXXXXXXX)']).map((item) => {
             return {
               department: item['Department'] || '',
               name: item['Full Name'],
