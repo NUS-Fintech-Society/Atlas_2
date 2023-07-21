@@ -20,10 +20,10 @@ export const createManyUsers = protectedProcedure
       }) // resume: to aid in applicants creation through csv upload
     )
   )
-  .mutation(async ({ input }) => {
+  .mutation(async ({ input, ctx }) => {
     try {
       const controller = new CreateManyUserController()
-      return await controller.execute(input)
+      return await controller.execute(input, ctx.session.user.email as string)
     } catch (e) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",

@@ -32,7 +32,7 @@ describe('create_many_user_controller.ts', () => {
         student_id: STUDENT_ID,
         nus_email: 'michaelyeo@u.nus.edu',
       },
-    ])
+    ], "woowenjun99@gmail.com")
 
     expect(adminAuth.createUser).toBeCalledTimes(1)
 

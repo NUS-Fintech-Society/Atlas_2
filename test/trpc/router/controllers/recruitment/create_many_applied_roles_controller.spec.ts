@@ -47,7 +47,7 @@ describe('create_many_applied_roles_controller', () => {
           nus_email: 'wenjun@u.nus.edu',
           student_id: STUDENT_ID,
         },
-      ]
+      ], "woowenjun99@gmail.com"
     )
 
     await expect(userCollection.getById(STUDENT_ID)).resolves.toStrictEqual({
@@ -115,7 +115,7 @@ describe('create_many_applied_roles_controller', () => {
             nus_email: 'wenjun@u.nus.edu',
             student_id: STUDENT_ID,
           },
-        ]
+        ], "woowenjun99@gmail.com"
       )
     ).resolves
 

@@ -32,10 +32,10 @@ export const createManyAppliedRoles = protectedProcedure
       ),
     })
   )
-  .mutation(async ({ input: { users, applicants } }) => {
+  .mutation(async ({ input: { users, applicants }, ctx }) => {
     try {
       const contoller = new CreateManyAppliedRoleController()
-      return await contoller.execute(applicants, users)
+      return await contoller.execute(applicants, users, ctx.session.user.email as string)
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),
