@@ -5,6 +5,7 @@ import { dropCollection } from '../../../../util/dropCollection'
 import { appliedRoleCollection } from '~/server/db/collections/admin/AppliedRoleCollection'
 import { sendEmail } from '~/server/trpc/router/controllers/email/email'
 import { sendNewMemberEmail } from '~/server/trpc/router/controllers/email/templates/new_user_creation'
+import { sendNewApplicantEmail } from '~/server/trpc/router/controllers/email/templates/new_applicant_creation'
 
 describe('create_many_applied_roles_controller', () => {
   /// Mock Applicant One
@@ -71,7 +72,7 @@ describe('create_many_applied_roles_controller', () => {
       uid: STUDENT_ID,
     })
 
-    expect(sendNewMemberEmail).toBeCalledTimes(1)
+    expect(sendNewApplicantEmail).toBeCalledTimes(1)
 
     const userAppliedRoles = await appliedRoleCollection.getAll()
 

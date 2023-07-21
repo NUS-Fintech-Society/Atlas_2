@@ -4,6 +4,7 @@ import { adminAuth } from '~/server/db/admin_firebase'
 import { userCollection } from '~/server/db/collections/admin/UserCollection'
 import { createMultipleUserFailureEmail } from '../email/templates/create_multiple_users_failure'
 import { sendNewMemberEmail } from '../email/templates/new_user_creation'
+import { sendNewApplicantEmail } from '../email/templates/new_applicant_creation'
 
 type CreateMultipleUserPayload = {
   name: string
@@ -144,7 +145,7 @@ export class CreateManyUserController {
 
     if (transaction) {
       const users = await this.addUsers(input, recipient, transaction)
-      await Promise.all(users.map((user) => sendNewMemberEmail(user.email, user.password)))
+      await Promise.all(users.map((user) => sendNewApplicantEmail(user.email, user.password)))
       return users
     }
 
