@@ -3,10 +3,7 @@ import { randomUUID } from 'crypto'
 import { sendMultipleEmails } from '../../member/helper'
 import { adminAuth } from '~/server/db/admin_firebase'
 import { userCollection } from '~/server/db/collections/admin/UserCollection'
-import {
-  CreateMultipleUserFailureEmail,
-  type Payload,
-} from '../email/templates/create_multiple_users_failure'
+import { createMultipleUserFailureEmail } from '../email/templates/create_multiple_users_failure'
 
 type CreateMultipleUserPayload = {
   name: string
@@ -20,11 +17,8 @@ type CreateMultipleUserPayload = {
 
 export class CreateManyUserController {
   // This variable refers to the people whom we fail to create a user account for.
-  private failure: Payload[] = []
   private filteredUsers: CreateMultipleUserPayload[] = []
   private payload: CreateMultipleUserPayload[] = []
-  private success: { id: string; email: string; password: string }[] = []
-  private transaction?: FirebaseFirestore.Transaction
 
   /**
    * Used to filter all the invalid users based on the following conditions.
@@ -36,6 +30,7 @@ export class CreateManyUserController {
     const users = await userCollection.getAll()
     const userIds = new Set(users.map((user) => user.id))
     const userEmails = new Set(users.map((user) => user.personal_email))
+    const failure: { name: string; reason: string; userId: string }[] = []
 
     this.filteredUsers = this.payload.filter((user) => {
       const isValidUser =
@@ -44,7 +39,7 @@ export class CreateManyUserController {
         !userEmails.has(user.personal_email)
 
       if (!isValidUser) {
-        this.failure.push({
+        failure.push({
           name: user.name,
           userId: user.student_id,
           reason: `The personal email ${user.personal_email} or matriculation number ${user.student_id} is already in the database.`,
@@ -53,14 +48,14 @@ export class CreateManyUserController {
 
       return isValidUser
     })
+
+    return failure
   }
 
-  private async sendEmails(recipient: string) {
-    await new CreateMultipleUserFailureEmail().execute(recipient, this.failure)
-    await sendMultipleEmails(this.success)
-  }
-
-  private async createUser(user: CreateMultipleUserPayload) {
+  private async createUser(
+    user: CreateMultipleUserPayload,
+    transaction: FirebaseFirestore.Transaction
+  ) {
     try {
       const password = randomUUID().substring(0, 10)
 
@@ -71,33 +66,36 @@ export class CreateManyUserController {
         password,
       })
 
-      userCollection
-        .withTransaction(this.transaction as FirebaseFirestore.Transaction)
-        .set(
-          {
-            department: user.department,
-            email: user.nus_email,
-            name: user.name,
-            isAdmin: false,
-            id: user.student_id,
-            role: user.role,
-            resume: user.resume || '',
-            personal_email: user.personal_email,
-          },
-          user.student_id
-        )
+      userCollection.withTransaction(transaction).set(
+        {
+          department: user.department,
+          email: user.nus_email,
+          name: user.name,
+          isAdmin: false,
+          id: user.student_id,
+          role: user.role,
+          resume: user.resume || '',
+          personal_email: user.personal_email,
+        },
+        user.student_id
+      )
 
-      this.success.push({
+      return {
+        success: true,
         id: user.student_id,
         email: user.personal_email,
         password,
-      })
+        user: user.name,
+      }
     } catch (e) {
-      this.failure.push({
-        userId: user.student_id,
+      return {
+        success: false,
+        id: user.student_id,
+        email: user.personal_email,
+        password: '',
+        error: (e as Error).message,
         name: user.name,
-        reason: (e as Error).message,
-      })
+      }
     }
   }
 
@@ -111,16 +109,41 @@ export class CreateManyUserController {
       student_id: string
       resume?: string | undefined
     }[],
-    recipient: string
+    recipient: string,
+    transaction: FirebaseFirestore.Transaction
   ) {
-    await this.filterUser()
+    const usersFilteredAway = await this.filterUser()
 
-    /// Step 2: Save the data for all the valid users.
-    await Promise.all(this.filteredUsers.map(this.createUser))
+    const emailData = await Promise.all(
+      this.filteredUsers.map((user) => this.createUser(user, transaction))
+    )
 
-    await this.sendEmails(recipient)
+    await createMultipleUserFailureEmail(
+      recipient,
+      emailData
+        .filter((user) => !user.success)
+        .map((user) => {
+          return {
+            userId: user.id,
+            name: user.name as string,
+            reason: user.error as string,
+          }
+        })
+        .concat(usersFilteredAway)
+    )
 
-    return this.success.map((data) => data.id)
+    await sendMultipleEmails(
+      emailData
+        .filter((user) => user.success)
+        .map((user) => {
+          return {
+            email: user.email,
+            password: user.password,
+          }
+        })
+    )
+
+    return emailData.filter((user) => user.success).map((data) => data.id)
   }
 
   public async execute(
@@ -131,13 +154,11 @@ export class CreateManyUserController {
     this.payload = input
 
     if (transaction) {
-      this.transaction = transaction
-      return await this.addUsers(input, recipient)
+      return await this.addUsers(input, recipient, transaction)
     }
 
     return await db.runTransaction(async (transaction) => {
-      this.transaction = transaction
-      return await this.addUsers(input, recipient)
+      return await this.addUsers(input, recipient, transaction)
     })
   }
 }

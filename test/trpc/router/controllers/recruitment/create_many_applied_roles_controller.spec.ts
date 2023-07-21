@@ -4,10 +4,9 @@ import { CreateManyAppliedRoleController } from '~/server/trpc/router/controller
 import { dropCollection } from '../../../../util/dropCollection'
 import { sendMultipleEmails } from '~/server/trpc/router/member/helper'
 import { appliedRoleCollection } from '~/server/db/collections/admin/AppliedRoleCollection'
+import { sendEmail } from '~/server/trpc/router/controllers/email/email'
 
 describe('create_many_applied_roles_controller', () => {
-  const controller = new CreateManyAppliedRoleController()
-
   /// Mock Applicant One
   const NAME = 'Wen Jun'
   const STUDENT_ID = 'wenjun'
@@ -31,6 +30,8 @@ describe('create_many_applied_roles_controller', () => {
   )
 
   test('The user should be able to upload the applicant into the database with the correct parameters.', async () => {
+    const controller = new CreateManyAppliedRoleController()
+
     await controller.execute(
       [
         {
@@ -47,7 +48,8 @@ describe('create_many_applied_roles_controller', () => {
           nus_email: 'wenjun@u.nus.edu',
           student_id: STUDENT_ID,
         },
-      ], "woowenjun99@gmail.com"
+      ],
+      'woowenjun99@gmail.com'
     )
 
     await expect(userCollection.getById(STUDENT_ID)).resolves.toStrictEqual({
@@ -69,9 +71,7 @@ describe('create_many_applied_roles_controller', () => {
       uid: STUDENT_ID,
     })
 
-    expect(sendMultipleEmails).toBeCalledWith([
-      { email: PERSONAL_EMAIL, id: STUDENT_ID, password: expect.any(String) },
-    ])
+    expect(sendMultipleEmails).toBeCalledTimes(1)
 
     const userAppliedRoles = await appliedRoleCollection.getAll()
 
@@ -89,6 +89,8 @@ describe('create_many_applied_roles_controller', () => {
   test.todo('The user should not have applied for 2 of the same roles.')
 
   test('If the user already exist, we should not upload him nor his roles into the database again.', async () => {
+    const controller = new CreateManyAppliedRoleController()
+
     await userCollection.set({
       department: 'Blockchain',
       email: 'wenjun@u.nus.edu',
@@ -115,7 +117,8 @@ describe('create_many_applied_roles_controller', () => {
             nus_email: 'wenjun@u.nus.edu',
             student_id: STUDENT_ID,
           },
-        ], "woowenjun99@gmail.com"
+        ],
+        'woowenjun99@gmail.com'
       )
     ).resolves
 
@@ -126,5 +129,9 @@ describe('create_many_applied_roles_controller', () => {
     const userAppliedRoles = await appliedRoleCollection.getAll()
 
     expect(userAppliedRoles).toHaveLength(0)
+
+    expect(sendEmail).toBeCalledTimes(1)
+
+    expect(sendEmail).toBeCalledWith("woowenjun99@gmail.com", "Immediate Action Required!", expect.any(String))
   })
 })

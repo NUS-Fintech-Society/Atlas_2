@@ -1,4 +1,4 @@
-import { EmailController } from '../email_controller'
+import { sendEmail } from '../email'
 
 export type Payload = {
   name: string
@@ -6,54 +6,47 @@ export type Payload = {
   reason: string
 }
 
-export class CreateMultipleUserFailureEmail {
-  private payload: Payload[] = []
+function buildBody(payload: Payload[]) {
+  const buildTable = `
+  <table>
+      <tr>
+          <th>Matriculation Number</th>
+          <th>Name</th>
+          <th>Reason</th>
+      </tr>
+      ${payload.map((user) => {
+        return `
+              <tr>
+                  <td>${user.userId}</td>
+                  <td>${user.name}</td>
+                  <td>${user.reason}</td>
+              </tr>
+          `
+      })}
+  </table>
+  `
 
-  private get body() {
-    const buildTable = `
-    <table>
-        <tr>
-            <th>Matriculation Number</th>
-            <th>Name</th>
-            <th>Reason</th>
-        </tr>
-        ${this.payload.map((user) => {
-          return `
-                <tr>
-                    <td>${user.userId}</td>
-                    <td>${user.name}</td>
-                    <td>${user.reason}</td>
-                </tr>
-            `
-        })}
-    </table>
-    `
+  return `
+  Hi admin,
+  <br />
+  <p>
+  There was an issue with uploading the following users into the database.
+  Please make the necessary changes. If there are any further issues, please
+  contact the HRMS Atlas team.
+  </p>
 
-    return `
-    Hi admin,
-    <br />
-    <p>
-    There was an issue with uploading the following users into the database.
-    Please make the necessary changes. If there are any further issues, please
-    contact the HRMS Atlas team.
-    </p>
+  ${buildTable}
+  <br />
+  Thank You. <br />
+  ATLAS HRMS Team
+  `
+}
 
-    ${buildTable}
-    <br />
-    Thank You. <br />
-    ATLAS HRMS Team
-    `
-  }
+export async function createMultipleUserFailureEmail(
+  recipient: string,
+  payload: Payload[]
+) {
+  if (!recipient || !payload.length) return
 
-  public async execute(recipient: string, payload: Payload[]) {
-    if (!recipient || !payload.length) return
-
-    this.payload = payload
-
-    await EmailController.sendEmail(
-      recipient,
-      'Immediate Action Required!',
-      this.body
-    )
-  }
+  await sendEmail(recipient, 'Immediate Action Required!', buildBody(payload))
 }

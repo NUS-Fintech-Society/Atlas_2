@@ -36,7 +36,6 @@ export class CreateManyAppliedRoleController {
       )
 
       applicants.forEach((appliedRole) => {
-        /// Upload first choice
         appliedRoleCollection.withTransaction(transaction).set({
           applicantId: appliedRole.applicantId,
           rank: 1,
