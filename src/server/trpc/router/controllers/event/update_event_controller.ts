@@ -3,6 +3,9 @@ import {
   type Event,
   eventCollection,
 } from '~/server/db/collections/admin/EventCollection'
+import { userCollection } from '~/server/db/collections/admin/UserCollection'
+import type { User } from '~/server/db/models/User'
+import { PermissionCheckerController } from '../util/permission_checker_controller'
 
 export type UpdateEventPayload = {
   name: string
@@ -19,27 +22,66 @@ export class UpdateEventController {
   private payload?: UpdateEventPayload
   private previousEventSnapshot?: Event
 
-  private recomputeAttendance() {
-    /// Unmark all the attendance if the hasStarted has changed from true to false.
-    const shouldUnmarkAttendance = this.previousEventSnapshot?.hasStarted && !this.updatePayload.hasStarted
-
-    if (shouldUnmarkAttendance) {
-      this.previousEventSnapshot?.invitedAttendees.forEach((attendee) => (attendee.attended = false))
-    }
-
+  private removeAttendees() {
     const updatedAttendees = this.payload?.attendees
 
+    /// Remove attendance
     this.updatePayload.invitedAttendees =
       this.previousEventSnapshot?.invitedAttendees.filter((attendee) => {
-        return updatedAttendees?.includes(attendee.id)
+        return updatedAttendees?.includes(attendee.id as string)
       })
+  }
+
+  private async addAttendance() {
+    /// Add attendance
+    const currentUserIds = new Set(
+      this.updatePayload.invitedAttendees?.map((attendee) => attendee.id)
+    )
+
+    const usersToAdd = this.payload?.attendees.filter((attendee) => {
+      return !currentUserIds.has(attendee)
+    })
+
+    const newUsers = await Promise.all(
+      (usersToAdd as string[]).map(async (id) => {
+        const data = await userCollection.getById(id)
+        return {
+          name: data.name,
+          id: data.id as string,
+          attended: false,
+          department: data.department,
+          role: data.role,
+        }
+      })
+    )
+
+    this.updatePayload.invitedAttendees =
+      this.updatePayload.invitedAttendees?.concat(newUsers) as User[]
+  }
+
+  private async recomputeAttendance() {
+    this.removeAttendees()
+
+    await this.addAttendance()
 
     this.updatePayload.attendees = this.updatePayload.invitedAttendees?.length
   }
 
-  public async execute(payload: UpdateEventPayload) {
+  public async execute(payload: UpdateEventPayload, userId: string) {
     this.payload = payload
-    this.previousEventSnapshot = await eventCollection.getById(payload.id)
+
+    const hasPermission =
+      await PermissionCheckerController.checkIfUserHasAdminPermission(userId)
+
+    if (!hasPermission) {
+      throw Error('You do not have permission to update the event.')
+    }
+
+    this.previousEventSnapshot = await eventCollection.find(payload.id)
+
+    if (!this.previousEventSnapshot) {
+      throw Error('The event does not exist.')
+    }
 
     this.updatePayload = {
       name: payload.name,
@@ -49,7 +91,7 @@ export class UpdateEventController {
       hasStarted: dayjs(payload.startDate).isBefore(dayjs()),
     }
 
-    this.recomputeAttendance()
+    await this.recomputeAttendance()
 
     await eventCollection.update(payload.id, this.updatePayload)
   }

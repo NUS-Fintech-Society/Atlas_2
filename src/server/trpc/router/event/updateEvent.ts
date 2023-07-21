@@ -1,8 +1,7 @@
 import { protectedProcedure } from '~/server/trpc/trpc'
 import { z } from 'zod'
-import eventCollection from '~/server/db/collections/EventCollection'
-import { Timestamp } from 'firebase/firestore'
-import userCollection from '~/server/db/collections/UserCollection'
+import { UpdateEventController } from '../controllers/event/update_event_controller'
+import { TRPCError } from '@trpc/server'
 
 export const updateEvent = protectedProcedure
   .input(
@@ -16,31 +15,14 @@ export const updateEvent = protectedProcedure
       isQrRequired: z.boolean(),
     })
   )
-  .mutation(async ({ input }) => {
+  .mutation(async ({ input, ctx }) => {
     try {
-      const users = await Promise.all(
-        input.attendees.map(async (attendee) => {
-          const data = await userCollection.getById(attendee)
-          return {
-            name: data.name,
-            id: data.id as string,
-            attended: false,
-            department: data.department,
-            role: data.role,
-          }
-        })
-      )
-
-      await eventCollection.update(input.id, {
-        attendees: 0,
-        endDate: Timestamp.fromDate(input.endDate),
-        hasStarted: false,
-        invitedAttendees: users,
-        name: input.name,
-        departments: input.departments,
-        isQrRequired: input.isQrRequired,
-        startDate: Timestamp.fromDate(input.startDate),
-      })
+      const controller = new UpdateEventController()
+      return await controller.execute(input, ctx.session.user.id)
     } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
+      })
     }
   })

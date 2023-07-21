@@ -4,7 +4,7 @@ type User = {
   attended?: boolean
   completed?: boolean //For Tasks
   department: string
-  id: string
+  id?: string
   name: string
   role?: string
 }
