@@ -115,16 +115,5 @@ function buildUserObject(
   })
 }
 
-/**
- * Blasts out multiple emails at the same time
- *
- * @param users The array of users object
- * @param password The hashed password
- */
-async function sendMultipleEmails(emails: string[], password: string) {
-  await Promise.all(
-    emails.map(async (email) => await sendEmail(email, password))
-  )
-}
 
-export { checkIfUserExist, sendEmail, sendMultipleEmails, buildUserObject }
+export { checkIfUserExist, sendEmail,  buildUserObject }
