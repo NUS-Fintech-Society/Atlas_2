@@ -16,4 +16,10 @@ jest.mock('~/server/trpc/router/controllers/email/email', () => {
   }
 })
 
+jest.mock("~/server/trpc/router/controllers/email/templates/new_user_creation", () => {
+  return {
+    sendNewMemberEmail: jest.fn()
+  }
+})
+
 jest.setTimeout(10000)

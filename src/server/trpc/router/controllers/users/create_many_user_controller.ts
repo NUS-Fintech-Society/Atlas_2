@@ -1,9 +1,9 @@
 import { db } from '~/server/db/admin_firebase'
 import { randomUUID } from 'crypto'
-import { sendMultipleEmails } from '../../member/helper'
 import { adminAuth } from '~/server/db/admin_firebase'
 import { userCollection } from '~/server/db/collections/admin/UserCollection'
 import { createMultipleUserFailureEmail } from '../email/templates/create_multiple_users_failure'
+import { sendNewMemberEmail } from '../email/templates/new_user_creation'
 
 type CreateMultipleUserPayload = {
   name: string
@@ -132,18 +132,7 @@ export class CreateManyUserController {
         .concat(usersFilteredAway)
     )
 
-    await sendMultipleEmails(
-      emailData
-        .filter((user) => user.success)
-        .map((user) => {
-          return {
-            email: user.email,
-            password: user.password,
-          }
-        })
-    )
-
-    return emailData.filter((user) => user.success).map((data) => data.id)
+    return emailData.filter((user) => user.success)
   }
 
   public async execute(
@@ -154,11 +143,15 @@ export class CreateManyUserController {
     this.payload = input
 
     if (transaction) {
-      return await this.addUsers(input, recipient, transaction)
+      const users = await this.addUsers(input, recipient, transaction)
+      await Promise.all(users.map((user) => sendNewMemberEmail(user.email, user.password)))
+      return users
     }
 
+    /// Use case: Create Multiple Users
     return await db.runTransaction(async (transaction) => {
-      return await this.addUsers(input, recipient, transaction)
+      const users = await this.addUsers(input, recipient, transaction)
+      await Promise.all(users.map((user) => sendNewMemberEmail(user.email, user.password)))
     })
   }
 }

@@ -29,10 +29,10 @@ export class CreateManyAppliedRoleController {
       
       const controller = new CreateManyUserController()
 
-      const usersCreated = await controller.execute(users, recipient)
+      const usersCreated = await controller.execute(users, recipient, transaction)
 
       applicants = applicants.filter((applicant) =>
-        usersCreated.includes(applicant.applicantId)
+        usersCreated?.map(user => user.id).includes(applicant.applicantId)
       )
 
       applicants.forEach((appliedRole) => {
