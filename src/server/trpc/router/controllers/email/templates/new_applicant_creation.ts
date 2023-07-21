@@ -5,7 +5,7 @@ function buildBody(email: string, password: string) {
     return `
     Dear User, <br />
 
-    <p> Thank you for applying to NUS Fintech Society! </p>
+    <h2> Thank you for applying to NUS Fintech Society! </h2>
     <p> 
     We are delighted to inform you that we have received your application 
     and would like to proceed forward with you into the next round.
