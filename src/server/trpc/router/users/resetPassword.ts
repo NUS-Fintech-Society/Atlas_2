@@ -4,29 +4,27 @@ import logCollection from '~/server/db/collections/LogCollection'
 import { Timestamp } from 'firebase/firestore'
 import { adminAuth } from '~/server/db/admin_firebase'
 import { TRPCError } from '@trpc/server'
-import { transporter } from '../util/transporter'
-import { env } from '~/env/server.mjs'
+import { sendEmail } from '../controllers/email/email'
 
 export const resetPassword = publicProcedure
   .input(z.string())
   .mutation(async ({ input: email }) => {
     try {
       const link = await adminAuth.generatePasswordResetLink(email)
-      await transporter.sendMail({
-        from: env.GMAIL,
-        to: email,
-        subject: 'Reset Password',
-        html: `
-            Hi,
-            <br />
-            <p>
-              Please click on the following <a href="${link}">link</a> to change your password.
-            </p>
-            <br />
-            Thank You. <br /> 
-            Fintech HR
-          `,
-      })
+      await sendEmail(
+        email, 
+        "Reset Password Link", 
+        `            
+          Hi,
+          <br />
+          <p>
+            Please click on the following <a href="${link}">link</a> to change your password.
+          </p>
+          <br />
+          Thank You. <br /> 
+          Fintech HR
+        `
+      )
     } catch (e) {
       await logCollection.add({
         level: 'WARNING',
@@ -36,8 +34,8 @@ export const resetPassword = publicProcedure
       })
 
       throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: (e as Error).message
+        code: 'INTERNAL_SERVER_ERROR',
+        message: (e as Error).message,
       })
     }
   })

@@ -2,9 +2,10 @@ import { adminAuth } from '~/server/db/admin_firebase'
 import { userCollection } from '~/server/db/collections/admin/UserCollection'
 import { CreateManyAppliedRoleController } from '~/server/trpc/router/controllers/recruitment/create_many_applied_roles_controller'
 import { dropCollection } from '../../../../util/dropCollection'
-import { sendMultipleEmails } from '~/server/trpc/router/member/helper'
 import { appliedRoleCollection } from '~/server/db/collections/admin/AppliedRoleCollection'
 import { sendEmail } from '~/server/trpc/router/controllers/email/email'
+import { sendNewMemberEmail } from '~/server/trpc/router/controllers/email/templates/new_user_creation'
+import { sendNewApplicantEmail } from '~/server/trpc/router/controllers/email/templates/new_applicant_creation'
 
 describe('create_many_applied_roles_controller', () => {
   /// Mock Applicant One
@@ -71,7 +72,7 @@ describe('create_many_applied_roles_controller', () => {
       uid: STUDENT_ID,
     })
 
-    expect(sendMultipleEmails).toBeCalledTimes(1)
+    expect(sendNewApplicantEmail).toBeCalledTimes(1)
 
     const userAppliedRoles = await appliedRoleCollection.getAll()
 
@@ -124,7 +125,7 @@ describe('create_many_applied_roles_controller', () => {
 
     expect(adminAuth.createUser).toBeCalledTimes(0)
 
-    expect(sendMultipleEmails).toBeCalledWith([])
+    expect(sendNewMemberEmail).toBeCalledTimes(0)
 
     const userAppliedRoles = await appliedRoleCollection.getAll()
 

@@ -1,12 +1,12 @@
 import { protectedProcedure } from '../../trpc'
 import { z } from 'zod'
-import { sendNewUserEmail } from '../member/helper'
 import userCollection from '~/server/db/collections/UserCollection'
 import logCollection from '~/server/db/collections/LogCollection'
 import { Timestamp } from 'firebase/firestore'
 import { TRPCError } from '@trpc/server'
 import { randomUUID } from 'crypto'
 import { adminAuth } from '~/server/db/admin_firebase'
+import { sendNewMemberEmail } from '../controllers/email/templates/new_user_creation'
 
 export const createSingleUser = protectedProcedure
   .input(
@@ -44,7 +44,7 @@ export const createSingleUser = protectedProcedure
           personal_email
       }, id)
 
-      await sendNewUserEmail(email, password)
+      await sendNewMemberEmail(email, password)
     } catch (e) {
       await logCollection.add({
         createdAt: Timestamp.fromDate(new Date()),

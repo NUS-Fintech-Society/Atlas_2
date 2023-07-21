@@ -1,8 +1,8 @@
 import { adminAuth } from '~/server/db/admin_firebase'
 import { userCollection } from '~/server/db/collections/admin/UserCollection'
 import { CreateManyUserController } from '~/server/trpc/router/controllers/users/create_many_user_controller'
-import { sendMultipleEmails } from '~/server/trpc/router/member/helper'
 import { dropCollection } from '../../../../util/dropCollection'
+import { sendNewMemberEmail } from '~/server/trpc/router/controllers/email/templates/new_user_creation'
 
 describe('create_many_user_controller.ts', () => {
   afterEach(async () => {
@@ -47,7 +47,7 @@ describe('create_many_user_controller.ts', () => {
       password: expect.any(String),
     })
 
-    expect(sendMultipleEmails).toBeCalledTimes(1)
+    expect(sendNewMemberEmail).toBeCalledTimes(1)
 
     await expect(userCollection.getById(STUDENT_ID)).resolves.toStrictEqual({
       ...applicant,
@@ -70,6 +70,6 @@ describe('create_many_user_controller.ts', () => {
 
     expect(adminAuth.createUser).toBeCalledTimes(0)
 
-    expect(sendMultipleEmails).toBeCalledTimes(0)
+    expect(sendNewMemberEmail).toBeCalledTimes(0)
   })
 })

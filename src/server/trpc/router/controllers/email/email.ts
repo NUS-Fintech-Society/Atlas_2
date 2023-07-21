@@ -1,5 +1,13 @@
-import { transporter } from '../../util/transporter'
 import { env } from '~/env/server.mjs'
+import nodemailer from 'nodemailer'
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: env.GMAIL,
+    pass: env.GMAIL_PASSWORD,
+  },
+})
 
 /**
  * @param recipient The recipient's email
