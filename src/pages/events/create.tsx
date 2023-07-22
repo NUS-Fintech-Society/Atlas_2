@@ -27,6 +27,7 @@ const CreateEventPage = () => {
   const router = useRouter()
   const toast = useToast()
   const [attendees, setAttendees] = useState<string[]>([])
+  const [department, setDepartment] = useState<string[]>([])
   const [submitBefore, setSubmitBefore] = useState(false) // hacky use for attendees validation
   const [isQrRequired, setIsQrRequired] = useState(false)
 
@@ -66,10 +67,16 @@ const CreateEventPage = () => {
     trpc.event.createEvent.useMutation()
 
   const invalidAttendees = attendees.length === 0
+  const invalidDepartment = attendees.length === 0
+
   const formSubmit = async (formData: FormSchemaType) => {
     try {
       // Hacky soluton since attendees not linked to React-hook-form
       if (invalidAttendees) {
+        return false
+      }
+
+      if (invalidDepartment) {
         return false
       }
       await mutateAsync({
@@ -86,6 +93,8 @@ const CreateEventPage = () => {
         title: 'Success',
         description: 'A new event has been successfully created',
       })
+
+      router.push('/events')
     } catch (e) {
       toast({
         description: (e as Error).message,
@@ -153,7 +162,7 @@ const CreateEventPage = () => {
               </div>
               {errors.dept && (
                 <Text color="tomato" className="pt-2">
-                  {errors.dept.message}
+                  {'At least one department is required'}
                 </Text>
               )}
             </VStack>

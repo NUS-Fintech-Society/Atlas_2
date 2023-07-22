@@ -10,9 +10,10 @@ function buildBody(password: string) {
     <p> 
         With effect from August 2023, we will be using the <a href="${env.NEXTAUTH_URL}">ATLAS HRMS</a> 
         portal to disseminate events and tasks. Before proceeding, please log into your account and 
-        fill up the form. The password to the account will be ${password}. 
+        fill up the form.
         You are <strong> strongly advised </strong> to change your password after your first login. 
     </p>
+    <p>Account Password: ${password}  </p>
     <h2>2. Means of Communication</h2>
     <p>
         We have decided to introduce DISCORD for the upcoming AY!! This is with the aim of fostering a stronger 

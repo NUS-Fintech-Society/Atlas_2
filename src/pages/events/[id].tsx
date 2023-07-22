@@ -104,6 +104,8 @@ const EditEventPage = () => {
         title: 'Success',
         description: 'The event has been successfully updated',
       })
+
+      router.push('/events')
     } catch (e) {
       toast({
         description: (e as Error).message,

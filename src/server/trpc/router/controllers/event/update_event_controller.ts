@@ -87,6 +87,7 @@ export class UpdateEventController {
       name: payload.name,
       startDate: payload.startDate,
       endDate: payload.endDate,
+      departments: payload.departments,
       isQrRequired: payload.isQrRequired,
       hasStarted: dayjs(payload.startDate).isBefore(dayjs()),
     }

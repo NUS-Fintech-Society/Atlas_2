@@ -28,7 +28,7 @@ const UserActionRequired: React.FC<UserActionRequiredProp> = ({
   if (!isAttendanceRequired) {
     return (
       <h1 className="mb-2 self-center text-center text-xl font-medium">
-        Your attendance has been recorded
+        Your attendance is not required for this event.
       </h1>
     )
   } else if (hasUserMarkedAttendance) {
