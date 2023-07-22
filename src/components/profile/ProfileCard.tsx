@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import UploadImageBtn from './UploadImageButton'
 import { useCallback } from 'react'
 
-const DEFAULT_IMAGE = '/fintech_logo.png'
+const DEFAULT_IMAGE = '/blank_profile.png'
 
 const ProfileCard = ({
   name,
