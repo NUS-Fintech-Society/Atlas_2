@@ -27,6 +27,8 @@ const TaskPage = () => {
   const toast = useToast()
   const [submitBefore, setSubmitBefore] = useState(false) // hacky use for assignees validation
 
+  const [isButtonDisabled, setButtonDisabled] = useState(false)
+
   const { data } = trpc.recruitment.getAllTasks.useQuery()
 
   const FormSchema = z.object({
@@ -64,6 +66,7 @@ const TaskPage = () => {
 
   const formSubmit = async (formData: FormSchemaType) => {
     try {
+      setButtonDisabled(true)
       await mutateAsync({
         taskName: formData.taskName,
         due: formData.due,
@@ -84,6 +87,8 @@ const TaskPage = () => {
         status: 'error',
         title: 'Oops, an error occured!',
       })
+    } finally {
+      setButtonDisabled(false) // Enable the button again after the form submission
     }
   }
   const redirectHome = () => router.push('/tasks')
@@ -158,6 +163,11 @@ const TaskPage = () => {
                   </Stack>
                 </CheckboxGroup>
               </div>
+              {errors.dept && (
+                <Text color="tomato" className="pt-2">
+                  {'At least one department is required'}
+                </Text>
+              )}
             </VStack>
             <div>
               <FormLabel>Due Date</FormLabel>
@@ -191,7 +201,7 @@ const TaskPage = () => {
                 width={150}
                 className="text-white"
                 type="submit"
-                disabled={isSubmitting}
+                isLoading={isButtonDisabled || isSubmitting}
                 onClick={() => setSubmitBefore(true)}
               >
                 Create Task

@@ -100,7 +100,13 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
       })}
       <p>Start Date: {startDate}</p>
       <p>End Date: {endDate}</p>
-      <p>Attendance: {`${data.showup}/${data.invitedAttendees.length}`}</p>
+      <p>
+        Attendance:{' '}
+        {`${
+          data.invitedAttendees.filter((attendee) => attendee.attended).length
+        }/${data.invitedAttendees.length}`}
+      </p>
+
       <p>Required Attendees:</p>
       <Table>
         <Thead>
