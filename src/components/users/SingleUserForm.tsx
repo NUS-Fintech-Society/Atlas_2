@@ -23,7 +23,7 @@ const FormSchema = z.object({
   id: z.string().min(1),
   isAdmin: z.boolean(),
   name: z.string(),
-  personal_email: z.string()
+  personal_email: z.string(),
 })
 
 type FormSchemaType = z.infer<typeof FormSchema>
@@ -54,7 +54,7 @@ const SingleUserForm = () => {
           isAdmin: formData.isAdmin,
           role,
           nus_email: formData.email,
-          personal_email: formData.personal_email
+          personal_email: formData.personal_email,
         })
         toast({
           title: 'Successfully updated!',
@@ -109,7 +109,7 @@ const SingleUserForm = () => {
           id="personal-email"
           isRequired
           marginBottom={5}
-          {...register("personal_email", { required: true })}
+          {...register('personal_email', { required: true })}
           placeholder="Personal Email"
           variant="outline"
         />
@@ -121,7 +121,7 @@ const SingleUserForm = () => {
           isRequired
           marginBottom={5}
           {...register('email', { required: true })}
-          placeholder="Email"
+          placeholder="NUS Email"
           variant="outline"
         />
       </InputGroup>
