@@ -52,13 +52,6 @@ export abstract class BaseCollection<T extends FirebaseFirestore.DocumentData> {
     await this.collection.doc(id).delete()
   }
 
-  async getAll() {
-    return await this.collection.get().then((snapshot) => {
-      const documents = snapshot.docs
-      return documents.map((doc) => ({ ...(doc.data() as T), id: doc.id }))
-    })
-  }
-
   async find(id: string) {
     const result = await this.collection.doc(id).get()
 
@@ -79,6 +72,10 @@ export abstract class BaseCollection<T extends FirebaseFirestore.DocumentData> {
         new FirebaseQueryBuilder<T>(this.collectionName, transaction),
     }
   }
+
+  queryBuilder() {
+    return new FirebaseQueryBuilder<T>(this.collectionName)
+  }
 }
 
 class FirebaseQueryBuilder<T> {
@@ -87,7 +84,7 @@ class FirebaseQueryBuilder<T> {
 
   constructor(
     collectionName: string,
-    private transaction: FirebaseFirestore.Transaction
+    private transaction?: FirebaseFirestore.Transaction
   ) {
     this.collectionRef = db.collection(collectionName)
     this.query = this.collectionRef
@@ -119,9 +116,13 @@ class FirebaseQueryBuilder<T> {
     return this
   }
 
-  async get(): Promise<
-    FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>
-  > {
-    return this.transaction.get(this.query)
+  async get() {
+    const result = this.transaction
+      ? await this.transaction.get(this.query)
+      : await this.query.get()
+
+    return result.docs.map((doc) => {
+      return { ...(doc.data() as T), id: doc.id }
+    })
   }
 }
