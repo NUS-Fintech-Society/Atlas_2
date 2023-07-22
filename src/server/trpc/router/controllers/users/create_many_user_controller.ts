@@ -28,7 +28,7 @@ export class CreateManyUserController {
    * (2). Student matriculation number already exist.
    */
   private async filterUser() {
-    const users = await userCollection.getAll()
+    const users = await userCollection.queryBuilder().get()
     const userIds = new Set(users.map((user) => user.id))
     const userEmails = new Set(users.map((user) => user.personal_email))
     const failure: { name: string; reason: string; userId: string }[] = []
