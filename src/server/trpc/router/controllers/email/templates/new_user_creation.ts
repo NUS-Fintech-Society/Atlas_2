@@ -8,7 +8,7 @@ function buildBody(password: string) {
     <p> Here are a few items to take note of as you get started on your journey with us. </p>
     <h2>1. Collection of details (Compulsory)</h2>
     <p> 
-        With effect from August 2023, we will be using the <a href="${env.NEXTAUTH_URL}">ATLAS HRMS</a> 
+        With effect from August 2023, we will be using the <a href="${env.DOMAIN}">ATLAS HRMS</a> 
         portal to disseminate events and tasks. Before proceeding, please log into your account and 
         fill up the form.
         You are <strong> strongly advised </strong> to change your password after your first login. 
