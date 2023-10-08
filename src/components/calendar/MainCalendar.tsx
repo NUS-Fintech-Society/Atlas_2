@@ -1,14 +1,27 @@
+import { useDisclosure } from '@chakra-ui/react'
+import type { EventClickArg } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import styled from '@emotion/styled'
+import { ModalContext } from '~/context/ModalContext'
 import { trpc } from '~/utils/trpc'
+import EventModal from './EventModal'
+import { useState } from 'react'
 
 export const StyleWrapper = styled.div``
 
 const MainCalendar = () => {
   const { data } = trpc.event.populateCalendar.useQuery()
+  const { onOpen, isOpen, onClose } = useDisclosure()
+
+  const [id, setId] = useState<string>("")
+
+  const handleEventClick = (info: EventClickArg) => {
+    setId(info.event.id)
+    onOpen()
+  }
 
   return (
     <StyleWrapper className="col-span-4 mx-auto">
@@ -27,8 +40,19 @@ const MainCalendar = () => {
           }}
           allDaySlot={false}
           events={data || []}
+          eventClick={handleEventClick}
         />
       </div>
+
+      <ModalContext.Provider
+        value={{
+          isOpen,
+          id,
+          onClose,
+        }}
+      >
+        <EventModal />
+      </ModalContext.Provider>
     </StyleWrapper>
   )
 }
