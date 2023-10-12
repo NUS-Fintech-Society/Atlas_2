@@ -2,7 +2,7 @@ import { protectedProcedure } from '~/server/trpc/trpc'
 import { TRPCError } from '@trpc/server'
 import eventCollection from '~/server/db/collections/EventCollection'
 import dayjs from 'dayjs'
-import { Timestamp } from 'firebase/firestore'
+import type { Timestamp } from 'firebase/firestore'
 
 export const populateCalendar = protectedProcedure.query(async () => {
   try {
@@ -10,6 +10,7 @@ export const populateCalendar = protectedProcedure.query(async () => {
     const events = await eventCollection.queries()
     return events.map((event) => {
       return {
+        id: event.id,
         title: event.name,
         start: dayjs((event.startDate as Timestamp).toDate()).format('YYYY-MM-DDTHH:mm'),
         end: dayjs((event.endDate as Timestamp).toDate()).format('YYYY-MM-DDTHH:mm'),
