@@ -102,7 +102,7 @@ import {
       <Flex direction="column" py={4}>
         <Flex direction="row">
         <Box className="w-40 mr-5">{'Event Name:'}</Box>
-        <Box>{'Event 3'}</Box>
+        <Box>{data.name}</Box>
         </Flex>
         <Flex direction="row">
         <Box className="w-40 mr-5">{'Date:'}</Box>
