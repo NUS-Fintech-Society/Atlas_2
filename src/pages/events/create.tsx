@@ -31,25 +31,36 @@ const CreateEventPage = () => {
   const [submitBefore, setSubmitBefore] = useState(false) // hacky use for attendees validation
   const [isQrRequired, setIsQrRequired] = useState(false)
 
-  const FormSchema = z.object({
-    eventName: z.string().min(1, { message: 'Invalid name' }),
-    dept: z
-      .array(
-        z.string({
-          required_error: 'At least one department must be chosen',
-          invalid_type_error: 'At least one department must be chosen',
-        })
-      )
-      .nonempty({
-        message: 'At least one department must be chosen',
-      }),
-    startDate: z.preprocess((arg) => {
-      if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
-    }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
-    endDate: z.preprocess((arg) => {
-      if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
-    }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
-  })
+  const FormSchema = z
+    .object({
+      eventName: z.string().min(1, { message: 'Invalid name' }),
+      dept: z
+        .array(
+          z.string({
+            required_error: 'At least one department must be chosen',
+            invalid_type_error: 'At least one department must be chosen',
+          })
+        )
+        .nonempty({
+          message: 'At least one department must be chosen',
+        }),
+      startDate: z.preprocess((arg) => {
+        if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
+      }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
+      endDate: z.preprocess((arg) => {
+        if (typeof arg == 'string' || arg instanceof Date) return new Date(arg)
+      }, z.date().min(new Date(), { message: 'Invalid date' }).max(new Date('2100'), { message: 'Invalid date' })),
+    })
+    .refine(
+      (data) => {
+        const { startDate, endDate } = data
+        return startDate <= endDate
+      },
+      {
+        message: 'End date cannot be earlier than start date',
+        path: ['endDate'],
+      }
+    )
 
   type FormSchemaType = z.infer<typeof FormSchema>
 
