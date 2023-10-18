@@ -8,6 +8,7 @@ import {
     ModalContent,
     ModalBody,
     ModalFooter,
+    Input,
   } from '@chakra-ui/react'
   import { useContext } from 'react'
   import { ModalContext } from '~/context/ModalContext'
@@ -100,25 +101,32 @@ import {
   
     return (
       <Flex direction="column" py={4}>
-        <Flex direction="row">
+        <Flex direction="row" className="mb-3">
         <Box className="w-40 mr-5">{'Event Name:'}</Box>
         <Box>{data.name}</Box>
         </Flex>
-        <Flex direction="row">
+        <Flex direction="row" className="mb-3">
         <Box className="w-40 mr-5">{'Date:'}</Box>
         <Box>{startDate}</Box>
         </Flex>
-        <Flex direction="row">
+        <Flex direction="row" className="mb-3">
         <Box className="w-40 mr-5">{'Time:'}</Box>
         <Box>{'1000 - 1200'}</Box>
         </Flex>
-        <Flex direction="row">
+        <Flex direction="row" className="mb-3">
         <Box className="w-40 mr-5">{'Venue:'}</Box>
         <Box>{'LT69'}</Box>
         </Flex>
-        <Flex direction="row">
+        <Flex direction="row" className="mb-3">
         <Box className="w-40 mr-5">{'Secret Code:'}</Box>
-        <Box>{'XXXXXXXXXXXXX'}</Box>
+        <Box>{ <Input
+        id="secretCode"
+        isRequired
+        placeholder=" Enter Secret code"
+        variant="filled"
+        size='s'
+        width='300%'
+      />}</Box>
         </Flex>
       
        

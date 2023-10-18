@@ -28,8 +28,10 @@ const EventModal = () => {
   const { onOpen, isOpen, onClose } = useDisclosure()
   const [id, setId] = useState<string>("")
   const openSubmitAttendanceModal = () => {
+   
     setId(modal.id)
     onOpen()
+    //modal.onClose()
   }
   
   if (!modal.id) {
@@ -37,6 +39,7 @@ const EventModal = () => {
   }
 
   return (
+    <div>
     <Modal
       isCentered
       isOpen={modal.isOpen}
@@ -72,6 +75,7 @@ const EventModal = () => {
             className="mb-10 text-black"
             type="submit"
             onClick={() => {
+              modal.onClose()
               openSubmitAttendanceModal()
             }}
           >
@@ -80,7 +84,8 @@ const EventModal = () => {
         </ModalFooter>
       </ModalContent>
       
-      <ModalContext.Provider
+    </Modal>
+    <ModalContext.Provider
         value={{
           isOpen,
           id,
@@ -89,8 +94,8 @@ const EventModal = () => {
       >
         <SubmitAttendanceModal />
       </ModalContext.Provider>
-
-    </Modal>
+    </div>
+    
 
   )
 }
