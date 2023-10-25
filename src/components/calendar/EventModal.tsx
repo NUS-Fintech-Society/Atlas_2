@@ -79,6 +79,19 @@ const EventModal = () => {
               openSubmitAttendanceModal()
             }}
           >
+            Stats
+          </Button>
+
+          <Button
+            bgColor="#F9A72B"
+            width={215}
+            className="mb-10 text-black"
+            type="submit"
+            onClick={() => {
+              modal.onClose()
+              openSubmitAttendanceModal()
+            }}
+          >
             Submit Attendance
           </Button>
         </ModalFooter>
