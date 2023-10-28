@@ -17,12 +17,12 @@ export const getEvent = protectedProcedure
       )
 
       //THIS QR CODE LEADS TO THE EVENT REGISTRATION
-      let qr_code = undefined
-      if (event.isQrRequired) {
-        qr_code = await toDataURL(
-          `${env.DOMAIN}/events/attendance/${event.id as string}`
-        )
-      }
+      // let qr_code = undefined
+      // if (event.isQrRequired) {
+      //   qr_code = await toDataURL(
+      //     `${env.DOMAIN}/events/attendance/${event.id as string}`
+      //   )
+      // }
 
       return {
         attendees: attendees.length,
@@ -37,7 +37,7 @@ export const getEvent = protectedProcedure
         })),
         name: event.name,
         showup: event.attendees,
-        qr_code,
+        // qr_code,
         departments: event.departments,
         startDate: (event.startDate as Timestamp).toDate(),
       }
