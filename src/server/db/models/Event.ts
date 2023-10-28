@@ -10,15 +10,18 @@ type User = {
 }
 
 export type Event = {
-  attendees: number
-  endDate: Timestamp | Date
-  hasStarted: boolean
   id?: string
-  invitedAttendees: User[]
-  name: string
-  departments: string[]
-  isQrRequired: boolean
   startDate: Timestamp | Date
+  endDate: Timestamp | Date
+  name: string
+  description: string
+  venue: string
+  departments: string[]
+  isExclusive: boolean
+  hasStarted: boolean
+  attendees: number
+  invitedAttendees: User[]
+  secretCode: string
 }
 
 export default User

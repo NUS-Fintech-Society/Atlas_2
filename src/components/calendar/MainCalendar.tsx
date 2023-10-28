@@ -9,18 +9,26 @@ import { ModalContext } from '~/context/ModalContext'
 import { Button } from '@chakra-ui/react'
 import { trpc } from '~/utils/trpc'
 import EventModal from './EventModal'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import CreateEventModal from './CreateEventModal'
 
 export const StyleWrapper = styled.div``
 
 const MainCalendar = () => {
+  const eventModal = useContext(ModalContext)
   const { data } = trpc.event.populateCalendar.useQuery()
   const { onOpen, isOpen, onClose } = useDisclosure()
 
   const [id, setId] = useState<string>("")
+  
 
   const handleEventClick = (info: EventClickArg) => {
     setId(info.event.id)
+    onOpen()
+  }
+
+  const handleCreateEvent = () => {
+    setId(eventModal.id)
     onOpen()
   }
 
@@ -37,7 +45,9 @@ const MainCalendar = () => {
             width={215}
             className="mb-10 text-white"
             type="submit"
-            onClick={() => alert('Create an Event Modal (Pop-Up)')}
+            onClick={() => {
+              <CreateEventModal />
+            }}
           >
             Create Event
           </Button>
@@ -64,8 +74,11 @@ const MainCalendar = () => {
           onClose,
         }}
       >
+        
         <EventModal />
+        <CreateEventModal />
       </ModalContext.Provider>
+     
     </StyleWrapper>
   )
 }
