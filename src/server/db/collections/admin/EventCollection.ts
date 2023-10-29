@@ -10,15 +10,18 @@ type User = {
 }
 
 export type Event = {
-  attendees: number
-  endDate: FirebaseFirestore.Timestamp | Date
-  hasStarted: boolean
-  id?: string
-  invitedAttendees: User[]
-  name: string
-  departments: string[]
-  isQrRequired: boolean
-  startDate: FirebaseFirestore.Timestamp | Date
+    id?: string
+    startDate: FirebaseFirestore.Timestamp | Date
+    endDate: FirebaseFirestore.Timestamp | Date
+    name: string
+    description: string
+    venue: string
+    departments: string[]
+    isExclusive: boolean  
+    hasStarted: boolean
+    attendees: number
+    invitedAttendees: User[]
+    secretCode: string   
 }
 
 class EventCollection extends BaseCollection<Event> {
