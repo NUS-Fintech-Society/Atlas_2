@@ -106,12 +106,11 @@ const Header: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   }
   dayjs.extend(LocalizedFormat)
   const startDate = dayjs(data.startDate).format('lll')
-
   return (
     <Flex justify="space-between" py={8}>
       <Box float="left">{data.name}</Box>
       {/* <Box float="right">{data.startDate.toString()}</Box> */}
-      <Box float="right">{startDate}</Box>
+      <Box float="right">{`Starts: ` + startDate}</Box>
     </Flex>
   )
 }
@@ -122,16 +121,14 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   }
 
   dayjs.extend(LocalizedFormat)
-  const startDate = dayjs(data.startDate).format('lll')
   const endDate = dayjs(data.endDate).format('lll')
-
+  const description = data.description;
   return (
     <Flex direction="column">
       <Flex justify="space-between" py={4}>
-        <Box>{'Time: 1000 - 1200'}</Box>
-        <Box>{'Venue: LT69'}</Box>
+        <Box float="left">{`Event Description: ` + description}</Box>
+        <Box float="right">{`Ends: ` + endDate}</Box>
       </Flex>
-      <Box py={6}>{'Description: This is a very fun event.'}</Box>
     </Flex>
   )
 }
