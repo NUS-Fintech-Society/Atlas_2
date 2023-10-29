@@ -24,4 +24,5 @@ export interface BodyProps {
   qr_code: string | undefined
   startDate: Date
   departments: string[]
+  description: string
 }

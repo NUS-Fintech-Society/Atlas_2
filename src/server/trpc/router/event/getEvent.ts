@@ -40,6 +40,7 @@ export const getEvent = protectedProcedure
         qr_code,
         departments: event.departments,
         startDate: (event.startDate as Timestamp).toDate(),
+        description: event.description
       }
     } catch (e) {
       throw new TRPCError({
