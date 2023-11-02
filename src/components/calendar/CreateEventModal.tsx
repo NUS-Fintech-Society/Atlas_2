@@ -19,7 +19,6 @@ import {
     useToast
 } from '@chakra-ui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
@@ -28,7 +27,7 @@ import { trpc } from '~/utils/trpc'
 import LoadingScreen from '../common/LoadingScreen'
 import type { Attendees } from '../events/DataTable'
 import { DataTable } from '../events/DataTable'
-import createEventFormSchema from '../utilities/calendar/createEventFormSchema'
+import createEventFormSchema from '../../utils/calendar/createEventFormSchema'
 
 type useInFormProps = {
     setAttendees: React.Dispatch<React.SetStateAction<string[]>>;
@@ -47,7 +46,6 @@ const CreateEventModal = () => {
         // return null
     }
 
-    const router = useRouter()
     const toast = useToast()
     const [attendees, setAttendees] = useState<string[]>([])
     // hacky use for attendees validation
