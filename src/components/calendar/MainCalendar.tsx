@@ -21,7 +21,6 @@ const MainCalendar = () => {
   const [displayEventId, setDisplayEventId] = useState<string>("")
   const [createEventId, setCreateEventId] = useState<string>("")
 
-
   const handleEventClick = (info: EventClickArg) => {
     setDisplayEventId(info.event.id)
     onOpenDisplayEvent()
@@ -37,7 +36,7 @@ const MainCalendar = () => {
     <StyleWrapper className="col-span-4 mx-auto">
       <div className="px-2 sm:px-6 sm:pt-5 md:px-20 md:pt-5 lg:px-28 lg:pt-5">
         <h1 className="prose mb-5 py-3 text-4xl font-semibold">
-          Event Calendar Overview
+          Events Overview
         </h1>
 
         <div className="text-right">
@@ -56,9 +55,9 @@ const MainCalendar = () => {
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           headerToolbar={{
-            start: 'prev,today,next',
+            start: 'title',
             center: 'dayGridMonth,timeGridWeek,timeGridDay',
-            end: 'title',
+            end: 'prev,today,next',
           }}
           allDaySlot={false}
           events={data || []}

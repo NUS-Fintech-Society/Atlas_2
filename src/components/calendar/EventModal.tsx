@@ -1,4 +1,5 @@
 import {
+  Button,
   Box,
   Flex,
   ModalHeader,
@@ -6,24 +7,39 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from '@chakra-ui/react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { ModalContext } from '~/context/ModalContext'
 import { trpc } from '~/utils/trpc'
 import LoadingScreen from '../common/LoadingScreen'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import dayjs from 'dayjs'
 import { type BodyProps } from '~/types/event/event.type'
+import SubmitAttendanceModal from './SubmitAttendanceModal'
+
 
 const EventModal = () => {
   const modal = useContext(ModalContext)
   const { data, isLoading } = trpc.event.getEvent.useQuery(modal.id)
 
+  //For SubmitAttendanceModal
+  const { onOpen, isOpen, onClose } = useDisclosure()
+  const [id, setId] = useState<string>("")
+  const openSubmitAttendanceModal = () => {
+   
+    setId(modal.id)
+    onOpen()
+    //modal.onClose()
+  }
+  
   if (!modal.id) {
     return null
   }
 
   return (
+    <div>
     <Modal
       isCentered
       isOpen={modal.isOpen}
@@ -42,8 +58,45 @@ const EventModal = () => {
         <ModalBody className="font-[Inter] text-xl" textColor="#01003D">
           {isLoading ? <LoadingScreen /> : <Body data={data} />}
         </ModalBody>
+        <ModalFooter display="flex" justifyContent="space-between">
+          <Button
+            bgColor="#0C1747"
+            width={150}
+            className="mb-10 text-white"
+            type="submit"
+            onClick={() => modal.onClose()}
+          >
+            Back
+          </Button>
+
+          <Button
+            bgColor="#F9A72B"
+            width={215}
+            className="mb-10 text-black"
+            type="submit"
+            onClick={() => {
+              modal.onClose()
+              openSubmitAttendanceModal()
+            }}
+          >
+            Submit Attendance
+          </Button>
+        </ModalFooter>
       </ModalContent>
+      
     </Modal>
+    <ModalContext.Provider
+        value={{
+          isOpen,
+          id,
+          onClose,
+        }}
+      >
+        <SubmitAttendanceModal />
+      </ModalContext.Provider>
+    </div>
+    
+
   )
 }
 
@@ -73,9 +126,9 @@ const Body: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
   const endDate = dayjs(data.endDate).format('lll')
 
   return (
-    <Flex direction="column" pb={24}>
+    <Flex direction="column">
       <Flex justify="space-between" py={4}>
-        <Box>{'Time: 12.00PM'}</Box>
+        <Box>{'Time: 1000 - 1200'}</Box>
         <Box>{'Venue: LT69'}</Box>
       </Flex>
       <Box py={6}>{'Description: This is a very fun event.'}</Box>
