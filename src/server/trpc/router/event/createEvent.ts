@@ -8,12 +8,14 @@ import logCollection from '~/server/db/collections/LogCollection'
 export const createEvent = protectedProcedure
   .input(
     z.object({
-      name: z.string(),
       startDate: z.date(),
       endDate: z.date(),
+      name: z.string(),
+      venue: z.string(),
+      description: z.string(),
       departments: z.array(z.string()),
-      attendees: z.array(z.string()),
-      isQrRequired: z.boolean(),
+      invitedAttendees: z.array(z.string()),
+      secretCode: z.string(),
     })
   )
   .mutation(async ({ input }) => {
@@ -21,7 +23,7 @@ export const createEvent = protectedProcedure
       const eventID = 'EVENT-' + eventCollection.generateRandomId()
 
       const users = await Promise.all(
-        input.attendees.map(async (attendee) => {
+        input.invitedAttendees.map(async (attendee) => {
           const data = await userCollection.getById(attendee)
           return {
             name: data.name,
@@ -35,14 +37,17 @@ export const createEvent = protectedProcedure
 
       await eventCollection.set(
         {
-          attendees: 0,
-          endDate: Timestamp.fromDate(input.endDate),
-          hasStarted: false,
-          invitedAttendees: users,
-          name: input.name,
           startDate: Timestamp.fromDate(input.startDate),
+          endDate: Timestamp.fromDate(input.endDate),
+          name: input.name,
+          venue: input.venue,
+          description: input.description,
           departments: input.departments,
-          isQrRequired: input.isQrRequired,
+          isExclusive: false,
+          hasStarted: false,
+          attendees: 0,
+          invitedAttendees: users,
+          secretCode: input.secretCode,
         },
         eventID
       )

@@ -1,27 +1,35 @@
-import { useDisclosure } from '@chakra-ui/react'
+import { Button, useDisclosure } from '@chakra-ui/react'
+import styled from '@emotion/styled'
 import type { EventClickArg } from '@fullcalendar/core'
-import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import timeGridPlugin from '@fullcalendar/timegrid'
-import styled from '@emotion/styled'
-import { ModalContext } from '~/context/ModalContext'
-import { Button } from '@chakra-ui/react'
-import { trpc } from '~/utils/trpc'
-import EventModal from './EventModal'
 import { useState } from 'react'
+import { ModalContext } from '~/context/ModalContext'
+import { trpc } from '~/utils/trpc'
+import CreateEventModal from './CreateEventModal'
+import EventModal from './EventModal'
 
 export const StyleWrapper = styled.div``
 
 const MainCalendar = () => {
   const { data } = trpc.event.populateCalendar.useQuery()
-  const { onOpen, isOpen, onClose } = useDisclosure()
+  const { onOpen: onOpenDisplayEvent, isOpen: isOpenDisplayEvent, onClose: onCloseDisplayEvent } = useDisclosure()
+  const { onOpen: onOpenCreateEvent, isOpen: isOpenCreateEvent, onClose: onCloseCreateEvent } = useDisclosure()
 
-  const [id, setId] = useState<string>('')
+  const [displayEventId, setDisplayEventId] = useState<string>("")
+  const [createEventId, setCreateEventId] = useState<string>("")
 
   const handleEventClick = (info: EventClickArg) => {
-    setId(info.event.id)
-    onOpen()
+    setDisplayEventId(info.event.id)
+    onOpenDisplayEvent()
+  }
+
+  const handleCreateEvent = () => {
+    const uniqueId = Date.now().toString();
+    setCreateEventId(uniqueId);
+    onOpenCreateEvent();
   }
 
   return (
@@ -37,7 +45,7 @@ const MainCalendar = () => {
             width={215}
             className="mb-10 text-white"
             type="submit"
-            onClick={() => alert('Create an Event Modal (Pop-Up)')}
+            onClick={handleCreateEvent}
           >
             Create Event
           </Button>
@@ -59,12 +67,22 @@ const MainCalendar = () => {
 
       <ModalContext.Provider
         value={{
-          isOpen,
-          id,
-          onClose,
+          isOpen: isOpenDisplayEvent,
+          id: displayEventId,
+          onClose: onCloseDisplayEvent,
         }}
       >
         <EventModal />
+      </ModalContext.Provider>
+
+      <ModalContext.Provider
+        value={{
+          isOpen: isOpenCreateEvent,
+          id: createEventId,
+          onClose: onCloseCreateEvent,
+        }}
+      >
+        <CreateEventModal />
       </ModalContext.Provider>
     </StyleWrapper>
   )
