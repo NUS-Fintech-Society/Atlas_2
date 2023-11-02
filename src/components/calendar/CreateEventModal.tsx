@@ -24,7 +24,6 @@ import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 import { ModalContext } from '~/context/ModalContext'
-import { type BodyProps } from '~/types/event/event.type'
 import { trpc } from '~/utils/trpc'
 import LoadingScreen from '../common/LoadingScreen'
 import type { Attendees } from '../events/DataTable'
@@ -38,11 +37,10 @@ type useInFormProps = {
     errors: any;
     isSubmitting: boolean;
     submitBefore: boolean;
-  };
+};
 
 const CreateEventModal = () => {
     const modal = useContext(ModalContext)
-    const { data, isLoading } = trpc.event.getEvent.useQuery(modal.id)
 
     if (!modal.id) {
         console.log("modal id is undefined")
@@ -53,7 +51,7 @@ const CreateEventModal = () => {
     const toast = useToast()
     const [attendees, setAttendees] = useState<string[]>([])
     // hacky use for attendees validation
-    const [submitBefore, setSubmitBefore] = useState(false) 
+    const [submitBefore, setSubmitBefore] = useState(false)
     const FormSchema = createEventFormSchema()
 
     type FormSchemaType = z.infer<typeof FormSchema>
@@ -62,19 +60,19 @@ const CreateEventModal = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, },
+        formState: { errors },
     } = useForm<FormSchemaType>({
         resolver: zodResolver(FormSchema),
     })
 
-    const { data: attendeeData } = trpc.attendance.getAllAttendanceButSelf.useQuery()
+    const { data } = trpc.attendance.getAllAttendanceButSelf.useQuery()
     const { mutateAsync, isLoading: isSubmitting } =
         trpc.event.createEvent.useMutation()
 
     const invalidAttendees = attendees.length === 0
     const useInForm = { setAttendees, invalidAttendees, register, errors, isSubmitting, submitBefore }
 
-    if (!attendeeData) return <LoadingScreen />
+    if (!data) return <LoadingScreen />
 
     const formSubmit = async (formData: FormSchemaType) => {
         try {
@@ -99,8 +97,7 @@ const CreateEventModal = () => {
                 title: 'Success',
                 description: 'A new event has been successfully created',
             })
-
-            router.push('/events')
+            modal.onClose()
         } catch (e) {
             toast({
                 description: (e as Error).message,
@@ -113,26 +110,19 @@ const CreateEventModal = () => {
 
     return (
         <Modal
-            isCentered
+            isCentered={true}
             isOpen={modal.isOpen}
             onClose={modal.onClose}
             scrollBehavior="inside"
-        // blockScrollOnMount={false}
         >
             <ModalOverlay />
             <ModalContent minW="1000px" borderRadius="1.2rem" overflowY={"scroll"}>
                 <ModalHeader className="bg-[#01003D] text-white">
-                    {isLoading ? (
-                        'Please wait while we are fetching the event'
-                    ) : (
-                        <Header data={data} />
-                    )}
+                    <Header />
                 </ModalHeader>
                 <form onSubmit={handleSubmit(formSubmit)}>
                     <ModalBody className="text-xl" textColor="#01003D">
-                        {isLoading
-                            ? <LoadingScreen />
-                            : <Body formData={data} attendeeData={attendeeData} useInForm={useInForm} />}
+                        <Body attendeeData={data} useInForm={useInForm} />
                     </ModalBody>
                     <ModalFooter display="flex" justifyContent="space-between">
                         <Button
@@ -163,11 +153,7 @@ const CreateEventModal = () => {
     )
 }
 
-const Header: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
-    if (!data) {
-        return <></>
-    }
-
+const Header: React.FC<object> = () => {
     return (
         <Box py={2}
             display="flex"
@@ -181,10 +167,9 @@ const Header: React.FC<{ data: BodyProps | null | undefined }> = ({ data }) => {
     )
 }
 
-const Body: React.FC<{ formData: BodyProps | null | undefined, attendeeData: Attendees[], useInForm: useInFormProps }> = ({ formData, attendeeData, useInForm }) => {
-
-    if (!formData) return <LoadingScreen />
-    const { setAttendees, invalidAttendees, register, errors, isSubmitting, submitBefore }: useInFormProps= useInForm
+const Body: React.FC<{ attendeeData: Attendees[], useInForm: useInFormProps }> = ({ attendeeData, useInForm }) => {
+    if (!attendeeData) return <LoadingScreen />
+    const { setAttendees, invalidAttendees, register, errors, isSubmitting, submitBefore }: useInFormProps = useInForm
 
     return (
         <Container>
