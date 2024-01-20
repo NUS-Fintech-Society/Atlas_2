@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
-import { getAuth } from "firebase/auth"
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
+import { getAuth, connectAuthEmulator } from "firebase/auth"
 import { env } from '~/env/client.mjs'
 
 const firebaseConfig = {
@@ -15,3 +15,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
+
+try {
+  if (process.env.NODE_ENV === 'development') {
+    connectFirestoreEmulator(db, "127.0.0.1", 8080)
+    connectAuthEmulator(auth, "http://localhost:9099")
+  }
+} catch (e) {
+
+}

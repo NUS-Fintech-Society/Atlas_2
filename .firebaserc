@@ -1,1 +1,5 @@
-{}
+{
+  "projects": {
+    "default": "atlas-dev-7b0d2"
+  }
+}
