@@ -9,6 +9,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  useBreakpointValue
 } from '@chakra-ui/react'
 import { useContext, useState } from 'react'
 import { ModalContext } from '~/context/ModalContext'
@@ -27,6 +28,10 @@ const EventModal = () => {
   //For SubmitAttendanceModal
   const { onOpen, isOpen, onClose } = useDisclosure()
   const [id, setId] = useState<string>("")
+
+  const minW = useBreakpointValue({ base: '100%', md: '1000px' });
+  const minH = useBreakpointValue({ base: '100%', md: '' });
+
   const openSubmitAttendanceModal = () => {
    
     setId(modal.id)
@@ -38,6 +43,7 @@ const EventModal = () => {
     return null
   }
 
+  
   return (
     <div>
     <Modal
@@ -47,7 +53,7 @@ const EventModal = () => {
       scrollBehavior="inside"
     >
       <ModalOverlay />
-      <ModalContent minW="1000px" borderRadius="1.2rem" overflow="hidden">
+      <ModalContent minW={minW} minH={minH} borderRadius="1.2rem" overflow="hidden">
         <ModalHeader className="bg-[#01003D] text-white">
           {isLoading ? (
             'Please wait while we are fetching the event'
@@ -59,6 +65,7 @@ const EventModal = () => {
           {isLoading ? <LoadingScreen /> : <Body data={data} />}
         </ModalBody>
         <ModalFooter display="flex" justifyContent="space-between">
+          
           <Button
             bgColor="#0C1747"
             width={150}

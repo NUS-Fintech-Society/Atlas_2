@@ -9,6 +9,8 @@ import {
     ModalBody,
     ModalFooter,
     Input,
+    useBreakpointValue,
+    Icon
   } from '@chakra-ui/react'
   import { useContext } from 'react'
   import { ModalContext } from '~/context/ModalContext'
@@ -21,6 +23,9 @@ import {
   const SubmitAttendanceModal = () => {
     const modal = useContext(ModalContext)
     const { data, isLoading } = trpc.event.getEvent.useQuery(modal.id)
+
+    const minW = useBreakpointValue({ base: '100%', md: '1000px' });
+    const minH = useBreakpointValue({ base: '100%', md: '' });
   
     if (!modal.id) {
       return null
@@ -34,7 +39,7 @@ import {
         scrollBehavior="inside"
       >
         <ModalOverlay />
-        <ModalContent minW="1000px" borderRadius="1.2rem" overflow="hidden">
+        <ModalContent minW={minW} minH={minH} borderRadius="1.2rem" overflow="hidden">
           <ModalHeader className="bg-[#01003D] text-white">
             {isLoading ? (
               'Please wait while we are fetching the event'
@@ -117,15 +122,28 @@ import {
         <Box className="w-40 mr-5">{'Venue:'}</Box>
         <Box>{'LT69'}</Box>
         </Flex>
+        <Flex direction="row" className="mb-5">
+        <Box className="w-40 mr-5">{'Description:'}</Box>
+        <Box>{'This is a very fun event.'}</Box>
+        </Flex>
+        <Flex direction="row" className="mb-5">
+        <Icon viewBox='0 0 200 150' color='green.500'>
+          <path
+            fill='currentColor'
+            d='M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0'
+          />
+        </Icon>
+        <Box className="ml-5">{'Machine Learning'}</Box>
+        </Flex>
         <Flex direction="row" className="mb-3">
         <Box className="w-40 mr-5">{'Secret Code:'}</Box>
-        <Box>{ <Input
+        <Box  w={[100, 200, 300, 400, 500]} >{ <Input
         id="secretCode"
         isRequired
         placeholder=" Enter Secret code"
         variant="filled"
         size='s'
-        width='300%'
+        width='100%'
       />}</Box>
         </Flex>
       
